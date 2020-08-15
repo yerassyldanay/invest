@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  iguard_global:
+    build: .
+    command: ./main
+    environment:
+      - "TZ=Asia/Almaty"
+    ports:
+      - "7000:7000"

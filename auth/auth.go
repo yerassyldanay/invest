@@ -1,115 +1,113 @@
 package auth
 
 import (
-	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/go-redis/redis"
-	"iguard_global/iredis"
-	"iguard_global/utils"
+	"invest/model"
+	"invest/utils"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
 
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		var nameOfFunc = "JWT_TOKEN"
-		var requestPath = request.URL.Path
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var fname = "JWT_TOKEN"
 
-		fmt.Println("Received: ", requestPath)
-
+		/*
+			there are some urls that do not require authentication.
+				E.g. getting static files or sign in/up urls
+		 */
 		for _, url := range utils.NoNeedToAuth {
-			if requestPath == url {
-				next.ServeHTTP(writer, request)
-				return
-			} else if strings.HasPrefix(requestPath, "/" + utils.FolderInWhichNotificationsAreStored) || strings.HasPrefix(requestPath, "/debug") {
-				next.ServeHTTP(writer, request)
-				return
-			} else if strings.HasPrefix(requestPath, "/" + utils.FolderInWhichLogosAreStored) {
-				next.ServeHTTP(writer, request)
+			fmt.Println(url, r.URL.Path)
+			if url == r.URL.Path {
+				fmt.Println(url, r.URL.Path)
+				next.ServeHTTP(w, r)
 				return
 			}
 		}
 
-		var tokenHeader = request.Header.Get("session_id")
+		/*
+			Authentication header must contain JWT token
+		 */
+		var tokenHeader = r.Header.Get("Authorization")
 
-		if tokenHeader == "" {
-			utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "Missing Auth Token"),
-				&utils.LogMessage{
-					Ok:       	false,
-					FuncName: 	nameOfFunc,
-					Message:  	"Missing Auth Token",
-				})
+		var splits = strings.Split(tokenHeader, " ")
+		if len(splits) != 2 {
+			utils.Respond(w, r, &utils.Msg{
+				Message: map[string]interface{}{
+					"eng": "invalid token",
+				},
+				Status:  http.StatusBadRequest,
+				Fname:   fname,
+				ErrMsg:  "could not be split correctly",
+			})
 			return
 		}
 
-		var splitted = strings.Split(tokenHeader, " ")
-		if len(splitted) != 2 {
-			utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "Token does not contain 2 strings"),
-				&utils.LogMessage{
-					Ok:       	false,
-					FuncName: 	nameOfFunc,
-					Message:  	"Token does not contain 2 strings",
-				})
-			return
-		}
-
-		var tokenNeeded = splitted[1]
-		var tokenStruct = &models.Token{}
+		var tokenNeeded = splits[1]
+		var tokenStruct = &model.Token{}
 
 		var token, err = jwt.ParseWithClaims(tokenNeeded, tokenStruct, func(token *jwt.Token) (i interface{}, e error) {
-			return []byte(os.Getenv("token_password")), nil
+			return []byte(os.Getenv("TOKEN_PASSWORD")), nil
 		})
 
 		if err != nil {
-			utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "Invalid Auth Token"),
-				&utils.LogMessage{
-					Ok:       	false,
-					FuncName: 	nameOfFunc,
-					Message:  	"ParseWithClaims. Invalid Auth Token",
-				})
+			utils.Respond(w, r, &utils.Msg{
+				Message: map[string]interface{}{
+					"eng": "invalid or expired token",
+				},
+				Status:  http.StatusBadRequest,
+				Fname:   fname,
+				ErrMsg:  err.Error(),
+			})
 			return
 		}
 
 		if !token.Valid {
-			utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "Invalid Auth Token"),
-				&utils.LogMessage{
-					Ok:       	false,
-					FuncName: 	nameOfFunc,
-					Message:  	"Valid. Invalid Auth Token",
-				})
+			utils.Respond(w, r, &utils.Msg{
+				Message: map[string]interface{}{
+					"eng": "token has been expired",
+				},
+				Status:  http.StatusBadRequest,
+				Fname:   fname,
+				ErrMsg:  "token has been expired",
+			})
 			return
 		}
 
-		var cntx = context.WithValue(request.Context(), "id", tokenStruct.UserID)
-		request = request.WithContext(cntx)
+		/*
+			pass parameters using context
+		 */
+		r = utils.SetHeader(r, utils.KeyId, strconv.FormatUint(tokenStruct.UserId, 10))
+		r = utils.SetHeader(r, utils.KeyRoleId, strconv.FormatUint(tokenStruct.RoleId, 10))
 
-		var redis_key = fmt.Sprintf("%v_%v", tokenStruct.Role, tokenStruct.UserID)
-		redis_result, err := iredis.GetRedis().Get(redis_key).Result()
-		if err == redis.Nil {
-			utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "You have not authenticated"),
-				&utils.LogMessage{
-					Ok:       	false,
-					FuncName: 	nameOfFunc,
-					Message:  	"Session Token is Old",
-				})
-			return
-		}
-
-		if tokenHeader[len(tokenHeader) - utils.RedisSliceLength:] != redis_result {
-			utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "You have authenticated with another device. Please, authenticate again"),
-				&utils.LogMessage{
-					Ok:       	false,
-					FuncName: 	nameOfFunc,
-					Message:  	"Session Token is Old",
-				})
-			return
-		}
-
-		request.Header.Add("role", tokenStruct.Role)
-		next.ServeHTTP(writer, request)
+		//var redis_key = fmt.Sprintf("%v_%v", tokenStruct.Role, tokenStruct.UserID)
+		//redis_result, err := iredis.GetRedis().Get(redis_key).Result()
+		//if err == redis.Nil {
+		//	utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "You have not authenticated"),
+		//		&utils.LogMessage{
+		//			Ok:       	false,
+		//			FuncName: 	fname,
+		//			Message:  	"Session Token is Old",
+		//		})
+		//	return
+		//}
+		//
+		//if tokenHeader[len(tokenHeader) - utils.RedisSliceLength:] != redis_result {
+		//	utils.Respond(w, r, &utils.Msg{
+		//		Message: map[string]interface{}{
+		//			"eng": "token has been expired",
+		//		},
+		//		Status:  http.StatusBadRequest,
+		//		Fname:   fname,
+		//		ErrMsg:  "token has been expired",
+		//	})
+		//	return
+		//}
+		next.ServeHTTP(w, r)
 	})
 }
 

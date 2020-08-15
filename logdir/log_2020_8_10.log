@@ -1,0 +1,24 @@
+time="2020-08-10T17:50:50+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T17:50:50+06:00" level=info msg=main port=7000
+time="2020-08-10T17:51:04+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T17:51:04+06:00" level=info msg=main port=7000
+time="2020-08-10T17:52:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T17:52:00+06:00" level=info msg=main port=7000
+time="2020-08-10T17:54:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T17:54:17+06:00" level=info msg=main port=7000
+time="2020-08-10T17:55:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T17:55:29+06:00" level=info msg=main port=7000
+time="2020-08-10T17:56:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T17:56:12+06:00" level=info msg=main port=7000
+time="2020-08-10T18:00:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T18:00:03+06:00" level=info msg=main port=7000
+time="2020-08-10T18:12:35+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T18:12:35+06:00" level=info msg=main port=7000
+time="2020-08-10T18:14:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T18:14:20+06:00" level=info msg=main port=7000
+time="2020-08-10T18:29:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T18:29:20+06:00" level=info msg=main port=7000
+time="2020-08-10T18:29:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T18:29:43+06:00" level=info msg=main port=7000
+time="2020-08-10T23:53:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-10T23:53:27+06:00" level=info msg=main port=7000

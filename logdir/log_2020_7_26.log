@@ -1,0 +1,164 @@
+time="2020-07-26T16:08:04+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:08:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:11:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:12:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:13:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:15:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:15:56+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:17:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:17:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:18:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:23:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:23:22+06:00" level=info msg=main port=7000
+time="2020-07-26T16:24:22+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:24:24+06:00" level=info msg=main port=7000
+time="2020-07-26T16:26:24+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:31+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:35+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:39+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:40+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:42+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:26:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:28:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:31:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:31:21+06:00" level=info msg=main port=7000
+time="2020-07-26T16:33:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:33:25+06:00" level=info msg=main port=7000
+time="2020-07-26T16:33:35+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:33:35+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:33:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:33:37+06:00" level=info msg=main port=7000
+time="2020-07-26T16:34:18+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:34:18+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:34:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:34:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:34:59+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:35:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:35:13+06:00" level=info msg=main port=7000
+time="2020-07-26T16:35:15+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:35:15+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:35:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:36:04+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:36:05+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:36:05+06:00" level=warning msg=Up_20200700001 message="using unaddressable value" ok=false
+time="2020-07-26T16:36:05+06:00" level=info msg=main port=7000
+time="2020-07-26T16:38:40+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:38:40+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:38:42+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:38:42+06:00" level=info msg=main port=7000
+time="2020-07-26T16:38:54+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:38:54+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:38:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:38:57+06:00" level=info msg=main port=7000
+time="2020-07-26T16:39:06+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:39:06+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:39:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:39:08+06:00" level=info msg=main port=7000
+time="2020-07-26T16:39:14+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:39:14+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:39:24+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:39:24+06:00" level=info msg=main port=7000
+time="2020-07-26T16:39:27+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:39:27+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:39:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:39:46+06:00" level=info msg=main port=7000
+time="2020-07-26T16:40:19+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:40:19+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:40:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:40:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:40:22+06:00" level=warning msg=Up_20200700001 message="using unaddressable value" ok=false
+time="2020-07-26T16:40:22+06:00" level=info msg=main port=7000
+time="2020-07-26T16:41:01+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:41:01+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:41:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:41:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:41:27+06:00" level=warning msg=Up_20200700001 message="using unaddressable value" ok=false
+time="2020-07-26T16:41:27+06:00" level=info msg=main port=7000
+time="2020-07-26T16:41:29+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T16:41:29+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T16:42:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:42:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:42:26+06:00" level=warning msg=Up_20200700001 message="using unaddressable value" ok=false
+time="2020-07-26T16:42:35+06:00" level=info msg=main port=7000
+time="2020-07-26T16:43:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:44:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:45:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:46:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T16:47:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T17:27:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T17:27:52+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T17:27:52+06:00" level=info msg=main port=7000
+time="2020-07-26T17:28:25+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T17:28:25+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T17:28:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T17:28:27+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T17:28:27+06:00" level=info msg=main port=7000
+time="2020-07-26T17:54:14+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T17:54:14+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T17:54:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:02:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:02:57+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T18:02:57+06:00" level=info msg=main port=7000
+time="2020-07-26T18:05:36+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:05:36+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:05:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:05:40+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T18:05:40+06:00" level=info msg=main port=7000
+time="2020-07-26T18:18:53+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:18:53+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:18:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:18:57+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T18:18:57+06:00" level=info msg=main port=7000
+time="2020-07-26T18:19:15+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:19:15+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:19:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:19:19+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T18:19:19+06:00" level=info msg=main port=7000
+time="2020-07-26T18:19:46+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:19:46+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:19:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:19:49+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T18:19:49+06:00" level=info msg=main port=7000
+time="2020-07-26T18:23:34+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:23:34+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:23:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:23:37+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T18:23:37+06:00" level=info msg=main port=7000
+time="2020-07-26T18:25:01+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:25:01+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:25:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:25:03+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-26T18:25:03+06:00" level=info msg=main port=7000
+time="2020-07-26T18:25:32+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:25:32+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:25:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:25:34+06:00" level=info msg=main port=7000
+time="2020-07-26T18:35:50+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:35:50+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:35:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:36:10+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:38:10+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:38:45+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:39:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:41:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:41:24+06:00" level=info msg=main port=7000
+time="2020-07-26T18:41:46+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T18:41:46+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-26T18:41:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-26T18:41:54+06:00" level=info msg=main port=7000
+time="2020-07-26T20:17:30+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-26T20:17:30+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

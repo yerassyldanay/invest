@@ -1,0 +1,86 @@
+time="2020-08-03T00:51:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T00:51:36+06:00" level=info msg=main port=7000
+time="2020-08-03T00:54:28+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-08-03T00:54:28+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-08-03T00:54:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T00:54:34+06:00" level=info msg=main port=7000
+time="2020-08-03T00:54:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T00:54:41+06:00" level=info msg=main port=7000
+time="2020-08-03T03:21:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:21:16+06:00" level=info msg=main port=7000
+time="2020-08-03T03:23:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:23:25+06:00" level=info msg=main port=7000
+time="2020-08-03T03:25:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:25:46+06:00" level=info msg=main port=7000
+time="2020-08-03T03:29:50+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:29:50+06:00" level=info msg=main port=7000
+time="2020-08-03T03:32:05+06:00" level=info msg=Investor_sign_up error= host="[::1]:43426" path=/signup status=200
+time="2020-08-03T03:37:16+06:00" level=info msg=Investor_sign_up error="a link has already been sent" host="[::1]:43426" path=/signup status=400
+time="2020-08-03T03:38:31+06:00" level=info msg=Investor_sign_up error="a link has already been sent" host="[::1]:43426" path=/signup status=400
+time="2020-08-03T03:42:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:42:32+06:00" level=info msg=main port=7000
+time="2020-08-03T03:43:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:43:00+06:00" level=info msg=main port=7000
+time="2020-08-03T03:43:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:43:32+06:00" level=info msg=main port=7000
+time="2020-08-03T03:45:06+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:45:06+06:00" level=info msg=main port=7000
+time="2020-08-03T03:46:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T03:46:47+06:00" level=info msg=main port=7000
+time="2020-08-03T03:48:19+06:00" level=info msg=Investor_sign_up error= host="[::1]:44080" path=/signup status=200
+time="2020-08-03T04:44:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T04:44:38+06:00" level=info msg=main port=7000
+time="2020-08-03T04:52:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T04:52:46+06:00" level=info msg=main port=7000
+time="2020-08-03T04:54:09+06:00" level=info msg=Investor_sign_up error= host="[::1]:45468" path=/signup status=200
+time="2020-08-03T04:55:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T04:55:57+06:00" level=info msg=main port=7000
+time="2020-08-03T04:58:52+06:00" level=info msg=Investor_sign_up error= host="[::1]:45560" path=/signup status=200
+time="2020-08-03T05:12:06+06:00" level=info msg=Investor_sign_up error="already in use: FIO TEST" host="[::1]:45560" path=/signup status=400
+time="2020-08-03T05:13:20+06:00" level=info msg=Investor_sign_up error="pq: duplicate key value violates unique constraint \"emails_pkey\"" host="[::1]:45560" path=/signup status=400
+time="2020-08-03T05:14:27+06:00" level=info msg=Investor_sign_up error="pq: duplicate key value violates unique constraint \"emails_pkey\"" host="[::1]:45560" path=/signup status=400
+time="2020-08-03T05:14:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T05:14:36+06:00" level=info msg=main port=7000
+time="2020-08-03T05:15:35+06:00" level=info msg=Investor_sign_up error= host="[::1]:45828" path=/signup status=200
+time="2020-08-03T05:17:39+06:00" level=info msg=Investor_sign_up error="already in use: FIO TEST" host="[::1]:45828" path=/signup status=400
+time="2020-08-03T05:18:14+06:00" level=info msg=Investor_sign_up error="a link has already been sent" host="[::1]:45828" path=/signup status=400
+time="2020-08-03T13:28:40+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:28:41+06:00" level=info msg=main port=7000
+time="2020-08-03T13:33:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:33:55+06:00" level=info msg=main port=7000
+time="2020-08-03T13:36:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:36:47+06:00" level=info msg=main port=7000
+time="2020-08-03T13:37:41+06:00" level=info msg=User_email_confirm error="pq: column \"verify\" of relation \"emails\" does not exist" host="[::1]:47290" path=/v1/all/confirmation/email/7zjccmkYfwD0vqN3ClGSMLjvhPYt67 status=400
+time="2020-08-03T13:37:58+06:00" level=info msg=User_email_confirm error="no valid transaction" host="[::1]:47290" path=/v1/all/confirmation/email/7zjccmkYfwD0vqN3ClGSMLjvhPYt67 status=400
+time="2020-08-03T13:38:25+06:00" level=info msg=User_email_confirm error="no valid transaction" host="[::1]:47290" path=/v1/all/confirmation/email/7zjccmkYfwD0vqN3ClGSMLjvhPYt67 status=400
+time="2020-08-03T13:38:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:38:30+06:00" level=info msg=main port=7000
+time="2020-08-03T13:39:23+06:00" level=info msg=User_email_confirm error="pq: column \"verify\" of relation \"emails\" does not exist" host="[::1]:47322" path=/v1/all/confirmation/email/7zjccmkYfwD0vqN3ClGSMLjvhPYt67 status=400
+time="2020-08-03T13:39:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:39:36+06:00" level=info msg=main port=7000
+time="2020-08-03T13:40:40+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:40:40+06:00" level=info msg=main port=7000
+time="2020-08-03T13:41:35+06:00" level=info msg=User_email_confirm error= host="[::1]:47380" path=/v1/all/confirmation/email/7zjccmkYfwD0vqN3ClGSMLjvhPYt67 status=200
+time="2020-08-03T13:55:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:55:02+06:00" level=info msg=main port=7000
+time="2020-08-03T13:55:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:55:34+06:00" level=info msg=main port=7000
+time="2020-08-03T13:56:19+06:00" level=info msg="User_phone_confirm 2" error= host="[::1]:47600" path=/v1/all/confirmation/phone status=200
+time="2020-08-03T13:56:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T13:56:26+06:00" level=info msg=main port=7000
+time="2020-08-03T13:56:40+06:00" level=info msg="User_phone_confirm 2" error= host="[::1]:47620" path=/v1/all/confirmation/phone status=200
+time="2020-08-03T14:15:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T14:15:49+06:00" level=info msg=main port=7000
+time="2020-08-03T14:17:40+06:00" level=info msg=User_email_confirm error= host="[::1]:47900" path=/v1/all/confirmation/email status=200
+time="2020-08-03T16:10:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T16:10:16+06:00" level=info msg=main port=7000
+time="2020-08-03T16:10:24+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T16:10:24+06:00" level=info msg=main port=7000
+time="2020-08-03T16:10:45+06:00" level=info msg=Sign_in error="crypto/bcrypt: hashedPassword is not the hash of the given password" host="[::1]:48028" path=/v1/all/signin status=200
+time="2020-08-03T16:10:53+06:00" level=info msg=Sign_in error= host="[::1]:48028" path=/v1/all/signin status=200
+time="2020-08-03T17:01:23+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-08-03T17:01:23+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-08-03T17:01:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-03T17:01:26+06:00" level=info msg=main port=7000
+time="2020-08-04T12:12:22+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-08-04T12:12:22+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

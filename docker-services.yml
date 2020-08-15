@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  postgres_invest:
+    restart: always
+    build: ./env/postgre/
+    env_file:
+      - "env/.env"
+    environment:
+      - "TZ=Asia/Almaty"
+      - "POSTGRES_DB=invest"
+    volumes:
+      - "/docker_volumes/invest/postgre:/var/lib/postgresql/data"
+    ports:
+      - "$HOST:7001:5432"
+    hostname: "invest_postgre"
+
+  redis_invest:
+    restart: always
+    image: redis:5.0
+    command: redis-server --requirepass f5db003759b2456f8acb
+    volumes:
+      - "/docker_volumes/invest/data"
+    ports:
+      - "$HOST:7002:6379"
+    hostname: "invest_redis"
+

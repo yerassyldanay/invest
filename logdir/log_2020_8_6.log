@@ -1,0 +1,52 @@
+time="2020-08-06T17:37:14+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:37:14+06:00" level=info msg=main port=7000
+time="2020-08-06T17:42:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:42:33+06:00" level=info msg=main port=7000
+time="2020-08-06T17:47:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:47:01+06:00" level=info msg=main port=7000
+time="2020-08-06T17:48:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:48:18+06:00" level=info msg=main port=7000
+time="2020-08-06T17:50:05+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:50:05+06:00" level=info msg=main port=7000
+time="2020-08-06T17:51:14+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:51:14+06:00" level=info msg=main port=7000
+time="2020-08-06T17:51:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:51:43+06:00" level=info msg=main port=7000
+time="2020-08-06T17:52:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:52:21+06:00" level=info msg=main port=7000
+time="2020-08-06T17:53:45+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:53:45+06:00" level=info msg=main port=7000
+time="2020-08-06T17:54:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:54:33+06:00" level=info msg=main port=7000
+time="2020-08-06T17:57:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T17:57:30+06:00" level=info msg=main port=7000
+time="2020-08-06T17:58:05+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51270" path=/v1/projects_see_all/project status=200
+time="2020-08-06T18:09:22+06:00" level=info msg="User_project_get_all 1" error="pq: syntax error at or near \"=\"" host="[::1]:51270" path=/v1/projects_see_own/project status=400
+time="2020-08-06T18:09:51+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:09:51+06:00" level=info msg=main port=7000
+time="2020-08-06T18:13:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:13:02+06:00" level=info msg=main port=7000
+time="2020-08-06T18:23:04+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:23:04+06:00" level=info msg=main port=7000
+time="2020-08-06T18:23:52+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51658" path=/v1/projects_see_own/project status=200
+time="2020-08-06T18:24:23+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51658" path=/v1/projects_see_own/project status=200
+time="2020-08-06T18:24:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:24:28+06:00" level=info msg=main port=7000
+time="2020-08-06T18:24:32+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51700" path=/v1/projects_see_own/project status=200
+time="2020-08-06T18:26:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:26:12+06:00" level=info msg=main port=7000
+time="2020-08-06T18:26:15+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51730" path=/v1/projects_see_own/project status=200
+time="2020-08-06T18:26:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:26:45+06:00" level=info msg=main port=7000
+time="2020-08-06T18:27:45+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51750" path=/v1/projects_see_own/project status=200
+time="2020-08-06T18:31:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:31:25+06:00" level=info msg=main port=7000
+time="2020-08-06T18:32:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T18:32:00+06:00" level=info msg=main port=7000
+time="2020-08-06T18:32:03+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51820" path=/v1/projects_see_own/project status=200
+time="2020-08-06T19:26:30+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51820" path=/v1/projects_see_all/project status=200
+time="2020-08-06T19:31:10+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51820" path=/v1/projects_see_all/project status=200
+time="2020-08-06T19:32:30+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51820" path=/v1/projects_see_all/project status=200
+time="2020-08-06T19:32:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-08-06T19:32:58+06:00" level=info msg=main port=7000
+time="2020-08-06T19:33:21+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:52432" path=/v1/projects_see_own/project status=200

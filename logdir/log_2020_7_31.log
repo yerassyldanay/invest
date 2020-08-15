@@ -1,0 +1,74 @@
+time="2020-07-31T02:29:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T02:30:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T02:30:21+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T02:30:21+06:00" level=info msg=main port=7000
+time="2020-07-31T02:33:39+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T02:33:39+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T02:33:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T02:33:41+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T02:33:41+06:00" level=info msg=main port=7000
+time="2020-07-31T02:33:59+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T02:33:59+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T02:34:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T02:34:01+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T02:34:01+06:00" level=info msg=main port=7000
+time="2020-07-31T02:36:18+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T02:36:18+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T02:36:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T02:36:21+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T02:36:21+06:00" level=info msg=main port=7000
+time="2020-07-31T02:37:25+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T02:37:25+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T02:37:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T02:37:27+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T02:37:27+06:00" level=info msg=main port=7000
+time="2020-07-31T02:43:08+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T02:43:08+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T02:43:10+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T02:43:10+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T02:43:10+06:00" level=info msg=main port=7000
+time="2020-07-31T16:50:13+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T16:50:13+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T16:50:35+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T16:50:36+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T16:50:36+06:00" level=info msg=main port=7000
+time="2020-07-31T16:54:35+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T16:54:35+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T16:54:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T16:54:37+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T16:54:37+06:00" level=info msg=main port=7000
+time="2020-07-31T16:55:11+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T16:55:11+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T16:55:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T16:55:13+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T16:55:13+06:00" level=info msg=main port=7000
+time="2020-07-31T16:56:51+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T16:56:51+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T16:57:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T16:57:44+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T16:57:44+06:00" level=info msg=main port=7000
+time="2020-07-31T17:55:31+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T17:55:31+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T17:55:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T17:55:34+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T17:55:34+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T17:55:34+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T17:56:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T17:56:20+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T17:56:20+06:00" level=info msg=main port=7000
+time="2020-07-31T17:57:20+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T17:57:20+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T17:57:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T17:57:23+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T17:57:23+06:00" level=info msg=main port=7000
+time="2020-07-31T17:58:03+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T17:58:03+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T17:58:05+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T17:58:05+06:00" level=warning msg=MAIN message="migration: no valid version found" ok=false
+time="2020-07-31T17:58:05+06:00" level=info msg=main port=7000
+time="2020-07-31T18:13:17+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-07-31T18:13:17+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-07-31T18:13:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-07-31T18:13:19+06:00" level=info msg=main port=7000
+time="2020-08-01T05:37:48+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-08-01T05:37:48+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
