@@ -48,6 +48,7 @@ var Finance_table = func(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	utils.Respond(w, r, &utils.Msg{
 		Message: resp,
@@ -73,6 +74,7 @@ var Finance_table_get = func(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	var errmsg string
 	resp, err := finance.Get_table()

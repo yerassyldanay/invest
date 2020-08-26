@@ -2,8 +2,8 @@ package model
 
 import (
 	"encoding/json"
-	"errors"
 	"invest/utils"
+	"net/http"
 	"time"
 )
 
@@ -14,10 +14,12 @@ func (p *Project) Validate() (bool) {
 	return true
 }
 
-func (p *Project) Create_project(bin string, lang string) (map[string]interface{}, error){
+func (p *Project) Create_project(bin string, lang string) (*utils.Msg){
 
 	if ok := p.Validate(); !ok {
-		return utils.ErrorInvalidParameters, errors.New("invalid parameters have been passed")
+		return &utils.Msg{
+			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid parameters have been passed",
+		}
 	}
 	
 	var trans = GetDB().Begin()
@@ -38,8 +40,8 @@ func (p *Project) Create_project(bin string, lang string) (map[string]interface{
 		Bin:	bin,
 		Lang: 	utils.If_condition_then(lang == "kaz", lang, "rus").(string),
 	}
-	if resp, err := org.Create_or_get_organization_from_db_by_bin(); err != nil {
-		return resp, err
+	if msg := org.Create_or_get_organization_from_db_by_bin(); msg.ErrMsg != "" {
+		return msg
 	}
 
 	p.Organization = org
@@ -47,7 +49,9 @@ func (p *Project) Create_project(bin string, lang string) (map[string]interface{
 	p.Created = time.Now().UTC()
 
 	if err := trans.Table(Project{}.TableName()).Create(p).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{
+			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
+		}
 	}
 	
 	var pu = ProjectsUsers{
@@ -56,16 +60,22 @@ func (p *Project) Create_project(bin string, lang string) (map[string]interface{
 	}
 	
 	if err := trans.Table("projects_users").Create(pu).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{
+			utils.ErrorInternalDbError, http.StatusExpectationFailed,"", err.Error(),
+		}
 	}
 
 	trans.Commit()
-	return utils.NoErrorFineEverthingOk, nil
+	return &utils.Msg{
+		utils.NoErrorFineEverthingOk, http.StatusOK, "", "",
+	}
 }
 
-func (p *Project) Update(bin string, lang string) (map[string]interface{}, error) {
+func (p *Project) Update(bin string, lang string) (*utils.Msg) {
 	if p.Id == 0 {
-		return utils.ErrorInvalidParameters, errors.New("invalid id. project update")
+		return &utils.Msg{
+			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid id. project update",
+		}
 	}
 
 	if lang == "" {
@@ -83,7 +93,9 @@ func (p *Project) Update(bin string, lang string) (map[string]interface{}, error
 	if err == nil && bin != "" {
 		p.OrganizationId = org.Id
 	} else {
-		return utils.ErrorInvalidParameters, err
+		return &utils.Msg{
+			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "could not get info on organization",
+		}
 	}
 
 	/*
@@ -104,8 +116,12 @@ func (p *Project) Update(bin string, lang string) (map[string]interface{}, error
 		Phone:          	p.Phone,
 		OrganizationId: 	p.OrganizationId,
 	}).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{
+			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
+		}
 	}
 
-	return utils.NoErrorFineEverthingOk, nil
+	return &utils.Msg{
+		utils.NoErrorFineEverthingOk, http.StatusOK, "", "",
+	}
 }

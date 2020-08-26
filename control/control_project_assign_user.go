@@ -20,6 +20,7 @@ var Admin_assign_user_to_project = func(w http.ResponseWriter, r *http.Request) 
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	var errmsg string
 	//resp, err := pu.Assign_user_to_project()
@@ -56,6 +57,7 @@ var Remove_user_from_project = func(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	var errmsg string
 	resp, err := pu.Remove_user_from_project()

@@ -96,3 +96,15 @@ var ErrorCouldNotSendEmail = map[string]interface{} {
 	"eng": "failed to send an email",
 }
 
+var ErrorAlreadySentLinkToEmail = map[string]interface{}{
+	"eng": "please, check your email. A link has been sent to your email address | Please, use this password",
+	"rus": "пожалуйста, проверьте почту. Ссылка была отправлена на ваш электронный адрес | Пожалуйста, используйте этот пароль",
+	"kaz": "почтаңызды тексеруді өтінеміз. Электрондық поштаңызға сілтеме жіберілді | Осы құпия сөзді қолданыңыз",
+}
+
+var ErrorFailedToCreateAnAccount = map[string]interface{}{
+	"eng": "failed to create an account",
+	"rus": "не удалось создать аккаунт",
+	"kaz": "аккаунт ашу мүмкін болмады",
+}
+

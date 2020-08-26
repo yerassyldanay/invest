@@ -18,16 +18,8 @@ var User_get_own_info = func(w http.ResponseWriter, r *http.Request) {
 		Id: uint64(id),
 	}
 
-	var errmsg string
-	resp, err := user.Get_full_info_of_this_user("id")
-	if err != nil {
-		errmsg = err.Error()
-	}
+	msg := user.Get_full_info_of_this_user("id")
+	msg.Fname = fname + " 1"
 
-	utils.Respond(w, r, &utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname + " 1",
-		ErrMsg:  errmsg,
-	})
+	utils.Respond(w, r, msg)
 }

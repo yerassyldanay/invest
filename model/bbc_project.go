@@ -28,6 +28,9 @@ type Project struct {
 	Deleted				string					`json:"deleted" gorm:"default:null"`
 
 	Categors			[]Categor				`json:"categors" gorm:"many2many:projects_categors"`
+
+	Status				string					`json:"status" gorm:"default:'not confirmed'"`
+	//ApprovedBy			[]User					`json:"approved_by" gorm:"many2many:projects_statuses;"`
 }
 
 func (Project) TableName() string {

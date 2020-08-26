@@ -171,7 +171,7 @@ func Set_up_db() {
 
 	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Document{}, &Email{}, &Finance{}, &FinanceCol{},
 		&Finresult{}, FinresultCol{}, &Ganta{}, &Organization{}, &Permission{},
-		&Phone{}, &Project{}, &Role{}, &SendgridMessage{}, &SendgridMessageStore{},
+		&Phone{}, &Project{}, &ProjectStatus{}, &Role{}, &SendgridMessage{}, &SendgridMessageStore{},
 		&User{})
 
 	/*

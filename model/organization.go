@@ -70,7 +70,7 @@ func (o *Organization) Get_and_assign_info_on_organization_by_bin() (*Organizati
 	create a company
 		expects that all fields are filled
 */
-func (o *Organization) Create_or_get_organization_from_db_by_bin() (map[string]interface{}, error) {
+func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) {
 	if o.Lang == "" {
 		o.Lang = "kaz"
 	}
@@ -83,9 +83,13 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (map[string]i
 	err == nil {
 		var resp = utils.NoErrorFineEverthingOk
 		resp["info"] =  Struct_to_map(*o)
-		return resp, nil
+		return &utils.Msg{
+			resp, http.StatusOK, "", "",
+		}
 	} else if err != gorm.ErrRecordNotFound {
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{
+			utils.ErrorInternalServerError, http.StatusInternalServerError, "", err.Error(),
+		}
 	}
 
 	/*
@@ -93,26 +97,32 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (map[string]i
 	*/
 	o, err = o.Get_and_assign_info_on_organization_by_bin()
 	if err != nil {
-		return utils.ErrorExternalServiceErrorNoOrganizationInfo, err
+		return &utils.Msg{
+			utils.ErrorExternalServiceErrorNoOrganizationInfo, http.StatusServiceUnavailable, "", err.Error(),
+		}
 	}
 
 	/*
 		store data on db
 	*/
 	if err := GetDB().Create(o).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{
+			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
+		}
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] =  Struct_to_map(*o)
 
-	return resp, nil
+	return &utils.Msg{
+		utils.NoErrorFineEverthingOk, http.StatusCreated, "", "",
+	}
 }
 
 /*
 	update company info by admin
 */
-func (o *Organization) Update_organization_info() (map[string]interface{}, error) {
+func (o *Organization) Update_organization_info() (*utils.Msg) {
 	if o.Lang == "" {
 		o.Lang = "kaz"
 	}
@@ -124,9 +134,13 @@ func (o *Organization) Update_organization_info() (map[string]interface{}, error
 		"address": o.Address,
 	}).Error;
 		err != nil {
-			return utils.ErrorInvalidParameters, err
+			return &utils.Msg{
+				utils.ErrorInvalidParameters, http.StatusBadRequest, "", err.Error(),
+			}
 	}
 
-	return utils.NoErrorFineEverthingOk, nil
+	return &utils.Msg{
+		utils.NoErrorFineEverthingOk, http.StatusCreated, "", "",
+	}
 }
 

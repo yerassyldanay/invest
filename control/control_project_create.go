@@ -37,10 +37,10 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 
 	lang := r.Header.Get(utils.HeaderContentLanguage)
 
-	var resp = make(map[string]interface{})
+	var msg *utils.Msg
 	var err error
 
-	if resp, err = project.Project.Create_project(project.Bin, lang); err == nil {
+	if msg = project.Project.Create_project(project.Bin, lang); msg.ErrMsg == "" {
 		/*
 			create a table of ganta for this project
 		 */
@@ -68,16 +68,9 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 			err != nil {
 				errmsg = errmsg + err.Error()
 		}
-	} else {
-		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
-		Message: 	resp,
-		Status:  	utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   	fname + " 2",
-		ErrMsg:  	errmsg,
-	})
+	utils.Respond(w, r, msg)
 }
 
 /*
@@ -146,9 +139,6 @@ var Update_project_by_investor = func(w http.ResponseWriter, r *http.Request) {
 		Bin				string				`json:"lang"`
 	}{}
 
-	var errmsg string
-	var resp = utils.NoErrorFineEverthingOk
-
 	var lang = r.Header.Get(utils.HeaderContentLanguage)
 
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
@@ -160,16 +150,8 @@ var Update_project_by_investor = func(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	defer r.Body.Close()
 
-	resp, err := project.Project.Update(project.Bin, lang)
-	if err != nil {
-		errmsg = err.Error()
-	}
-
-	utils.Respond(w, r, &utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname,
-		ErrMsg:  errmsg,
-	})
+	msg := project.Project.Update(project.Bin, lang)
+	utils.Respond(w, r, msg)
 }

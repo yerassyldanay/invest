@@ -1,19 +1,24 @@
 package model
 
 import (
-	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/templates"
 	"invest/utils"
+	"net/http"
 	"strings"
 	"time"
 )
 
 /*
 	signup for investors
+		201 - created
+		400 - bad request
+		409 - already in use
+		417 - db error
+		422 - could not sent message & not stored on db
  */
-func (c *User) Sign_Up() (response map[string]interface{}, err error) {
+func (c *User) Sign_Up() (*utils.Msg) {
 	var user User
 	var count int
 
@@ -22,16 +27,16 @@ func (c *User) Sign_Up() (response map[string]interface{}, err error) {
 	 */
 	if err := GetDB().Table(User{}.TableName()).Where("username=?", c.Username).First(&user).Count(&count).Error;
 		err != nil && err != gorm.ErrRecordNotFound {
-			return utils.ErrorInternalDbError, err
+			return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	} else if count > 0 {
-		return utils.ErrorUsernameOrFioIsAreadyInUse, errors.New("already in use: " + c.Fio)
+		return &utils.Msg{utils.ErrorUsernameOrFioIsAreadyInUse, http.StatusConflict, "", "already in use: " + c.Fio}
 	}
 
 	ok := Validate_password(c.Password)
 	hashed, err := utils.Convert_string_to_hash(c.Password)
 
 	if !ok || err != nil {
-		return utils.ErrorInvalidPassword, errors.New("invalid password")
+		return &utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "invalid password"}
 	}
 
 	c.Position = utils.RoleInvestor
@@ -64,13 +69,13 @@ func (c *User) Sign_Up() (response map[string]interface{}, err error) {
 	if trans.Table(Email{}.TableName()).Where("address = ?", c.Email.Address).First(&c.Email).Count(&count); count > 0 {
 
 		if c.Email.Verified {
-			return utils.ErrorEmailIsAreadyInUse, err
+			return &utils.Msg{utils.ErrorEmailIsAreadyInUse, http.StatusConflict, "", "email address already in use"}
 
 		} else if c.Email.Verified == false && c.Email.Deadline.UTC().Before(time.Now().UTC()) {
 			var tuser = User{}
 			if err := trans.Exec("select u.* from users u inner join emails e on u.email_id = e.id where u.email_id = ?;", c.Email.Id).First(&tuser).Error;
 				err != nil && err != gorm.ErrRecordNotFound {
-					return utils.ErrorInternalDbError, err
+					return &utils.Msg{ utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 			} else if err != gorm.ErrRecordNotFound {
 					trans.Where("id=?", tuser.EmailId).Delete(Email{})
 					trans.Where("id=?", tuser.PhoneId).Delete(Phone{})
@@ -93,11 +98,7 @@ func (c *User) Sign_Up() (response map[string]interface{}, err error) {
 			//	return utils.ErrorInternalDbError, err
 			//}
 		} else {
-			return map[string]interface{}{
-				"eng": "please, check your email. A link has been sent to your email address | Please, use this password",
-				"rus": "пожалуйста, проверьте почту. Ссылка была отправлена на ваш электронный адрес | Пожалуйста, используйте этот пароль",
-				"kaz": "почтаңызды тексеруді өтінеміз. Электрондық поштаңызға сілтеме жіберілді | Осы құпия сөзді қолданыңыз",
-			}, errors.New("a link has already been sent")
+			return &utils.Msg{utils.ErrorAlreadySentLinkToEmail, http.StatusConflict, "", "a link has already been sent"}
 		}
 	}
 
@@ -110,28 +111,23 @@ func (c *User) Sign_Up() (response map[string]interface{}, err error) {
 
 	if err := trans.Create(&c.Email).Error; err != nil {
 		//trans.Rollback()
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	}
 	c.EmailId = c.Email.Id
 
 	if err := trans.Create(&c.Phone).Error; err != nil {
-		//trans.Rollback()
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	}
 	c.PhoneId = c.Phone.Id
 
 	if err := trans.Table(Role{}.TableName()).Where("name=?", utils.RoleInvestor).First(&c.Role).Error;
 		err != nil {
-			return utils.ErrorInternalDbError, err
+			return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	}
 	c.RoleId = c.Role.Id
 
 	if err := trans.Create(c).Error; err != nil {
-		return map[string]interface{}{
-			"eng": "failed to create an account",
-			"rus": "не удалось создать аккаунт",
-			"kaz": "аккаунт ашу мүмкін болмады",
-		}, err
+		return &utils.Msg{utils.ErrorFailedToCreateAnAccount, http.StatusExpectationFailed, "", err.Error()}
 	}
 
 	/*
@@ -173,8 +169,11 @@ func (c *User) Sign_Up() (response map[string]interface{}, err error) {
 
 	resp, err := sm.Send_message()
 	if err != nil {
-		return resp, err
+		return &utils.Msg{resp, http.StatusUnprocessableEntity, "", err.Error()}
 	}
 
-	return utils.NoErrorFineEverthingOk, trans.Commit().Error
+	trans.Commit()
+	return &utils.Msg{
+		resp, http.StatusCreated, "", "",
+	}
 }

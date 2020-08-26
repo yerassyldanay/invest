@@ -6,4 +6,5 @@ type SignIn struct {
 	Password			string				`json:"password" validate:"nonzero"`
 	Role				string				`json:"role" validate:"nonzero"`
 	Id					uint64				`json:"id"`
+	TokenCompound				string				`json:"-,omitempty"`
 }

@@ -41,6 +41,7 @@ const (
 	KeyRoleId = "rid"
 	KeyTime = "time"
 	KeyLanguage = "lang"
+	KeyOffset = "offset"
 
 	KeyEmailSubject = "subject"
 	KeyEmailPlainText = "page"
@@ -87,4 +88,13 @@ const (
 const (
 	DefaultLContentanguage = "kaz"
 	DefaultNotAllowedUserToDelete = 3
+)
+
+const (
+	ProjectStatusNotConfirmed = "not confirmed"
+	ProjectStatusConfirmed	= "confirmed"
+	ProjectStatusReturnedToChange = "returned for revision"
+	ProjectStatusBlocked = "blocked"
+
+	ProjectStatusChangeTimeInHours = 48
 )

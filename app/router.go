@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"invest/auth"
 	"invest/control"
 	"invest/model"
 	"invest/utils"
@@ -64,6 +65,12 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("GET")
 	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("POST")
 	router.HandleFunc("/v1/administrate/user/{which}", control.User_create_read_update_delete).Methods("DELETE")
+
+	/*
+		check
+	 */
+	router.HandleFunc("/v1/administrate/role", control.Role_create_update_add_and_remove_permissions).Methods("GET", "POST", "PUT")
+	router.HandleFunc("/v1/administrate/role/{role_id}", control.Role_delete_or_get_with_role_id).Methods("GET", "DELETE")
 
 	/*
 		check
@@ -130,7 +137,6 @@ func Create_new_invest_router() (*mux.Router) {
 		fmt.Println(fr)
 	})
 
-
 	/*
 		admin's functionality
 		GET: /admin/civil?role=&offset=
@@ -139,7 +145,7 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		check for session token
 	 */
-	//router.Use(auth.JwtAuthentication)
+	router.Use(auth.HasPermissionAndEmailVerifiedWrapper, auth.JwtAuthentication)
 
 	return router
 }

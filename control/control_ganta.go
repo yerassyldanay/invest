@@ -19,6 +19,7 @@ var Ganta_add_new_step = func(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	var errmsg string
 	resp, err := ganta.Add_new_step()

@@ -20,6 +20,7 @@ var Finresult_and_project_evaluation_table = func(w http.ResponseWriter, r *http
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	var errmsg string
 	var resp = make(map[string]interface{})
@@ -57,6 +58,7 @@ var Finresult_table_get = func(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	var errmsg string
 	resp, err := finres.Get_finresult_table()

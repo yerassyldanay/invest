@@ -5,6 +5,7 @@ type Role struct {
 	Name			string				`json:"name" validate:"required"`
 	Description		string				`json:"description" validate:"required"`
 	Permissions		[]Permission		`json:"permissions" gorm:"many2many:roles_permissions"`
+	PermissionsSent		[]uint64			`json:"permissions_sent" gorm:"-"`
 }
 
 func (Role) TableName() string {

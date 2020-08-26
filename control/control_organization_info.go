@@ -2,7 +2,6 @@ package control
 
 import (
 	"encoding/json"
-	"errors"
 	"invest/model"
 	"invest/utils"
 	"net/http"
@@ -21,30 +20,20 @@ var Update_organization_data = func(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	defer r.Body.Close()
 
 	org.Lang = r.Header.Get(utils.HeaderContentLanguage)
 
-	var errmsg string
-	resp, err := org.Update_organization_info()
-	if err != nil {
-		errmsg = err.Error()
-	}
-
-	utils.Respond(w, r, &utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname + " 2",
-		ErrMsg:  errmsg,
-	})
+	msg := org.Update_organization_info()
+	utils.Respond(w, r, msg)
 }
 
 var Get_organization_info_by_bin = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_organization_info_by_bin"
 	var bin = Get_query_parameter_str(r, "bin", "")
-
-	var err = errors.New("invalid parameters. invalid bin number")
-	var resp = utils.ErrorInvalidParameters
-	var errmsg string
+	var msg = &utils.Msg{
+		utils.ErrorInvalidParameters, http.StatusBadRequest, fname + " 1", "invalid parameters. invalid bin number",
+	}
 
 	var org = &model.Organization{
 		Lang: r.Header.Get(utils.HeaderContentLanguage),
@@ -52,17 +41,8 @@ var Get_organization_info_by_bin = func(w http.ResponseWriter, r *http.Request) 
 	}
 	
 	if bin != "" {
-		resp, err = org.Create_or_get_organization_from_db_by_bin()
+		msg = org.Create_or_get_organization_from_db_by_bin()
 	}
 
-	if err != nil {
-		errmsg = err.Error()
-	}
-
-	utils.Respond(w, r, &utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname + " 1",
-		ErrMsg:  errmsg,
-	})
+	utils.Respond(w, r, msg)
 }
