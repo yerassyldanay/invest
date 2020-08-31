@@ -59,26 +59,29 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/info", control.User_get_own_info).Methods("GET", "POST")
 
 	/*
-		check
+		CRUD user by admin
 	 */
-	router.HandleFunc("/v1/all/user/{which}", control.User_create_read_update_delete).Methods("PUT")
+	router.HandleFunc("/v1/administrate/user/{which}", control.User_create_read_update_delete).Methods("PUT")
 	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("GET")
 	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("POST")
 	router.HandleFunc("/v1/administrate/user/{which}", control.User_create_read_update_delete).Methods("DELETE")
 
 	/*
-		check
+		CRUD role & assign permissions
 	 */
 	router.HandleFunc("/v1/administrate/role", control.Role_create_update_add_and_remove_permissions).Methods("GET", "POST", "PUT")
 	router.HandleFunc("/v1/administrate/role/{role_id}", control.Role_delete_or_get_with_role_id).Methods("GET", "DELETE")
 
+	router.HandleFunc("/v1/administrate/permissions", control.Role_add_and_remove_permissions).Methods( "POST", "DELETE")
+
+
 	/*
-		check
+		Categories
 	 */
-	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("GET")
+	router.HandleFunc("/v1/all/categor", control.Categors_create_read_update_delete).Methods("GET")
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("POST")
-	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("PUT")
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("DELETE")
+
 
 	router.HandleFunc("/v1/projects_make_changes/project", control.Update_project_by_investor).Methods("PUT")
 
@@ -86,34 +89,29 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_add_document_to_project).Methods("POST")
 
 	/*
-		check
+		Leave a COMMENT on the project
 	 */
 	router.HandleFunc("/v1/projects_comment/project", control.Get_comments_of_the_project).Methods("GET")
-
 	router.HandleFunc("/v1/projects_comment/project", control.Add_comment_to_project).Methods("POST")
 
 	/*
-		check
+		Read & Update financial tables
+			they are automatically created
 	 */
 	router.HandleFunc("/v1/projects_make_changes/finance", control.Finance_table_get).Methods("GET")
+	router.HandleFunc("/v1/projects_make_changes/finance", control.Finance_table_update).Methods("PUT")
+
 	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_table_get).Methods("GET")
-	router.HandleFunc("/v1/projects_make_changes/finance", control.Finance_table).Methods("PUT")
-	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_and_project_evaluation_table).Methods("PUT")
-
-
-	router.HandleFunc("/v1/projects_make_changes/finance", control.Finance_table).Methods("POST")
-	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_and_project_evaluation_table).Methods("POST")
+	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_table_update).Methods("PUT")
 
 	router.HandleFunc("/v1/projects_see_all/project", control.User_project_get_all).Methods("GET")
 	router.HandleFunc("/v1/projects_see_own/project", control.User_project_get_own).Methods("GET")
 
 	/*
-		check
+		Assign & remove user from project
 	 */
 	router.HandleFunc("/v1/administrate/project", control.Remove_user_from_project).Methods("DELETE")
-
 	router.HandleFunc("/v1/administrate/project", control.Admin_assign_user_to_project).Methods("POST")
-	router.HandleFunc("/v1/all/organization", control.Get_organization_info_by_bin).Methods("GET")
 
 	router.HandleFunc("/v1/administrate/ganta", control.Ganta_get_all_steps_by_project_id).Methods("GET")
 	router.HandleFunc("/v1/administrate/ganta", control.Ganta_add_new_step).Methods("POST")
@@ -124,9 +122,10 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		check
 	 */
+	router.HandleFunc("/v1/all/organization", control.Get_organization_info_by_bin).Methods("GET")
 	router.HandleFunc("/v1/administrate/organization", control.Update_organization_data).Methods("PUT")
 
-	router.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
 		var fr = model.Project{
 			Id: 1,
 		}
@@ -144,8 +143,9 @@ func Create_new_invest_router() (*mux.Router) {
 
 	/*
 		check for session token
+			also will go through: auth.EmailVerifiedWrapper, auth.HasPermissionWrapper
 	 */
-	router.Use(auth.HasPermissionAndEmailVerifiedWrapper, auth.JwtAuthentication)
+	router.Use(auth.JwtAuthentication)
 
 	return router
 }

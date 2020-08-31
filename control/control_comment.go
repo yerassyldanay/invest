@@ -1,9 +1,7 @@
 package control
 
 import (
-	"errors"
 	"fmt"
-	"github.com/gorilla/mux"
 	"invest/model"
 	"invest/utils"
 	"net/http"
@@ -81,20 +79,22 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+/*
+	provide
+		* project_id
+ */
 var Get_comments_of_the_project = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_comments_of_the_project"
-	var vars, ok = mux.Vars(r)["project_id"]
+	project_id := Get_query_parameter_uint64(r, "project_id", 0)
 
 	var errmsg string
 	var err error
 	var resp map[string]interface{}
 
-	if ok && len(vars) > 0 {
-		var c = model.Comment{}
-		resp, err = c.Get_all_comments_to_the_project()
-	} else {
-		resp, err = utils.ErrorInvalidParameters, errors.New("parameters are not valid. get comment")
+	var c = model.Comment{
+		ProjectId: project_id,
 	}
+	resp, err = c.Get_all_comments_to_the_project()
 
 	if err != nil {
 		errmsg = err.Error()

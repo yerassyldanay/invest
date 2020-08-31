@@ -108,3 +108,9 @@ var ErrorFailedToCreateAnAccount = map[string]interface{}{
 	"kaz": "аккаунт ашу мүмкін болмады",
 }
 
+var ErrorDupicateKeyOnDb = map[string]interface{} {
+	"eng": "failed to create, probably, because some fields are repeated",
+	"rus": "не удалось создать, возможно, потому что некоторые поля повторяются",
+	"kaz": "енгізілген кейбір ақпарат қайталанады",
+}
+

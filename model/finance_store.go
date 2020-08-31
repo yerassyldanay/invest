@@ -1,132 +1,136 @@
 package model
 
 import (
-	"errors"
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"invest/utils"
-	"strings"
 )
 
-func (fi *Finance) Recalculate_sum_to_avoid_missguidance() {
-	return
+func (fic *FinanceCol) Recalculate_sum_to_avoid_misguidance() {
+	fic.Sum = fic.Initiator + fic.SPK + fic.Funded
 }
 
-func (fi *Finance) Create_and_store_on_db() (map[string]interface{}, error) {
-	fi.Recalculate_sum_to_avoid_missguidance()
+func (fi *Finance) Recalculate_sum_to_avoid_misguidance() {
+	fi.Land.Recalculate_sum_to_avoid_misguidance()
+	fi.Capital.Recalculate_sum_to_avoid_misguidance()
+	fi.Tech.Recalculate_sum_to_avoid_misguidance()
+	fi.Other.Recalculate_sum_to_avoid_misguidance()
 
-	var trans = GetDB().Begin()
-	defer func() {
-		if trans != nil {
-			trans.Rollback()
-		}
-	}()
+	fi.Sum.SPK = fi.Land.SPK + fi.Capital.SPK + fi.Tech.SPK + fi.Other.SPK
+	fi.Sum.Funded = fi.Land.Funded + fi.Capital.Funded + fi.Tech.Funded + fi.Other.Funded
+	fi.Sum.Initiator = fi.Land.Initiator + fi.Capital.Initiator + fi.Tech.Initiator + fi.Other.Initiator
+	fi.Sum.Sum = fi.Land.Sum + fi.Capital.Sum + fi.Tech.Sum + fi.Other.Sum
 
-	//var count int
-	//if GetDB().Table(Project{}.TableName()).Where("id=?", fi.ProjectId).Count(&count); count != 1 {
-	//	return utils.ErrorInvalidParameters, errors.New("there is no such project")
-	//}
-
-	var count int
-	if GetDB().Table(Finance{}.TableName()).Where("project_id=?", fi.ProjectId).Count(&count); count != 0 {
-			return utils.ErrorMethodNotAllowed, errors.New("the finance table of the project already exists")
-	}
-
-	if err := trans.Create(&fi.Land).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-	fi.LandId = fi.Land.Id
-
-	if err := trans.Create(&fi.Tech).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-	fi.TechId = fi.Tech.Id
-
-	if err := trans.Create(&fi.Capital).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-	fi.CapitalId = fi.Capital.Id
-
-	if err := trans.Create(&fi.Other).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-	fi.OtherId = fi.Other.Id
-
-	if err := trans.Create(&fi.Sum).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-	fi.SumId = fi.Sum.Id
-
-	if err := trans.Create(fi).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-
-	trans.Commit()
-	return utils.NoErrorFineEverthingOk, nil
+	fmt.Println(*fi)
 }
 
 /*
-	get a finance table
+	create a project in one place
+		expects that values are valid
  */
-func (fi *Finance) Get_table() (map[string]interface{}, error) {
+func (fi *Finance) Create_this_table() error {
 
+	fi.Recalculate_sum_to_avoid_misguidance()
+
+	//_ = fi.
+
+	err := GetDB().Create(fi).Error
+	return err
+}
+
+/*
+	load data in one place
+ */
+func (fi *Finance) Load_values_to_this_object_by_project_id() error {
 	err := GetDB().Preload("Project").Preload("Land").
 		Preload("Tech").Preload("Capital").Preload("Other").
 		Preload("Sum").Table(fi.TableName()).
 		Where("project_id=?", fi.ProjectId).
 		First(fi).Error
 
-	if err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-
-	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = Struct_to_map(*fi)
-
-	return resp, nil
-}
-
-func get_table_help(result chan bool, fcid uint64, fc *FinanceCol) {
-	if err := GetDB().Table(Ganta{}.TableName()).Where("id=?", fcid).First(fc); err != nil {
-		fmt.Println("get fin table: ", err)
-	}
-
-	result <- true
+	return err
 }
 
 /*
-	delete table and recreate
+	updating table values
  */
-func (fi *Finance) Update_finance_table() (map[string]interface{}, error) {
-	var trans = GetDB().Begin()
-	defer func() { if trans != nil { trans.Rollback() } }()
-
-	var main_query = `
-		delete from finance_cols where id in (
-			select fc.id from finance_cols fc join finances fi
-			on fc.id = fi.project_id or fc.id = fi.capital_id
-			or fc.id = fi.land_id or fc.id = fi.other_id
-			or fc.id = fi.sum_id
-			where fi.project_id = ?
-		);
-	`
-	main_query = strings.Replace(main_query, "\\n", "", -1)
-	main_query = strings.Replace(main_query, "\\t", "", -1)
-
-	if err := trans.Exec(main_query, fi.ProjectId).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+func (fi *Finance) Update_finance_table_with_this_table_by_project_id() (*utils.Msg) {
+	var old_finance = Finance{
+		ProjectId: fi.ProjectId,
 	}
 
-	main_query = `delete from finances where project_id = ?;`
-	if err := trans.Exec(main_query, fi.ProjectId).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+	/*
+		verify that the sum of the values are correct
+	 */
+	fi.Recalculate_sum_to_avoid_misguidance()
+
+	/*
+		this will load table from db
+	 */
+	err := old_finance.Load_values_to_this_object_by_project_id()
+	if err == gorm.ErrRecordNotFound {
+		/*
+			if the table is not found then store this table on db
+		 */
+		fi.Id = 0
+		err = fi.Create_this_table()
+
+		if err != nil {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		}
+
+		return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+
+	} else if err != nil {
+		/*
+			did not expect this kind of error
+				thus returning msg
+		 */
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	_, err := fi.Create_and_store_on_db()
-	if err != nil {
-		return utils.ErrorInternalDbError, err
+	/*
+		replacing the ids of tables
+			to store the new table on db
+		thus can store the new table instead of old one
+	 */
+	fi.Id = old_finance.Id
+
+	fi.LandId = old_finance.Land.Id
+	fi.TechId = old_finance.Tech.Id
+	fi.CapitalId = old_finance.Capital.Id
+	fi.OtherId = old_finance.Other.Id
+	fi.SumId = old_finance.Sum.Id
+
+	if err := GetDB().Save(fi).Error; err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	trans.Commit()
-	return utils.NoErrorFineEverthingOk, nil
+	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+}
+
+/*
+	get a finance table
+ */
+func (fi *Finance) Get_table() (*utils.Msg) {
+	if fi.ProjectId == 0 {
+		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "project id is 0"}
+	}
+
+	err := fi.Load_values_to_this_object_by_project_id()
+
+	if err == gorm.ErrRecordNotFound {
+		err = fi.Create_this_table()
+		if err != nil {
+			fi = &Finance{}
+		}
+	} else if err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 500, "", err.Error()}
+	}
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = Struct_to_map_with_escape(*fi, []string{"project"})
+
+	return &utils.Msg{resp, 200, "", ""}
 }
 

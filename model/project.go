@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"invest/utils"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -46,9 +47,14 @@ func (p *Project) Create_project(bin string, lang string) (*utils.Msg){
 
 	p.Organization = org
 	p.OrganizationId = org.Id
-	p.Created = time.Now().UTC()
+	p.Created = time.Now()
 
 	if err := trans.Table(Project{}.TableName()).Create(p).Error; err != nil {
+		if strings.Contains(err.Error(), "duplicate key") {
+			return &utils.Msg{
+				utils.ErrorDupicateKeyOnDb, http.StatusConflict, "", err.Error(),
+			}
+		}
 		return &utils.Msg{
 			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
 		}
@@ -79,7 +85,7 @@ func (p *Project) Update(bin string, lang string) (*utils.Msg) {
 	}
 
 	if lang == "" {
-		lang = utils.DefaultLContentanguage
+		lang = utils.DefaultContentLanguage
 	}
 	
 	/*

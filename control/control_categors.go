@@ -38,14 +38,14 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 	case http.MethodPost:
 		resp, err = c.Create_category()
 
-	case http.MethodPut:
-		resp, err = c.Update()
+	//case http.MethodPut:
+	//	resp, err = c.Update()
 
 	case http.MethodDelete:
 		resp, err = c.Delete_category_from_tabe_and_projects()
 
 	default:
-
+		resp, err = utils.ErrorMethodNotAllowed, errors.New("not supported")
 	}
 
 	if err != nil {

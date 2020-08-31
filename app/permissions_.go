@@ -38,3 +38,6 @@ func Prepare_permissions() {
 		time.Sleep(time.Second * 0)
 	}
 }
+
+
+

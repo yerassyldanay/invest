@@ -19,6 +19,8 @@ require (
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
 	golang.org/x/sys v0.0.0-20200519105757-fe76b779f299 // indirect
+	golang.org/x/text v0.3.0
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
+	gopkg.in/go-playground/validator.v2 v2.0.0-20150311033435-276e0f9b5832
 	gopkg.in/validator.v2 v2.0.0-20200605151824-2b28d334fa05
 )

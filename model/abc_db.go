@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"github.com/joho/godotenv"
 	//_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/lib/pq"
 	"invest/utils"
@@ -46,11 +45,8 @@ func chooseDbDriver(dbtype, dbpath string) goose.DBDriver {
 		postgresql://other@localhost/otherdb?connect_timeout=10&application_name=myapp
  */
 func Get_db_uri() (string, error) {
-	/*
-		the following call loads all env variables in the .env file
-	*/
-	if err := godotenv.Load("./env/.env", "./env/sendgrid.env"); err != nil {
-		//fmt.Println(err.Error())
+
+	if err := Load_env_values(); err != nil {
 		return "", err
 	}
 
@@ -64,6 +60,8 @@ func Get_db_uri() (string, error) {
 	var dbPort = os.Getenv("POSTGRES_PORT")
 
 	var dbUri = fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", dbHost, dbPort, dbUsername, dbName, dbPassword)
+
+	//fmt.Println("dbUri: ", dbUri)
 
 	return dbUri, nil
 }
@@ -178,12 +176,25 @@ func Set_up_db() {
 		parameters of db
 	 */
 	db.DB().SetMaxOpenConns(utils.MaxNumberOpenConnToDb)
+
+	/*
+		these lines of code will make sure that everytime we create a row
+			sequence id will be updated
+		as there is a problem with sync of seq. id.
+	 */
+	db.Callback().Create().Before("gorm:update").Register("updateSeqId", func(scope *gorm.Scope) {
+		fmt.Println("updating hook is working: ", scope.TableName())
+		_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(scope.DB(), "default")
+	})
 }
 
 /*
 	getter for gorm.DB object
  */
 func GetDB () *gorm.DB {
+	if db == nil {
+		Set_up_db()
+	}
 	return db
 }
 

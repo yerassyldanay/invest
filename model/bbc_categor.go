@@ -8,3 +8,4 @@ type Categor struct {
 func (Categor) TableName() string {
 	return "categors"
 }
+

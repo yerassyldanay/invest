@@ -27,7 +27,7 @@ const (
 )
 
 var NoNeedToAuth = []string {
-	"/test",
+	"/intest",
 	"/api/check",
 	"/v1/all/signup",
 	"/v1/all/signin",
@@ -35,17 +35,19 @@ var NoNeedToAuth = []string {
 	"/v1/all/confirmation/phone",
 }
 
-const (
-	KeyId = "id"
-	KeyRole = "role"
-	KeyRoleId = "rid"
-	KeyTime = "time"
-	KeyLanguage = "lang"
-	KeyOffset = "offset"
+var NoNeedToConfirmEmail = []string {}
 
-	KeyEmailSubject = "subject"
-	KeyEmailPlainText = "page"
-	KeyEmailHtml = "html"
+const (
+	KeyId = "Id"
+	KeyRole = "Role"
+	KeyRoleId = "Rid"
+	KeyTime = "Time"
+	KeyLanguage = "Lang"
+	KeyOffset = "Offset"
+
+	KeyEmailSubject = "Subject"
+	KeyEmailPlainText = "Page"
+	KeyEmailHtml = "Html"
 
 	DocTypeDocs = "docs"
 	DocTypeComment = "comment"
@@ -53,12 +55,15 @@ const (
 
 const (
 	AttemptToConnectToDb = 3
-
 	TimeSecToSleepBetweenDbConn = 5
 
 	MaxNumberOpenConnToDb = 5
 	MaxNumberOfDigitsSentByEmail = 4
 	MaxNumberOfCharactersSentByEmail = 30
+)
+
+const (
+	ConstantDefaultNumberOfUsers = 3
 )
 
 const (
@@ -83,12 +88,28 @@ const (
 	HeaderAuth = "Authentication"
 	HeaderContentLanguage = "Content-Language"
 	HeaderAcceptLanguage = "Accept-Language"
+	HeaderCustomStatus = "Custom-Status"
+	HeaderContentType = "Content-Type"
+	HeaderAuthorization = "Authorization"
 )
 
 const (
-	DefaultLContentanguage = "kaz"
+	CookieLanguageKeyWord = "lang"
+)
+
+const (
+	DefaultContentLanguage = "kk"
+	ContentLanguageKk = "kk"
+	ContentLanguageRu = "ru"
+	ContentLanguageEn = "en"
 	DefaultNotAllowedUserToDelete = 3
 )
+
+var LanguageMap = map[string]string{
+	"kk": "kaz",
+	"ru": "rus",
+	"en": "eng",
+}
 
 const (
 	ProjectStatusNotConfirmed = "not confirmed"
@@ -97,4 +118,12 @@ const (
 	ProjectStatusBlocked = "blocked"
 
 	ProjectStatusChangeTimeInHours = 48
+)
+
+const (
+	AuthorizationAdminToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxLCJleHAiOiIyMDIwLTA4LTMwVDE3OjEzOjAzLjQwNDA2MDkxNyswNjowMCJ9.9FC_Ihr1gDLyJ8EX_wlwymECuOmKS8VeLCpW1RnO6WM`
+)
+
+const (
+	GormSeqIdFinance = "finance"
 )

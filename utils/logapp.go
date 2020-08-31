@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
@@ -87,7 +89,30 @@ func (fr *FileRotator) Set_log_file() {
 	}
 
 	var err error
-	file, err = os.OpenFile(FolderLogFiles+ "/" + FR.FileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	var file_path string
+
+	/*
+		this is to handle the mistake arising when running this function from different paths
+			main.go - /invest
+			intest - /invest/intest
+	 */
+	current_path, _ := os.Getwd()
+	if strings.Contains(current_path, "/invest/intest") {
+		file_path, err = filepath.Abs("../" + FolderLogFiles + "/")
+		if err != nil {
+			log.Println(err)
+		}
+	} else {
+		file_path, err = filepath.Abs("./" + FolderLogFiles + "/")
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	file_path = filepath.Join(file_path, FR.FileName)
+	//fmt.Println("file_path: ", file_path, current_path)
+
+	file, err = os.OpenFile(file_path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Println(err)
 	}

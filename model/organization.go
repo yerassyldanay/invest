@@ -71,8 +71,13 @@ func (o *Organization) Get_and_assign_info_on_organization_by_bin() (*Organizati
 		expects that all fields are filled
 */
 func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) {
-	if o.Lang == "" {
+	switch o.Lang {
+	case utils.ContentLanguageKk:
 		o.Lang = "kaz"
+	case utils.ContentLanguageRu:
+		o.Lang = "rus"
+	default:
+		o.Lang = "eng"
 	}
 
 	var err error

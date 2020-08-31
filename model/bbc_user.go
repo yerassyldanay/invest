@@ -1,5 +1,11 @@
 package model
 
+import (
+	"errors"
+	"github.com/jinzhu/gorm"
+	"invest/utils"
+)
+
 /*
 	note: 2^32 = 4 294 967 296
 */
@@ -35,3 +41,45 @@ type User struct {
 func (User) TableName() string {
 	return "users"
 }
+
+/*
+	Hooks are functions that are called before or after creation/querying/updating/deletion.
+	If you have defined specified methods for a model, it will be called automatically when creating, updating, querying, deleting, and if any callback returns an error,
+	GORM will stop future operations and rollback current transaction.
+	The type of hook methods should be func(*gorm.DB) error
+
+	https://gorm.io/docs/hooks.html
+ */
+//func (c *User) AfterFind(tx *gorm.DB) error {
+//	/*
+//		after each get method this will set password to ""
+//	 */
+//	c.Password = ""
+//	return nil
+//}
+
+var errorDafultUsersAreBeingAltered = errors.New("cannot delete default users")
+
+/*
+	cannot delete default users
+ */
+func (c *User) BeforeDelete(tx *gorm.DB) error {
+	if c.Id <= utils.ConstantDefaultNumberOfUsers {
+		return errorDafultUsersAreBeingAltered
+	}
+
+	return nil
+}
+
+/*
+	cannot update default user
+ */
+func (c *User) BeforeUpdate(tx *gorm.DB) error {
+	if c.Id <= utils.ConstantDefaultNumberOfUsers {
+		return errorDafultUsersAreBeingAltered
+	}
+
+	return nil
+}
+
+

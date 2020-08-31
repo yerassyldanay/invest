@@ -31,12 +31,7 @@ func (ca *Categor) Update() (map[string]interface{}, error) {
  */
 func (ca *Categor) Delete_category_from_tabe_and_projects() (map[string]interface{}, error) {
 
-	var main_query = "delete from projects_categories where categor_id = ? ;"
-	if err := GetDB().Exec(main_query).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-
-	if err := GetDB().Where("id=?", ca.Id).Delete(&Categor{}).Error;
+	if err := GetDB().Delete(ca, "id = ?", ca.Id).Error;
 		err != nil {
 			return utils.ErrorInternalDbError, err
 	}

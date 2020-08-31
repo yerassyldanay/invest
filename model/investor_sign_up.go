@@ -32,7 +32,7 @@ func (c *User) Sign_Up() (*utils.Msg) {
 		return &utils.Msg{utils.ErrorUsernameOrFioIsAreadyInUse, http.StatusConflict, "", "already in use: " + c.Fio}
 	}
 
-	ok := Validate_password(c.Password)
+	ok := Validate_password(c.Password, nil, "")
 	hashed, err := utils.Convert_string_to_hash(c.Password)
 
 	if !ok || err != nil {

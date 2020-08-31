@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"invest/model"
 	"invest/utils"
@@ -21,9 +20,9 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 				E.g. getting static files or sign in/up urls
 		 */
 		for _, url := range utils.NoNeedToAuth {
-			fmt.Println(url, r.URL.Path)
+			//fmt.Println(url, r.URL.Path)
 			if url == r.URL.Path {
-				fmt.Println(url, r.URL.Path)
+				//fmt.Println(url, r.URL.Path)
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -40,8 +39,8 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 				Message: map[string]interface{}{
 					"eng": "invalid token",
 				},
-				Status:  http.StatusBadRequest,
-				Fname:   fname,
+				Status:  http.StatusMisdirectedRequest,
+				Fname:   fname + " 1",
 				ErrMsg:  "could not be split correctly",
 			})
 			return
@@ -49,6 +48,10 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		var tokenNeeded = splits[1]
 		var tokenStruct = &model.Token{}
+
+		if check := os.Getenv("TOKEN_PASSWORD"); check == "" {
+			_ = model.Load_env_values()
+		}
 
 		var token, err = jwt.ParseWithClaims(tokenNeeded, tokenStruct, func(token *jwt.Token) (i interface{}, e error) {
 			return []byte(os.Getenv("TOKEN_PASSWORD")), nil
@@ -59,8 +62,8 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 				Message: map[string]interface{}{
 					"eng": "invalid or expired token",
 				},
-				Status:  http.StatusBadRequest,
-				Fname:   fname,
+				Status:  http.StatusMisdirectedRequest,
+				Fname:   fname + " 2",
 				ErrMsg:  err.Error(),
 			})
 			return
@@ -71,8 +74,8 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 				Message: map[string]interface{}{
 					"eng": "token has been expired",
 				},
-				Status:  http.StatusBadRequest,
-				Fname:   fname,
+				Status:  http.StatusMisdirectedRequest,
+				Fname:   fname + " 3",
 				ErrMsg:  "token has been expired",
 			})
 			return
@@ -90,7 +93,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		//	utils.RespondExtended(writer, request, utils.Message(http.StatusBadRequest, "You have not authenticated"),
 		//		&utils.LogMessage{
 		//			Ok:       	false,
-		//			FuncName: 	fname,
+		//			FuncName: 	fname + " 4,
 		//			Message:  	"Session Token is Old",
 		//		})
 		//	return
@@ -102,12 +105,12 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		//			"eng": "token has been expired",
 		//		},
 		//		Status:  http.StatusBadRequest,
-		//		Fname:   fname,
+		//		Fname:   fname + " 5,
 		//		ErrMsg:  "token has been expired",
 		//	})
 		//	return
 		//}
-		next.ServeHTTP(w, r)
+		EmailVerifiedWrapper(next, w, r)
 	})
 }
 

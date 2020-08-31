@@ -12,7 +12,6 @@ import (
 
 var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Create_project"
-	var errmsg string
 
 	var project = struct{
 		model.Project
@@ -20,7 +19,7 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	}{}
 
 	var id = utils.GetHeader(r, utils.KeyId)
-	fmt.Println(id)
+	//fmt.Println(id)
 
 	project.CreatedBy = id
 
@@ -39,6 +38,7 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 
 	var msg *utils.Msg
 	var err error
+	var errmsg string
 
 	if msg = project.Project.Create_project(project.Bin, lang); msg.ErrMsg == "" {
 		/*
@@ -54,7 +54,7 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 		var finance = model.Finance{
 			ProjectId: project.Id,
 		}
-		if _, err = finance.Create_and_store_on_db(); err != nil {
+		if err = finance.Create_this_table(); err != nil {
 			errmsg = errmsg + err.Error()
 		}
 		
@@ -64,12 +64,12 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 		var finresult = model.Finresult{
 			ProjectId: project.Id,
 		}
-		if _, err = finresult.Create_and_store_financial_results_of_project_on_db();
-			err != nil {
+		if err = finresult.Create_this_table(); err != nil {
 				errmsg = errmsg + err.Error()
 		}
 	}
 
+	msg.ErrMsg = errmsg
 	utils.Respond(w, r, msg)
 }
 

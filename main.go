@@ -14,6 +14,12 @@ import (
 
 func main() {
 	/*
+		prepare validator:
+			* add custom functions such as password, bin, etc. validators
+	 */
+	//model.PrepareValidator()
+
+	/*
 		Set up a connection with db
 	 */
 	model.Set_up_db()

@@ -18,6 +18,7 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Sign_in"
 	var sis = model.SignIn{}
 
+	//fmt.Println("r.Body", r.Header, r.URL)
 	if err := json.NewDecoder(r.Body).Decode(&sis); err != nil {
 		utils.Respond(w, r,
 			&utils.Msg{
@@ -26,6 +27,8 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
+
+	//fmt.Println("sis: ", sis)
 
 	var msg *utils.Msg
 	if err := validator.Validate(sis); err != nil {
@@ -44,6 +47,8 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 		*/
 		r.Header.Set(utils.HeaderAuth, sis.TokenCompound)
 	}
+
+	//fmt.Printf("\nmsg: %#v \n\n", msg)
 
 	utils.Respond(w, r, msg)
 }

@@ -43,8 +43,8 @@ func (msg *Msg) Log(r *http.Request) {
 func Respond(w http.ResponseWriter, r *http.Request, msg *Msg) {
 	var fname = "RESPOND"
 
-	w.Header().Add("Content-Type", "application/json")
-	w.Header().Add("Status", strconv.Itoa(msg.Status))
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set(HeaderCustomStatus, strconv.Itoa(msg.Status))
 
 	/*
 		this header will bear a auth token
@@ -52,6 +52,8 @@ func Respond(w http.ResponseWriter, r *http.Request, msg *Msg) {
 	w.Header().Add("Authentication", r.Header.Get("Authentication"))
 
 	w.WriteHeader(msg.Status)
+
+	//fmt.Println("w.WriteHeader: ", w.Header(), msg.Status)
 
 	if err := json.NewEncoder(w).Encode(msg.Message); err != nil {
 		SysMessage {
@@ -63,6 +65,7 @@ func Respond(w http.ResponseWriter, r *http.Request, msg *Msg) {
 		return
 	}
 
+	//fmt.Println("msg: ", msg)
 	msg.Log(r)
 }
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"invest/utils"
 	"net/http"
+	"strconv"
 )
 
 func(r *Role) Validate() bool {
@@ -27,7 +28,17 @@ func(r *Role) Create_a_role_with_permissions() (*utils.Msg) {
 		}
 	}
 
-	if err := GetDB().Exec("select * from permissions where id in (?);", r.PermissionsSent).Scan(&r.Permissions).Error;
+	var permForQuery bytes.Buffer
+
+	for i, perm := range r.PermissionsSent {
+		if i != 0 {
+			permForQuery.WriteString(", ")
+		}
+		permForQuery.WriteString(strconv.Itoa(int(perm)))
+	}
+
+	var main_query = fmt.Sprintf(" id in (%s) ", permForQuery.String())
+	if err := GetDB().Find(&r.Permissions, main_query).Error;
 		err != nil {
 			return &utils.Msg{
 				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg:  err.Error(),
@@ -67,39 +78,57 @@ func (r *Role) Update_role_name_description_and_permissions() (*utils.Msg) {
 }
 
 /*
-	this method expects
-		1. role_id
-		2. ids of permissions
+	helper function
  */
-func (r *Role) Set_a_list_of_permissions() (*utils.Msg) {
-	var arrper []uint64
-	for i, _ := range r.Permissions {
-		arrper = append(arrper, r.Permissions[i].Id)
+func Convert_list_to_string_seperate_by_given_string(list []uint64, sep string) string {
+	var query bytes.Buffer
+	for i, elem := range list {
+		if i != 0 {
+			query.WriteString(sep)
+		}
+
+		query.WriteString(fmt.Sprintf("%v", elem))
 	}
 
-	if err := GetDB().Table(Permission{}.TableName()).Where("id in ?", arrper).Find(&r.Permissions).Error;
+	fmt.Println("query.String(): ", query.String())
+	return query.String()
+}
+
+/*
+	this method expects
+		1. role id
+		2. ids of permissions
+ */
+func (r *Role) Add_a_list_of_permissions() (*utils.Msg) {
+
+	if err := GetDB().Preload("Permissions").Find(r, "id = ?", r.Id).Error;
+		err != nil {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	}
+
+	var querystr = Convert_list_to_string_seperate_by_given_string(r.PermissionsSent, ", ")
+	querystr = fmt.Sprintf(" id in (%s) ", querystr)
+
+	var permissions = []Permission{}
+	if err := GetDB().Find(&permissions, querystr).Error;
 		err != nil {
 			return &utils.Msg{
 				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg:  err.Error(),
 			}
 	}
 
-	var main_query bytes.Buffer
-	_, _ = main_query.WriteString(" insert into roles_permissions values ")
-
-	for i, _ := range r.Permissions {
-		if i != 0 {
-			main_query.WriteString(" , ")
-		}
-		main_query.WriteString(fmt.Sprintf(" (%d, %d) ", r.Id, r.Permissions[i].Id))
+	/*
+		add permissions to the list
+	 */
+	for _, permission := range permissions {
+		r.Permissions = append(r.Permissions, permission)
 	}
 
-	main_query.WriteString(" ; ")
-
-	if err := GetDB().Exec(main_query.String()).Error; err != nil {
-		return &utils.Msg{
-			Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg: err.Error() ,
-		}
+	/*
+		save the results
+	 */
+	if err := GetDB().Save(r).Error; err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	return &utils.Msg{
@@ -108,16 +137,15 @@ func (r *Role) Set_a_list_of_permissions() (*utils.Msg) {
 }
 
 func (r *Role) Remove_a_list_of_permissions() (*utils.Msg) {
-	var arrper []uint64
-	for i, _ := range r.Permissions {
-		arrper = append(arrper, r.Permissions[i].Id)
-	}
 
-	if err := GetDB().Table("roles_permissions").
-		Delete("role_id=$1 and permission_id in $2", r.Id, arrper).Error; err != nil {
-			return &utils.Msg{
-				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg: err.Error(),
-			}
+	var querystr = Convert_list_to_string_seperate_by_given_string(r.PermissionsSent, ", ")
+
+	/*
+		deleting role & permissions relations
+	 */
+	querystr = fmt.Sprintf( " delete from roles_permissions where role_id = %d and permission_id in (%s); ", r.Id, querystr )
+	if err := GetDB().Exec(querystr).Error; err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	return &utils.Msg{
@@ -179,7 +207,7 @@ func (r *Role) Get_roles(offset string) (*utils.Msg) {
 	var roles = struct {
 		Info			[]Role
 	}{}
-	if err := GetDB().Preload("permissions").Table(Role{}.TableName()).Offset(offset).Limit(GetLimit).Find(&roles.Info).Error; err != nil {
+	if err := GetDB().Preload("Permissions").Table(Role{}.TableName()).Offset(offset).Limit(GetLimit).Find(&roles.Info).Error; err != nil {
 		var resp = utils.ErrorInternalDbError
 		resp["info"] = []map[string]interface{}{}
 		return &utils.Msg{
@@ -190,9 +218,7 @@ func (r *Role) Get_roles(offset string) (*utils.Msg) {
 	var resp = utils.ErrorInternalDbError
 	resp["info"] = Struct_to_map(roles)
 
-	return &utils.Msg{
-		Message: utils.NoErrorFineEverthingOk, Status:  http.StatusOK, ErrMsg: "",
-	}
+	return &utils.Msg{resp, http.StatusOK, "", ""}
 }
 
 func (r *Role) Get_role_info() (*utils.Msg) {

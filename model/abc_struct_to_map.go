@@ -19,10 +19,15 @@ func Struct_to_map(cs interface{}) (map[string]interface{}) {
 	}
 
 	for i := 0; i < v.NumField(); i++ {
-		key := strings.ToLower(typeOfS.Field(i).Name)
+		key := strings.ToLower(string(typeOfS.Field(i).Tag.Get("json")))
 		info[key] = v.Field(i).Interface()
 	}
-
+	//b, err := json.Marshal(cs)
+	//if err != nil {
+	//	return info
+	//}
+	//
+	//_ = json.Unmarshal(b, &info)
 	return info
 }
 
@@ -37,7 +42,7 @@ func Struct_to_map_with_escape(cs interface{}, escape []string) (map[string]inte
 
 	var ok = true
 	for i := 0; i < v.NumField(); i++ {
-		key := strings.ToLower(typeOfS.Field(i).Name)
+		key := strings.ToLower(typeOfS.Field(i).Tag.Get("json"))
 
 		ok = true
 		for _, tkey := range escape {

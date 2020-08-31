@@ -32,8 +32,10 @@ func (pu *ProjectsUsers) Assign_user_to_project() (map[string]interface{}, error
 	remove user from project
  */
 func (pu *ProjectsUsers) Remove_user_from_project() (map[string]interface{}, error) {
-	if err := GetDB().Table(pu.TableName()).Where("user_id = ? and project_id = ?",
-		pu.UserId, pu.ProjectId).Error; err != nil {
+	//var main_query = ` delete from projects_users where project_id = ? and user_id = ? ; `
+
+	err := GetDB().Delete(&ProjectsUsers{}, " project_id = ? and user_id = ? ", pu.ProjectId, pu.UserId).Error
+	if err != nil {
 		return utils.ErrorInternalDbError, err
 	}
 

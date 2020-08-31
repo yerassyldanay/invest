@@ -1,154 +1,141 @@
 package model
 
 import (
-	"fmt"
+	"github.com/jinzhu/gorm"
 	"invest/utils"
-	"strings"
 )
 
-func (fr *Finresult) Recalculate_sum_values() {
+/*
+	calculate values again to make sure they are valid
+ */
+func (frc *FinresultCol) Recalculate_sum_to_avoid_misguidance() {
 	return
 }
 
-func (fr *Finresult) Create_and_store_financial_results_of_project_on_db() (map[string]interface{}, error) {
-	fr.Recalculate_sum_values()
-
-	var trans = GetDB().Begin()
-	defer func() {
-		if trans != nil {
-			trans.Rollback()
-		}
-	}()
-
-	var count int
-	if err := GetDB().Table(Finresult{}.TableName()).Where("project_id=?", fr.ProjectId).Count(&count).Error; count != 0 || err != nil {
-		//fmt.Println("create finresult err: ", err)
-		return utils.ErrorMethodNotAllowed, err
-	}
-
-	/*
-
-	 */
-	if err := trans.Create(&fr.TotalIncome).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
-	}
-	fr.TotalIncomeId = fr.TotalIncome.Id
-
-	if err := trans.Create(&fr.TotalProduction).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
-	}
-	fr.TotalProductionId = fr.TotalProduction.Id
-
-	/*
-		ProductionCost
-	 */
-	if err := trans.Create(&fr.ProductionCost).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
-	}
-	fr.PrivateCostId = fr.PrivateCost.Id
-
-	if err := trans.Create(&fr.OperationalProfit).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
-	}
-	fr.OperationalProfitId = fr.OperationalProfit.Id
-
-	/*
-		Cancellation
-	 */
-	if err := trans.Create(&fr.Cancellation).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
-	}
-	fr.CancellationId = fr.Cancellation.Id
-
-	if err := trans.Create(&fr.OtherCost).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
-	}
-	fr.OtherCostId = fr.OtherCost.Id
-
-	if err := trans.Create(&fr.PrivateCost).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
-	}
-	fr.PrivateCostId = fr.PrivateCost.Id
-
-	/*
-		Create fin table
-	 */
-	if err := trans.Create(fr).Error; err != nil {
-		return utils.ErrorInternalDbError, err
-	}
-
-	fmt.Println(trans)
-	trans.Commit()
-	trans = nil
-	return utils.NoErrorFineEverthingOk,nil
+func (fr *Finresult) Recalculate_sum_to_avoid_misguidance() {
+	fr.TotalIncome.Recalculate_sum_to_avoid_misguidance()
+	fr.TotalProduction.Recalculate_sum_to_avoid_misguidance()
+	fr.ProductionCost.Recalculate_sum_to_avoid_misguidance()
+	fr.OperationalProfit.Recalculate_sum_to_avoid_misguidance()
+	fr.Cancellation.Recalculate_sum_to_avoid_misguidance()
+	fr.OtherCost.Recalculate_sum_to_avoid_misguidance()
+	fr.PrivateCost.Recalculate_sum_to_avoid_misguidance()
 }
 
-func (fr *Finresult) Get_finresult_table() (map[string]interface{}, error) {
+/*
+	load table data
+ */
+func (fr *Finresult) Load_values_to_this_object_by_project_id() error {
 	err := GetDB().Preload("TotalProduction").Preload("TotalIncome").
 		Preload("PrivateCost").Preload("OtherCost").
 		Preload("OperationalProfit").Preload("Cancellation").
 		Preload("ProductionCost").Table(fr.TableName()).Where("project_id=?", fr.ProjectId).
 		First(fr).Error
 
-	if err != nil {
-		return utils.ErrorInternalDbError, err
+	return err
+}
+
+/*
+	create a table
+ */
+func (fr *Finresult) Create_this_table() error {
+
+	fr.Recalculate_sum_to_avoid_misguidance()
+
+	return GetDB().Create(fr).Error
+}
+
+/*
+	this function will provide a fin table
+		in case there is no table it will create a new one and return that table
+ */
+func (fr *Finresult) Get_finresult_table() (*utils.Msg) {
+	if fr.ProjectId == 0 {
+		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "project id is 0"}
+	}
+
+	err := fr.Load_values_to_this_object_by_project_id()
+
+	if err == gorm.ErrRecordNotFound {
+		/*
+			if not found then create a new fin result table
+		 */
+		if err = fr.Create_this_table(); err != nil {
+			/*
+				if could not create then return default one
+			 */
+			fr = &Finresult{}
+		}
+
+	} else if err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = Struct_to_map(*fr)
+	resp["info"] = Struct_to_map_with_escape(*fr, []string{"project"})
 
-	return resp, nil
+	return &utils.Msg{resp, 200, "", ""}
 }
 
 /*
-	to run using goroutine
- */
-func get_finresult__help(result chan bool, id uint64, fc *FinresultCol) {
-	if err := GetDB().Table(FinanceCol{}.TableName()).Where("id=?", id).First(fc).Error;
-		err != nil {
-			fmt.Println("get finresult column: ", err)
-	}
-
-	result <- true
-}
-
-/*
-	delete table and recreate
+	update a table
+		the AfterCreate hook will delete unnecessary
 */
-func (fi *Finresult) Update_finresult_table() (map[string]interface{}, error) {
-	var trans = GetDB().Begin()
-	defer func() { if trans != nil { trans.Rollback() } }()
-
-	var main_query = `
-		delete from finresult_cols where id in (
-			select fc.id from finresult_cols fc join finresults fi
-				on fc.id = fi.cancellation_id
-				or fc.id = fi.operational_profit_id
-				or fc.id = fi.other_cost_id
-				or fc.id = fi.private_cost_id
-				or fc.id = fi.production_cost_id
-				or fc.id = fi.total_income_id
-				or fc.id = fi.total_production_id
-			where project_id = ?
-		);
-	`
-	main_query = strings.Replace(main_query, "\\n", "", -1)
-	main_query = strings.Replace(main_query, "\\t", "", -1)
-
-	if err := trans.Exec(main_query, fi.ProjectId).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+func (fr *Finresult) Update_this_table() (*utils.Msg) {
+	var old_finance = Finresult{
+		ProjectId: fr.ProjectId,
 	}
 
-	main_query = `delete from finresults where project_id = ?;`
-	if err := trans.Exec(main_query, fi.ProjectId).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+	/*
+		verify that the sum of the values are correct
+	*/
+	fr.Recalculate_sum_to_avoid_misguidance()
+
+	/*
+		this will load table from db
+	*/
+	err := old_finance.Load_values_to_this_object_by_project_id()
+	if err == gorm.ErrRecordNotFound {
+		/*
+			if the table is not found then store this table on db
+		*/
+		fr.Id = 0
+		err = fr.Create_this_table()
+
+		if err != nil {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		}
+
+		return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+
+	} else if err != nil {
+		/*
+			did not expect this kind of error
+				thus returning msg
+		*/
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	_, err := fi.Create_and_store_financial_results_of_project_on_db()
-	if err != nil {
-		return utils.ErrorInternalDbError, err
+	/*
+		replacing the ids of tables
+			to store the new table on db
+		thus can store the new table instead of old one
+	*/
+	fr.Id = old_finance.Id
+
+	fr.TotalIncomeId = old_finance.TotalIncome.Id
+	fr.TotalProductionId = old_finance.TotalProduction.Id
+
+	fr.ProductionCostId = old_finance.ProductionCost.Id
+	fr.OperationalProfitId = old_finance.OperationalProfit.Id
+	fr.CancellationId = old_finance.Cancellation.Id
+
+	fr.OtherCostId = old_finance.OtherCost.Id
+	fr.PrivateCostId = old_finance.PrivateCost.Id
+
+	if err := GetDB().Save(fr).Error; err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	trans.Commit()
-	return utils.NoErrorFineEverthingOk, nil
+	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }

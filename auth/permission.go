@@ -19,11 +19,11 @@ import (
 			if yes: a request will be forwarded
 			else: 'the method is not allowed' message will be sent
  */
-var HasPermissionAndEmailVerifiedWrapper = func(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+var HasPermissionWrapper = func(next http.Handler, w http.ResponseWriter, r *http.Request) {
 		var fname = "check_whether_user_has_such_permission"
 		var up = model.UserPermission{}
-		up.UserId = control.Get_query_parameter_uint64(r, utils.KeyId, 0)
+
+		up.UserId = control.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
 
 		/*
 			/v1/permission/1/2 -> [v1, permission, 1, 2]
@@ -32,25 +32,26 @@ var HasPermissionAndEmailVerifiedWrapper = func(next http.Handler) http.Handler 
 		if len(paths) < 2 {
 			utils.Respond(w, r, &utils.Msg{
 				Message: utils.ErrorInternalServerError,
-				Status:  http.StatusInternalServerError,
+				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 1",
 				ErrMsg:  "the path is invalid",
 			})
 			return
 		}
 
-		up.Permission = paths[1]
+		up.Permission = paths[2]
 
-		var msg = up.Check_on_db_whether_this_user_has_such_a_permission_and_user_account_is_confirmed()
+		var msg = up.Check_db_whether_this_user_has_such_a_permission()
 		msg.Fname = fname + " 2"
 
 		if msg.ErrMsg != "" {
 			utils.Respond(w, r, msg)
+			return
 		}
 
 		/*
 			this means user has such a permission
 		 */
-		next.ServeHTTP(w, r)
-	})
+		Parse_prefered_language_of_user(next, w, r)
 }
+

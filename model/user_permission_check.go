@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+	"github.com/jinzhu/gorm"
 	"invest/utils"
 	"net/http"
 )
@@ -10,13 +12,18 @@ import (
 		provided:
 			1. user id
 			2. permission name
+
+	statuses: 200, 405
  */
-func (up *UserPermission) Check_on_db_whether_this_user_has_such_a_permission_and_user_account_is_confirmed() (*utils.Msg) {
+func (up *UserPermission) Check_db_whether_this_user_has_such_a_permission() (*utils.Msg) {
 	var fname = "Check_on_db_whether_this_user_has_such_a_permission"
 	if up.Permission == "all" {
-		return &utils.Msg{}
+		return &utils.Msg{
+			Status: http.StatusOK,
+		}
 	}
 
+	fmt.Println("up: ", up.UserId, up.Permission)
 	var main_query = `
 		select u.* from users u where u.id = $1 and u.role_id in
 		   (
@@ -28,18 +35,34 @@ func (up *UserPermission) Check_on_db_whether_this_user_has_such_a_permission_an
 	`
 
 	var user = User{}
-	if err := GetDB().Raw(main_query, up.UserId, up.Permission).Scan(&user).Error; err != nil {
+	if err := GetDB().Raw(main_query, up.UserId, up.Permission).Scan(&user).Error; err == gorm.ErrRecordNotFound || user.Id == 0 {
 		return &utils.Msg{
-			Message: utils.ErrorMethodNotAllowed, Status:  http.StatusMethodNotAllowed,  Fname:   fname,
+			Message: utils.ErrorMethodNotAllowed, Status:  http.StatusFailedDependency,  Fname:   fname,
 			ErrMsg:  "user has not got such permission or invalid parameters have been provided",
+		}
+	}
+
+	return &utils.Msg{
+		Status: http.StatusOK,
+	}
+}
+
+/*
+	statuses: 200, 406, 417
+ */
+func (up *UserPermission) Check_db_whether_this_user_account_is_confirmed() (*utils.Msg) {
+	var user = User{}
+	if err := GetDB().Table(User{}.TableName()).Where("id = ?", up.UserId).First(&user).Error; err != nil {
+		return &utils.Msg{
+			Status:  http.StatusExpectationFailed,
 		}
 	}
 
 	if !user.Verified {
 		return &utils.Msg {
-			utils.ErrorEmailIsNotVerified, http.StatusNotAcceptable, "", "the account is not confirmed",
+			utils.ErrorEmailIsNotVerified, http.StatusLocked, "", "the account is not confirmed",
 		}
 	}
 
-	return &utils.Msg{}
+	return &utils.Msg{Status: http.StatusOK}
 }

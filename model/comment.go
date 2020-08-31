@@ -2,6 +2,8 @@ package model
 
 import (
 	"errors"
+	"fmt"
+	"github.com/jinzhu/gorm"
 	"invest/utils"
 )
 
@@ -39,13 +41,20 @@ func (c *Comment) Create_comment_after_saving_its_document() (map[string]interfa
 	get comments of the project
  */
 func (c *Comment) Get_all_comments_to_the_project() (map[string]interface{}, error) {
-	if err := GetDB().Set("gorm:auto_preload", false).Table(c.TableName()).
-			Where("project_id=?", c.ProjectId).First(c).Error; err != nil {
+	var info = struct {
+		Comments		[]Comment
+	}{
+		Comments: []Comment{},
+	}
+
+	if err := GetDB().Table(c.TableName()).
+		Where("project_id = ?", c.ProjectId).First(&info.Comments).Error; err != nil && err != gorm.ErrRecordNotFound {
 				return utils.ErrorInternalDbError, err
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = Struct_to_map(*c)
+	fmt.Println("resp: ", resp)
+	resp["info"] = Struct_to_map(info)["comments"]
 
 	return resp, nil
 }

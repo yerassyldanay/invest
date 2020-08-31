@@ -1,9 +1,9 @@
 package model
 
+import "C"
 import (
-	"encoding/json"
-	"errors"
-	"gopkg.in/validator.v2"
+	"github.com/jinzhu/gorm"
+	"gopkg.in/go-playground/validator.v2"
 	"invest/templates"
 	"invest/utils"
 	//"gorm.io/gorm/clause"
@@ -18,10 +18,16 @@ func (c *User) Remove_all_users_with_not_confirmed_email() (map[string]interface
 /*
 	create
 */
-func (c *User) Create_user() (map[string]interface{}, error) {
+func (c *User) Create_user() (*utils.Msg) {
 	if c.Lang == "" {
-		c.Lang = utils.DefaultLContentanguage
+		c.Lang = utils.DefaultContentLanguage
 	}
+
+	/*
+		update seq ids
+			refer to function description for more information
+	 */
+	_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(GetDB(), "default")
 
 	trans := GetDB().Begin()
 	defer func(){
@@ -31,18 +37,24 @@ func (c *User) Create_user() (map[string]interface{}, error) {
 	}()
 
 	/*
-		remove if the user is not confirmed
+		remove if the user account is not confirmed
 	*/
-	if resp, err := c.Remove_all_users_with_not_confirmed_email(); err != nil {
-		return resp, err
+	_, _ = c.Remove_all_users_with_not_confirmed_email()
+
+	if ok := Validate_password(c.Password, nil, ""); !ok {
+		return &utils.Msg{
+			Message: utils.ErrorInvalidPassword,
+			Status:  400,
+			ErrMsg:  "invalid password",
+		}
 	}
 
-	if ok := Validate_password(c.Password); !ok {
-		return utils.ErrorInvalidPassword, errors.New("invalid password")
-	}
-
-	if err := validator.Validate(c); err != nil {
-		return utils.ErrorInvalidParameters, err
+	if err := validator.ValidateStruct(*c); err != nil && c.Phone.Is_valid() {
+		return &utils.Msg{
+			Message: utils.ErrorInvalidParameters,
+			Status:  400,
+			ErrMsg:  err.Error(),
+		}
 	}
 
 	/*
@@ -50,35 +62,55 @@ func (c *User) Create_user() (map[string]interface{}, error) {
 	*/
 	hashed, err := utils.Convert_string_to_hash(c.Password)
 	if err != nil {
-		return utils.ErrorInternalServerError, err
+		return &utils.Msg{
+			Message: utils.ErrorInternalServerError,
+			Status:  500,
+			ErrMsg:  err.Error(),
+		}
 	}
 	c.Password = string(hashed)
 	
 	/*
 		get role of the user
 	 */
-	if err := trans.Model(&Role{}).Where("name", c.Role.Name).First(&c.Role).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+	if err := trans.Table(Role{}.TableName()).Where("name = ?", c.Role.Name).First(&c.Role).Error; err != nil {
+		return &utils.Msg{
+			Message: utils.ErrorInternalDbError,
+			Status:  417,
+			ErrMsg:  err.Error(),
+		}
 	}
 
 	/*
 		create email & phone on db
 	 */
-	if err := GetDB().Create(&c.Email).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+	c.Email.Verified = true
+
+	if err := trans.Create(&c.Email).Error; err != nil {
+		return &utils.Msg{
+			Message: utils.ErrorInternalDbError,
+			Status:  417,
+			ErrMsg:  err.Error(),
+		}
 	}
 	c.EmailId = c.Email.Id
 
-	if err := GetDB().Create(&c.Phone).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+	c.Phone.Verified = true
+	if err := trans.Create(&c.Phone).Error; err != nil {
+		return &utils.Msg{
+			Message: utils.ErrorInternalDbError,
+			Status:  417,
+			ErrMsg:  err.Error(),
+		}
 	}
 	c.PhoneId = c.Phone.Id
 
 	/*
 		create a user with provided info
 	*/
+	c.Verified = true
 	if err := trans.Create(&c).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	/*
@@ -87,111 +119,192 @@ func (c *User) Create_user() (map[string]interface{}, error) {
 	var sm = SendgridMessageStore{}
 	sm, _ = sm.Prepare_message_this_object(c, templates.Base_message_map_1_welcome)
 
-	if resp, err := sm.Send_message(); err != nil {
-		return resp, err
+	_, _ = sm.Send_message()
+
+	if err := trans.Commit().Error; err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return utils.NoErrorFineEverthingOk, trans.Commit().Error
+	return &utils.Msg{utils.NoErrorFineEverthingOk, 201, "", ""}
 }
 
 /*
 	update password
 */
-func (c *User) Update_user_password() (map[string]interface{}, error) {
-	if ok := Validate_password(c.Password); !ok {
-		return utils.ErrorInvalidPassword, errors.New("invalid password")
-	}
-
-	if err := GetDB().Table(User{}.TableName()).Where("id=?", c.Id).First(c).Error; err != nil {
-		return utils.ErrorInvalidParameters, errors.New("invalid parameters")
+func (c *User) Update_own_user_password_by_user_id() (*utils.Msg) {
+	if ok := Validate_password(c.Password, nil, ""); !ok {
+		return &utils.Msg{utils.ErrorInvalidPassword, 400, "", "invalid password"}
 	}
 
 	b, err := utils.Convert_string_to_hash(c.Password)
 	if err != nil {
-		return utils.ErrorInternalDbError, errors.New("invalid parameters")
+		return &utils.Msg{utils.ErrorInternalServerError, 500, "", err.Error()}
 	}
-
 	c.Password = string(b)
 
-	if err := GetDB().Model(&User{}).Where("id=?", c.Id).Update("password", c.Password).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+	if err := GetDB().Model(&User{Id: c.Id}).Update("password", c.Password).Error; err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return utils.NoErrorFineEverthingOk, nil
+	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+}
+
+/*
+	who can update info:
+		admin other's info & user their own info
+ */
+func (c *User) Get_permission_for_update(whois string) *utils.Msg {
+	//
+	//if err := GetDB().Table(c.TableName()).Where("id = ?", c.Id).Error; err != {
+	//
+	//}
+	return &utils.Msg{}
 }
 
 /*
 	update info
 */
-func (c *User) Update_user_info() (map[string]interface{}, error) {
+func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id() (*utils.Msg) {
 
-	if err := GetDB().Table(User{}.TableName()).Where("id=?", c.Id).First(&User{}).Error; err != nil {
-		return utils.ErrorInvalidParameters, err
+	var trans = GetDB().Begin()
+	defer func() { if trans != nil { trans.Rollback() } }()
+
+	/*
+		validate info that will be stored
+			note: omit password, email info as they won't be not stored / updated
+	 */
+	var ok =  c.Phone.Is_valid() && c.Fio != "" && c.Position != "" && c.Role.Name != "" && c.Id != 0
+	if !ok {
+			return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid parameters. failed user info update validation"}
 	}
 
-	if err := GetDB().Table(User{}.TableName()).Where("id=?", c.Id).Select("fio", "position").Error;
+	/*
+		get role id as a new role can be set
+	 */
+	if err := trans.Table(Role{}.TableName()).Where("name = ?", c.Role.Name).First(&c.Role).Error;
 		err != nil {
-			return utils.ErrorInternalDbError, err
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	}
+	c.RoleId = c.Role.Id
+
+	/*
+		check db and find the phone id
+			or create such phone
+	 */
+	var phone = Phone{}
+	if err := trans.Table(phone.TableName()).
+		Where("ccode=$1 and number=$2", c.Phone.Ccode, c.Phone.Number).First(&phone).Error;
+	err != nil && err != gorm.ErrRecordNotFound {
+		/*
+			db error occurred
+		 */
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	} else if err == gorm.ErrRecordNotFound {
+		/*
+			record not found -> create a phone
+		 */
+		c.Phone.Verified = true
+		if err := trans.Create(&c.Phone).Error; err != nil {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		}
+	} else {
+		/*
+			record found -> delete old phone -> assign the number id
+		 */
+		//if err = trans.Exec(" delete from phones p where p.id = (select p.id from users u where u.id = ? ) ;", c.Id).Error; err != nil {
+		//	return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		//}
+
+		c.Phone.Id = phone.Id
+	}
+	c.PhoneId = c.Phone.Id
+
+	/*
+		at this moment:
+			phone
+			role
+			other info: fio & position
+		are valid & ready
+	 */
+	//var main_query = `
+	//	update users set fio = $1,
+	//	position = $2,
+	//	role_id = $3,
+	//	phone_id = $4,
+	//	verified = true,
+	//	where id = $5;
+	//`
+	if err := trans.Model(&User{Id: c.Id}).Where("id = ?", c.Id).Updates(User{
+		Fio:      		c.Fio,
+		Position: 		c.Position,
+		RoleId:  	 	c.RoleId,
+		PhoneId:  		c.PhoneId,
+		Verified: 		true,
+	}).Error;
+		err != nil {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return utils.NoErrorFineEverthingOk, nil
+	trans.Commit()
+	trans = nil
+
+	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
 /*
 	[]{"manager", "lawyer", "financier"}, 10 - starting from this point
 		limit = 20
 */
-func (a *User) Get_users_by_roles(roles []string, offset string) (map[string]interface{}, error) {
-	var users = []User{}
-	if err := GetDB().Table(User{}.TableName()).Omit("password").Where("role in (?)", roles).Offset(offset).Limit(GetLimit).Find(&users).Error; err != nil {
-		return utils.ErrorNoSuchUser, err
+func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
+	type Info struct {
+		Users 		[]User
+	}
+	var users = Info{}
+
+	if err := GetDB().Preload("Email").Preload("Phone").Preload("Role").Omit("password").
+		Exec("select u.* from users u join roles r on u.role_id = r.id where r.name in (?)", roles).
+		Omit("password").Find(&users.Users).Error; err != nil {
+		return &utils.Msg{utils.ErrorNoSuchUser, 404, "", err.Error()}
 	}
 
-	for i, user := range users {
-		user.Password = ""
-		user.Phone.SentCode = ""
-		user.Email.SentCode = ""
-		user.Email.SentHash = ""
-
-		users[i] = user
+	for i, _ := range users.Users {
+		users.Users[i].Password = ""
 	}
 
 	var t = utils.NoErrorFineEverthingOk
-	if b, err := json.Marshal(users); err != nil {
-		return utils.ErrorInternalServerError, nil
-	} else {
-		t["info"] = string(b)
-	}
+	t["info"] = Struct_to_map(users)["users"]
 
-	return t, nil
+	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
-func (a *User) Get_all_users(offset string) (map[string]interface{}, error) {
-	type Temp struct{
-		User
-		Address			string				`json:"address"`
-		Ccode			string				`json:"ccode"`
-		Number			string				`json:"number"`
-	}
-	var users []Temp
+func (a *User) Get_all_users(offset string) (*utils.Msg) {
+	//type Temp struct{
+	//	User
+	//	Address			string				`json:"address"`
+	//	Ccode			string				`json:"ccode"`
+	//	Number			string				`json:"number"`
+	//}
+	var users []User
 
-	var main_query = `select u.*, e.address as address, p.ccode as ccode, p.number as number from users u
-			join emails e on u.email_id = e.id
-			join phones p on u.phone_id = p.id 
-			offset ? limit ? ; `
+	//var main_query = `select u.*, e.address as address, p.ccode as ccode, p.number as number from users u
+	//		join emails e on u.email_id = e.id
+	//		join phones p on u.phone_id = p.id
+	//		offset ? limit ? ; `
 	
-	if err := GetDB().Raw(main_query, offset, GetLimit).Scan(&users).Error; err != nil {
-		return utils.ErrorInternalDbError, err
+	if err := GetDB().Preload("Role").Preload("Email").Preload("Phone").
+		Offset(offset).Limit(GetLimit).Find(&users).Error; err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 	
 	var infos = []map[string]interface{}{}
 	for _, user := range users {
+		user.Password = ""
 		infos = append(infos, Struct_to_map(user))
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = infos
 
-	return resp, nil
+	return &utils.Msg{resp, 200, "", ""}
 }
 

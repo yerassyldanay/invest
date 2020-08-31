@@ -35,6 +35,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 			return
 		}
 		defer r.Body.Close()
+
 		/*
 			put and post
 		 */
@@ -81,6 +82,41 @@ var Role_delete_or_get_with_role_id = func(w http.ResponseWriter, r *http.Reques
 			Fname:   	fname + " 2",
 			ErrMsg:  	"this method is not supported",
 		}
+	}
+
+	utils.Respond(w, r, msg)
+}
+
+var Role_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Request) {
+	var fname = "Role_add_and_remove_permissions"
+	var msg = &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", ""}
+	var role = model.Role{}
+
+	if err := json.NewDecoder(r.Body).Decode(&role); err != nil {
+		msg.ErrMsg = err.Error()
+		utils.Respond(w, r, msg)
+		return
+	}
+
+	switch r.Method {
+	case http.MethodDelete:
+		/*
+			remove permissions
+		 */
+		msg = role.Remove_a_list_of_permissions()
+
+	case http.MethodPost:
+		/*
+			add permissions
+		 */
+		msg = role.Add_a_list_of_permissions()
+
+	default:
+		/*
+			not supported
+		 */
+		msg = &utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "method is not allowed. role/permissions"}
+
 	}
 
 	utils.Respond(w, r, msg)
