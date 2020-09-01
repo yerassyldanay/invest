@@ -1,0 +1,14 @@
+time="2020-09-01T17:40:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-01T17:40:02+06:00" level=info msg=main port=7001
+time="2020-09-01T17:40:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-01T17:40:53+06:00" level=info msg=main port=7002
+time="2020-09-01T17:41:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-01T17:41:48+06:00" level=info msg=main port=7010
+time="2020-09-01T17:41:51+06:00" level=info msg="Sign_in 3" error= host="[::1]:38160" path=/v1/all/signin status=200
+time="2020-09-01T19:01:37+06:00" level=info msg="Sign_in 3" error= host="[::1]:38160" path=/v1/all/signin status=200
+time="2020-09-01T19:03:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-01T19:03:00+06:00" level=info msg=main port=7010
+time="2020-09-01T19:03:02+06:00" level=info msg="Sign_in 3" error= host="[::1]:38400" path=/v1/all/signin status=200
+time="2020-09-01T19:03:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-01T19:03:33+06:00" level=info msg=main port=7010
+time="2020-09-01T19:03:34+06:00" level=info msg="Sign_in 3" error= host="[::1]:38416" path=/v1/all/signin status=200

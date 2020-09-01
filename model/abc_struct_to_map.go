@@ -44,6 +44,10 @@ func Struct_to_map_with_escape(cs interface{}, escape []string) (map[string]inte
 	for i := 0; i < v.NumField(); i++ {
 		key := strings.ToLower(typeOfS.Field(i).Tag.Get("json"))
 
+		if key == "-" {
+			continue
+		}
+
 		ok = true
 		for _, tkey := range escape {
 			if key == tkey {

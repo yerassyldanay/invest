@@ -92,7 +92,7 @@ func (c *User) Get_full_info_of_this_user(by string) (*utils.Msg) {
 		d = GetDB().Table(User{}.TableName()).Where("id=?", c.Id)
 	}
 
-	if err := d.First(c).Error; err != nil {
+	if err := d.Preload("Phone").Preload("Email").First(c).Error; err != nil {
 		return &utils.Msg{utils.ErrorNoSuchUser, http.StatusNotFound, "", err.Error()}
 	}
 	c.Password = ""
