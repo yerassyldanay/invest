@@ -12,26 +12,27 @@ import (
  */
 func (g *Ganta) Validate() bool {
 
-	var temp string
-	for _, str := range []string{g.Kaz, g.Rus, g.Eng} {
-		if str != "" {
-			temp = str
-		}
-	}
-
-	if g.Kaz == "" {
-		g.Kaz = temp
-	}
-
-	if g.Rus == "" {
-		g.Rus = temp
-	}
-
-	if g.Eng == "" {
-		g.Eng = temp
-	}
-
-	return temp != ""
+	//var temp string
+	//for _, str := range []string{g.Kaz, g.Rus, g.Eng} {
+	//	if str != "" {
+	//		temp = str
+	//	}
+	//}
+	//
+	//if g.Kaz == "" {
+	//	g.Kaz = temp
+	//}
+	//
+	//if g.Rus == "" {
+	//	g.Rus = temp
+	//}
+	//
+	//if g.Eng == "" {
+	//	g.Eng = temp
+	//}
+	//
+	//return temp != ""
+	return true
 }
 
 func (g *Ganta) Add_new_step() (map[string]interface{}, error) {

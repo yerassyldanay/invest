@@ -2,7 +2,6 @@ package model
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"invest/utils"
 	"time"
@@ -10,33 +9,17 @@ import (
 
 var GantaDefaultStepHours time.Duration = 3 * 24
 
-func (p * Project) Create_ganta_table_for_this_project() (map[string]interface{}, error) {
+func (p * Project) Create_ganta_table_for_this_project() (*utils.Msg) {
 	if p.Id == 0 {
-		return utils.ErrorInvalidParameters, errors.New("invalid project id. id = 0")
+		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid project id. id = 0"}
 	}
 
-	var gantas = []Ganta{
-		{
-			ProjectId: p.Id,
-			Kaz:       "Бірінші қадам",
-			Rus:       "Первый шаг",
-			Eng:       "First step",
-			Start:     p.Created,
-		},
-		{
-			ProjectId: p.Id,
-			Kaz:       "Екінші қадам",
-			Rus:       "Второй шаг",
-			Eng:       "Second step",
-			Start:     p.Created.Add(time.Hour * GantaDefaultStepHours),
-		},
-		{
-			ProjectId: p.Id,
-			Kaz:       "Үшінші қадам",
-			Rus:       "Третий шаг",
-			Eng:       "Third step",
-			Start:     p.Created.Add(time.Hour * GantaDefaultStepHours * 2),
-		},
+	/*
+		create ganta steps & set project id to them
+	 */
+	var gantas = GantaDefaultSteps
+	for i, _ := range gantas {
+		gantas[i].ProjectId = p.Id
 	}
 
 	var main_query bytes.Buffer
@@ -46,9 +29,6 @@ func (p * Project) Create_ganta_table_for_this_project() (map[string]interface{}
 		main_query.WriteString(
 			fmt.Sprintf("(%d, '%s', '%s', '%s', '%s')",
 				ganta.ProjectId,
-				ganta.Kaz,
-				ganta.Rus,
-				ganta.Eng,
 				ganta.Start.Format("2006-01-02 15:04:05")),
 		)
 
@@ -63,10 +43,10 @@ func (p * Project) Create_ganta_table_for_this_project() (map[string]interface{}
 	fmt.Println(a)
 
 	if n := GetDB().Exec(main_query.String()).RowsAffected; n == 0 {
-		return utils.ErrorInternalDbError, errors.New("no ros are affected. create ganta for the project")
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", "no ros are affected. create ganta for the project"}
 	}
 
-	return utils.NoErrorFineEverthingOk, nil
+	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
 

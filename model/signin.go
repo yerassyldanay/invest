@@ -87,9 +87,9 @@ func (c *User) Get_full_info_of_this_user(by string) (*utils.Msg) {
 	var d = GetDB().Preload("Role").Preload("Email").Preload("Phone")
 	switch by {
 	case "username":
-		d = GetDB().Table(User{}.TableName()).Where("username=?", c.Username)
+		d = d.Table(User{}.TableName()).Where("username=?", c.Username)
 	default:
-		d = GetDB().Table(User{}.TableName()).Where("id=?", c.Id)
+		d = d.Table(User{}.TableName()).Where("id=?", c.Id)
 	}
 
 	if err := d.Preload("Phone").Preload("Email").First(c).Error; err != nil {
@@ -109,6 +109,3 @@ func (c *User) Get_full_info_of_this_user(by string) (*utils.Msg) {
 		resp, http.StatusOK, "", "",
 	}
 }
-
-
-

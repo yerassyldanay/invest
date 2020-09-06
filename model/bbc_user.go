@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
+	"time"
 )
 
 /*
@@ -29,8 +30,13 @@ type User struct {
 
 	Verified		bool				`json:"verified" gorm:"default:false"`
 	Lang			string				`json:"-" gorm:"-"`
+	
+	OrganizationId		uint64				`json:"organization_id"`
+	Organization		Organization		`json:"organization" gorm:"foreignkey:Bin"`
 
 	Blocked			bool				`json:"blocked" gorm:"default:false"`
+
+	Created				time.Time			`json:"created" gorm:"default:now()"`
 }
 
 /*

@@ -49,7 +49,7 @@ func Respond(w http.ResponseWriter, r *http.Request, msg *Msg) {
 	/*
 		this header will bear a auth token
 	 */
-	w.Header().Add("Authentication", r.Header.Get("Authentication"))
+	w.Header().Add(HeaderAuthorization, r.Header.Get(HeaderAuthorization))
 
 	w.WriteHeader(msg.Status)
 

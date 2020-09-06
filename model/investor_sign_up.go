@@ -11,6 +11,18 @@ import (
 )
 
 /*
+	validate sign up user info
+ */
+func (c *User) Is_user_info_valid() bool {
+	if c.Username != "" && c.Password != "" && c.Organization.Bin != "" &&
+			c.Email.Address != "" {
+		return true
+	}
+
+	return false
+}
+
+/*
 	signup for investors
 		201 - created
 		400 - bad request
@@ -22,10 +34,15 @@ func (c *User) Sign_Up() (*utils.Msg) {
 	var user User
 	var count int
 
+	if ok := c.Is_user_info_valid(); !ok {
+		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid parameters. user sign up"}
+	}
+
 	/*
 		is username or fio in use
 	 */
-	if err := GetDB().Table(User{}.TableName()).Where("username=?", c.Username).First(&user).Count(&count).Error;
+	if err := GetDB().Preload("Email").Preload("Phone").Preload("Role").Preload("Organization").
+		Table(User{}.TableName()).Where("username = ?", c.Username).First(&user).Count(&count).Error;
 		err != nil && err != gorm.ErrRecordNotFound {
 			return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	} else if count > 0 {
@@ -41,6 +58,13 @@ func (c *User) Sign_Up() (*utils.Msg) {
 
 	c.Position = utils.RoleInvestor
 	c.Password = hashed
+
+	/*
+		create organization or get old one
+	 */
+	c.Organization.Lang = c.Lang
+	c.Organization.Create_or_get_organization_from_db_by_bin()
+	c.OrganizationId = c.Organization.Id
 
 	/*
 		starting a transaction, which is be rolled back in case of an error
@@ -77,26 +101,11 @@ func (c *User) Sign_Up() (*utils.Msg) {
 				err != nil && err != gorm.ErrRecordNotFound {
 					return &utils.Msg{ utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 			} else if err != gorm.ErrRecordNotFound {
-					trans.Where("id=?", tuser.EmailId).Delete(Email{})
-					trans.Where("id=?", tuser.PhoneId).Delete(Phone{})
-					trans.Where("id=?", tuser.Id).Delete(User{})
+					trans.Delete(Email{}, "id=?", tuser.EmailId)
+					trans.Delete(Phone{}, "id=?", tuser.PhoneId)
+					trans.Delete(User{}, "id=?", tuser.Id)
 			}
-			
-			//if err := trans.Table(Email{}.TableName()).Where("address=?", c.Email.Address).Updates(map[string]interface{}{
-			//	"sent_code": scode,
-			//	"sent_hash": shash,
-			//	"deadline": time.Now().UTC().Add(time.Hour * 24),
-			//}).Error;
-			//	err != nil {
-			//		return utils.ErrorFailedToUpdateSomeValues, err
-			//}
-			//
-			//if err := trans.Table(User{}.TableName()).Update(map[string]interface{}{
-			//	"password": c.Password,
-			//	"position": c.Position,
-			//}).Error; err != nil {
-			//	return utils.ErrorInternalDbError, err
-			//}
+
 		} else {
 			return &utils.Msg{utils.ErrorAlreadySentLinkToEmail, http.StatusConflict, "", "a link has already been sent"}
 		}
@@ -107,7 +116,7 @@ func (c *User) Sign_Up() (*utils.Msg) {
 	 */
 	c.Email.SentCode = scode
 	c.Email.SentHash = shash
-	c.Email.Deadline = time.Now().UTC().Add(time.Hour * 24)
+	c.Email.Deadline = utils.GetCurrentTime().Add(time.Hour * 24)
 
 	if err := trans.Create(&c.Email).Error; err != nil {
 		//trans.Rollback()
@@ -174,6 +183,6 @@ func (c *User) Sign_Up() (*utils.Msg) {
 
 	trans.Commit()
 	return &utils.Msg{
-		resp, http.StatusCreated, "", "",
+		utils.NoErrorFineEverthingOk, http.StatusCreated, "", "",
 	}
 }

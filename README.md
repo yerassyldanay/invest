@@ -69,7 +69,7 @@ const (
 ```text
 This is a list of statuses that might be returned to any request that go though
 wrapper that check session token, language & permission and whether email address 
-is confirmed
+is confir03med
 
 421 - invalid parameters (e.g. session token is invalid) 
 423 - email address is not confirmed 

@@ -127,3 +127,7 @@ const (
 const (
 	GormSeqIdFinance = "finance"
 )
+
+const (
+	RedisKeyForgetPassword = "forget_password"
+)

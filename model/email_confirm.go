@@ -2,16 +2,17 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 )
 
 func (e *Email) Confirm(key string) (map[string]interface{}, error) {
 	var u = User{}
-	var trans = GetDB()
+	var trans = GetDB().Begin()
 
 	defer func() {
-		trans.Rollback()
+		if trans != nil {trans.Rollback()}
 	}()
 
 	/*
@@ -26,24 +27,28 @@ func (e *Email) Confirm(key string) (map[string]interface{}, error) {
 
 	switch key {
 	case "shash":
-		query = "select u.* from users u inner join emails e on u.email_id = e.id where e.sent_hash = ?;"
+		query = " emails.sent_hash = ? "
 		param = e.SentHash
 	default:
-		query = "select u.* from users u inner join emails e on u.email_id = e.id where e.sent_code = ?;"
+		query = " emails.sent_code = "
 		param = e.SentCode
 	}
 
-	if err := trans.Exec(query, param).First(&u).Error; err == gorm.ErrRecordNotFound {
+	var users = []User{}
+	if err := trans.Model(&User{}).Joins(" join emails on users.email_id = emails.id ").
+		Where(query, param).Limit("1").Scan(&u).Error; err == gorm.ErrRecordNotFound {
 				return utils.ErrorEmailIsAreadyInUse, err
 	} else if err != nil {
 		return utils.ErrorInternalDbError, err
 	}
 
+	fmt.Println(u, users)
+
 	if err := trans.Table(Email{}.TableName()).Where("id=?", u.EmailId).Updates(map[string]interface{}{
-		"sent_code": "",
-		"sent_hash": "",
-		"verified": true,
-		"deadline": nil,
+		"sent_code": 	"",
+		"sent_hash": 	"",
+		"verified": 	true,
+		"deadline": 	nil,
 	}).Error; err != nil {
 		return utils.ErrorInternalDbError, err
 	}
@@ -53,6 +58,7 @@ func (e *Email) Confirm(key string) (map[string]interface{}, error) {
 	}
 
 	trans.Commit()
+	trans = nil
 
 	return utils.NoErrorFineEverthingOk, nil
 }

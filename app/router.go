@@ -53,6 +53,12 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/signup", control.Investor_sign_up).Methods("POST")
 	router.HandleFunc("/v1/all/signin", control.Sign_in).Methods("POST")
 
+	/*
+		create
+	 */
+	//router.HandleFunc("/v1/all/check/fio", control.Investor_sign_up).Methods("GET")
+	//router.HandleFunc("/v1/all/check/email", control.Investor_sign_up)
+
 	router.HandleFunc("/v1/all/confirmation/email", control.User_email_confirm).Methods("GET")
 	router.HandleFunc("/v1/all/confirmation/phone", control.User_phone_confirm).Methods("GET")
 
@@ -74,14 +80,12 @@ func Create_new_invest_router() (*mux.Router) {
 
 	router.HandleFunc("/v1/administrate/permissions", control.Role_add_and_remove_permissions).Methods( "POST", "DELETE")
 
-
 	/*
 		Categories
 	 */
 	router.HandleFunc("/v1/all/categor", control.Categors_create_read_update_delete).Methods("GET")
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("POST")
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("DELETE")
-
 
 	router.HandleFunc("/v1/projects_make_changes/project", control.Update_project_by_investor).Methods("PUT")
 
@@ -124,6 +128,11 @@ func Create_new_invest_router() (*mux.Router) {
 	 */
 	router.HandleFunc("/v1/all/organization", control.Get_organization_info_by_bin).Methods("GET")
 	router.HandleFunc("/v1/administrate/organization", control.Update_organization_data).Methods("PUT")
+
+	/*
+		check
+	 */
+	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
 		var fr = model.Project{

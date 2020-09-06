@@ -21,6 +21,8 @@ func (o *Organization) Get_and_assign_info_on_organization_by_bin() (*Organizati
 		o.Lang = "kaz"
 	}
 
+	var bin = o.Bin
+
 	var url = fmt.Sprintf("https://stat.gov.kz/api/juridicalusr/counter/gov/?bin=%s&lang=%s", o.Bin, o.Lang)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -63,6 +65,8 @@ func (o *Organization) Get_and_assign_info_on_organization_by_bin() (*Organizati
 	o.Regdate = ti.UTC()
 	o.Address = strings.Replace(katoAddress.(string), "\\\"", "", 50)
 
+	o.Bin = bin
+
 	return o, nil
 }
 
@@ -79,6 +83,8 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) 
 	default:
 		o.Lang = "eng"
 	}
+
+	var bin = o.Bin
 
 	var err error
 	/*
@@ -110,6 +116,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) 
 	/*
 		store data on db
 	*/
+	o.Bin = bin
 	if err := GetDB().Create(o).Error; err != nil {
 		return &utils.Msg{
 			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),

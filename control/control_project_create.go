@@ -44,9 +44,7 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 		/*
 			create a table of ganta for this project
 		 */
-		if _, err = project.Create_ganta_table_for_this_project(); err != nil {
-			errmsg = err.Error()
-		} 
+		msg = project.Create_ganta_table_for_this_project()
 		
 		/*
 			create finance table for this project
