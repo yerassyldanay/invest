@@ -33,6 +33,7 @@ var NoNeedToAuth = []string {
 	"/v1/all/signin",
 	"/v1/all/confirmation/email",
 	"/v1/all/confirmation/phone",
+	"/v1/all/organization",
 }
 
 var NoNeedToConfirmEmail = []string {}
@@ -45,9 +46,9 @@ const (
 	KeyLanguage = "Lang"
 	KeyOffset = "Offset"
 
-	KeyEmailSubject = "Subject"
-	KeyEmailPlainText = "Page"
-	KeyEmailHtml = "Html"
+	KeyEmailSubject = "subject"
+	KeyEmailPlainText = "page"
+	KeyEmailHtml = "html"
 
 	DocTypeDocs = "docs"
 	DocTypeComment = "comment"
@@ -98,10 +99,10 @@ const (
 )
 
 const (
-	DefaultContentLanguage = "kk"
-	ContentLanguageKk = "kk"
-	ContentLanguageRu = "ru"
-	ContentLanguageEn = "en"
+	DefaultContentLanguage = "kaz"
+	ContentLanguageKk = "kaz"
+	ContentLanguageRu = "rus"
+	ContentLanguageEn = "eng"
 	DefaultNotAllowedUserToDelete = 3
 )
 

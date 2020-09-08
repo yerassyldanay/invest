@@ -64,9 +64,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		if err != nil {
 			utils.Respond(w, r, &utils.Msg{
-				Message: map[string]interface{}{
-					"eng": "invalid or expired token",
-				},
+				Message: utils.ErrorTokenInvalidOrExpired,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 2",
 				ErrMsg:  err.Error(),
@@ -76,9 +74,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		if !token.Valid {
 			utils.Respond(w, r, &utils.Msg{
-				Message: map[string]interface{}{
-					"eng": "token has been expired",
-				},
+				Message: utils.ErrorTokenInvalidOrExpired,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 3",
 				ErrMsg:  "token has been expired",

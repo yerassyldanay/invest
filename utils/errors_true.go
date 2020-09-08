@@ -114,3 +114,9 @@ var ErrorDupicateKeyOnDb = map[string]interface{} {
 	"kaz": "енгізілген кейбір ақпарат қайталанады",
 }
 
+var ErrorTokenInvalidOrExpired = map[string]interface{}{
+	"eng": "invalid or expired token",
+	"rus": "токен невалидный или устарел",
+	"kaz": "токен дүрыс емес немесе ескірген",
+}
+

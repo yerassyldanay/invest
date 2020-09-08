@@ -1,11 +1,9 @@
 package app
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
-	"invest/model"
 	"invest/utils"
 	"net/http"
 )
@@ -135,14 +133,8 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var fr = model.Project{
-			Id: 1,
-		}
-		err := model.GetDB().Set("gorm:auto_preload", true).Table(fr.TableName()).Where("id=?", fr.Id).
-			First(&fr).Error
-
-		fmt.Println(err)
-		fmt.Println(fr)
+		//var user = model.User{}
+		//var err error
 	})
 
 	/*

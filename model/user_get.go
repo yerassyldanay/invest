@@ -11,8 +11,12 @@ func (c *User) Get_user_by_id() error {
 	get admins
  */
 func (c *User) Get_admins_only_user_info() (users []User){
-	var main_query = `select u.* from users u join roles r on u.role_id = r.id where r.name = 'admin';`
-	_ = GetDB().Exec(main_query).Scan(&users).Error
+	err := GetDB().Preload("Email").Preload("Phone").Table("users").
+		Joins(" join roles on roles.id = users.role_id ").
+		Where(" roles.name = 'admin' ").Find(&users).Error
+	if err != nil {
+		return users
+	}
 
 	return users
 }

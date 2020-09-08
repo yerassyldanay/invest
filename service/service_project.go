@@ -57,24 +57,24 @@ func Service_create_project(project *model.Project) (*utils.Msg){
 
 	/*
 		create a template & set values
-	 */
+	*/
 	var t = model.Template{}
-	sm := t.Template_prepare_notify_users_about_changes_in_project(project.Lang, project.Name, user.Fio)
+	sm := t.Template_prepare_notify_users_about_changes_in_project("kaz", project.Name, user.Fio)
 
 	/*
 		set default values such as an email address of a message sender
-	 */
+	*/
 	var sms = model.SendgridMessageStore{}
 	sms.Set_default_values()
 
 	/*
 		set template
-	 */
+	*/
 	sms.SendgridMessage = sm
 
 	/*
 		to who
-	 */
+	*/
 	var addressers = []model.EmailAddresser{}
 	var admins = user.Get_admins_only_user_info()
 	for _, admin := range admins {
@@ -86,7 +86,7 @@ func Service_create_project(project *model.Project) (*utils.Msg){
 
 	/*
 		set receivers & send
-	 */
+	*/
 	sms.ToAddresser = addressers
 	_, err = sms.SendMessageToList()
 	if err != nil {
