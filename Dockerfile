@@ -25,11 +25,11 @@ RUN apt-get install git -y
 
 # to solve the following problem:
 # exec: "gcc": executable file not found in %PATH%
-RUN apt-get install build-essential
+RUN apt-get install build-essential -y
 
 WORKDIR /go/src
 COPY . /go/src/
 
-#RUN go build main.go
+RUN go build main.go
 #CMD tail -f /dev/null
 
