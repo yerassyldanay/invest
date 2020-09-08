@@ -1,9 +1,9 @@
 package utils
 
 var ErrorInvalidPassword = map[string]interface{}{
-	"eng": "invalid password",
-	"rus": "невалидный пароль",
-	"kaz": "құпия сөз қате",
+	"eng": "invalid password: password must contain 8 to 20 characters (upper, lower letters & digits)",
+	"rus": "невалидный пароль: пароль должен состоять из от 8 до 20 знаков (большие и маленькие буквы & цифры)",
+	"kaz": "құпия сөз қате: құпия сөз 8-20 таңбадан тұруы (үлкен және кіші әріптердің санның болу) қажет",
 }
 
 var ErrorInvalidParameters = map[string]interface{}{

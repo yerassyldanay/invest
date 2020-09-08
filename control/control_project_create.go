@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"invest/model"
+	"invest/service"
 	"invest/utils"
 	"net/http"
 	"os"
@@ -13,15 +14,7 @@ import (
 var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Create_project"
 
-	var project = struct{
-		model.Project
-		Bin					string 					`json:"bin"`
-	}{}
-
-	var id = utils.GetHeader(r, utils.KeyId)
-	//fmt.Println(id)
-
-	project.CreatedBy = id
+	var project = model.Project{}
 
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		utils.Respond(w, r, &utils.Msg{
@@ -34,40 +27,12 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	lang := r.Header.Get(utils.HeaderContentLanguage)
+	project.OfferedById = utils.GetHeader(r, utils.KeyId)
+	project.AddInfo.Lang = r.Header.Get(utils.HeaderContentLanguage)
 
-	var msg *utils.Msg
-	var err error
-	var errmsg string
+	var msg = service.Service_create_project(&project)
+	msg.Fname = fname
 
-	if msg = project.Project.Create_project(project.Bin, lang); msg.ErrMsg == "" {
-		/*
-			create a table of ganta for this project
-		 */
-		msg = project.Create_ganta_table_for_this_project()
-		
-		/*
-			create finance table for this project
-		 */
-		var finance = model.Finance{
-			ProjectId: project.Id,
-		}
-		if err = finance.Create_this_table(); err != nil {
-			errmsg = errmsg + err.Error()
-		}
-		
-		/*
-			create finresult table for this project
-		 */
-		var finresult = model.Finresult{
-			ProjectId: project.Id,
-		}
-		if err = finresult.Create_this_table(); err != nil {
-				errmsg = errmsg + err.Error()
-		}
-	}
-
-	msg.ErrMsg = errmsg
 	utils.Respond(w, r, msg)
 }
 
@@ -132,12 +97,7 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 
 var Update_project_by_investor = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Update_project_by_investor"
-	var project = struct {
-		model.Project
-		Bin				string				`json:"lang"`
-	}{}
-
-	var lang = r.Header.Get(utils.HeaderContentLanguage)
+	var project = model.Project{}
 
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		utils.Respond(w, r, &utils.Msg{
@@ -150,6 +110,9 @@ var Update_project_by_investor = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	msg := project.Project.Update(project.Bin, lang)
+	project.Lang = r.Header.Get(utils.HeaderContentLanguage)
+
+	msg := project.Update()
 	utils.Respond(w, r, msg)
 }
+

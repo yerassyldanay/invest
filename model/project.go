@@ -5,19 +5,21 @@ import (
 	"invest/utils"
 	"net/http"
 	"strings"
-	"time"
 )
 
-func (p *Project) Validate() (bool) {
-	if p.CreatedBy == 0 || p.Email == "" || p.Phone == "" || p.Name == "" || p.Description == "" || p.EmployeeCount == 0 {
+func (p *Project) IsValid() (bool) {
+	if p.OfferedById == 0 || p.OfferedByPosition == "" || p.Email == "" || p.PhoneNumber == "" || p.Name == "" || p.Description == "" || p.EmployeeCount <= 0 {
 		return false
 	}
 	return true
 }
 
-func (p *Project) Create_project(bin string, lang string) (*utils.Msg){
+func (p *Project) Create_project() (*utils.Msg){
+	if p.Lang == "" {
+		p.Lang = utils.DefaultContentLanguage
+	}
 
-	if ok := p.Validate(); !ok {
+	if ok := p.IsValid(); !ok {
 		return &utils.Msg{
 			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid parameters have been passed",
 		}
@@ -37,19 +39,15 @@ func (p *Project) Create_project(bin string, lang string) (*utils.Msg){
 	/*
 		get org. id by bin or create one
 	 */
-	var org = Organization{
-		Bin:	bin,
-		Lang: 	utils.If_condition_then(lang == "kaz", lang, "rus").(string),
-	}
-	if msg := org.Create_or_get_organization_from_db_by_bin(); msg.ErrMsg != "" {
+	p.Organization.Lang = p.Lang
+	if msg := p.Organization.Create_or_get_organization_from_db_by_bin(); msg.ErrMsg != "" {
 		return msg
 	}
 
-	p.Organization = org
-	p.OrganizationId = org.Id
-	p.Created = time.Now()
+	p.OrganizationId = p.Organization.Id
+	p.Created = utils.GetCurrentTime()
 
-	if err := trans.Table(Project{}.TableName()).Create(p).Error; err != nil {
+	if err := trans.Create(p).Error; err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {
 			return &utils.Msg{
 				utils.ErrorDupicateKeyOnDb, http.StatusConflict, "", err.Error(),
@@ -59,17 +57,6 @@ func (p *Project) Create_project(bin string, lang string) (*utils.Msg){
 			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
 		}
 	}
-	
-	var pu = ProjectsUsers{
-		ProjectId: 	p.Id,
-		UserId:    	p.CreatedBy,
-	}
-	
-	if err := trans.Table("projects_users").Create(pu).Error; err != nil {
-		return &utils.Msg{
-			utils.ErrorInternalDbError, http.StatusExpectationFailed,"", err.Error(),
-		}
-	}
 
 	trans.Commit()
 	return &utils.Msg{
@@ -77,26 +64,22 @@ func (p *Project) Create_project(bin string, lang string) (*utils.Msg){
 	}
 }
 
-func (p *Project) Update(bin string, lang string) (*utils.Msg) {
+func (p *Project) Update() (*utils.Msg) {
+	if p.Lang == "" {
+		p.Lang = utils.DefaultContentLanguage
+	}
+
 	if p.Id == 0 {
 		return &utils.Msg{
 			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid id. project update",
 		}
 	}
-
-	if lang == "" {
-		lang = utils.DefaultContentLanguage
-	}
 	
 	/*
 		get org id
 	 */
-	var org = &Organization{
-		Bin: bin,
-		Lang: lang,
-	}
-	org, err := org.Get_and_assign_info_on_organization_by_bin()
-	if err == nil && bin != "" {
+	org, err := p.Organization.Get_and_assign_info_on_organization_by_bin()
+	if err == nil {
 		p.OrganizationId = org.Id
 	} else {
 		return &utils.Msg{
@@ -118,8 +101,7 @@ func (p *Project) Update(bin string, lang string) (*utils.Msg) {
 		Info:           	p.Info,
 		EmployeeCount:  	p.EmployeeCount,
 		Email:          	p.Email,
-		Ccode:          	p.Ccode,
-		Phone:          	p.Phone,
+		PhoneNumber: 		p.PhoneNumber,
 		OrganizationId: 	p.OrganizationId,
 	}).Error; err != nil {
 		return &utils.Msg{

@@ -67,13 +67,13 @@ func (sis *SignIn) Sign_in() (*utils.Msg) {
 		return &utils.Msg{utils.ErrorInternalIssueOrInvalidPassword, http.StatusInternalServerError, "", err.Error()}
 	}
 
-	token_string = "Bearer " + token_string
-	sis.TokenCompound = token_string
+	sis.TokenCompound = "Bearer " + token_string
 
 	user.Password = ""
 
 	resp := utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(user)
+	resp["token"] = token_string
 
 	return &utils.Msg{
 		resp, http.StatusOK,"", "",

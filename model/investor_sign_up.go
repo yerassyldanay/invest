@@ -6,6 +6,8 @@ import (
 	"invest/templates"
 	"invest/utils"
 	"net/http"
+	"net/url"
+	"os"
 	"strings"
 	"time"
 )
@@ -158,9 +160,24 @@ func (c *User) Sign_Up() (*utils.Msg) {
 		page = templates.Base_email_page_eng
 	}
 
-	shash = templates.BaseUrlToConfirmEmail + "/" + shash
-	html = fmt.Sprintf(html, scode, shash)
-	page = fmt.Sprintf(page, scode, shash)
+	queryParam := url.Values{
+		"hashcode": []string{
+			"shash",
+		},
+		"key": []string{
+			"shash",
+		},
+	}
+
+	urlPath := url.URL{
+		Scheme:     "http",
+		Host:       os.Getenv("FRONT_HOST"),
+		Path:       os.Getenv("FRONT_PORT"),
+		RawQuery: 	queryParam.Encode(),
+	}
+
+	html = fmt.Sprintf(html, scode, urlPath.String())
+	page = fmt.Sprintf(page, scode, urlPath.String())
 
 	var sm = SendgridMessageStore{
 		From:              utils.BaseEmailAddress,
@@ -171,7 +188,7 @@ func (c *User) Sign_Up() (*utils.Msg) {
 			Subject:   subject,
 			PlainText: page,
 			HTML:      html,
-			Date:      time.Now().UTC(),
+			Created:      time.Now().UTC(),
 		},
 		Status: 200,
 	}

@@ -22,7 +22,7 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&sis); err != nil {
 		utils.Respond(w, r,
 			&utils.Msg{
-				Message: utils.ErrorInternalServerError, Status:  http.StatusInternalServerError, Fname: fname + " 1", ErrMsg:  err.Error(),
+				Message: utils.ErrorInvalidParameters, Status:  400, Fname: fname + " 1", ErrMsg:  err.Error(),
 		})
 		return
 	}

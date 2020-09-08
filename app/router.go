@@ -8,7 +8,6 @@ import (
 	"invest/model"
 	"invest/utils"
 	"net/http"
-	"regexp"
 )
 
 func Create_new_invest_router() (*mux.Router) {
@@ -23,18 +22,24 @@ func Create_new_invest_router() (*mux.Router) {
 		For this reason, method that handles OPTIONS requests based on the url pattern is
 			provided below
 	*/
-	router.Methods("OPTIONS").MatcherFunc(func(r *http.Request, match *mux.RouteMatch) bool {
-		matchCase, err := regexp.MatchString("/*", r.URL.Path)
-		if err != nil {
-			return false
-		}
-		return matchCase
-	}).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Origin")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
 		w.Header().Add("Content-Type", "application/json")
-	})
+	}).Methods("OPTIONS")
+
+	//	MatcherFunc(func(r *http.Request, match *mux.RouteMatch) bool {
+	//	//matchCase, err := regexp.MatchString("/.*", r.URL.Path)
+	//	//if err != nil {
+	//	//	return false
+	//	//}
+	//	//return matchCase
+	//	return false
+	//})
+	//.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	//
+	//})
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("id: ", utils.GetContext(r, utils.KeyId))
@@ -155,6 +160,7 @@ func Create_new_invest_router() (*mux.Router) {
 			also will go through: auth.EmailVerifiedWrapper, auth.HasPermissionWrapper
 	 */
 	router.Use(auth.JwtAuthentication)
+	router.Use(mux.CORSMethodMiddleware(router))
 
 	return router
 }

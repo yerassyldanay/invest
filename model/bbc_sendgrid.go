@@ -14,7 +14,7 @@ type SendgridMessage struct {
 	Subject				string			`json:"subject" validate:"required"`
 	PlainText 			string			`json:"plain_text" validate:"required"`
 	HTML      			string			`json:"html" validate:"required"`
-	Date				time.Time		`json:"date" gorm:"default: now()"`
+	Created				time.Time		`json:"date" gorm:"default: now()"`
 }
 
 func (SendgridMessage) TableName() string {

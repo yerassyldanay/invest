@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"invest/templates"
 	"invest/utils"
-	"time"
 )
 
 func (pu *ProjectsUsers) Notify_both(lang string) (map[string]interface{}, error) {
@@ -67,7 +66,7 @@ func (pu *ProjectsUsers) Notify_both(lang string) (map[string]interface{}, error
 			Subject:   		subject,
 			PlainText: 		page,
 			HTML:      		html,
-			Date:      		time.Now().UTC(),
+			Created:      		utils.GetCurrentTime(),
 		},
 	}
 

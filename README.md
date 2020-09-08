@@ -54,6 +54,7 @@ const (
 ```text
 200 - ok. everything is fine & as expected
 201 - ok. created
+204 - ok. but could not send email message
 400 - bad request. your data did not go through validation 
 404 - info not found on database
 405 - method is not allowed. you are trying something that you cannot access

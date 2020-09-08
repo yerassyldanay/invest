@@ -30,7 +30,7 @@ func SetHeader(r *http.Request, key, val string) *http.Request {
 
 func GetHeader(r *http.Request, key string) uint64 {
 	if t := r.Header.Get(key); t != "" {
-		a, _ := strconv.ParseInt(t, 0, 10)
+		a, _ := strconv.ParseInt(t, 10, 64)
 		return uint64(a)
 	}
 	return 0

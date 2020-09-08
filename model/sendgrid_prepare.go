@@ -3,7 +3,6 @@ package model
 import (
 	"invest/utils"
 	"strings"
-	"time"
 )
 
 /*
@@ -21,9 +20,19 @@ func (sm *SendgridMessageStore) Prepare_message_this_object(c *User, message_map
 			Subject:   	message_map[utils.KeyEmailSubject][lang],
 			PlainText: 	message_map[utils.KeyEmailPlainText][lang],
 			HTML:      	message_map[utils.KeyEmailHtml][lang],
-			Date:      	time.Now(),
+			Created:      	utils.GetCurrentTime(),
 		},
 	}
 
 	return newsm, nil
 }
+
+/*
+	prepare a sendgrid message
+ */
+func (sm *SendgridMessageStore) Set_default_values() {
+	sm.From = utils.BaseEmailAddress
+	sm.FromName = utils.BaseEmailName
+}
+
+
