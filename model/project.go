@@ -46,7 +46,7 @@ func (p *Project) Create_project() (*utils.Msg){
 
 	var trans = GetDB().Begin()
 	defer func() { if trans != nil {trans.Rollback()} }()
-	
+
 	if err := trans.Create(p).Error; err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {
 			return &utils.Msg{
