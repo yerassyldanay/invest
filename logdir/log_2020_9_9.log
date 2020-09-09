@@ -1,0 +1,48 @@
+time="2020-09-09T06:51:39+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T06:51:40+06:00" level=info msg=main port=7000
+time="2020-09-09T06:51:49+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:60276" path=/ status=421
+time="2020-09-09T06:51:50+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:60278" path=/ status=421
+time="2020-09-09T06:52:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T06:52:02+06:00" level=info msg=main port=7000
+time="2020-09-09T06:52:06+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:60308" path=/ status=421
+time="2020-09-09T06:52:06+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:60310" path=/ status=421
+time="2020-09-09T06:54:33+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:60310" path=/ status=421
+time="2020-09-09T06:54:33+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:33262" path=/ status=421
+time="2020-09-09T06:54:58+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-09T06:54:58+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-09T06:57:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T06:57:03+06:00" level=info msg=main port=7010
+time="2020-09-09T07:00:03+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-09T07:00:03+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-09T07:00:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T07:00:27+06:00" level=info msg=main port=7010
+time="2020-09-09T07:00:36+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:51038" path=/ status=421
+time="2020-09-09T07:00:36+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:51040" path=/ status=421
+time="2020-09-09T07:02:57+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:52296" path=/ status=421
+time="2020-09-09T07:02:57+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:52298" path=/ status=421
+time="2020-09-09T07:07:04+06:00" level=info error= host="[::1]:54366" path=/v1/all/organization status=200
+time="2020-09-09T07:43:18+06:00" level=info error= host="[::1]:43920" path=/v1/all/organization status=200
+time="2020-09-09T07:44:34+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-09T07:44:34+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-09T07:44:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T07:44:37+06:00" level=info msg=main port=7010
+time="2020-09-09T07:44:40+06:00" level=info error= host="[::1]:44588" path=/v1/all/organization status=200
+time="2020-09-09T07:44:45+06:00" level=info error= host="[::1]:44588" path=/v1/all/organization status=200
+time="2020-09-09T07:46:00+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-09T07:46:00+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-09T07:46:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T07:46:03+06:00" level=info msg=main port=7010
+time="2020-09-09T07:46:06+06:00" level=info error= host="[::1]:45280" path=/v1/all/organization status=200
+time="2020-09-09T07:46:10+06:00" level=info error= host="[::1]:45280" path=/v1/all/organization status=200
+time="2020-09-09T07:46:27+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-09T07:46:27+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-09T07:46:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T07:46:30+06:00" level=info msg=main port=7010
+time="2020-09-09T07:46:35+06:00" level=info error= host="[::1]:45508" path=/v1/all/organization status=200
+time="2020-09-09T07:46:51+06:00" level=info error= host="[::1]:45508" path=/v1/all/organization status=200
+time="2020-09-09T07:46:58+06:00" level=info error= host="[::1]:45508" path=/v1/all/organization status=200
+time="2020-09-09T07:47:46+06:00" level=info error= host="[::1]:45508" path=/v1/all/organization status=200
+time="2020-09-09T07:50:16+06:00" level=info error= host="[::1]:45508" path=/v1/all/organization status=200
+time="2020-09-09T07:50:50+06:00" level=info error= host="[::1]:45508" path=/v1/all/organization status=200
+time="2020-09-09T07:50:58+06:00" level=info error= host="[::1]:45508" path=/v1/all/organization status=200
+time="2020-09-09T07:57:43+06:00" level=info error= host="[::1]:51072" path=/v1/all/organization status=200

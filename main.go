@@ -77,7 +77,7 @@ func main() {
 	/*
 		port
 	 */
-	var port = "7000"
+	var port = "7010"
 	var fname = "main"
 
 	logr.WithFields(logr.Fields{

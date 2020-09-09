@@ -43,7 +43,7 @@ func (msg *Msg) Log(r *http.Request) {
 func Respond(w http.ResponseWriter, r *http.Request, msg *Msg) {
 	var fname = "RESPOND"
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:63342")
 	w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Origin")
 	w.Header().Set("Access-Control-Allow-Methods", "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT")
 	w.Header().Set("Content-Type", "application/json")

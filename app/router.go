@@ -28,7 +28,16 @@ func Create_new_invest_router() (*mux.Router) {
 		//return matchCase
 		return true
 	}).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		/*
+			Explicitly informs the referer how many seconds it should store the preflight
+			result. Within this time, it can just send the request,
+			and doesn't need to bother sending the preflight request again.
+		*/
+		w.Header().Set("Access-Control-Max-Age", "86400")
+
+		w.Header().Set("Access-Control-Allow-Credentials", "")
+
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:63342")
 		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Origin")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS, EAT")
 		w.Header().Add("Content-Type", "application/json")

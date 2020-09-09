@@ -15,11 +15,6 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var fname = "JWT_TOKEN"
 
-		//w.Header().Set("Access-Control-Allow-Origin", "*")
-		//w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Origin")
-		//w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
-		//w.Header().Add("Content-Type", "application/json")
-
 		/*
 			there are some urls that do not require authentication.
 				E.g. getting static files or sign in/up urls
