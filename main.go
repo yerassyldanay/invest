@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/handlers"
 	logr "github.com/sirupsen/logrus"
 	"invest/app"
 	"invest/model"
@@ -74,6 +75,10 @@ func main() {
 	 */
 	var router = app.Create_new_invest_router()
 
+	handlerOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	originOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"})
+
 	/*
 		port
 	 */
@@ -84,7 +89,7 @@ func main() {
 		"port": port,
 	}).Info(fname)
 
-	go http.ListenAndServe(":" + port, router)
+	go http.ListenAndServe(":" + port, handlers.CORS(handlerOk, originOk, methodsOk)(router))
 
 	/*
 		ctrl + c -> shut down
