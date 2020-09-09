@@ -1,6 +1,10 @@
 package utils
 
 const (
+	GetLimitProjects = 20
+)
+
+const (
 	RoleAdmin = "admin"
 	RoleManager = "manager"
 	RoleInvestor = "investor"

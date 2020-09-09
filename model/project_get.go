@@ -81,3 +81,24 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 	return resp, nil
 }
 
+/*
+	preload & get all projects
+ */
+func (p *Project) Get_all_after_preload(offset string) (*utils.Msg) {
+	var projects = []Project{}
+	if err := GetDB().Preload("Organization").Preload("Categors").Preload("User").
+		Offset(offset).Limit(utils.GetLimitProjects).Find(&projects).Error;
+		err != nil {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	}
+
+	var rprojects = []map[string]interface{}{}
+	for _, project := range projects {
+		rprojects = append(rprojects, Struct_to_map(project))
+	}
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = rprojects
+
+	return &utils.Msg{resp, 200, "", ""}
+}
