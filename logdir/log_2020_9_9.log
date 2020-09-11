@@ -77,3 +77,18 @@ time="2020-09-09T14:18:06+06:00" level=info msg=main port=7000
 time="2020-09-09T14:19:15+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-09-09T14:19:16+06:00" level=info msg=main port=7000
 time="2020-09-09T14:19:37+06:00" level=info msg=Create_project error= host="[::1]:35654" path=/v1/projects_make_changes/project status=200
+time="2020-09-09T22:48:20+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:33426" path=/ status=421
+time="2020-09-09T22:48:20+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:33428" path=/ status=421
+time="2020-09-09T22:48:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T22:48:34+06:00" level=info msg=main port=7000
+time="2020-09-09T22:48:37+06:00" level=info msg=User_email_confirm error= host="[::1]:33434" path=/v1/all/confirmation/email status=200
+time="2020-09-09T22:48:57+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-09T22:48:57+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-09T22:49:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T22:49:00+06:00" level=info msg=main port=7000
+time="2020-09-09T22:50:12+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-09T22:50:12+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-09T22:50:14+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-09T22:50:15+06:00" level=info msg=main port=7000
+time="2020-09-10T06:28:56+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-10T06:28:56+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

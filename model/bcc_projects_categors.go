@@ -6,6 +6,12 @@ import (
 )
 
 /*
+	before create check whether there is a project and a category
+ */
+//func (c *Categor) BeforeInsert(tx *gorm.DB) error {
+//}
+
+/*
 	if the categor is used then cannot delete it
 */
 func (c *Categor) BeforeDelete(tx *gorm.DB) error {

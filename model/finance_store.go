@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 )
@@ -21,7 +20,7 @@ func (fi *Finance) Recalculate_sum_to_avoid_misguidance() {
 	fi.Sum.Initiator = fi.Land.Initiator + fi.Capital.Initiator + fi.Tech.Initiator + fi.Other.Initiator
 	fi.Sum.Sum = fi.Land.Sum + fi.Capital.Sum + fi.Tech.Sum + fi.Other.Sum
 
-	fmt.Println(*fi)
+	//fmt.Println(*fi)
 }
 
 /*

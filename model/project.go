@@ -1,7 +1,9 @@
 package model
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"invest/utils"
 	"net/http"
 	"strings"
@@ -44,6 +46,9 @@ func (p *Project) Create_project() (*utils.Msg){
 	p.OrganizationId = p.Organization.Id
 	p.Created = utils.GetCurrentTime()
 
+	var categors = p.Categors
+	p.Categors = []Categor{}
+
 	var trans = GetDB().Begin()
 	defer func() { if trans != nil {trans.Rollback()} }()
 
@@ -58,7 +63,24 @@ func (p *Project) Create_project() (*utils.Msg){
 		}
 	}
 
+	if len(categors) > 0 {
+		var main_query = bytes.Buffer{}
+		main_query.WriteString(" insert into projects_categors (project_id, categor_id) values ")
+		for i, categor := range categors {
+			if i != 0 {
+				main_query.WriteString(fmt.Sprintf("(%d, %d)", p.Id, categor.Id))
+			}
+		}
+
+		main_query.WriteString(";")
+
+		var so = main_query.String()
+		_ = trans.Exec(so).Error
+	}
+
 	trans.Commit()
+	trans = nil
+
 	return &utils.Msg{
 		utils.NoErrorFineEverthingOk, http.StatusOK, "", "",
 	}

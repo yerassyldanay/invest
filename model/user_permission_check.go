@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 	"net/http"
@@ -23,7 +22,7 @@ func (up *UserPermission) Check_db_whether_this_user_has_such_a_permission() (*u
 		}
 	}
 
-	fmt.Println("up: ", up.UserId, up.Permission)
+	//fmt.Println("up: ", up.UserId, up.Permission)
 	var main_query = `
 		select u.* from users u where u.id = $1 and u.role_id in
 		   (

@@ -48,4 +48,14 @@ var User_project_get_own = func(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+var User_get_projects_info_grouped_by_statuses = func(w http.ResponseWriter, r *http.Request) {
+	var fname = "User_get_projects_info_grouped_by_statuses"
+	var project = model.Project{}
 
+	msg := project.Get_projects_grouped_by_statuses()
+	msg.Fname = fname + " 1"
+
+	//fmt.Println("r.Header.Get(utils.KeyId): ", r.Header.Get(utils.KeyId))
+
+	utils.Respond(w, r, msg)
+}

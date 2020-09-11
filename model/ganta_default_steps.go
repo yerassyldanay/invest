@@ -1,51 +1,79 @@
 package model
 
-import "invest/utils"
+import (
+	"invest/utils"
+	"time"
+)
 
-var GantaDefaultSteps = []Ganta{
+var DefaultGantaParent1 = Ganta {
+	IsAdditional:  false,
+	ProjectId:     0,  // will be set
+	Kaz:           "", // will be set as An admin is assigning users to the project
+	Rus:           "", // the same
+	Eng:           "Step 1",
+	StartDate:     utils.GetCurrentTime(),
+	Duration:      10,
+	GantaParentId: 0,
+	Status:        utils.ProjectStatusInprogress,
+}
+
+var DefaultGantaParent2 = Ganta{
+	IsAdditional:  false,
+	Kaz:           "",
+	Rus:           "",
+	Eng:           "Step 2",
+	StartDate:     utils.GetCurrentTime().Add(time.Hour * 24 * 10),
+	Duration:      10,
+	GantaParentId: 0,
+	Status:        utils.ProjectStatusInprogress,
+}
+
+var DefaultGantaChildren1 = []Ganta{
 	{
-		Name: GantaName {
-			Kaz:   "",
-			Rus:   "",
-			Eng:   "An admin is assigning users to the project",
-		},
-		IsDefault: true,
-		Start:     utils.GetCurrentTime(),
+		IsAdditional:  false,
+		Kaz:           "",
+		Rus:           "",
+		Eng:           "Child 1 Step 1",
+		StartDate:     utils.GetCurrentTime(),
+		Duration:      3,
+		GantaParentId: 0,			// will be set
+		DocumentId:    0,
+		Document:      Document{},
+		Status:        "",			// this status will not be considered instead consider the status of the child
 	},
 	{
-		Name: GantaName{
-			Kaz:   "",
-			Rus:   "",
-			Eng:   "The first step | Manager confirmation",
-		},
-		IsDefault: true,
-		Start:     utils.GetCurrentTime(),
+		IsAdditional:  false,
+		Kaz:           "",
+		Rus:           "",
+		Eng:           "Child 2 Step 1",
+		StartDate:     utils.GetCurrentTime(),
+		Duration:      3,
+		GantaParentId: 0,
+		Status:        "",
+	},
+}
+
+var DefaultGantaChildren2 = []Ganta{
+	{
+		IsAdditional:  false,
+		Kaz:           "",
+		Rus:           "",
+		Eng:           "Child 1 Step 2",
+		StartDate:     utils.GetCurrentTime(),
+		Duration:      3,
+		GantaParentId: 0,			// will be set
+		DocumentId:    0,
+		Document:      Document{},
+		Status:        "",			// this status will not be considered instead consider the status of the child
 	},
 	{
-		Name: GantaName{
-			Kaz:   "",
-			Rus:   "",
-			Eng:   "Confirmation from a lawyer and financier",
-		},
-		IsDefault: true,
-		Start:     utils.GetCurrentTime(),
-	},
-	{
-		Name: GantaName{
-			Kaz:   "",
-			Rus:   "",
-			Eng:   "Second Step | Confirmation from a manager",
-		},
-		IsDefault: true,
-		Start:     utils.GetCurrentTime(),
-	},
-	{
-		Name: GantaName{
-			Kaz:   "",
-			Rus:   "",
-			Eng:   "Confirmation from a board",
-		},
-		IsDefault: true,
-		Start:     utils.GetCurrentTime(),
+		IsAdditional:  false,
+		Kaz:           "",
+		Rus:           "",
+		Eng:           "Child 2 Step 2",
+		StartDate:     utils.GetCurrentTime(),
+		Duration:      3,
+		GantaParentId: 0,
+		Status:        "",
 	},
 }

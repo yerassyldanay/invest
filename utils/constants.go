@@ -17,6 +17,15 @@ const (
 )
 
 const (
+	ProjectStatusNewone = "newone"
+	ProjectStatusInprogress = "inprogress"
+	ProjectStatusDone = "done"
+	ProjectStatusRejected = "rejected"
+
+	ProjectStatusChangeTimeInHours = 48
+)
+
+const (
 	FolderLogFiles = "logdir"
 )
 
@@ -115,15 +124,6 @@ var LanguageMap = map[string]string{
 	"ru": "rus",
 	"en": "eng",
 }
-
-const (
-	ProjectStatusNotConfirmed = "not confirmed"
-	ProjectStatusConfirmed	= "confirmed"
-	ProjectStatusReturnedToChange = "returned for revision"
-	ProjectStatusBlocked = "blocked"
-
-	ProjectStatusChangeTimeInHours = 48
-)
 
 const (
 	AuthorizationAdminToken = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxLCJleHAiOiIyMDIwLTA4LTMwVDE3OjEzOjAzLjQwNDA2MDkxNyswNjowMCJ9.9FC_Ihr1gDLyJ8EX_wlwymECuOmKS8VeLCpW1RnO6WM`

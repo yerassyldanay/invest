@@ -18,7 +18,7 @@ func (ps *ProjectStatus) Create_project_user_connection_to_set_status() (*utils.
 		}
 	}
 
-	ps.Status = utils.ProjectStatusNotConfirmed
+	ps.Status = utils.ProjectStatusNewone
 	ps.Modified = time.Now()
 	ps.Deadline = time.Now().Add(time.Hour * utils.ProjectStatusChangeTimeInHours)
 
@@ -60,7 +60,7 @@ func (*ProjectStatus) Create_a_bulk_of_project_status_rows(pss []ProjectStatus) 
  */
 func (ps *ProjectStatus) Update_status_by_project_and_user_id() (*utils.Msg) {
 	var deadline = time.Now().Add(time.Hour * utils.ProjectStatusChangeTimeInHours)
-	if 	ps.Status == utils.ProjectStatusConfirmed || ps.Status == utils.ProjectStatusBlocked {
+	if 	ps.Status == utils.ProjectStatusNewone || ps.Status == utils.ProjectStatusRejected {
 		deadline = time.Time{}
 	}
 
@@ -68,9 +68,13 @@ func (ps *ProjectStatus) Update_status_by_project_and_user_id() (*utils.Msg) {
 		statuses are limited and predefined
 		if none of predefined statuses is provided then set one of them
 	 */
-	if ps.Status != utils.ProjectStatusConfirmed && ps.Status != utils.ProjectStatusBlocked &&
-			ps.Status != utils.ProjectStatusReturnedToChange && ps.Status != utils.ProjectStatusNotConfirmed {
-		ps.Status = utils.ProjectStatusNotConfirmed
+	if utils.Does_a_slice_contain_element([]interface{}{
+		utils.ProjectStatusInprogress,
+		utils.ProjectStatusRejected,
+		utils.ProjectStatusNewone,
+		utils.ProjectStatusDone,
+	}, ps.Status) {
+		ps.Status = utils.ProjectStatusNewone
 	}
 
 	if err := GetDB().Table(ProjectStatus{}.TableName()).

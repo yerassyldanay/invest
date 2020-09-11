@@ -20,13 +20,13 @@ func (g *Ganta) Add_new_step() (map[string]interface{}, error) {
 		return utils.ErrorInvalidParameters, errors.New("invalid parameters (lang) have been provided")
 	}
 
-	if g.Start.IsZero() {
+	if g.StartDate.IsZero() {
 		var tganta = Ganta{}
 		if err := GetDB().Table(Ganta{}.TableName()).Where("project_id = $1 and start = (select max(start) from gantas where project_id = $1)", g.ProjectId).First(&tganta).Error
 			err != nil {
 			return utils.ErrorInternalDbError, err
 		}
-		g.Start = tganta.Start.Add(time.Hour * GantaDefaultStepHours)
+		g.StartDate = tganta.StartDate.Add(time.Hour * GantaDefaultStepHours)
 	}
 
 	if err := GetDB().Create(g).Error; err != nil {
@@ -77,7 +77,7 @@ func (gu *GantaUpDate) Update_step_start_thus_others() (map[string]interface{}, 
 			continue
 		}
 
-		ganta.Start.Add(time.Hour * (24 * gu.Day + gu.Hour))
+		ganta.StartDate.Add(time.Hour * (24 * gu.Day + gu.Hour))
 		if err := GetDB().Save(&ganta).Error; err != nil {
 			break
 		}

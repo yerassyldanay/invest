@@ -58,7 +58,12 @@ func (c *User) Sign_Up() (*utils.Msg) {
 		return &utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "invalid password"}
 	}
 
-	c.Position = utils.RoleInvestor
+	if err := GetDB().Table(Role{}.TableName()).Where("name = ?", utils.RoleInvestor).
+		First(&c.Role).Error; err != nil {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
+	}
+
+	c.RoleId = c.Role.Id
 	c.Password = hashed
 
 	/*
@@ -162,7 +167,7 @@ func (c *User) Sign_Up() (*utils.Msg) {
 
 	queryParam := url.Values{
 		"hashcode": []string{
-			"shash",
+			shash,
 		},
 		"key": []string{
 			"shash",

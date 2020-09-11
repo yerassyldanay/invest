@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 )
@@ -34,7 +33,6 @@ func (e *Email) Confirm(key string) (map[string]interface{}, error) {
 		param = e.SentCode
 	}
 
-	var users = []User{}
 	if err := trans.Model(&User{}).Joins(" join emails on users.email_id = emails.id ").
 		Where(query, param).Limit("1").Scan(&u).Error; err == gorm.ErrRecordNotFound {
 				return utils.ErrorEmailIsAreadyInUse, err
@@ -42,7 +40,7 @@ func (e *Email) Confirm(key string) (map[string]interface{}, error) {
 		return utils.ErrorInternalDbError, err
 	}
 
-	fmt.Println(u, users)
+	//fmt.Println(u, users)
 
 	if err := trans.Table(Email{}.TableName()).Where("id=?", u.EmailId).Updates(map[string]interface{}{
 		"sent_code": 	"",

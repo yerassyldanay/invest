@@ -3,6 +3,7 @@ package control
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"invest/model"
 	"invest/utils"
 	"net/http"
@@ -34,15 +35,14 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 	case http.MethodGet:
 		var offset = Get_query_parameter_str(r, "offset", "0")
 		resp, err = c.Get_all_categors(offset)
+		fmt.Println(resp)
 
 	case http.MethodPost:
 		resp, err = c.Create_category()
 
-	//case http.MethodPut:
-	//	resp, err = c.Update()
-
 	case http.MethodDelete:
 		resp, err = c.Delete_category_from_tabe_and_projects()
+		resp = utils.NoErrorFineEverthingOk
 
 	default:
 		resp, err = utils.ErrorMethodNotAllowed, errors.New("not supported")

@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 )
@@ -53,7 +52,7 @@ func (c *Comment) Get_all_comments_to_the_project() (map[string]interface{}, err
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
-	fmt.Println("resp: ", resp)
+	//fmt.Println("resp: ", resp)
 	resp["info"] = Struct_to_map(info)["comments"]
 
 	return resp, nil

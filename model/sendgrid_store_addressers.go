@@ -99,7 +99,7 @@ func Send_message_to_function(i int, msgchan chan *sendMessage, reschan chan *se
 		go Send_message_helper(sm, reschan)
 	}
 
-	fmt.Println("> goroutine #", i, "done")
+	//fmt.Println("> goroutine #", i, "done")
 }
 
 /*

@@ -55,7 +55,7 @@ var Ganta_get_all_steps_by_project_id = func(w http.ResponseWriter, r *http.Requ
 	})
 }
 
-var Update_ganta_step = func(w http.ResponseWriter, r *http.Request) {
+var Update_or_remove_ganta_step = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Update_ganta_step"
 	var gu = model.GantaUpDate{}
 

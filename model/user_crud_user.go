@@ -2,6 +2,7 @@ package model
 
 import "C"
 import (
+	"bytes"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/go-playground/validator.v2"
 	"invest/templates"
@@ -173,7 +174,7 @@ func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id
 		validate info that will be stored
 			note: omit password, email info as they won't be not stored / updated
 	 */
-	var ok =  c.Phone.Is_valid() && c.Fio != "" && c.Position != "" && c.Role.Name != "" && c.Id != 0
+	var ok =  c.Phone.Is_valid() && c.Fio != "" && c.Role.Name != "" && c.Id != 0
 	if !ok {
 			return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid parameters. failed user info update validation"}
 	}
@@ -236,7 +237,6 @@ func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id
 	//`
 	if err := trans.Model(&User{Id: c.Id}).Where("id = ?", c.Id).Updates(User{
 		Fio:      		c.Fio,
-		Position: 		c.Position,
 		RoleId:  	 	c.RoleId,
 		PhoneId:  		c.PhoneId,
 		Verified: 		true,
@@ -259,22 +259,36 @@ func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
 	type Info struct {
 		Users 		[]User
 	}
-	var users = Info{}
 
-	if err := GetDB().Preload("Email").Preload("Phone").Preload("Role").Omit("password").
-		Exec("select u.* from users u join roles r on u.role_id = r.id where r.name in (?)", roles).
-		Omit("password").Find(&users.Users).Error; err != nil {
-		return &utils.Msg{utils.ErrorNoSuchUser, 404, "", err.Error()}
+	var users = Info{}
+	var bquery = bytes.Buffer{}
+
+	bquery.WriteString("select * from users u join roles r on u.role_id = r.id where r.name in (")
+	for i, role := range roles {
+		if ok := utils.Is_it_free_from_sql_injection(role); !ok {
+			return &utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
+		}
+
+		bquery.WriteString("'" + role + "'")
+		if i != len(roles) - 1 {
+			bquery.WriteString(", ")
+		}
+	}
+	bquery.WriteString(");");
+
+	err := GetDB().Raw(bquery.String()).Scan(&users.Users).Error
+	if err != nil {
+		return &utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
 	}
 
 	for i, _ := range users.Users {
 		users.Users[i].Password = ""
 	}
 
-	var t = utils.NoErrorFineEverthingOk
-	t["info"] = Struct_to_map(users)["users"]
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = Struct_to_map(users)["users"]
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return &utils.Msg{resp, 200, "", ""}
 }
 
 func (a *User) Get_all_users(offset string) (*utils.Msg) {

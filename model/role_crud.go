@@ -90,7 +90,7 @@ func Convert_list_to_string_seperate_by_given_string(list []uint64, sep string) 
 		query.WriteString(fmt.Sprintf("%v", elem))
 	}
 
-	fmt.Println("query.String(): ", query.String())
+	//fmt.Println("query.String(): ", query.String())
 	return query.String()
 }
 

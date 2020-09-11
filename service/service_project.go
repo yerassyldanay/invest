@@ -11,7 +11,7 @@ func Service_create_project(project *model.Project) (*utils.Msg){
 		Fname: "Service_create_project",
 	}
 
-	project.Status = ""
+	project.Status = utils.ProjectStatusNewone
 
 	/*
 		create a project

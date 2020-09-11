@@ -26,9 +26,15 @@ var User_email_confirm = func(w http.ResponseWriter, r *http.Request) {
 			SentHash: hashcode,
 		}
 		resp, err = email.Confirm(key)
+
 		if err != nil {
 			errmsg = err.Error()
 		}
+	}
+
+	if key == "shash" {
+		http.Redirect(w, r, "http://www.spk-saryarka.kz/", 301)
+		return
 	}
 
 	utils.Respond(w, r, &utils.Msg{

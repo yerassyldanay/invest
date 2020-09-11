@@ -84,7 +84,6 @@ func Create_new_invest_router() (*mux.Router) {
 	 */
 	router.HandleFunc("/v1/administrate/role", control.Role_create_update_add_and_remove_permissions).Methods("GET", "POST", "PUT")
 	router.HandleFunc("/v1/administrate/role/{role_id}", control.Role_delete_or_get_with_role_id).Methods("GET", "DELETE")
-
 	router.HandleFunc("/v1/administrate/permissions", control.Role_add_and_remove_permissions).Methods( "POST", "DELETE")
 
 	/*
@@ -115,6 +114,7 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_table_get).Methods("GET")
 	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_table_update).Methods("PUT")
 
+	router.HandleFunc("/v1/projects_see_all/project/analysis", control.User_get_projects_info_grouped_by_statuses).Methods("GET")
 	router.HandleFunc("/v1/projects_see_all/project", control.User_project_get_all).Methods("GET")
 	router.HandleFunc("/v1/projects_see_own/project", control.User_project_get_own).Methods("GET")
 
@@ -126,9 +126,9 @@ func Create_new_invest_router() (*mux.Router) {
 
 	router.HandleFunc("/v1/administrate/ganta", control.Ganta_get_all_steps_by_project_id).Methods("GET")
 	router.HandleFunc("/v1/administrate/ganta", control.Ganta_add_new_step).Methods("POST")
-	router.HandleFunc("/v1/administrate/ganta", control.Update_ganta_step).Methods("PUT")
+	router.HandleFunc("/v1/administrate/ganta", control.Update_or_remove_ganta_step).Methods("PUT")
 
-	router.HandleFunc("/v1/administrate/ganta", control.Update_ganta_step).Methods("DELETE")
+	router.HandleFunc("/v1/administrate/ganta", control.Update_or_remove_ganta_step).Methods("DELETE")
 
 	/*
 		check
@@ -142,8 +142,7 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		//var user = model.User{}
-		//var err error
+
 	})
 
 	/*
@@ -160,6 +159,7 @@ func Create_new_invest_router() (*mux.Router) {
 
 	return router
 }
+
 
 // Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlX2lkIjozLCJleHAiOiIyMDIwLTA4LTA4VDIzOjE5OjIwLjI1ODQ2NTQyMSswNjowMCJ9.Ffqpg5W0VK-1sxGZdXsX6tEzSgN4Jv19WFGmdGBBeUs
 //

@@ -33,6 +33,10 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	var msg = service.Service_create_project(&project)
 	msg.Fname = fname
 
+	if msg.ErrMsg == "" {
+		msg.Message = utils.NoErrorFineEverthingOk
+	}
+
 	utils.Respond(w, r, msg)
 }
 

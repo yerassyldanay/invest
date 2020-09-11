@@ -17,14 +17,15 @@ type Project struct {
 	OrganizationId			uint64					`json:"organization_id"`
 	Organization			Organization			`json:"organization" gorm:"foreignkey:OrganizationId"`
 
-	User				[]User					`json:"user" gorm:"many2many:projects_users;"`
-	Documents			[]Document				`json:"documents" gorm:"-"`
-	Categors			[]Categor				`json:"categors" gorm:"many2many:projects_categors"`
+	User					[]User					`json:"user" gorm:"many2many:projects_users;"`
+	Documents				[]Document				`json:"documents" gorm:"-"`
+	Categors				[]Categor				`json:"categors" gorm:"many2many:projects_categors"`
 
 	OfferedById					uint64					`json:"offered_by_id" gorm:"not null"`
 	OfferedByPosition			string					`json:"offered_by_position" gorm:"not null"`
 
-	Status				string					`json:"status" gorm:"default:'not confirmed'"`
+	Status						string					`json:"status" gorm:"default:'newone'"`
+	StatusProject				string					`json:"status_project" default:"rejected"`
 
 	AddInfo
 }
@@ -33,3 +34,7 @@ func (Project) TableName() string {
 	return "projects"
 }
 
+/*
+	status:
+
+ */

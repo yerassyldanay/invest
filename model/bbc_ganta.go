@@ -3,27 +3,34 @@ package model
 import "time"
 
 /*
-	table of Ganta
+	there are two main steps
+			and many sub-steps
+
+	there will be two statuses:
+		* status of the ganta = status of the parent
+		* status of the document, which will be considered as the status of the child ganta step
  */
 type Ganta struct {
-	Id							uint64					`json:"id" gorm:"primary key"`
-	
-	IsDefault					bool					`json:"is_default" gorm:"default:false"`
-	
-	ProjectId					uint64					`json:"project_id"`
-	Project						Project					`json:"project" gorm:"foreignkey:ProjectId"`
+	Id								uint64					`json:"id" gorm:"primary key"`
 
-	NameId						uint64						`json:"name_id"`
-	Name						GantaName					`json:"name" gorm:"foreignkey:GantaNameId"`
-	
-	Start						time.Time				`json:"start" gorm:"not null"`
-	Deadline					int						`json:"deadline" gorm:"-"`
-}
+	IsAdditional					bool					`json:"is_default" gorm:"default:false"`
 
-type GantaName struct {
-	Kaz					string					`json:"kaz"`
-	Rus					string					`json:"rus"`
-	Eng					string					`json:"eng"`
+	ProjectId						uint64					`json:"project_id" gorm:"foreignkey:projects.id"`
+	//Project							Project					`json:"project" gorm:"foreignkey:ProjectId"`
+
+	Kaz								string					`json:"kaz" gorm:"default:''"`
+	Rus								string					`json:"rus" gorm:"default:''"`
+	Eng								string					`json:"eng" gorm:"default:''"`
+
+	StartDate						time.Time				`json:"start_date" gorm:"not null"`
+	Duration						int						`json:"duration" gorm:"-"`
+
+	GantaParentId					uint64					`json:"ganta_parent_id"`
+
+	DocumentId						uint64					`json:"document_id"`
+	Document						Document				`json:"document" foreignkey:"DocumentId"`
+
+	Status							string					`json:"status"`
 }
 
 func (Ganta) TableName() string {

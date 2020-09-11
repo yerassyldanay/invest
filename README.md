@@ -84,3 +84,7 @@ kk;q=*.*
 en;
 en-*
 ```
+
+/etc/letsencrypt/live/tsrk.xyz/fullchain.pem
+/etc/letsencrypt/live/tsrk.xyz/privkey.pem
+

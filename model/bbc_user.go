@@ -17,7 +17,6 @@ type User struct {
 	Password		string				`json:"password"`
 
 	Fio				string				`json:"fio" validate:"required"`
-	Position		string				`json:"position" validate:"required"`
 	
 	RoleId			uint64				`json:"role_id"`
 	Role			Role				`json:"role" gorm:"foreignkey:RoleId"`
@@ -35,7 +34,6 @@ type User struct {
 	Organization		Organization		`json:"organization" gorm:"foreignkey:Bin"`
 
 	Blocked			bool				`json:"blocked" gorm:"default:false"`
-
 	Created				time.Time			`json:"created" gorm:"default:now()"`
 }
 
