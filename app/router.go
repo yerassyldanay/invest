@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
+	"invest/model"
 	"invest/utils"
 	"net/http"
 )
@@ -142,7 +143,12 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
+		var project = model.Project{
+			Id: 6,
+		}
 
+		msg := project.Create_ganta_table_for_this_project()
+		utils.Respond(w, r, msg)
 	})
 
 	/*

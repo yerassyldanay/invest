@@ -25,6 +25,9 @@ func Service_create_project(project *model.Project) (*utils.Msg){
 		create a table of ganta for this project
 	*/
 	msg = project.Create_ganta_table_for_this_project()
+	if msg.ErrMsg != "" {
+		fmt.Println("Create Ganta Table: ", msg.ErrMsg)
+	}
 
 	/*
 		create finance table for this project

@@ -14,7 +14,6 @@ type Ganta struct {
 	Id								uint64					`json:"id" gorm:"primary key"`
 
 	IsAdditional					bool					`json:"is_default" gorm:"default:false"`
-
 	ProjectId						uint64					`json:"project_id" gorm:"foreignkey:projects.id"`
 	//Project							Project					`json:"project" gorm:"foreignkey:ProjectId"`
 
@@ -22,8 +21,8 @@ type Ganta struct {
 	Rus								string					`json:"rus" gorm:"default:''"`
 	Eng								string					`json:"eng" gorm:"default:''"`
 
-	StartDate						time.Time				`json:"start_date" gorm:"not null"`
-	Duration						int						`json:"duration" gorm:"-"`
+	StartDate						time.Time				`json:"start_date" gorm:"default:now()"`
+	DurationInHours						int						`json:"duration_in_hours"`
 
 	GantaParentId					uint64					`json:"ganta_parent_id"`
 

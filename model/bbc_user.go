@@ -30,8 +30,8 @@ type User struct {
 	Verified		bool				`json:"verified" gorm:"default:false"`
 	Lang			string				`json:"-" gorm:"-"`
 	
-	OrganizationId		uint64				`json:"organization_id"`
-	Organization		Organization		`json:"organization" gorm:"foreignkey:Bin"`
+	OrganizationId		uint64				`json:"organization_id" gorm:"default:0"`
+	Organization		Organization		`json:"organization" gorm:"foreignkey:OrganizationId"`
 
 	Blocked			bool				`json:"blocked" gorm:"default:false"`
 	Created				time.Time			`json:"created" gorm:"default:now()"`

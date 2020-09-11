@@ -4,13 +4,26 @@ import "C"
 import (
 	"bytes"
 	"github.com/jinzhu/gorm"
-	"gopkg.in/go-playground/validator.v2"
-	"invest/templates"
 	"invest/utils"
 	//"gorm.io/gorm/clause"
 )
 
 const GetLimit = 20
+
+/*
+	validate user information
+ */
+func (c *User) Is_spk_user_valid() bool {
+	if ok := Validate_password(c.Password, "", ""); !ok {
+		return false
+	}
+
+	if c.Username == "" || c.Fio == "" || c.Email.Address == "" || c.Phone.Ccode == "" || c.Phone.Number == "" {
+		return false
+	}
+
+	return true
+}
 
 func (c *User) Remove_all_users_with_not_confirmed_email() (map[string]interface{}, error) {
 	return nil, nil
@@ -50,11 +63,11 @@ func (c *User) Create_user() (*utils.Msg) {
 		}
 	}
 
-	if err := validator.ValidateStruct(*c); err != nil && c.Phone.Is_valid() {
+	if ok := c.Is_spk_user_valid(); !ok || !c.Phone.Is_valid() {
 		return &utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
-			ErrMsg:  err.Error(),
+			ErrMsg:  "did not pass validation. crud user",
 		}
 	}
 
@@ -114,18 +127,19 @@ func (c *User) Create_user() (*utils.Msg) {
 		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	/*
-		generate message
-	 */
-	var sm = SendgridMessageStore{}
-	sm, _ = sm.Prepare_message_this_object(c, templates.Base_message_map_1_welcome)
-
-	_, _ = sm.Send_message()
+	///*
+	//	generate message
+	// */
+	//var sm = SendgridMessageStore{}
+	//sm, _ = sm.Prepare_message_this_object(c, templates.Base_message_map_1_welcome)
+	//
+	//_, _ = sm.Send_message()
 
 	if err := trans.Commit().Error; err != nil {
 		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
+	trans = nil
 	return &utils.Msg{utils.NoErrorFineEverthingOk, 201, "", ""}
 }
 

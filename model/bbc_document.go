@@ -15,8 +15,8 @@ type Document struct {
 	Created						time.Time			`json:"date" gorm:"default:now()"`
 	Url							string				`json:"url"`
 
-	ProjectId					uint64 				`json:"project_id" gorm:"unique_index:unique_doc_per_project"`
-	Project						Project				`json:"project" gorm:"foreignkey:ProjectId"`
+	ProjectId					uint64 				`json:"project_id" gorm:"unique_index:unique_doc_per_project;foreignkey:projects.id"`
+	//Project						Project				`json:"project" gorm:"foreignkey:ProjectId"`
 
 	Type						string				`json:"status" gorm:"default:'docs'"`
 	Deleted						time.Time			`json:"deleted" gorm:"default:null"`

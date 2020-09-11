@@ -163,3 +163,46 @@ time="2020-09-11T18:47:20+06:00" level=info msg=INIT_DB message="connected to Po
 time="2020-09-11T18:47:21+06:00" level=info msg=main port=7000
 time="2020-09-11T18:47:23+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
 time="2020-09-11T18:47:23+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-11T19:14:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T19:14:55+06:00" level=info msg=main port=7000
+time="2020-09-11T19:14:56+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-11T19:14:56+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-11T22:14:49+06:00" level=warning msg=INIT_DB message="dial tcp 192.168.100.41:7001: connect: network is unreachable sleeping for a while..." ok=false
+time="2020-09-11T22:14:54+06:00" level=warning msg=INIT_DB message="dial tcp 192.168.100.41:7001: connect: network is unreachable sleeping for a while..." ok=false
+time="2020-09-11T22:14:59+06:00" level=warning msg=INIT_DB message="dial tcp 192.168.100.41:7001: connect: network is unreachable sleeping for a while..." ok=false
+time="2020-09-11T22:15:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T22:15:33+06:00" level=info msg=main port=7000
+time="2020-09-11T22:15:46+06:00" level=info error= host="[::1]:46770" path=/intest status=200
+time="2020-09-11T22:24:13+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-11T22:24:13+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-11T22:24:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T22:24:31+06:00" level=info msg=main port=7000
+time="2020-09-11T22:25:30+06:00" level=info msg=Ganta_get_all_steps_by_project_id error= host="[::1]:46854" path=/v1/administrate/ganta status=200
+time="2020-09-11T22:25:45+06:00" level=info msg=Ganta_get_all_steps_by_project_id error= host="[::1]:46854" path=/v1/administrate/ganta status=200
+time="2020-09-11T22:27:38+06:00" level=info error="pq: relation \"gantas\" does not exist" host="[::1]:46854" path=/intest status=417
+time="2020-09-11T22:27:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T22:27:55+06:00" level=info msg=main port=7000
+time="2020-09-11T22:28:16+06:00" level=info error= host="[::1]:46930" path=/intest status=200
+time="2020-09-11T22:30:18+06:00" level=info msg=Ganta_get_all_steps_by_project_id error= host="[::1]:46930" path=/v1/administrate/ganta status=200
+time="2020-09-11T22:32:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T22:32:44+06:00" level=info msg=main port=7000
+time="2020-09-11T22:36:41+06:00" level=info msg=Ganta_get_all_steps_by_project_id error= host="[::1]:47046" path=/v1/administrate/ganta status=200
+time="2020-09-11T22:38:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T22:38:49+06:00" level=info msg=main port=7000
+time="2020-09-11T22:38:56+06:00" level=info msg=Ganta_get_all_steps_by_project_id error= host="[::1]:47074" path=/v1/administrate/ganta status=200
+time="2020-09-11T23:02:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T23:02:08+06:00" level=info msg=main port=7000
+time="2020-09-11T23:03:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T23:03:19+06:00" level=info msg=main port=7000
+time="2020-09-11T23:11:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T23:11:20+06:00" level=info msg=main port=7000
+time="2020-09-11T23:24:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T23:24:02+06:00" level=info msg=main port=7000
+time="2020-09-11T23:24:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T23:24:58+06:00" level=info msg=main port=7000
+time="2020-09-11T23:26:31+06:00" level=info error= host="[::1]:47424" path=/v1/administrate/user status=201
+time="2020-09-11T23:58:26+06:00" level=info msg=Ganta_get_all_steps_by_project_id error= host="[::1]:47424" path=/v1/administrate/ganta status=200
+time="2020-09-11T23:59:05+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-11T23:59:06+06:00" level=info msg=main port=7000
+time="2020-09-11T23:59:16+06:00" level=info error= host="[::1]:47636" path=/intest status=200
+time="2020-09-11T23:59:25+06:00" level=info msg=Ganta_get_all_steps_by_project_id error= host="[::1]:47636" path=/v1/administrate/ganta status=200

@@ -38,9 +38,12 @@ func (d *Document) Add() (map[string]interface{}, error) {
 	/*
 		find the project
 	 */
-	if err := GetDB().Table(Project{}.TableName()).Where("id=?", d.ProjectId).First(&d.Project).Error; err != nil {
+	var project = Project{}
+	if err := GetDB().Table(Project{}.TableName()).Where("id=?", d.ProjectId).First(&project).Error; err != nil {
 		return utils.ErrorInternalDbError, err
 	}
+
+	d.ProjectId = project.Id
 
 	/*
 		create a document row on db

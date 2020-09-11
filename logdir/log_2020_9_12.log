@@ -1,0 +1,2 @@
+time="2020-09-12T00:03:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T00:03:08+06:00" level=info msg=main port=7000

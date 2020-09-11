@@ -39,6 +39,10 @@ func (g *Ganta) Add_new_step() (map[string]interface{}, error) {
 	return resp, nil
 }
 
+/*
+	get ganta steps by:
+		* project_id
+ */
 func (g *Ganta) Get_ganta_by_project_id() (map[string]interface{}, error) {
 	var gantas = struct {
 		Ganta				[]Ganta					`json:"ganta"`
@@ -47,7 +51,6 @@ func (g *Ganta) Get_ganta_by_project_id() (map[string]interface{}, error) {
 		err != nil {
 			return utils.ErrorInternalDbError, err
 	}
-
 
 	var ganmap = []map[string]interface{}{}
 	for _, ganta := range gantas.Ganta {
@@ -60,6 +63,9 @@ func (g *Ganta) Get_ganta_by_project_id() (map[string]interface{}, error) {
 	return resp, nil
 }
 
+/*
+	update ganta steps
+ */
 func (gu *GantaUpDate) Update_step_start_thus_others() (map[string]interface{}, error) {
 	if ok := gu.Ganta.Validate(); !ok {
 		return utils.ErrorInvalidParameters, errors.New("empty lang fields. ganta up date")
