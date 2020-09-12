@@ -7,7 +7,6 @@ import (
 	"invest/utils"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 )
@@ -175,14 +174,16 @@ func (c *User) Sign_Up() (*utils.Msg) {
 	}
 
 	urlPath := url.URL{
-		Scheme:     "http",
-		Host:       os.Getenv("FRONT_HOST"),
-		Path:       os.Getenv("FRONT_PORT"),
+		Scheme:     "https",
+		Host:       "tsrk.xyz",
+		Path:		"/v1/all/confirmation/email",
 		RawQuery: 	queryParam.Encode(),
 	}
 
 	html = fmt.Sprintf(html, scode, urlPath.String())
 	page = fmt.Sprintf(page, scode, urlPath.String())
+
+	//fmt.Println("urlPath.String(): ", urlPath.String())
 
 	var sm = SendgridMessageStore{
 		From:              utils.BaseEmailAddress,

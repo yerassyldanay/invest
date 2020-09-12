@@ -1,12 +1,13 @@
 package app
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
-	"invest/model"
 	"invest/utils"
 	"net/http"
+	"net/url"
 )
 
 func Create_new_invest_router() (*mux.Router) {
@@ -143,12 +144,21 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var project = model.Project{
-			Id: 6,
+		queryParam := url.Values{
+			"hashcode": []string{
+				"AHEpm2m60d4acaggSUW7UhHYsiniur",
+			},
+			"key": []string{
+				"shash",
+			},
 		}
-
-		msg := project.Create_ganta_table_for_this_project()
-		utils.Respond(w, r, msg)
+		urlPath := url.URL{
+			Scheme:     "https",
+			Host:       "tsrk.xyz",
+			Path:		"/v1/all/confirmation/email",
+			RawQuery: 	queryParam.Encode(),
+		}
+		fmt.Println(urlPath.String())
 	})
 
 	/*

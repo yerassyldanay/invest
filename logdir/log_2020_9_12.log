@@ -51,3 +51,13 @@ time="2020-09-12T07:48:12+06:00" level=info error= host="[::1]:48906" path=/v1/a
 time="2020-09-12T15:45:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-09-12T15:45:18+06:00" level=info msg=main port=7000
 time="2020-09-12T15:45:26+06:00" level=info error= host="[::1]:49214" path=/v1/administrate/user status=200
+time="2020-09-12T15:50:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T15:50:48+06:00" level=info msg=main port=7000
+time="2020-09-12T15:51:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T15:51:29+06:00" level=info msg=main port=7000
+time="2020-09-12T15:51:50+06:00" level=info error= host="[::1]:49324" path=/v1/all/signup status=201
+time="2020-09-12T15:54:53+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T15:54:54+06:00" level=info msg=main port=7000
+time="2020-09-12T15:58:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T15:58:04+06:00" level=info msg=main port=7000
+time="2020-09-12T16:03:23+06:00" level=info error= host="[::1]:49412" path=/v1/administrate/user status=201
