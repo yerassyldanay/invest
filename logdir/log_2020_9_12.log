@@ -61,3 +61,25 @@ time="2020-09-12T15:54:54+06:00" level=info msg=main port=7000
 time="2020-09-12T15:58:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-09-12T15:58:04+06:00" level=info msg=main port=7000
 time="2020-09-12T16:03:23+06:00" level=info error= host="[::1]:49412" path=/v1/administrate/user status=201
+time="2020-09-12T17:47:35+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-12T17:47:35+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-12T17:47:39+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T17:47:40+06:00" level=info msg=main port=7000
+time="2020-09-12T17:47:56+06:00" level=info msg="User_get_projects_info_grouped_by_statuses 1" error= host="[::1]:50592" path=/v1/projects_see_all/project/analysis status=200
+time="2020-09-12T17:53:38+06:00" level=info error= host="[::1]:50592" path=/v1/administrate/user status=201
+time="2020-09-12T18:10:54+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-12T18:10:54+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-12T18:10:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T18:10:58+06:00" level=info msg=main port=7000
+time="2020-09-12T18:36:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T18:36:24+06:00" level=info msg=main port=7000
+time="2020-09-12T18:39:17+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-12T18:39:17+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-12T18:39:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T18:39:30+06:00" level=info msg=main port=7000
+time="2020-09-12T18:39:31+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-12T18:39:31+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-12T18:39:53+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-12T18:39:53+06:00" level=info msg=main port=7000
+time="2020-09-12T18:40:43+06:00" level=info msg=Create_project error= host="[::1]:51130" path=/v1/projects_make_changes/project status=200
+time="2020-09-12T18:40:57+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:51130" path=/v1/projects_see_own/project status=200

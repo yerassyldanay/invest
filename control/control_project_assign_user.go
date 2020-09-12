@@ -23,12 +23,12 @@ var Admin_assign_user_to_project = func(w http.ResponseWriter, r *http.Request) 
 	defer r.Body.Close()
 
 	var errmsg string
-	//resp, err := pu.Assign_user_to_project()
-	//if err != nil {
-	//	errmsg = err.Error()
-	//}
+	resp, err := pu.Assign_user_to_project()
+	if err != nil {
+		errmsg = err.Error()
+	}
 
-	resp, err := pu.Notify_both("")
+	resp, err = pu.Notify_both("")
 	if err != nil {
 		errmsg = errmsg + " | " + err.Error()
 	}

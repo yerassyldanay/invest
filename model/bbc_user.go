@@ -13,10 +13,10 @@ import (
 type User struct {
 	Id				uint64				`json:"id" gorm:"AUTO_INCREMENT;primary key"`
 
-	Username		string				`json:"username" validate:"required"`
+	Username		string				`json:"username" gorm:"unique" validate:"required"`
 	Password		string				`json:"password"`
 
-	Fio				string				`json:"fio" validate:"required"`
+	Fio				string				`json:"fio" gorm:"unique" validate:"required"`
 	
 	RoleId			uint64				`json:"role_id"`
 	Role			Role				`json:"role" gorm:"foreignkey:RoleId"`

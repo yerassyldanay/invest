@@ -22,7 +22,7 @@ type Ganta struct {
 	Eng								string					`json:"eng" gorm:"default:''"`
 
 	StartDate						time.Time				`json:"start_date" gorm:"default:now()"`
-	DurationInHours						int						`json:"duration_in_hours"`
+	DurationInDays						int						`json:"duration_in_days"`
 
 	GantaParentId					uint64					`json:"ganta_parent_id"`
 

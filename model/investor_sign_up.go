@@ -194,7 +194,7 @@ func (c *User) Sign_Up() (*utils.Msg) {
 			Subject:   subject,
 			PlainText: page,
 			HTML:      html,
-			Created:      time.Now().UTC(),
+			Created:      utils.GetCurrentTime(),
 		},
 		Status: 200,
 	}

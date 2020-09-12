@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
+	"invest/model"
 	"invest/utils"
 	"net/http"
 	"net/url"
@@ -142,6 +143,15 @@ func Create_new_invest_router() (*mux.Router) {
 		check
 	 */
 	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
+
+	router.HandleFunc("/droptables", func(w http.ResponseWriter, r *http.Request) {
+		model.GetDB().Debug().DropTableIfExists(&model.Categor{}, &model.Comment{}, &model.Document{}, &model.Email{}, &model.Finance{}, &model.FinanceCol{},
+			&model.Finresult{}, &model.FinresultCol{}, &model.Ganta{}, &model.Organization{}, &model.Permission{},
+			&model.Phone{}, &model.Project{}, &model.ProjectStatus{}, &model.Role{}, &model.SendgridMessage{}, &model.SendgridMessageStore{},
+			&model.User{})
+
+		model.GetDB().Debug().AutoMigrate(&model.ProjectsUsers{})
+	})
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
 		queryParam := url.Values{
