@@ -2,7 +2,6 @@ package control
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"invest/model"
 	"invest/utils"
@@ -25,7 +24,7 @@ var User_create_read_update_delete = func(w http.ResponseWriter, r *http.Request
 	var user = model.User{}
 
 	user.Lang = r.Header.Get(utils.HeaderContentLanguage)
-	fmt.Println(fname, r.URL, r.Header, r.Method, "\n\n")
+	//fmt.Println(fname, r.URL, r.Header, r.Method, "\n\n")
 
 	/*
 		parse user data

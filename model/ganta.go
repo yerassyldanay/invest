@@ -76,6 +76,15 @@ func (p * Project) Create_ganta_table_for_this_project() (*utils.Msg) {
 	defer func() { if trans != nil {trans.Rollback()} }()
 
 	/*
+		check whether the project already contains a ganta table
+	 */
+	var count int
+	if GetDB().Table(Ganta{}.TableName()).Where("project_id = ?", p.Id).Count(&count);
+		count > 0 {
+			return &utils.Msg{utils.ErrorMethodNotAllowed, 405, "", ""}
+	}
+
+	/*
 		create parents
 	 */
 	p1, p2, err := p.create_default_parents(trans)

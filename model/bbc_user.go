@@ -35,6 +35,8 @@ type User struct {
 
 	Blocked			bool				`json:"blocked" gorm:"default:false"`
 	Created				time.Time			`json:"created" gorm:"default:now()"`
+
+	Statistics			UserStats				`json:"statistics" gorm:"-"`
 }
 
 /*

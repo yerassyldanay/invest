@@ -5,6 +5,8 @@ import (
 	"bytes"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
+	"sync"
+
 	//"gorm.io/gorm/clause"
 )
 
@@ -295,9 +297,14 @@ func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
 		return &utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
 	}
 
+	var wg = sync.WaitGroup{}
 	for i, _ := range users.Users {
 		users.Users[i].Password = ""
+
+		wg.Add(1)
+		go users.Users[i].Add_statistics_to_this_user_on_project_statuses(&wg)
 	}
+	wg.Wait()
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(users)["users"]
@@ -306,29 +313,24 @@ func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
 }
 
 func (a *User) Get_all_users(offset string) (*utils.Msg) {
-	//type Temp struct{
-	//	User
-	//	Address			string				`json:"address"`
-	//	Ccode			string				`json:"ccode"`
-	//	Number			string				`json:"number"`
-	//}
-	var users []User
 
-	//var main_query = `select u.*, e.address as address, p.ccode as ccode, p.number as number from users u
-	//		join emails e on u.email_id = e.id
-	//		join phones p on u.phone_id = p.id
-	//		offset ? limit ? ; `
+	var users []User
 	
 	if err := GetDB().Preload("Role").Preload("Email").Preload("Phone").
 		Offset(offset).Limit(GetLimit).Find(&users).Error; err != nil {
 		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
-	
+
+	var wg = sync.WaitGroup{}
 	var infos = []map[string]interface{}{}
 	for _, user := range users {
+		wg.Add(1)
+		go user.Add_statistics_to_this_user_on_project_statuses(&wg)
+
 		user.Password = ""
 		infos = append(infos, Struct_to_map(user))
 	}
+	wg.Wait()
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = infos
