@@ -40,7 +40,7 @@ var User_project_get_own = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname + " 1",

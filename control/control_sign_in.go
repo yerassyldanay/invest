@@ -21,7 +21,7 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("r.Body: ", r.Header, r.URL)
 	if err := json.NewDecoder(r.Body).Decode(&sis); err != nil {
 		utils.Respond(w, r,
-			&utils.Msg{
+			utils.Msg{
 				Message: utils.ErrorInvalidParameters, Status:  400, Fname: fname + " 1", ErrMsg:  err.Error(),
 		})
 		return
@@ -30,9 +30,9 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Println("sis: ", sis)
 
-	var msg *utils.Msg
+	var msg utils.Msg
 	if err := validator.Validate(sis); err != nil {
-		msg = &utils.Msg{
+		msg = utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  http.StatusBadRequest,
 			Fname:   fname + " 2",

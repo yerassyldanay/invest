@@ -20,7 +20,7 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 
 	if r.Method != http.MethodGet {
 		if err = json.NewDecoder(r.Body).Decode(&c); err != nil {
-			utils.Respond(w, r, &utils.Msg{
+			utils.Respond(w, r, utils.Msg{
 				Message: resp,
 				Status:  400,
 				Fname:   fname + " 1",
@@ -52,7 +52,7 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname,

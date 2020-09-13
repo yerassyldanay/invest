@@ -17,7 +17,7 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	var project = model.Project{}
 
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: 	utils.ErrorInvalidParameters,
 			Status:  	400,
 			Fname:   	fname + " 1",
@@ -51,7 +51,7 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 	fmt.Println(a, b)
 
 	if err := r.ParseMultipartForm(0); err != nil {
-		utils.Respond(w, r, &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.0", err.Error()})
+		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.0", err.Error()})
 		return
 	}
 
@@ -65,7 +65,7 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 	_ = json.Unmarshal([]byte(r.FormValue("info_sent")), &rbody.InfoSent)
 
 	//if err := json.NewDecoder(r.Body).Decode(&rbody); err != nil {
-	//	utils.Respond(w, r, &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.5", err.Error()})
+	//	utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.5", err.Error()})
 	//	return
 	//}
 	//defer r.Body.Close()
@@ -73,7 +73,7 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 	var ds = DocStore{}
 	resp, err := ds.Download_and_store_file(r)
 	if err != nil {
-		utils.Respond(w, r, &utils.Msg{resp, 400, fname + " 2", err.Error()})
+		utils.Respond(w, r, utils.Msg{resp, 400, fname + " 2", err.Error()})
 		return
 	}
 
@@ -91,7 +91,7 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 		}
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: 	resp,
 		Status:  	utils.If_condition_then(err == nil, 200, 400).(int),
 		Fname:   	fname,
@@ -104,7 +104,7 @@ var Update_project_by_investor = func(w http.ResponseWriter, r *http.Request) {
 	var project = model.Project{}
 
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname + " 1",

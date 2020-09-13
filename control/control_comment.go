@@ -22,7 +22,7 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Add_comment_to_project"
 
 	if err := r.ParseMultipartForm(0); err != nil {
-		utils.Respond(w, r, &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.0", err.Error()})
+		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.0", err.Error()})
 		return
 	}
 
@@ -33,7 +33,7 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 	if is_docked {
 		resp, err := ds.Download_and_store_file(r)
 		if err != nil {
-			utils.Respond(w, r, &utils.Msg{resp, 400, fname + " 2", err.Error()})
+			utils.Respond(w, r, utils.Msg{resp, 400, fname + " 2", err.Error()})
 			return
 		}
 	}
@@ -48,7 +48,7 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 		if path != "" {
 			fmt.Println(os.Remove("." + path))
 		}
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname + " 1",
@@ -71,7 +71,7 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname + " 2",
@@ -100,7 +100,7 @@ var Get_comments_of_the_project = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname,

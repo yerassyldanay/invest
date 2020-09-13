@@ -7,12 +7,12 @@ import (
 	"net/http"
 )
 
-var Admin_assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
+var Assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Admin_assign_user_to_project"
 	var pu = model.ProjectsUsers{}
 
 	if err := json.NewDecoder(r.Body).Decode(&pu); err  != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: 	utils.ErrorInvalidParameters,
 			Status:  	400,
 			Fname:   	fname + " 1",
@@ -33,7 +33,7 @@ var Admin_assign_user_to_project = func(w http.ResponseWriter, r *http.Request) 
 		errmsg = errmsg + " | " + err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: 	resp,
 		Status:  	utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   	fname,
@@ -49,7 +49,7 @@ var Remove_user_from_project = func(w http.ResponseWriter, r *http.Request) {
 	var pu = model.ProjectsUsers{}
 
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname + " 1",
@@ -65,7 +65,7 @@ var Remove_user_from_project = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:  fname + " 2",

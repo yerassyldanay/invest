@@ -12,7 +12,7 @@ var Update_organization_data = func(w http.ResponseWriter, r *http.Request) {
 	var org = model.Organization{}
 
 	if err := json.NewDecoder(r.Body).Decode(&org); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: 	utils.ErrorInvalidParameters,
 			Status:  	400,
 			Fname:   	fname + " 1",
@@ -31,7 +31,7 @@ var Update_organization_data = func(w http.ResponseWriter, r *http.Request) {
 var Get_organization_info_by_bin = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_organization_info_by_bin"
 	var bin = Get_query_parameter_str(r, "bin", "")
-	var msg = &utils.Msg{
+	var msg = utils.Msg{
 		utils.ErrorInvalidParameters, http.StatusBadRequest, fname + " 1", "invalid parameters. invalid bin number",
 	}
 

@@ -20,6 +20,9 @@ func Struct_to_map(cs interface{}) (map[string]interface{}) {
 
 	for i := 0; i < v.NumField(); i++ {
 		key := strings.ToLower(string(typeOfS.Field(i).Tag.Get("json")))
+		if key == "-" {
+			continue
+		}
 		if key == "" {
 			key = strings.ToLower(typeOfS.Field(i).Name)
 		}

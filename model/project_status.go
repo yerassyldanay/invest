@@ -11,9 +11,9 @@ import (
 	this helps to assign users to project
 		users are those, who can set a status to a project
  */
-func (ps *ProjectStatus) Create_project_user_connection_to_set_status() (*utils.Msg) {
+func (ps *ProjectStatus) Create_project_user_connection_to_set_status() (utils.Msg) {
 	if ps.ProjectId	== 0 || ps.UserId == 0 {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "project is or/and user id is not correct",
 		}
 	}
@@ -23,18 +23,18 @@ func (ps *ProjectStatus) Create_project_user_connection_to_set_status() (*utils.
 	ps.Deadline = time.Now().Add(time.Hour * utils.ProjectStatusChangeTimeInHours)
 
 	if err := GetDB().Create(ProjectStatus{}).Error; err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
 		}
 	}
 
-	return &utils.MsgNoErrorMessageOk
+	return utils.MsgNoErrorMessageOk
 }
 
 /*
 
  */
-func (*ProjectStatus) Create_a_bulk_of_project_status_rows(pss []ProjectStatus) (*utils.Msg) {
+func (*ProjectStatus) Create_a_bulk_of_project_status_rows(pss []ProjectStatus) (utils.Msg) {
 	var errmsg bytes.Buffer
 	for _, ps := range pss {
 		if msg := ps.Create_project_user_connection_to_set_status(); msg.ErrMsg != "" {
@@ -43,7 +43,7 @@ func (*ProjectStatus) Create_a_bulk_of_project_status_rows(pss []ProjectStatus) 
 		}
 	}
 
-	return &utils.Msg{
+	return utils.Msg{
 		Message: utils.NoErrorFineEverthingOk,
 		Status:  utils.If_condition_then(errmsg.String() != "", http.StatusMultiStatus, http.StatusOK).(int),
 		ErrMsg:  errmsg.String(),
@@ -58,7 +58,7 @@ func (*ProjectStatus) Create_a_bulk_of_project_status_rows(pss []ProjectStatus) 
 		case 2:
 			'blocked' or 'confirmed' - nobody gets notifications
  */
-func (ps *ProjectStatus) Update_status_by_project_and_user_id() (*utils.Msg) {
+func (ps *ProjectStatus) Update_status_by_project_and_user_id() (utils.Msg) {
 	var deadline = time.Now().Add(time.Hour * utils.ProjectStatusChangeTimeInHours)
 	if 	ps.Status == utils.ProjectStatusNewone || ps.Status == utils.ProjectStatusRejected {
 		deadline = time.Time{}
@@ -85,10 +85,10 @@ func (ps *ProjectStatus) Update_status_by_project_and_user_id() (*utils.Msg) {
 			Deadline: deadline,
 		}).Error;
 			err != nil {
-				return &utils.Msg{
+				return utils.Msg{
 					utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
 				}
 	}
 
-	return &utils.MsgNoErrorMessageOk
+	return utils.MsgNoErrorMessageOk
 }

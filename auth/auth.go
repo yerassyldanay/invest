@@ -35,7 +35,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		var splits = strings.Split(tokenHeader, " ")
 		if len(splits) != 2 {
-			utils.Respond(w, r, &utils.Msg{
+			utils.Respond(w, r, utils.Msg{
 				Message: map[string]interface{}{
 					"eng": "invalid token",
 				},
@@ -58,7 +58,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		})
 
 		if err != nil {
-			utils.Respond(w, r, &utils.Msg{
+			utils.Respond(w, r, utils.Msg{
 				Message: utils.ErrorTokenInvalidOrExpired,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 2",
@@ -68,7 +68,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		if !token.Valid {
-			utils.Respond(w, r, &utils.Msg{
+			utils.Respond(w, r, utils.Msg{
 				Message: utils.ErrorTokenInvalidOrExpired,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 3",
@@ -96,7 +96,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		//}
 		//
 		//if tokenHeader[len(tokenHeader) - utils.RedisSliceLength:] != redis_result {
-		//	utils.Respond(w, r, &utils.Msg{
+		//	utils.Respond(w, r, utils.Msg{
 		//		Message: map[string]interface{}{
 		//			"eng": "token has been expired",
 		//		},

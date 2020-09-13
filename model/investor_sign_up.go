@@ -31,12 +31,12 @@ func (c *User) Is_user_info_valid() bool {
 		417 - db error
 		422 - could not sent message & not stored on db
  */
-func (c *User) Sign_Up() (*utils.Msg) {
+func (c *User) Sign_Up() (utils.Msg) {
 	var user User
 	var count int
 
 	if ok := c.Is_user_info_valid(); !ok {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid parameters. user sign up"}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid parameters. user sign up"}
 	}
 
 	/*
@@ -45,21 +45,21 @@ func (c *User) Sign_Up() (*utils.Msg) {
 	if err := GetDB().Preload("Email").Preload("Phone").Preload("Role").Preload("Organization").
 		Table(User{}.TableName()).Where("username = ?", c.Username).First(&user).Count(&count).Error;
 		err != nil && err != gorm.ErrRecordNotFound {
-			return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	} else if count > 0 {
-		return &utils.Msg{utils.ErrorUsernameOrFioIsAreadyInUse, http.StatusConflict, "", "already in use: " + c.Fio}
+		return utils.Msg{utils.ErrorUsernameOrFioIsAreadyInUse, http.StatusConflict, "", "already in use: " + c.Fio}
 	}
 
 	ok := Validate_password(c.Password, nil, "")
 	hashed, err := utils.Convert_string_to_hash(c.Password)
 
 	if !ok || err != nil {
-		return &utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "invalid password"}
+		return utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "invalid password"}
 	}
 
 	if err := GetDB().Table(Role{}.TableName()).Where("name = ?", utils.RoleInvestor).
 		First(&c.Role).Error; err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
 	}
 
 	c.RoleId = c.Role.Id
@@ -99,13 +99,13 @@ func (c *User) Sign_Up() (*utils.Msg) {
 	if trans.Table(Email{}.TableName()).Where("address = ?", c.Email.Address).First(&c.Email).Count(&count); count > 0 {
 
 		if c.Email.Verified {
-			return &utils.Msg{utils.ErrorEmailIsAreadyInUse, http.StatusConflict, "", "email address already in use"}
+			return utils.Msg{utils.ErrorEmailIsAreadyInUse, http.StatusConflict, "", "email address already in use"}
 
 		} else if c.Email.Verified == false && c.Email.Deadline.UTC().Before(time.Now().UTC()) {
 			var tuser = User{}
 			if err := trans.Exec("select u.* from users u inner join emails e on u.email_id = e.id where u.email_id = ?;", c.Email.Id).First(&tuser).Error;
 				err != nil && err != gorm.ErrRecordNotFound {
-					return &utils.Msg{ utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
+					return utils.Msg{ utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 			} else if err != gorm.ErrRecordNotFound {
 					trans.Delete(Email{}, "id=?", tuser.EmailId)
 					trans.Delete(Phone{}, "id=?", tuser.PhoneId)
@@ -113,7 +113,7 @@ func (c *User) Sign_Up() (*utils.Msg) {
 			}
 
 		} else {
-			return &utils.Msg{utils.ErrorAlreadySentLinkToEmail, http.StatusConflict, "", "a link has already been sent"}
+			return utils.Msg{utils.ErrorAlreadySentLinkToEmail, http.StatusConflict, "", "a link has already been sent"}
 		}
 	}
 
@@ -126,23 +126,23 @@ func (c *User) Sign_Up() (*utils.Msg) {
 
 	if err := trans.Create(&c.Email).Error; err != nil {
 		//trans.Rollback()
-		return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	}
 	c.EmailId = c.Email.Id
 
 	if err := trans.Create(&c.Phone).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	}
 	c.PhoneId = c.Phone.Id
 
 	if err := trans.Table(Role{}.TableName()).Where("name=?", utils.RoleInvestor).First(&c.Role).Error;
 		err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error()}
 	}
 	c.RoleId = c.Role.Id
 
 	if err := trans.Create(c).Error; err != nil {
-		return &utils.Msg{utils.ErrorFailedToCreateAnAccount, http.StatusExpectationFailed, "", err.Error()}
+		return utils.Msg{utils.ErrorFailedToCreateAnAccount, http.StatusExpectationFailed, "", err.Error()}
 	}
 
 	/*
@@ -201,11 +201,11 @@ func (c *User) Sign_Up() (*utils.Msg) {
 
 	resp, err := sm.Send_message()
 	if err != nil {
-		return &utils.Msg{resp, http.StatusUnprocessableEntity, "", err.Error()}
+		return utils.Msg{resp, http.StatusUnprocessableEntity, "", err.Error()}
 	}
 
 	trans.Commit()
-	return &utils.Msg{
+	return utils.Msg{
 		utils.NoErrorFineEverthingOk, http.StatusCreated, "", "",
 	}
 }

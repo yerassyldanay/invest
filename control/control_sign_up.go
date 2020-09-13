@@ -20,7 +20,7 @@ var Investor_sign_up = func(w http.ResponseWriter, r *http.Request) {
 	var user = model.User{}
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInternalServerError,
 			Status:  http.StatusInternalServerError,
 			Fname:   fname + " 1",

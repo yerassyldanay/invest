@@ -49,9 +49,9 @@ func (fr *Finresult) Create_this_table() error {
 	this function will provide a fin table
 		in case there is no table it will create a new one and return that table
  */
-func (fr *Finresult) Get_finresult_table() (*utils.Msg) {
+func (fr *Finresult) Get_finresult_table() (utils.Msg) {
 	if fr.ProjectId == 0 {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "project id is 0"}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "project id is 0"}
 	}
 
 	err := fr.Load_values_to_this_object_by_project_id()
@@ -68,20 +68,20 @@ func (fr *Finresult) Get_finresult_table() (*utils.Msg) {
 		}
 
 	} else if err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map_with_escape(*fr, []string{"project"})
 
-	return &utils.Msg{resp, 200, "", ""}
+	return utils.Msg{resp, 200, "", ""}
 }
 
 /*
 	update a table
 		the AfterCreate hook will delete unnecessary
 */
-func (fr *Finresult) Update_this_table() (*utils.Msg) {
+func (fr *Finresult) Update_this_table() (utils.Msg) {
 	var old_finance = Finresult{
 		ProjectId: fr.ProjectId,
 	}
@@ -103,17 +103,17 @@ func (fr *Finresult) Update_this_table() (*utils.Msg) {
 		err = fr.Create_this_table()
 
 		if err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 		}
 
-		return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+		return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 
 	} else if err != nil {
 		/*
 			did not expect this kind of error
 				thus returning msg
 		*/
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	/*
@@ -134,8 +134,8 @@ func (fr *Finresult) Update_this_table() (*utils.Msg) {
 	fr.PrivateCostId = old_finance.PrivateCost.Id
 
 	if err := GetDB().Save(fr).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }

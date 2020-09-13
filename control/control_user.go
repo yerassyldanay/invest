@@ -31,13 +31,13 @@ var User_create_read_update_delete = func(w http.ResponseWriter, r *http.Request
 	 */
 	if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodDelete {
 		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-			utils.Respond(w, r, &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " post", err.Error()})
+			utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " post", err.Error()})
 			return
 		}
 		defer r.Body.Close()
 	}
 
-	var msg = &utils.Msg{Fname: fname + " 1"}
+	var msg = utils.Msg{Fname: fname + " 1"}
 
 	switch r.Method {
 	case http.MethodPost:
@@ -61,7 +61,7 @@ var User_create_read_update_delete = func(w http.ResponseWriter, r *http.Request
 		case "password":
 			msg = user.Update_own_user_password_by_user_id()
 		default:
-			msg = &utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 4", "crud user an unknown put request"}
+			msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 4", "crud user an unknown put request"}
 		}
 
 	case http.MethodGet:
@@ -83,11 +83,11 @@ var User_create_read_update_delete = func(w http.ResponseWriter, r *http.Request
 		case "block":
 			msg = user.Block_unblock_user()
 		default:
-			msg = &utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 3", "nor delete or block. user_crud"}
+			msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 3", "nor delete or block. user_crud"}
 		}
 
 	default:
-		msg = &utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 2", "user crud. method invalid " + r.Method}
+		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 2", "user crud. method invalid " + r.Method}
 	}
 
 	utils.Respond(w, r, msg)

@@ -21,10 +21,10 @@ var Finance_table_update = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Finance_table"
 	var finance = model.Finance{}
 
-	var msg = &utils.Msg{}
+	var msg = utils.Msg{}
 
 	if err := json.NewDecoder(r.Body).Decode(&finance); err != nil {
-		msg = &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error() }
+		msg = utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error() }
 		utils.Respond(w, r, msg)
 		return
 	}
@@ -37,7 +37,7 @@ var Finance_table_update = func(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPut:
 		msg = finance.Update_finance_table_with_this_table_by_project_id()
 	default:
-		msg = &utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 2", "method not allowed. crud finance table"}
+		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " 2", "method not allowed. crud finance table"}
 	}
 	defer r.Body.Close()
 

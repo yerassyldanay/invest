@@ -84,12 +84,12 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 /*
 	preload & get all projects
  */
-func (p *Project) Get_all_after_preload(offset string) (*utils.Msg) {
+func (p *Project) Get_all_after_preload(offset string) (utils.Msg) {
 	var projects = []Project{}
 	if err := GetDB().Preload("Organization").Preload("Categors").Preload("User").
 		Offset(offset).Limit(utils.GetLimitProjects).Find(&projects).Error;
 		err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var rprojects = []map[string]interface{}{}
@@ -100,5 +100,5 @@ func (p *Project) Get_all_after_preload(offset string) (*utils.Msg) {
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = rprojects
 
-	return &utils.Msg{resp, 200, "", ""}
+	return utils.Msg{resp, 200, "", ""}
 }

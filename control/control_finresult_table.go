@@ -12,7 +12,7 @@ var Finresult_table_update = func(w http.ResponseWriter, r *http.Request) {
 	var finance = model.Finresult{}
 
 	if err := json.NewDecoder(r.Body).Decode(&finance); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname + " 1",
@@ -22,7 +22,7 @@ var Finresult_table_update = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var msg = &utils.Msg{
+	var msg = utils.Msg{
 		Fname: fname + " 1",
 	}
 
@@ -32,7 +32,7 @@ var Finresult_table_update = func(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPut:
 		msg = finance.Update_this_table()
 	default:
-		msg = &utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "not allowed. fin result put/post"}
+		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "not allowed. fin result put/post"}
 	}
 
 	utils.Respond(w, r, msg)

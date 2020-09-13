@@ -88,3 +88,7 @@ en-*
 /etc/letsencrypt/live/tsrk.xyz/fullchain.pem
 /etc/letsencrypt/live/tsrk.xyz/privkey.pem
 
+#####to_do
+```text
+make phone number unique
+```

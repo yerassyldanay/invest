@@ -34,7 +34,7 @@ func (c *User) Remove_all_users_with_not_confirmed_email() (map[string]interface
 /*
 	create
 */
-func (c *User) Create_user() (*utils.Msg) {
+func (c *User) Create_user() (utils.Msg) {
 	if c.Lang == "" {
 		c.Lang = utils.DefaultContentLanguage
 	}
@@ -58,7 +58,7 @@ func (c *User) Create_user() (*utils.Msg) {
 	_, _ = c.Remove_all_users_with_not_confirmed_email()
 
 	if ok := Validate_password(c.Password, nil, ""); !ok {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInvalidPassword,
 			Status:  400,
 			ErrMsg:  "invalid password",
@@ -66,7 +66,7 @@ func (c *User) Create_user() (*utils.Msg) {
 	}
 
 	if ok := c.Is_spk_user_valid(); !ok || !c.Phone.Is_valid() {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			ErrMsg:  "did not pass validation. crud user",
@@ -78,7 +78,7 @@ func (c *User) Create_user() (*utils.Msg) {
 	*/
 	hashed, err := utils.Convert_string_to_hash(c.Password)
 	if err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInternalServerError,
 			Status:  500,
 			ErrMsg:  err.Error(),
@@ -90,7 +90,7 @@ func (c *User) Create_user() (*utils.Msg) {
 		get role of the user
 	 */
 	if err := trans.Table(Role{}.TableName()).Where("name = ?", c.Role.Name).First(&c.Role).Error; err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInternalDbError,
 			Status:  417,
 			ErrMsg:  err.Error(),
@@ -103,7 +103,7 @@ func (c *User) Create_user() (*utils.Msg) {
 	c.Email.Verified = true
 
 	if err := trans.Create(&c.Email).Error; err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInternalDbError,
 			Status:  417,
 			ErrMsg:  err.Error(),
@@ -113,7 +113,7 @@ func (c *User) Create_user() (*utils.Msg) {
 
 	c.Phone.Verified = true
 	if err := trans.Create(&c.Phone).Error; err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInternalDbError,
 			Status:  417,
 			ErrMsg:  err.Error(),
@@ -126,7 +126,7 @@ func (c *User) Create_user() (*utils.Msg) {
 	*/
 	c.Verified = true
 	if err := trans.Create(&c).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	///*
@@ -138,50 +138,50 @@ func (c *User) Create_user() (*utils.Msg) {
 	//_, _ = sm.Send_message()
 
 	if err := trans.Commit().Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	trans = nil
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 201, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 201, "", ""}
 }
 
 /*
 	update password
 */
-func (c *User) Update_own_user_password_by_user_id() (*utils.Msg) {
+func (c *User) Update_own_user_password_by_user_id() (utils.Msg) {
 	if ok := Validate_password(c.Password, nil, ""); !ok {
-		return &utils.Msg{utils.ErrorInvalidPassword, 400, "", "invalid password"}
+		return utils.Msg{utils.ErrorInvalidPassword, 400, "", "invalid password"}
 	}
 
 	b, err := utils.Convert_string_to_hash(c.Password)
 	if err != nil {
-		return &utils.Msg{utils.ErrorInternalServerError, 500, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalServerError, 500, "", err.Error()}
 	}
 	c.Password = string(b)
 
 	if err := GetDB().Model(&User{Id: c.Id}).Update("password", c.Password).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
 /*
 	who can update info:
 		admin other's info & user their own info
  */
-func (c *User) Get_permission_for_update(whois string) *utils.Msg {
+func (c *User) Get_permission_for_update(whois string) utils.Msg {
 	//
 	//if err := GetDB().Table(c.TableName()).Where("id = ?", c.Id).Error; err != {
 	//
 	//}
-	return &utils.Msg{}
+	return utils.Msg{}
 }
 
 /*
 	update info
 */
-func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id() (*utils.Msg) {
+func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id() (utils.Msg) {
 
 	var trans = GetDB().Begin()
 	defer func() { if trans != nil { trans.Rollback() } }()
@@ -192,7 +192,7 @@ func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id
 	 */
 	var ok =  c.Phone.Is_valid() && c.Fio != "" && c.Role.Name != "" && c.Id != 0
 	if !ok {
-			return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid parameters. failed user info update validation"}
+			return utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid parameters. failed user info update validation"}
 	}
 
 	/*
@@ -200,7 +200,7 @@ func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id
 	 */
 	if err := trans.Table(Role{}.TableName()).Where("name = ?", c.Role.Name).First(&c.Role).Error;
 		err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 	c.RoleId = c.Role.Id
 
@@ -215,21 +215,21 @@ func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id
 		/*
 			db error occurred
 		 */
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	} else if err == gorm.ErrRecordNotFound {
 		/*
 			record not found -> create a phone
 		 */
 		c.Phone.Verified = true
 		if err := trans.Create(&c.Phone).Error; err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 		}
 	} else {
 		/*
 			record found -> delete old phone -> assign the number id
 		 */
 		//if err = trans.Exec(" delete from phones p where p.id = (select p.id from users u where u.id = ? ) ;", c.Id).Error; err != nil {
-		//	return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		//	return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 		//}
 
 		c.Phone.Id = phone.Id
@@ -243,14 +243,6 @@ func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id
 			other info: fio & position
 		are valid & ready
 	 */
-	//var main_query = `
-	//	update users set fio = $1,
-	//	position = $2,
-	//	role_id = $3,
-	//	phone_id = $4,
-	//	verified = true,
-	//	where id = $5;
-	//`
 	if err := trans.Model(&User{Id: c.Id}).Where("id = ?", c.Id).Updates(User{
 		Fio:      		c.Fio,
 		RoleId:  	 	c.RoleId,
@@ -258,20 +250,20 @@ func (c *User) Update_user_info_except_for_email_address_and_password_by_user_id
 		Verified: 		true,
 	}).Error;
 		err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	trans.Commit()
 	trans = nil
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
 /*
 	[]{"manager", "lawyer", "financier"}, 10 - starting from this point
 		limit = 20
 */
-func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
+func (a *User) Get_users_by_roles(roles []string, offset string) (utils.Msg) {
 	type Info struct {
 		Users 		[]User
 	}
@@ -282,7 +274,7 @@ func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
 	bquery.WriteString("select * from users u join roles r on u.role_id = r.id where r.name in (")
 	for i, role := range roles {
 		if ok := utils.Is_it_free_from_sql_injection(role); !ok {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
 		}
 
 		bquery.WriteString("'" + role + "'")
@@ -294,7 +286,7 @@ func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
 
 	err := GetDB().Raw(bquery.String()).Scan(&users.Users).Error
 	if err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", ""}
 	}
 
 	var wg = sync.WaitGroup{}
@@ -309,16 +301,16 @@ func (a *User) Get_users_by_roles(roles []string, offset string) (*utils.Msg) {
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(users)["users"]
 
-	return &utils.Msg{resp, 200, "", ""}
+	return utils.Msg{resp, 200, "", ""}
 }
 
-func (a *User) Get_all_users(offset string) (*utils.Msg) {
+func (a *User) Get_all_users(offset string) (utils.Msg) {
 
 	var users []User
 	
 	if err := GetDB().Preload("Role").Preload("Email").Preload("Phone").
 		Offset(offset).Limit(GetLimit).Find(&users).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var wg = sync.WaitGroup{}
@@ -335,6 +327,6 @@ func (a *User) Get_all_users(offset string) (*utils.Msg) {
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = infos
 
-	return &utils.Msg{resp, 200, "", ""}
+	return utils.Msg{resp, 200, "", ""}
 }
 

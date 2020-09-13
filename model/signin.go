@@ -8,6 +8,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -20,18 +21,18 @@ import (
 		404 - info not found on database
 		500 - internal server error (code error)
  */
-func (sis *SignIn) Sign_in() (*utils.Msg) {
+func (sis *SignIn) Sign_in() (utils.Msg) {
 	var user = User{}
 	regexpOnlyLetters, err := regexp.Compile("[a-z]+")
 	if err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInternalServerError, Status:  http.StatusInternalServerError, ErrMsg:  err.Error(),
 		}
 	}
 
 	//fmt.Println(strings.ToLower(sis.KeyUsername))
 	if ok := regexpOnlyLetters.Match([]byte(strings.ToLower(sis.KeyUsername))); !ok {
-			return &utils.Msg{utils.ErrorInvalidParameters, http.StatusBadRequest, "", "regexp does not match with key"}
+			return utils.Msg{utils.ErrorInvalidParameters, http.StatusBadRequest, "", "regexp does not match with key"}
 	}
 
 	user.Username = sis.Username
@@ -40,7 +41,7 @@ func (sis *SignIn) Sign_in() (*utils.Msg) {
 		return msg
 	} else {
 		if err := GetDB().Table(User{}.TableName()).Where(sis.KeyUsername + "=?", sis.Username).First(&user).Error; err != nil {
-			return &utils.Msg{utils.ErrorNoSuchUser, http.StatusNotFound, "", err.Error()}
+			return utils.Msg{utils.ErrorNoSuchUser, http.StatusNotFound, "", err.Error()}
 		}
 	}
 
@@ -48,7 +49,7 @@ func (sis *SignIn) Sign_in() (*utils.Msg) {
 		here we check whether two passwords (a provided password and password on db_create_fake_data) MATCH
 	*/
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(sis.Password)); err == bcrypt.ErrMismatchedHashAndPassword || err != nil {
-		return &utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "password either does not match or invalid"}
+		return utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "password either does not match or invalid"}
 	}
 	
 	/*
@@ -64,7 +65,7 @@ func (sis *SignIn) Sign_in() (*utils.Msg) {
 	token_string, err := token_hashed.SignedString([]byte(os.Getenv("TOKEN_PASSWORD")))
 
 	if err != nil {
-		return &utils.Msg{utils.ErrorInternalIssueOrInvalidPassword, http.StatusInternalServerError, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalIssueOrInvalidPassword, http.StatusInternalServerError, "", err.Error()}
 	}
 
 	sis.TokenCompound = "Bearer " + token_string
@@ -75,7 +76,7 @@ func (sis *SignIn) Sign_in() (*utils.Msg) {
 	resp["info"] = Struct_to_map(user)
 	resp["token"] = token_string
 
-	return &utils.Msg{
+	return utils.Msg{
 		resp, http.StatusOK,"", "",
 	}
 }
@@ -83,7 +84,7 @@ func (sis *SignIn) Sign_in() (*utils.Msg) {
 /*
 	get the full user info
  */
-func (c *User) Get_full_info_of_this_user(by string) (*utils.Msg) {
+func (c *User) Get_full_info_of_this_user(by string) (utils.Msg) {
 	var d = GetDB().Preload("Role").Preload("Email").Preload("Phone")
 	switch by {
 	case "username":
@@ -93,7 +94,7 @@ func (c *User) Get_full_info_of_this_user(by string) (*utils.Msg) {
 	}
 
 	if err := d.Preload("Phone").Preload("Email").First(c).Error; err != nil {
-		return &utils.Msg{utils.ErrorNoSuchUser, http.StatusNotFound, "", err.Error()}
+		return utils.Msg{utils.ErrorNoSuchUser, http.StatusNotFound, "", err.Error()}
 	}
 	c.Password = ""
 
@@ -102,10 +103,18 @@ func (c *User) Get_full_info_of_this_user(by string) (*utils.Msg) {
 	 */
 	_ = c.Role.Get_permissions_by_role_id()
 
+	/*
+		add statistics
+	*/
+	var wg = sync.WaitGroup{}
+	wg.Add(1)
+	c.Add_statistics_to_this_user_on_project_statuses(&wg)
+	wg.Wait()
+
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(*c)
 
-	return &utils.Msg{
+	return utils.Msg{
 		resp, http.StatusOK, "", "",
 	}
 }

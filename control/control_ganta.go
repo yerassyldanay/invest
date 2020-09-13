@@ -11,7 +11,7 @@ var Ganta_add_new_step = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_add_new_step"
 	var ganta = model.Ganta{}
 	if err := json.NewDecoder(r.Body).Decode(&ganta); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname,
@@ -27,7 +27,7 @@ var Ganta_add_new_step = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname,
@@ -47,7 +47,7 @@ var Ganta_get_all_steps_by_project_id = func(w http.ResponseWriter, r *http.Requ
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname,
@@ -60,7 +60,7 @@ var Update_or_remove_ganta_step = func(w http.ResponseWriter, r *http.Request) {
 	var gu = model.GantaUpDate{}
 
 	if err := json.NewDecoder(r.Body).Decode(&gu); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname,
@@ -76,7 +76,7 @@ var Update_or_remove_ganta_step = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname,
@@ -92,7 +92,7 @@ var Delete_ganta_step = func(w http.ResponseWriter, r *http.Request) {
 	var gu = model.Ganta{}
 
 	if err := json.NewDecoder(r.Body).Decode(&gu); err != nil {
-		utils.Respond(w, r, &utils.Msg{
+		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname,
@@ -108,7 +108,7 @@ var Delete_ganta_step = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: resp,
 		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   fname,

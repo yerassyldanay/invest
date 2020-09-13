@@ -1,4 +1,0 @@
-time="2020-09-05T23:45:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
-time="2020-09-05T23:45:49+06:00" level=info msg=main port=7010
-time="2020-09-06T01:43:03+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
-time="2020-09-06T01:43:03+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

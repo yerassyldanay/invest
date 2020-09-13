@@ -67,9 +67,9 @@ func (p *Project) create_child_steps_of_the_ganta_table(p1 uint64, steps []Ganta
 	provide:
 		project_id
  */
-func (p * Project) Create_ganta_table_for_this_project() (*utils.Msg) {
+func (p * Project) Create_ganta_table_for_this_project() (utils.Msg) {
 	if p.Id == 0 {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid project id. id = 0"}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid project id. id = 0"}
 	}
 
 	trans := GetDB().Begin()
@@ -81,7 +81,7 @@ func (p * Project) Create_ganta_table_for_this_project() (*utils.Msg) {
 	var count int
 	if GetDB().Table(Ganta{}.TableName()).Where("project_id = ?", p.Id).Count(&count);
 		count > 0 {
-			return &utils.Msg{utils.ErrorMethodNotAllowed, 405, "", ""}
+			return utils.Msg{utils.ErrorMethodNotAllowed, 405, "", ""}
 	}
 
 	/*
@@ -89,7 +89,7 @@ func (p * Project) Create_ganta_table_for_this_project() (*utils.Msg) {
 	 */
 	p1, p2, err := p.create_default_parents(trans)
 	if err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	fmt.Println(p1, p2)
@@ -98,11 +98,11 @@ func (p * Project) Create_ganta_table_for_this_project() (*utils.Msg) {
 		create child processes
 	 */
 	if err = p.create_child_steps_of_the_ganta_table(p1, DefaultGantaChildren1, trans); err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	if err = p.create_child_steps_of_the_ganta_table(p2, DefaultGantaChildren2, trans); err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	/*
@@ -110,11 +110,11 @@ func (p * Project) Create_ganta_table_for_this_project() (*utils.Msg) {
 	 */
 	err = trans.Commit().Error
 	if err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	trans = nil
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
 

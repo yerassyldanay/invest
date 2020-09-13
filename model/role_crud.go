@@ -21,9 +21,9 @@ func(r *Role) Validate() bool {
 	400 - invalid parameters
 	417 - internal db error
  */
-func(r *Role) Create_a_role_with_permissions() (*utils.Msg) {
+func(r *Role) Create_a_role_with_permissions() (utils.Msg) {
 	if ok := r.Validate(); !ok {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInvalidParameters, Status:  http.StatusBadRequest, ErrMsg: utils.Error_msg_invalid_parameters_passed,
 		}
 	}
@@ -40,25 +40,25 @@ func(r *Role) Create_a_role_with_permissions() (*utils.Msg) {
 	var main_query = fmt.Sprintf(" id in (%s) ", permForQuery.String())
 	if err := GetDB().Find(&r.Permissions, main_query).Error;
 		err != nil {
-			return &utils.Msg{
+			return utils.Msg{
 				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg:  err.Error(),
 			}
 	}
 
 	if err := GetDB().Create(r).Error; err != nil {
-		return &utils.Msg{Message: utils.ErrorInternalDbError, Status: http.StatusExpectationFailed, ErrMsg: err.Error()}
+		return utils.Msg{Message: utils.ErrorInternalDbError, Status: http.StatusExpectationFailed, ErrMsg: err.Error()}
 	}
 
-	return &utils.Msg{
+	return utils.Msg{
 		Message: utils.NoErrorFineEverthingOk,
 		Status:  200,
 		ErrMsg:  "",
 	}
 }
 
-func (r *Role) Update_role_name_description_and_permissions() (*utils.Msg) {
+func (r *Role) Update_role_name_description_and_permissions() (utils.Msg) {
 	if ok := r.Validate(); !ok {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInvalidParameters, Status:  http.StatusBadRequest, ErrMsg: utils.Error_msg_invalid_parameters_passed,
 		}
 	}
@@ -67,12 +67,12 @@ func (r *Role) Update_role_name_description_and_permissions() (*utils.Msg) {
 		"name": r.Name,
 		"description": r.Description,
 	}).Error; err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg: err.Error(),
 		}
 	}
 
-	return &utils.Msg{
+	return utils.Msg{
 		Message: utils.NoErrorFineEverthingOk, Status:  200, ErrMsg: "",
 	}
 }
@@ -99,11 +99,11 @@ func Convert_list_to_string_seperate_by_given_string(list []uint64, sep string) 
 		1. role id
 		2. ids of permissions
  */
-func (r *Role) Add_a_list_of_permissions() (*utils.Msg) {
+func (r *Role) Add_a_list_of_permissions() (utils.Msg) {
 
 	if err := GetDB().Preload("Permissions").Find(r, "id = ?", r.Id).Error;
 		err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var querystr = Convert_list_to_string_seperate_by_given_string(r.PermissionsSent, ", ")
@@ -112,7 +112,7 @@ func (r *Role) Add_a_list_of_permissions() (*utils.Msg) {
 	var permissions = []Permission{}
 	if err := GetDB().Find(&permissions, querystr).Error;
 		err != nil {
-			return &utils.Msg{
+			return utils.Msg{
 				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg:  err.Error(),
 			}
 	}
@@ -128,15 +128,15 @@ func (r *Role) Add_a_list_of_permissions() (*utils.Msg) {
 		save the results
 	 */
 	if err := GetDB().Save(r).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return &utils.Msg{
+	return utils.Msg{
 		Message: utils.NoErrorFineEverthingOk, Status:  http.StatusOK, ErrMsg: "",
 	}
 }
 
-func (r *Role) Remove_a_list_of_permissions() (*utils.Msg) {
+func (r *Role) Remove_a_list_of_permissions() (utils.Msg) {
 
 	var querystr = Convert_list_to_string_seperate_by_given_string(r.PermissionsSent, ", ")
 
@@ -145,10 +145,10 @@ func (r *Role) Remove_a_list_of_permissions() (*utils.Msg) {
 	 */
 	querystr = fmt.Sprintf( " delete from roles_permissions where role_id = %d and permission_id in (%s); ", r.Id, querystr )
 	if err := GetDB().Exec(querystr).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return &utils.Msg{
+	return utils.Msg{
 		Message: utils.NoErrorFineEverthingOk, Status:  http.StatusOK, ErrMsg: "",
 	}
 }
@@ -156,17 +156,17 @@ func (r *Role) Remove_a_list_of_permissions() (*utils.Msg) {
 /*
 	delete the role if there is no user with such a role
  */
-func (r *Role) Delete_this_role() (*utils.Msg) {
+func (r *Role) Delete_this_role() (utils.Msg) {
 	var count int
 	if err := GetDB().Table(User{}.TableName()).Where("role_id=?", r.Id).Count(&count).Error;
 		err != nil {
-			return &utils.Msg{
+			return utils.Msg{
 				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg: err.Error(),
 			}
 	}
 
 	if count > 0 {
-		return &utils.Msg{
+		return utils.Msg{
 			Message: utils.ErrorMethodNotAllowed, Status:  http.StatusMethodNotAllowed, ErrMsg: utils.Error_msg_method_not_allowed,
 		}
 	}
@@ -176,7 +176,7 @@ func (r *Role) Delete_this_role() (*utils.Msg) {
 
 	if err := trans.Exec("delete from roles_permissions where role_id = ? ; ", r.Id).Error;
 		err != nil {
-			return &utils.Msg{
+			return utils.Msg{
 				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg: err.Error(),
 			}
 	}
@@ -187,7 +187,7 @@ func (r *Role) Delete_this_role() (*utils.Msg) {
 	 */
 	if err := trans.Table(Role{}.TableName()).Where("id=?", r.Id).Delete(&Role{}).Error;
 		err != nil {
-			return &utils.Msg{
+			return utils.Msg{
 				Message: utils.ErrorInternalDbError, Status:  http.StatusExpectationFailed, ErrMsg: err.Error(),
 			}
 	}
@@ -195,7 +195,7 @@ func (r *Role) Delete_this_role() (*utils.Msg) {
 	trans.Commit()
 	trans = nil
 
-	return &utils.Msg{
+	return utils.Msg{
 		Message: utils.NoErrorFineEverthingOk, Status:  http.StatusOK, ErrMsg: "",
 	}
 }
@@ -203,14 +203,14 @@ func (r *Role) Delete_this_role() (*utils.Msg) {
 /*
 	get roles
  */
-func (r *Role) Get_roles(offset string) (*utils.Msg) {
+func (r *Role) Get_roles(offset string) (utils.Msg) {
 	var roles = struct {
 		Info			[]Role
 	}{}
 	if err := GetDB().Preload("Permissions").Table(Role{}.TableName()).Offset(offset).Limit(GetLimit).Find(&roles.Info).Error; err != nil {
 		var resp = utils.ErrorInternalDbError
 		resp["info"] = []map[string]interface{}{}
-		return &utils.Msg{
+		return utils.Msg{
 			Message: resp, Status:  http.StatusExpectationFailed, ErrMsg: err.Error(),
 		}
 	}
@@ -218,19 +218,19 @@ func (r *Role) Get_roles(offset string) (*utils.Msg) {
 	var resp = utils.ErrorInternalDbError
 	resp["info"] = Struct_to_map(roles)
 
-	return &utils.Msg{resp, http.StatusOK, "", ""}
+	return utils.Msg{resp, http.StatusOK, "", ""}
 }
 
-func (r *Role) Get_role_info() (*utils.Msg) {
+func (r *Role) Get_role_info() (utils.Msg) {
 	if err := GetDB().Preload("Permissions").Table(r.TableName()).Where("id=?", r.Id).Error;
 		err != nil {
-			return &utils.Msg{Message: utils.ErrorInternalDbError, Status: http.StatusExpectationFailed, ErrMsg: err.Error()}
+			return utils.Msg{Message: utils.ErrorInternalDbError, Status: http.StatusExpectationFailed, ErrMsg: err.Error()}
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(&r)
 
-	return &utils.Msg{
+	return utils.Msg{
 		Message: resp, Status:  http.StatusOK, ErrMsg: "",
 	}
 }

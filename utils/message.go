@@ -40,7 +40,7 @@ func (msg *Msg) Log(r *http.Request) {
 		2. status
 		3. encoder - body of response
  */
-func Respond(w http.ResponseWriter, r *http.Request, msg *Msg) {
+func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 	var fname = "RESPOND"
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")

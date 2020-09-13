@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 	"time"
@@ -19,12 +20,23 @@ func (ProjectsUsers) TableName() string {
 }
 
 /*
-	do not allow to delete default users
+	* do not allow to delete default users
+	* do not allow assign investor to the project
  */
 func (pu ProjectsUsers) BeforeDelete(tx *gorm.DB) error {
 
 	if pu.UserId <= utils.DefaultNotAllowedUserToDelete {
 		return errorDafultUsersAreBeingAltered
+	}
+
+	var user = User{}
+	err := GetDB().Preload("Role").First(&user, "id = ?", pu.UserId).Error
+	if err != nil {
+		return err
+	}
+
+	if user.Role.Name == utils.RoleInvestor {
+		return errors.New("cannot assign investor to the project")
 	}
 
 	return nil

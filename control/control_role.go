@@ -14,7 +14,7 @@ import (
  */
 var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_create_update_add_and_delete_permissions_remove"
-	var msg *utils.Msg
+	var msg utils.Msg
 	var role = model.Role{}
 
 	/*
@@ -26,7 +26,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 		msg = role.Get_roles(offset)
 	default:
 		if err := json.NewDecoder(r.Body).Decode(&role); err != nil {
-			utils.Respond(w, r, &utils.Msg{
+			utils.Respond(w, r, utils.Msg{
 				Message: 	utils.ErrorInvalidParameters,
 				Status: 	http.StatusBadRequest,
 				Fname:   	fname + " 1",
@@ -47,7 +47,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 			/*
 				if none of these methods, then
 			 */
-			msg = &utils.Msg{
+			msg = utils.Msg{
 				Message: utils.ErrorMethodNotAllowed,
 				Status: 	http.StatusMethodNotAllowed,
 				Fname:   	fname + " 2",
@@ -64,7 +64,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
  */
 var Role_delete_or_get_with_role_id = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_delete_or_get_with_role_id"
-	var msg *utils.Msg
+	var msg utils.Msg
 	var role = model.Role{}
 
 	var vars = mux.Vars(r)
@@ -76,7 +76,7 @@ var Role_delete_or_get_with_role_id = func(w http.ResponseWriter, r *http.Reques
 	case http.MethodGet:
 		msg = role.Get_role_info()
 	default:
-		msg = &utils.Msg{
+		msg = utils.Msg{
 			Message: utils.ErrorMethodNotAllowed,
 			Status: 	http.StatusMethodNotAllowed,
 			Fname:   	fname + " 2",
@@ -89,7 +89,7 @@ var Role_delete_or_get_with_role_id = func(w http.ResponseWriter, r *http.Reques
 
 var Role_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_add_and_remove_permissions"
-	var msg = &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", ""}
+	var msg = utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", ""}
 	var role = model.Role{}
 
 	if err := json.NewDecoder(r.Body).Decode(&role); err != nil {
@@ -115,7 +115,7 @@ var Role_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Reques
 		/*
 			not supported
 		 */
-		msg = &utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "method is not allowed. role/permissions"}
+		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "method is not allowed. role/permissions"}
 
 	}
 

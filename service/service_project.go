@@ -6,8 +6,8 @@ import (
 	"invest/utils"
 )
 
-func Service_create_project(project *model.Project) (*utils.Msg){
-	var msg = &utils.Msg{
+func Service_create_project(project *model.Project) (utils.Msg){
+	var msg = utils.Msg{
 		Fname: "Service_create_project",
 	}
 
@@ -93,8 +93,8 @@ func Service_create_project(project *model.Project) (*utils.Msg){
 	sms.ToAddresser = addressers
 	_, err = sms.SendMessageToList()
 	if err != nil {
-		return &utils.Msg{utils.ErrorCouldNotSendEmail, 204, "", err.Error()}
+		return utils.Msg{utils.ErrorCouldNotSendEmail, 204, "", err.Error()}
 	}
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }

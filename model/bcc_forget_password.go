@@ -19,9 +19,9 @@ type ForgetPassword struct {
 	UserId				uint64				`json:"user_id"`
 }
 
-func (fp *ForgetPassword) SendMessage() (*utils.Msg) {
+func (fp *ForgetPassword) SendMessage() (utils.Msg) {
 	if err := validator.Validate(*fp); err != nil {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
 	}
 
 	var codeChan = make(chan string, 1)
@@ -32,15 +32,15 @@ func (fp *ForgetPassword) SendMessage() (*utils.Msg) {
 	var user = User{}
 	if err := GetDB().First(&user.Email, "address = ?", fp.EmailAddress).Error;
 		err == gorm.ErrRecordNotFound {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
 	} else if err != nil || !user.Email.Verified {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "email is not confirmed or internal data base error occurred"}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "email is not confirmed or internal data base error occurred"}
 	}
 
 	var email = user.Email
 	err := GetDB().First(&user, "email_id = ?", user.Email.Id).Error
 	if err != nil {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
 	}
 
 	user.Email = email
@@ -53,7 +53,7 @@ func (fp *ForgetPassword) SendMessage() (*utils.Msg) {
 	case code = <- codeChan:
 		fp.Code = code
 	case  <- time.Tick(time.Second * 10):
-		return &utils.Msg{utils.ErrorInternalServerError, 500, "", "timeout. ForgetPassword Link"}
+		return utils.Msg{utils.ErrorInternalServerError, 500, "", "timeout. ForgetPassword Link"}
 	}
 
 	/*
@@ -62,7 +62,7 @@ func (fp *ForgetPassword) SendMessage() (*utils.Msg) {
 	var sms = SendgridMessageStore{}
 	sms, err = sms.Prepare_message_this_object(&user, templates.Base_message_map_2_forget_password)
 	if err != nil {
-		return &utils.Msg{utils.ErrorInternalServerError, 503, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalServerError, 503, "", err.Error()}
 	}
 
 	/*
@@ -73,31 +73,31 @@ func (fp *ForgetPassword) SendMessage() (*utils.Msg) {
 	 */
 	GetRedis().Set(fp.Code, fp.UserId, time.Hour * 24)
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
-func (fp *ForgetPassword) Change_password_of_user_by_hash() (*utils.Msg) {
+func (fp *ForgetPassword) Change_password_of_user_by_hash() (utils.Msg) {
 	// check hash is in redis
 	user_id, err := GetRedis().Get(fp.Code).Uint64()
 	if err != nil || user_id != fp.UserId || user_id == 0 {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid code has been provided"}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid code has been provided"}
 	}
 
 	if ok := Validate_password(fp.NewPassword, "", ""); !ok {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid password"}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid password"}
 	}
 
 	hashed_password, err := utils.Convert_string_to_hash(fp.NewPassword)
 	if err != nil {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
 	}
 
 	if err := GetDB().Table(User{}.TableName()).Where("id = ?", fp.UserId).Update("password", hashed_password).Error;
 		err != nil {
-			return &utils.Msg{utils.ErrorInternalServerError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalServerError, 417, "", err.Error()}
 	}
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
 

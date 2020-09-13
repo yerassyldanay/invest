@@ -37,7 +37,7 @@ var User_email_confirm = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: 	resp,
 		Status:  	utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   	fname,
@@ -53,7 +53,7 @@ var User_phone_confirm = func(w http.ResponseWriter, r *http.Request) {
 	var p = model.Phone{}
 
 	//if err := json.NewDecoder(r.Body).Decode(&p); err != nil {
-	//	utils.Respond(w, r, &utils.Msg{
+	//	utils.Respond(w, r, utils.Msg{
 	//		Message: 	utils.ErrorInternalServerError,
 	//		Status:  	500,
 	//		Fname:   	fname + " 1",
@@ -71,7 +71,7 @@ var User_phone_confirm = func(w http.ResponseWriter, r *http.Request) {
 		errmsg = err.Error()
 	}
 
-	utils.Respond(w, r, &utils.Msg{
+	utils.Respond(w, r, utils.Msg{
 		Message: 	resp,
 		Status:  	utils.If_condition_then(errmsg == "", 200, 400).(int),
 		Fname:   	fname + " 2",

@@ -53,7 +53,7 @@ func (fi *Finance) Load_values_to_this_object_by_project_id() error {
 /*
 	updating table values
  */
-func (fi *Finance) Update_finance_table_with_this_table_by_project_id() (*utils.Msg) {
+func (fi *Finance) Update_finance_table_with_this_table_by_project_id() (utils.Msg) {
 	var old_finance = Finance{
 		ProjectId: fi.ProjectId,
 	}
@@ -75,17 +75,17 @@ func (fi *Finance) Update_finance_table_with_this_table_by_project_id() (*utils.
 		err = fi.Create_this_table()
 
 		if err != nil {
-			return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 		}
 
-		return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+		return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 
 	} else if err != nil {
 		/*
 			did not expect this kind of error
 				thus returning msg
 		 */
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	/*
@@ -102,18 +102,18 @@ func (fi *Finance) Update_finance_table_with_this_table_by_project_id() (*utils.
 	fi.SumId = old_finance.Sum.Id
 
 	if err := GetDB().Save(fi).Error; err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return &utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }
 
 /*
 	get a finance table
  */
-func (fi *Finance) Get_table() (*utils.Msg) {
+func (fi *Finance) Get_table() (utils.Msg) {
 	if fi.ProjectId == 0 {
-		return &utils.Msg{utils.ErrorInvalidParameters, 400, "", "project id is 0"}
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "project id is 0"}
 	}
 
 	err := fi.Load_values_to_this_object_by_project_id()
@@ -124,12 +124,12 @@ func (fi *Finance) Get_table() (*utils.Msg) {
 			fi = &Finance{}
 		}
 	} else if err != nil {
-		return &utils.Msg{utils.ErrorInternalDbError, 500, "", err.Error()}
+		return utils.Msg{utils.ErrorInternalDbError, 500, "", err.Error()}
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map_with_escape(*fi, []string{"project"})
 
-	return &utils.Msg{resp, 200, "", ""}
+	return utils.Msg{resp, 200, "", ""}
 }
 

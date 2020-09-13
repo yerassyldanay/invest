@@ -74,7 +74,7 @@ func (o *Organization) Get_and_assign_info_on_organization_by_bin() (*Organizati
 	create a company
 		expects that all fields are filled
 */
-func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) {
+func (o *Organization) Create_or_get_organization_from_db_by_bin() (utils.Msg) {
 	if o.Lang == "" {
 		o.Lang = utils.DefaultContentLanguage
 	}
@@ -89,11 +89,11 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) 
 	err == nil {
 		var resp = utils.NoErrorFineEverthingOk
 		resp["info"] =  Struct_to_map(*o)
-		return &utils.Msg{
+		return utils.Msg{
 			resp, http.StatusOK, "", "",
 		}
 	} else if err != gorm.ErrRecordNotFound {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInternalServerError, http.StatusInternalServerError, "", err.Error(),
 		}
 	}
@@ -103,7 +103,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) 
 	*/
 	o, err = o.Get_and_assign_info_on_organization_by_bin()
 	if err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorExternalServiceErrorNoOrganizationInfo, http.StatusServiceUnavailable, "", err.Error(),
 		}
 	}
@@ -113,7 +113,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) 
 	*/
 	o.Bin = bin
 	if err := GetDB().Create(o).Error; err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
 		}
 	}
@@ -121,7 +121,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] =  Struct_to_map(*o)
 
-	return &utils.Msg{
+	return utils.Msg{
 		utils.NoErrorFineEverthingOk, http.StatusCreated, "", "",
 	}
 }
@@ -129,7 +129,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin() (*utils.Msg) 
 /*
 	update company info by admin
 */
-func (o *Organization) Update_organization_info() (*utils.Msg) {
+func (o *Organization) Update_organization_info() (utils.Msg) {
 	if o.Lang == "" {
 		o.Lang = "kaz"
 	}
@@ -141,12 +141,12 @@ func (o *Organization) Update_organization_info() (*utils.Msg) {
 		"address": o.Address,
 	}).Error;
 		err != nil {
-			return &utils.Msg{
+			return utils.Msg{
 				utils.ErrorInvalidParameters, http.StatusBadRequest, "", err.Error(),
 			}
 	}
 
-	return &utils.Msg{
+	return utils.Msg{
 		utils.NoErrorFineEverthingOk, http.StatusCreated, "", "",
 	}
 }

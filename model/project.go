@@ -16,13 +16,13 @@ func (p *Project) IsValid() (bool) {
 	return true
 }
 
-func (p *Project) Create_project() (*utils.Msg){
+func (p *Project) Create_project() (utils.Msg){
 	if p.Lang == "" {
 		p.Lang = utils.DefaultContentLanguage
 	}
 
 	if ok := p.IsValid(); !ok {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid parameters have been passed",
 		}
 	}
@@ -54,11 +54,11 @@ func (p *Project) Create_project() (*utils.Msg){
 
 	if err := trans.Create(p).Error; err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {
-			return &utils.Msg{
+			return utils.Msg{
 				utils.ErrorDupicateKeyOnDb, http.StatusConflict, "", err.Error(),
 			}
 		}
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
 		}
 	}
@@ -81,18 +81,18 @@ func (p *Project) Create_project() (*utils.Msg){
 	trans.Commit()
 	trans = nil
 
-	return &utils.Msg{
+	return utils.Msg{
 		utils.NoErrorFineEverthingOk, http.StatusOK, "", "",
 	}
 }
 
-func (p *Project) Update() (*utils.Msg) {
+func (p *Project) Update() (utils.Msg) {
 	if p.Lang == "" {
 		p.Lang = utils.DefaultContentLanguage
 	}
 
 	if p.Id == 0 {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid id. project update",
 		}
 	}
@@ -104,7 +104,7 @@ func (p *Project) Update() (*utils.Msg) {
 	if err == nil {
 		p.OrganizationId = org.Id
 	} else {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "could not get info on organization",
 		}
 	}
@@ -126,12 +126,12 @@ func (p *Project) Update() (*utils.Msg) {
 		PhoneNumber: 		p.PhoneNumber,
 		OrganizationId: 	p.OrganizationId,
 	}).Error; err != nil {
-		return &utils.Msg{
+		return utils.Msg{
 			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
 		}
 	}
 
-	return &utils.Msg{
+	return utils.Msg{
 		utils.NoErrorFineEverthingOk, http.StatusOK, "", "",
 	}
 }

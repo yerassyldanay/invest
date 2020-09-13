@@ -21,7 +21,7 @@ import (
  */
 var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Forget_password_send_message"
-	var msg = &utils.Msg{
+	var msg = utils.Msg{
 		Fname: fname + " 1",
 	}
 
@@ -36,7 +36,7 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 
 	case http.MethodPost:
 		if err := json.NewDecoder(r.Body).Decode(&fp); err != nil {
-			utils.Respond(w, r, &utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
+			utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
 			return
 		}
 

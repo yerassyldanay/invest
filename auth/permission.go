@@ -30,7 +30,7 @@ var HasPermissionWrapper = func(next http.Handler, w http.ResponseWriter, r *htt
 		*/
 		paths := strings.Split(r.URL.Path, "/")
 		if len(paths) < 2 {
-			utils.Respond(w, r, &utils.Msg{
+			utils.Respond(w, r, utils.Msg{
 				Message: utils.ErrorInternalServerError,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 1",

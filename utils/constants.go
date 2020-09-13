@@ -47,6 +47,7 @@ var NoNeedToAuth = []string {
 	"/v1/all/confirmation/email",
 	"/v1/all/confirmation/phone",
 	"/v1/all/organization",
+	"/droptables",
 }
 
 var NoNeedToConfirmEmail = []string {}
