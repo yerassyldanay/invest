@@ -7,111 +7,61 @@ import (
 	"net/http"
 )
 
-var Ganta_add_new_step = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "Ganta_add_new_step"
+var Ganta_create_update_delete = func(w http.ResponseWriter, r *http.Request) {
+	var fname = "Ganta_create_update_delete"
 	var ganta = model.Ganta{}
+
 	if err := json.NewDecoder(r.Body).Decode(&ganta); err != nil {
 		utils.Respond(w, r, utils.Msg{
 			Message: utils.ErrorInvalidParameters,
 			Status:  400,
-			Fname:   fname,
+			Fname:   fname + " 1",
 			ErrMsg:  err.Error(),
 		})
 		return
 	}
 	defer r.Body.Close()
 
-	var errmsg string
-	resp, err := ganta.Add_new_step()
-	if err != nil {
-		errmsg = err.Error()
+	var msg = utils.Msg{}
+	switch r.Method {
+	case http.MethodPost:
+		msg = ganta.Add_new_step()
+		msg.Fname = fname + " post"
+	case http.MethodPut:
+		msg = ganta.Update_ganta_step()
+		msg.Fname = fname + " put"
+	case http.MethodDelete:
+		msg.Fname = fname + " delete"
+	default:
+		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "making a not supported request: " + r.Method}
 	}
 
-	utils.Respond(w, r, utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname,
-		ErrMsg:  errmsg,
-	})
+	utils.Respond(w, r, msg)
 }
 
-var Ganta_get_all_steps_by_project_id = func(w http.ResponseWriter, r *http.Request) {
+/*
+	get only ganta steps
+ */
+var Ganta_only_ganta_steps_by_project_id = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_get_all_steps_by_project_id"
+	var choice = Get_query_parameter_str(r, "choice", "")
 	var ganta = model.Ganta{
 		ProjectId: uint64(Get_query_parameter_int(r, "project_id", 0)),
 	}
 
-	var errmsg string
-	resp, err := ganta.Get_ganta_by_project_id()
-	if err != nil {
-		errmsg = err.Error()
+	var msg = utils.Msg{}
+	switch choice {
+	case "withdoc":
+		msg = ganta.Get_ganta_with_documents_by_project_id()
+		msg.Fname = fname + " docs"
+	case "one":
+		msg = ganta.Get_only_one_with_docs()
+		msg.Fname = fname + " one"
+	default:
+		msg = ganta.Get_only_ganta_by_project_id()
+		msg.Fname = fname + " default"
 	}
 
-	utils.Respond(w, r, utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname,
-		ErrMsg:  errmsg,
-	})
+	utils.Respond(w, r, msg)
 }
 
-var Update_or_remove_ganta_step = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "Update_ganta_step"
-	var gu = model.GantaUpDate{}
-
-	if err := json.NewDecoder(r.Body).Decode(&gu); err != nil {
-		utils.Respond(w, r, utils.Msg{
-			Message: utils.ErrorInvalidParameters,
-			Status:  400,
-			Fname:   fname,
-			ErrMsg:  err.Error(),
-		})
-		return
-	}
-	defer r.Body.Close()
-
-	var errmsg string
-	resp, err := gu.Update_step_start_thus_others()
-	if err != nil {
-		errmsg = err.Error()
-	}
-
-	utils.Respond(w, r, utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname,
-		ErrMsg:  errmsg,
-	})
-}
-
-/*
-	delete ganta step
- */
-var Delete_ganta_step = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "Delete_ganta_step"
-	var gu = model.Ganta{}
-
-	if err := json.NewDecoder(r.Body).Decode(&gu); err != nil {
-		utils.Respond(w, r, utils.Msg{
-			Message: utils.ErrorInvalidParameters,
-			Status:  400,
-			Fname:   fname,
-			ErrMsg:  err.Error(),
-		})
-		return
-	}
-	defer r.Body.Close()
-
-	var errmsg string
-	resp, err := gu.Delete_ganta_step()
-	if err != nil {
-		errmsg = err.Error()
-	}
-
-	utils.Respond(w, r, utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname,
-		ErrMsg:  errmsg,
-	})
-}

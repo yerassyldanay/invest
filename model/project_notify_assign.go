@@ -7,7 +7,7 @@ import (
 	"invest/utils"
 )
 
-func (pu *ProjectsUsers) Notify_both(lang string) (map[string]interface{}, error) {
+func (pu *ProjectsUsers) Notify_user(lang string) (map[string]interface{}, error) {
 	if pu.UserId == 0 || pu.ProjectId == 0 {
 		return utils.ErrorInvalidParameters, errors.New("invalid aparameters passed")
 	}

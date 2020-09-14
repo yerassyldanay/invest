@@ -39,7 +39,9 @@ func (Ganta) TableName() string {
 type GantaUpDate struct {
 	Day					time.Duration				`json:"day" validate:"max=10,min=-10"`
 	Hour				time.Duration				`json:"hour" validate:"max=24,min=-24"`
-
+	
+	UserId				uint64						`json:"user_id"`
+	
 	Ganta
 }
 

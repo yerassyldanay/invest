@@ -80,19 +80,13 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/user/{which}", control.User_create_read_update_delete).Methods("PUT")
 	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("GET")
 	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("POST")
-	router.HandleFunc("/v1/administrate/user/{which}", control.User_create_read_update_delete).Methods("DELETE")
 
 	router.HandleFunc("/v1/administrate/profile", control.Get_full_user_info)
 
 	/*
-		1. передать статистику определенного сотрудника
-		2. передать проекты по статусу
-		3. передать проекты по статусу + по айди сотрудника
-
 		/ad../stat/project?status=?
 		/ad../stat/project?user_id=?&&status=?
 		/ad../stat/project?user_id
-
 	 */
 	router.HandleFunc("/v1/administrate/stat/project", control.Stats_on_projects_based_on_user_or_status).Methods("GET")
 
@@ -110,10 +104,11 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("POST")
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("DELETE")
 
+	//router.HandleFunc("/v1/projects_make_changes/project", )
 	router.HandleFunc("/v1/projects_make_changes/project", control.Update_project_by_investor).Methods("PUT")
-
 	router.HandleFunc("/v1/projects_make_changes/project", control.Create_project).Methods("POST")
 	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_add_document_to_project).Methods("POST")
+	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_remove_document).Methods("DELETE")
 
 	/*
 		Leave a COMMENT on the project
@@ -141,11 +136,10 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/project", control.Remove_user_from_project).Methods("DELETE")
 	router.HandleFunc("/v1/administrate/project", control.Assign_user_to_project).Methods("POST")
 
-	router.HandleFunc("/v1/administrate/ganta", control.Ganta_get_all_steps_by_project_id).Methods("GET")
-	router.HandleFunc("/v1/administrate/ganta", control.Ganta_add_new_step).Methods("POST")
-	router.HandleFunc("/v1/administrate/ganta", control.Update_or_remove_ganta_step).Methods("PUT")
-
-	router.HandleFunc("/v1/administrate/ganta", control.Update_or_remove_ganta_step).Methods("DELETE")
+	router.HandleFunc("/v1/administrate/ganta/{choice}", control.Ganta_only_ganta_steps_by_project_id).Methods("GET")
+	router.HandleFunc("/v1/administrate/ganta", control.Ganta_create_update_delete).Methods("POST")
+	router.HandleFunc("/v1/administrate/ganta", control.Ganta_create_update_delete).Methods("PUT")
+	router.HandleFunc("/v1/administrate/ganta", control.Ganta_create_update_delete).Methods("DELETE")
 
 	/*
 		check
@@ -165,6 +159,8 @@ func Create_new_invest_router() (*mux.Router) {
 			&model.User{})
 
 		model.GetDB().Debug().AutoMigrate(&model.ProjectsUsers{})
+
+		model.GetDB().DropTableIfExists("goose_db_version")
 	})
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {

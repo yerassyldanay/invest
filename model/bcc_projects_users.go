@@ -23,11 +23,16 @@ func (ProjectsUsers) TableName() string {
 	* do not allow to delete default users
 	* do not allow assign investor to the project
  */
-func (pu ProjectsUsers) BeforeDelete(tx *gorm.DB) error {
+func (pu *ProjectsUsers) BeforeDelete(tx *gorm.DB) error {
 
 	if pu.UserId <= utils.DefaultNotAllowedUserToDelete {
 		return errorDafultUsersAreBeingAltered
 	}
+
+	return nil
+}
+
+func (pu *ProjectsUsers) BeforeCreate(tx *gorm.DB) error {
 
 	var user = User{}
 	err := GetDB().Preload("Role").First(&user, "id = ?", pu.UserId).Error

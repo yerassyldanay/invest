@@ -2,6 +2,7 @@ package control
 
 import (
 	"encoding/json"
+	"fmt"
 	"invest/model"
 	"invest/utils"
 	"net/http"
@@ -10,6 +11,8 @@ import (
 var Assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Admin_assign_user_to_project"
 	var pu = model.ProjectsUsers{}
+
+	lang := r.Header.Get(utils.HeaderContentLanguage)
 
 	if err := json.NewDecoder(r.Body).Decode(&pu); err  != nil {
 		utils.Respond(w, r, utils.Msg{
@@ -22,23 +25,13 @@ var Assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var errmsg string
-	resp, err := pu.Assign_user_to_project()
-	if err != nil {
-		errmsg = err.Error()
+	msg := pu.Assign_user_to_project()
+	if msg.ErrMsg == "" {
+		fmt.Println(lang)
+		//_, _ = pu.Notify_user(lang)
 	}
 
-	resp, err = pu.Notify_both("")
-	if err != nil {
-		errmsg = errmsg + " | " + err.Error()
-	}
-
-	utils.Respond(w, r, utils.Msg{
-		Message: 	resp,
-		Status:  	utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   	fname,
-		ErrMsg:  	errmsg,
-	})
+	utils.Respond(w, r, msg)
 }
 
 /*
@@ -59,18 +52,7 @@ var Remove_user_from_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var errmsg string
-	resp, err := pu.Remove_user_from_project()
-	if err != nil {
-		errmsg = err.Error()
-	}
-
-	utils.Respond(w, r, utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:  fname + " 2",
-		ErrMsg:  errmsg,
-	})
+	msg := pu.Remove_user_from_project()
+	utils.Respond(w, r, msg)
 }
-
 
