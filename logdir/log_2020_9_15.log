@@ -207,3 +207,65 @@ time="2020-09-15T12:16:54+06:00" level=info msg=fn_rotate_log_files message="fin
 time="2020-09-15T12:16:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-09-15T12:16:58+06:00" level=info msg=main port=7000
 time="2020-09-15T12:16:58+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:39572" path=/v1/projects_comment/ganta/withoutdoc status=200
+time="2020-09-15T12:34:54+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error="record not found" host="[::1]:39572" path=/v1/projects_comment/ganta/onewithdoc status=417
+time="2020-09-15T12:35:04+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error= host="[::1]:39572" path=/v1/projects_comment/ganta/onewithdoc status=200
+time="2020-09-15T12:44:23+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error= host="[::1]:39572" path=/v1/projects_comment/ganta/onewithdoc status=200
+time="2020-09-15T12:45:05+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error= host="[::1]:39572" path=/v1/projects_comment/ganta/onewithdoc status=200
+time="2020-09-15T12:46:45+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error= host="[::1]:39572" path=/v1/projects_comment/ganta/onewithdoc status=200
+time="2020-09-15T15:15:18+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:15:18+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:15:45+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:15:46+06:00" level=info msg=main port=7000
+time="2020-09-15T15:15:48+06:00" level=info error= host="[::1]:40578" path=/intest status=417
+time="2020-09-15T15:16:49+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:16:49+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:16:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:16:53+06:00" level=info msg=main port=7000
+time="2020-09-15T15:16:53+06:00" level=info error= host="[::1]:40600" path=/intest status=200
+time="2020-09-15T15:24:23+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:24:23+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:24:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:24:26+06:00" level=info msg=main port=7000
+time="2020-09-15T15:24:27+06:00" level=info error= host="[::1]:40782" path=/intest status=200
+time="2020-09-15T15:26:13+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:26:13+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:26:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:26:17+06:00" level=info msg=main port=7000
+time="2020-09-15T15:26:18+06:00" level=info error= host="[::1]:40804" path=/intest status=200
+time="2020-09-15T15:27:20+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:27:20+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:27:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:27:23+06:00" level=info msg=main port=7000
+time="2020-09-15T15:27:24+06:00" level=info error= host="[::1]:40830" path=/intest status=417
+time="2020-09-15T15:27:31+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:27:31+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:27:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:27:35+06:00" level=info msg=main port=7000
+time="2020-09-15T15:27:37+06:00" level=info error= host="[::1]:40838" path=/intest status=200
+time="2020-09-15T15:27:58+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:27:58+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:28:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:28:02+06:00" level=info msg=main port=7000
+time="2020-09-15T15:28:03+06:00" level=info error= host="[::1]:40864" path=/intest status=200
+time="2020-09-15T15:34:27+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T15:34:27+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T15:34:31+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:34:31+06:00" level=info msg=main port=7000
+time="2020-09-15T15:34:46+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:40932" path=/v1/administrate/project status=421
+time="2020-09-15T15:35:11+06:00" level=info msg="Sign_in 3" error= host="[::1]:40932" path=/v1/all/signin status=200
+time="2020-09-15T15:35:22+06:00" level=info msg="Project_get_all_assigned_users 1" error= host="[::1]:40932" path=/v1/administrate/project status=417
+time="2020-09-15T15:35:42+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T15:35:42+06:00" level=info msg=main port=7000
+time="2020-09-15T15:35:59+06:00" level=info msg="Project_get_all_assigned_users 1" error= host="[::1]:40960" path=/v1/administrate/project status=200
+time="2020-09-15T16:08:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T16:08:19+06:00" level=info msg=main port=7000
+time="2020-09-15T16:08:21+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:41366" path=/v1/all/project/docs/stat status=421
+time="2020-09-15T16:08:51+06:00" level=info msg="Sign_in 3" error= host="[::1]:41366" path=/v1/all/signin status=200
+time="2020-09-15T16:09:03+06:00" level=info msg="Get_number_of_documents 1" error= host="[::1]:41366" path=/v1/all/project/docs/stat status=200
+time="2020-09-15T16:09:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T16:09:58+06:00" level=info msg=main port=7000
+time="2020-09-15T16:10:00+06:00" level=info msg="Get_number_of_documents 1" error= host="[::1]:41410" path=/v1/all/project/docs/stat status=200
+time="2020-09-15T16:14:08+06:00" level=info msg="Project_get_all_assigned_users 1" error= host="[::1]:41410" path=/v1/administrate/project status=200
+time="2020-09-15T16:17:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T16:17:24+06:00" level=info msg=main port=7000
+time="2020-09-15T16:17:26+06:00" level=info msg="Project_get_all_assigned_users 1" error= host="[::1]:41486" path=/v1/administrate/project/stat status=200

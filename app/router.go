@@ -1,14 +1,12 @@
 package app
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
 	"invest/model"
 	"invest/utils"
 	"net/http"
-	"net/url"
 )
 
 func Create_new_invest_router() (*mux.Router) {
@@ -84,18 +82,16 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/profile", control.Get_full_user_info)
 
 	/*
-		/ad../stat/project?status=?
-		/ad../stat/project?user_id=?&&status=?
-		/ad../stat/project?user_id
-	 */
-	router.HandleFunc("/v1/administrate/stat/project", control.Stats_on_projects_based_on_user_or_status).Methods("GET")
-
-	/*
 		CRUD role & assign permissions
 	 */
 	router.HandleFunc("/v1/administrate/role", control.Role_create_update_add_and_remove_permissions).Methods("GET", "POST", "PUT")
 	router.HandleFunc("/v1/administrate/role/{role_id}", control.Role_delete_or_get_with_role_id).Methods("GET", "DELETE")
 	router.HandleFunc("/v1/administrate/permissions", control.Role_add_and_remove_permissions).Methods( "POST", "DELETE")
+
+	/*
+		list users & their roles, who are assigned to the project
+	 */
+	router.HandleFunc("/v1/administrate/", nil).Methods("GET")
 
 	/*
 		Categories
@@ -112,6 +108,14 @@ func Create_new_invest_router() (*mux.Router) {
 
 	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_add_document_to_project).Methods("POST")
 	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_remove_document).Methods("DELETE")
+
+	/*
+		/ad../stat/project?status=?
+		/ad../stat/project?user_id=?&&status=?
+		/ad../stat/project?user_id
+	*/
+	router.HandleFunc("/v1/administrate/stat/project", control.Stats_on_projects_based_on_user_or_status).Methods("GET")
+	router.HandleFunc("/v1/all/project/docs/stat", control.Get_stat_on_documents_of_project).Methods("GET")
 
 	/*
 		Leave a COMMENT on the project
@@ -138,6 +142,7 @@ func Create_new_invest_router() (*mux.Router) {
 	 */
 	router.HandleFunc("/v1/administrate/project", control.Remove_user_from_project).Methods("DELETE")
 	router.HandleFunc("/v1/administrate/project", control.Assign_user_to_project).Methods("POST")
+	router.HandleFunc("/v1/administrate/project/stat", control.Get_all_assigned_users_to_project).Methods("GET")
 
 	router.HandleFunc("/v1/projects_comment/ganta/{choice}", control.Ganta_only_ganta_steps_by_project_id).Methods("GET")
 	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("POST")
@@ -167,21 +172,9 @@ func Create_new_invest_router() (*mux.Router) {
 	})
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		queryParam := url.Values{
-			"hashcode": []string{
-				"AHEpm2m60d4acaggSUW7UhHYsiniur",
-			},
-			"key": []string{
-				"shash",
-			},
-		}
-		urlPath := url.URL{
-			Scheme:     "https",
-			Host:       "tsrk.xyz",
-			Path:		"/v1/all/confirmation/email",
-			RawQuery: 	queryParam.Encode(),
-		}
-		fmt.Println(urlPath.String())
+		var project = model.Project{Id: 2}
+		msg := project.Get_this_project_with_its_users()
+		utils.Respond(w, r, msg)
 	})
 
 	/*

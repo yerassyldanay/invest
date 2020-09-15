@@ -17,7 +17,7 @@ type Project struct {
 	OrganizationId			uint64					`json:"organization_id"`
 	Organization			Organization			`json:"organization" gorm:"foreignkey:OrganizationId"`
 
-	User					[]User					`json:"user" gorm:"many2many:projects_users;"`
+	Users					[]User					`json:"user" gorm:"many2many:projects_users;"`
 	Documents				[]Document				`json:"documents" gorm:"-"`
 	Categors				[]Categor				`json:"categors" gorm:"many2many:projects_categors"`
 

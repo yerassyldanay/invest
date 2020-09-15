@@ -34,10 +34,10 @@ func (u *User) Get_all_projects(offset string) (map[string]interface{}, error) {
 		var main_query = "select u.username, u.fio, u.position from projects_users pu " +
 			" join users u on pu.user_id = u.id " +
 			" join roles r on u.role_id = r.id where pu.project_id=?; "
-		err = GetDB().Exec(main_query, tproject.Id).Omit("password").Find(&tproject.User).Error
+		err = GetDB().Exec(main_query, tproject.Id).Omit("password").Find(&tproject.Users).Error
 
-		for i, _ := range tproject.User {
-			tproject.User[i].Password = ""
+		for i, _ := range tproject.Users {
+			tproject.Users[i].Password = ""
 		}
 
 		//fmt.Println("Get projects: ", err)
