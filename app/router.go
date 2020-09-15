@@ -104,9 +104,12 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("POST")
 	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("DELETE")
 
-	//router.HandleFunc("/v1/projects_make_changes/project", )
-	router.HandleFunc("/v1/projects_make_changes/project", control.Update_project_by_investor).Methods("PUT")
+	/*
+		Project & Document
+	 */
+	router.HandleFunc("/v1/projects_make_changes/project", control.Update_project).Methods("PUT")
 	router.HandleFunc("/v1/projects_make_changes/project", control.Create_project).Methods("POST")
+
 	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_add_document_to_project).Methods("POST")
 	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_remove_document).Methods("DELETE")
 
@@ -136,10 +139,10 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/project", control.Remove_user_from_project).Methods("DELETE")
 	router.HandleFunc("/v1/administrate/project", control.Assign_user_to_project).Methods("POST")
 
-	router.HandleFunc("/v1/administrate/ganta/{choice}", control.Ganta_only_ganta_steps_by_project_id).Methods("GET")
-	router.HandleFunc("/v1/administrate/ganta", control.Ganta_create_update_delete).Methods("POST")
-	router.HandleFunc("/v1/administrate/ganta", control.Ganta_create_update_delete).Methods("PUT")
-	router.HandleFunc("/v1/administrate/ganta", control.Ganta_create_update_delete).Methods("DELETE")
+	router.HandleFunc("/v1/projects_comment/ganta/{choice}", control.Ganta_only_ganta_steps_by_project_id).Methods("GET")
+	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("POST")
+	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("PUT")
+	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("DELETE")
 
 	/*
 		check

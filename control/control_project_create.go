@@ -75,7 +75,7 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 	document.ProjectId = uint64(i)
 	document.GantaId = uint64(j)
 
-	id := Get_query_parameter_uint64(r, utils.KeyId, uint64(0))
+	id := Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
 
 	/*
 		CHECK TIME:	
@@ -88,11 +88,16 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 	}
 
 	/*
-
+		you cannot add document
+			* to parent ganta step
+			* if a ganta step already has a document
 	 */
 	var ganta = model.Ganta{Id: document.GantaId}
-	if yes := ganta.Does_this_ganta_step_has_document(model.GetDB()); yes {
+	_ = ganta.Get_by_id(model.GetDB())
+
+	if ganta.GantaParentId == 0 || ganta.Does_this_ganta_step_has_document(model.GetDB()) {
 		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " ganta", "the ganta step already possesses a document"})
+		return
 	}
 
 	var ds = DocStore{}
@@ -118,7 +123,7 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 	utils.Respond(w, r, msg)
 }
 
-var Update_project_by_investor = func(w http.ResponseWriter, r *http.Request) {
+var Update_project = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Update_project_by_investor"
 	var project = model.Project{}
 
@@ -147,11 +152,20 @@ var Project_remove_document = func(w http.ResponseWriter, r *http.Request) {
 		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error()})
 	}
 
+	id := Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
+	var project = model.Project{Id: document.ProjectId}
+	_ = project.Get_by_id(model.GetDB())
+
+	if project.OfferedById != id {
+		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " project", "not investor of the project"})
+		return
+	}
+
 	document.ChangesMadeById = Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
 
-	 msg := document.Remove()
-	 msg.Fname = fname + " 2"
+	msg := document.Remove()
+	msg.Fname = fname + " 2"
 
-	 utils.Respond(w, r, msg)
+	utils.Respond(w, r, msg)
 }
 

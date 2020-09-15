@@ -9,6 +9,7 @@ import (
 	prettify the description
  */
 func (g *Ganta) prepare_name_and_validate() bool {
+
 	var temp string
 	for _, lang := range []string{g.Kaz, g.Rus, g.Eng} {
 		if lang != "" {
@@ -21,10 +22,16 @@ func (g *Ganta) prepare_name_and_validate() bool {
 		return false
 	}
 
-	for _, lang := range []*string{&g.Kaz, &g.Rus, &g.Eng} {
-		if *(lang) != "" {
-			*lang = temp
-		}
+	if g.Kaz == "" {
+		g.Kaz = temp
+	}
+
+	if g.Rus == "" {
+		g.Rus = temp
+	}
+
+	if g.Eng == "" {
+		g.Eng = temp
 	}
 
 	return true
@@ -39,6 +46,7 @@ func (g *Ganta) IsValid() bool {
 }
 
 func (g *Ganta) Add_new_step() (utils.Msg) {
+
 	/*
 		validate the ganta step
 	 */
@@ -46,21 +54,25 @@ func (g *Ganta) Add_new_step() (utils.Msg) {
 		return utils.Msg{utils.ErrorInternalDbError, 417, "", "invalid parameters (lang) have been provided"}
 	}
 
+	//if g.Start != "" {
+	//	t, err := strconv.ParseInt(g.Start, 10, 64)
+	//	if err == nil {
+	//		g.StartDate = time.Unix(t, 0)
+	//	}
+	//	fmt.Println("err: ", err)
+	//}
+	if g.Start != 0 {
+		g.StartDate = time.Unix(g.Start, 0)
+	}
+
+	//fmt.Println(g.StartDate)
+
 	/*
 		set the start date to max
 	 */
 	if g.StartDate.IsZero() {
 		g.GantaParentId = 0
-		var tganta = Ganta{}
-		if err := GetDB().First(&tganta, "project_id = $1 and start = (select max(start) from gantas where project_id = $1)", g.ProjectId).Error
-		//	err == gorm.ErrRecordNotFound {
-		//	g.StartDate = utils.GetCurrentTime()
-		//} else if
-		err != nil {
-			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
-		} else {
-			g.StartDate = tganta.StartDate.Add(time.Hour * time.Duration(tganta.DurationInDays) * 24)
-		}
+		g.StartDate = utils.GetCurrentTime()
 	}
 
 	if err := GetDB().Create(g).Error; err != nil {
@@ -86,7 +98,7 @@ func (g *Ganta) Get_only_ganta_by_project_id() (utils.Msg) {
 
 	var gantasMap = []map[string]interface{}{}
 	for _, ganta := range gantas {
-		gantasMap = append(gantasMap, Struct_to_map(ganta))
+		gantasMap = append(gantasMap, Struct_to_map_with_escape(ganta, []string{"document"}))
 	}
 
 	var resp = utils.NoErrorFineEverthingOk

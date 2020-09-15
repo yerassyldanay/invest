@@ -21,15 +21,16 @@ type Ganta struct {
 	Rus								string					`json:"rus" gorm:"default:''"`
 	Eng								string					`json:"eng" gorm:"default:''"`
 
+	Start 							int64					`json:"start;omitempty" gorm:"-"`
 	StartDate						time.Time				`json:"start_date" gorm:"default:now()"`
 	DurationInDays						int						`json:"duration_in_days"`
 
 	GantaParentId					uint64					`json:"ganta_parent_id"`
 
-	DocumentId						uint64					`json:"document_id"`
-	Document						Document				`json:"document" foreignkey:"DocumentId"`
+	//DocumentId						uint64					`json:"document_id"`
+	Document					Document				`json:"document" foreignkey:"DocumentId"`
 
-	Status							string					`json:"status"`
+	Status							string					`json:"status" gorn:"default:'newone'"`
 }
 
 func (Ganta) TableName() string {

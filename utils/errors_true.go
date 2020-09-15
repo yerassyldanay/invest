@@ -43,9 +43,9 @@ var ErrorInternalServerError = map[string]interface{} {
 }
 
 var ErrorInternalDbError = map[string]interface{} {
-	"eng": "failed create / update / remove a row in db",
-	"rus": "не удалось создать / обновить / удалить строку в бд",
-	"kaz": "мәліметті құру / жаңарту / жою сәтсіз аяқталды",
+	"eng": "failed create / update / remove / get a row from db",
+	"rus": "не удалось создать / обновить / удалить / получить строку в бд",
+	"kaz": "мәліметті құру / жаңарту / жою / алу сәтсіз аяқталды",
 }
 
 var ErrorEmailIsNotVerified = map[string]interface{} {

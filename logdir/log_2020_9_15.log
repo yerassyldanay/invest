@@ -1,0 +1,209 @@
+time="2020-09-15T00:00:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:00:03+06:00" level=info msg=main port=7000
+time="2020-09-15T00:00:09+06:00" level=info msg="Project_add_document_to_project ganta" error="the ganta step already possesses a document" host="[::1]:36678" path=/v1/projects_make_changes/project/docs status=405
+time="2020-09-15T00:01:15+06:00" level=info msg="Project_add_document_to_project 3" error= host="[::1]:36678" path=/v1/projects_make_changes/project/docs status=200
+time="2020-09-15T00:02:02+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:36678" path=/v1/projects_see_own/project status=200
+time="2020-09-15T00:16:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:16:24+06:00" level=info msg=main port=7000
+time="2020-09-15T00:17:21+06:00" level=info msg="Project_remove_document 2" error= host="[::1]:36812" path=/v1/projects_make_changes/project/docs status=200
+time="2020-09-15T00:18:39+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:18:39+06:00" level=info msg=main port=7000
+time="2020-09-15T00:19:31+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:36854" path=/v1/administrate/ganta status=421
+time="2020-09-15T00:20:00+06:00" level=info msg="check_whether_user_has_such_permission 2" error="user has not got such permission or invalid parameters have been provided" host="[::1]:36854" path=/v1/administrate/ganta status=424
+time="2020-09-15T00:20:45+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T00:20:45+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T00:20:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:20:48+06:00" level=info msg=main port=7000
+time="2020-09-15T00:20:50+06:00" level=info msg="check_whether_user_has_such_permission 2" error="user has not got such permission or invalid parameters have been provided" host="[::1]:36868" path=/v1/projects_comment/ganta status=424
+time="2020-09-15T00:20:53+06:00" level=info msg="check_whether_user_has_such_permission 2" error="user has not got such permission or invalid parameters have been provided" host="[::1]:36868" path=/v1/projects_comment/ganta status=424
+time="2020-09-15T00:21:15+06:00" level=info msg="Sign_in 3" error= host="[::1]:36868" path=/v1/all/signin status=200
+time="2020-09-15T00:21:31+06:00" level=info msg="Ganta_create_update_delete post" error="invalid parameters (lang) have been provided" host="[::1]:36868" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:22:32+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T00:22:32+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T00:22:35+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:22:36+06:00" level=info msg=main port=7000
+time="2020-09-15T00:22:37+06:00" level=info msg="Ganta_create_update_delete post" error="invalid parameters (lang) have been provided" host="[::1]:36890" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:23:00+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T00:23:00+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T00:23:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:23:04+06:00" level=info msg=main port=7000
+time="2020-09-15T00:23:05+06:00" level=info msg="Ganta_create_update_delete post" error="invalid parameters (lang) have been provided" host="[::1]:36902" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:23:23+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T00:23:23+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T00:23:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:23:27+06:00" level=info msg=main port=7000
+time="2020-09-15T00:23:28+06:00" level=info msg="Ganta_create_update_delete post" error="invalid parameters (lang) have been provided" host="[::1]:36920" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:24:11+06:00" level=info msg="Ganta_create_update_delete post" error="invalid parameters (lang) have been provided" host="[::1]:36920" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:24:32+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T00:24:32+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T00:24:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:24:36+06:00" level=info msg=main port=7000
+time="2020-09-15T00:24:37+06:00" level=info msg="Ganta_create_update_delete post" error="invalid parameters (lang) have been provided" host="[::1]:36944" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:25:07+06:00" level=info msg="Ganta_create_update_delete 1" error="invalid character '}' looking for beginning of object key string" host="[::1]:36944" path=/v1/projects_comment/ganta status=400
+time="2020-09-15T00:25:10+06:00" level=info msg="Ganta_create_update_delete post" error="pq: column \"start\" does not exist" host="[::1]:36944" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:26:45+06:00" level=info msg="Ganta_create_update_delete post" error="pq: column \"start\" does not exist" host="[::1]:36944" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:27:13+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T00:27:13+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T00:27:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:27:17+06:00" level=info msg=main port=7000
+time="2020-09-15T00:29:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:29:32+06:00" level=info msg=main port=7000
+time="2020-09-15T00:30:30+06:00" level=info msg="Ganta_create_update_delete post" error="pq: column \"start\" does not exist" host="[::1]:37016" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:30:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:30:37+06:00" level=info msg=main port=7000
+time="2020-09-15T00:31:07+06:00" level=info msg="Ganta_create_update_delete post" error="pq: column \"parent_id\" does not exist" host="[::1]:37036" path=/v1/projects_comment/ganta status=417
+time="2020-09-15T00:31:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:31:13+06:00" level=info msg=main port=7000
+time="2020-09-15T00:31:26+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:37070" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T00:33:40+06:00" level=info msg="Ganta_create_update_delete 1" error="parsing time \"\"2020-10-02 12:39:53\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \" 12:39:53\"\" as \"T\"" host="[::1]:37070" path=/v1/projects_comment/ganta status=400
+time="2020-09-15T00:37:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:37:48+06:00" level=info msg=main port=7000
+time="2020-09-15T00:38:11+06:00" level=info msg="Ganta_create_update_delete 1" error="parsing time \"\"2020-12-03 12:39:53\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \" 12:39:53\"\" as \"T\"" host="[::1]:37140" path=/v1/projects_comment/ganta status=400
+time="2020-09-15T00:39:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:39:01+06:00" level=info msg=main port=7000
+time="2020-09-15T00:39:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:39:28+06:00" level=info msg=main port=7000
+time="2020-09-15T00:40:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:40:12+06:00" level=info msg=main port=7000
+time="2020-09-15T00:41:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:41:01+06:00" level=info msg=main port=7000
+time="2020-09-15T00:41:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:41:39+06:00" level=info msg=main port=7000
+time="2020-09-15T00:42:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:42:13+06:00" level=info msg=main port=7000
+time="2020-09-15T00:44:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:44:18+06:00" level=info msg=main port=7000
+time="2020-09-15T00:45:28+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:37446" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T00:45:28+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:37512" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T00:46:35+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:37512" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T00:48:04+06:00" level=info msg="check_whether_user_has_such_permission 2" error="user has not got such permission or invalid parameters have been provided" host="[::1]:37512" path=/v1/projects_comment/ganta/one status=424
+time="2020-09-15T00:48:19+06:00" level=info msg="check_whether_user_has_such_permission 2" error="user has not got such permission or invalid parameters have been provided" host="[::1]:37512" path=/v1/projects_comment/ganta/one status=424
+time="2020-09-15T00:49:10+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37512" path=/v1/projects_comment/ganta/one status=200
+time="2020-09-15T00:49:48+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37512" path=/v1/projects_comment/ganta/withoutdoc status=200
+time="2020-09-15T00:50:36+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37512" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T00:51:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:51:43+06:00" level=info msg=main port=7000
+time="2020-09-15T00:52:22+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37614" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T00:56:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:56:02+06:00" level=info msg=main port=7000
+time="2020-09-15T00:56:12+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37660" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T00:57:50+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:57:50+06:00" level=info msg=main port=7000
+time="2020-09-15T00:57:54+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37700" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T00:58:56+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T00:58:57+06:00" level=info msg=main port=7000
+time="2020-09-15T00:59:00+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37730" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:00:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:00:17+06:00" level=info msg=main port=7000
+time="2020-09-15T01:00:20+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37758" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:00:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:00:52+06:00" level=info msg=main port=7000
+time="2020-09-15T01:01:03+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37776" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:01:24+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37776" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:02:24+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:02:25+06:00" level=info msg=main port=7000
+time="2020-09-15T01:02:27+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37814" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:07:42+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:07:42+06:00" level=info msg=main port=7000
+time="2020-09-15T01:07:49+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:37934" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:18:24+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:18:24+06:00" level=info msg=main port=7000
+time="2020-09-15T01:18:33+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:38012" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:19:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:19:34+06:00" level=info msg=main port=7000
+time="2020-09-15T01:19:40+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:38048" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:20:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:20:14+06:00" level=info msg=main port=7000
+time="2020-09-15T01:20:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:20:44+06:00" level=info msg=main port=7000
+time="2020-09-15T01:20:49+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:38096" path=/v1/projects_comment/ganta/withdocs status=200
+time="2020-09-15T01:21:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:21:29+06:00" level=info msg=main port=7000
+time="2020-09-15T01:21:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:21:48+06:00" level=info msg=main port=7000
+time="2020-09-15T01:22:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:22:34+06:00" level=info msg=main port=7000
+time="2020-09-15T01:22:59+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:22:59+06:00" level=info msg=main port=7000
+time="2020-09-15T01:23:04+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:23:05+06:00" level=info msg=main port=7000
+time="2020-09-15T01:23:26+06:00" level=info msg="Ganta_get_all_steps_by_project_id docs" error="record not found" host="[::1]:38208" path=/v1/projects_comment/ganta/withdocs status=417
+time="2020-09-15T01:23:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:23:38+06:00" level=info msg=main port=7000
+time="2020-09-15T01:24:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:24:18+06:00" level=info msg=main port=7000
+time="2020-09-15T01:24:59+06:00" level=info msg="Ganta_get_all_steps_by_project_id docs" error="record not found" host="[::1]:38248" path=/v1/projects_comment/ganta/withdocs status=417
+time="2020-09-15T01:26:15+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:26:16+06:00" level=info msg=main port=7000
+time="2020-09-15T01:26:31+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:26:32+06:00" level=info msg=main port=7000
+time="2020-09-15T01:29:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:29:18+06:00" level=info msg=main port=7000
+time="2020-09-15T01:31:51+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:31:51+06:00" level=info msg=main port=7000
+time="2020-09-15T01:32:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:32:08+06:00" level=info msg=main port=7000
+time="2020-09-15T01:32:22+06:00" level=info msg=Create_project error= host="[::1]:38398" path=/v1/projects_make_changes/project status=200
+time="2020-09-15T01:32:38+06:00" level=info msg=Create_project error= host="[::1]:38398" path=/v1/projects_make_changes/project status=200
+time="2020-09-15T01:33:45+06:00" level=info msg="Ganta_get_all_steps_by_project_id withoutdocs" error="can't preload field Document for model.Ganta" host="[::1]:38398" path=/v1/projects_comment/ganta/manydocs status=417
+time="2020-09-15T01:34:31+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T01:34:31+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T01:34:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T01:34:34+06:00" level=info msg=main port=7000
+time="2020-09-15T01:34:35+06:00" level=info msg="Ganta_get_all_steps_by_project_id withoutdocs" error="pq: column \"ganta_id\" does not exist" host="[::1]:38440" path=/v1/projects_comment/ganta/manydocs status=417
+time="2020-09-15T01:34:36+06:00" level=info msg="Ganta_get_all_steps_by_project_id withoutdocs" error="pq: column \"ganta_id\" does not exist" host="[::1]:38440" path=/v1/projects_comment/ganta/manydocs status=417
+time="2020-09-15T01:34:37+06:00" level=info msg="Ganta_get_all_steps_by_project_id withoutdocs" error="pq: column \"ganta_id\" does not exist" host="[::1]:38440" path=/v1/projects_comment/ganta/manydocs status=417
+time="2020-09-15T10:24:12+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T10:24:12+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T10:24:15+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T10:24:16+06:00" level=info msg=main port=7000
+time="2020-09-15T10:39:58+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T10:39:58+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T10:45:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T10:45:30+06:00" level=info msg=main port=7000
+time="2020-09-15T10:46:09+06:00" level=info msg="Ganta_get_all_steps_by_project_id withoutdocs" error= host="[::1]:38692" path=/v1/projects_comment/ganta/manydocs status=200
+time="2020-09-15T10:48:32+06:00" level=info msg="Ganta_get_all_steps_by_project_id withoutdocs" error= host="[::1]:38692" path=/v1/projects_comment/ganta/manydocs status=200
+time="2020-09-15T10:49:31+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:38692" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T10:50:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T10:50:28+06:00" level=info msg=main port=7000
+time="2020-09-15T10:50:33+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:38756" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T10:51:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T10:51:54+06:00" level=info msg=main port=7000
+time="2020-09-15T10:52:01+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:38780" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T10:52:35+06:00" level=info msg="Ganta_create_update_delete post" error= host="[::1]:38780" path=/v1/projects_comment/ganta status=200
+time="2020-09-15T11:25:12+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:38780" path=/v1/projects_comment/ganta/withoutdocs status=200
+time="2020-09-15T11:25:33+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:38780" path=/v1/projects_comment/ganta/onewithdoc status=200
+time="2020-09-15T11:25:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T11:25:47+06:00" level=info msg=main port=7000
+time="2020-09-15T11:26:12+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error="can't preload field Document for model.Ganta" host="[::1]:39144" path=/v1/projects_comment/ganta/onewithdoc status=417
+time="2020-09-15T11:26:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T11:26:17+06:00" level=info msg=main port=7000
+time="2020-09-15T11:26:26+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error= host="[::1]:39164" path=/v1/projects_comment/ganta/onewithdoc status=200
+time="2020-09-15T11:28:07+06:00" level=info msg="Ganta_get_all_steps_by_project_id onewithdoc" error="record not found" host="[::1]:39164" path=/v1/projects_comment/ganta/onewithdoc status=417
+time="2020-09-15T12:00:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T12:00:10+06:00" level=info msg=main port=7000
+time="2020-09-15T12:01:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T12:01:27+06:00" level=info msg=main port=7000
+time="2020-09-15T12:01:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T12:01:37+06:00" level=info msg=main port=7000
+time="2020-09-15T12:02:23+06:00" level=info msg="Ganta_get_all_steps_by_project_id manywithdoc" error= host="[::1]:39426" path=/v1/projects_comment/ganta/manywithdoc status=200
+time="2020-09-15T12:03:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T12:03:23+06:00" level=info msg=main port=7000
+time="2020-09-15T12:03:30+06:00" level=info msg="Ganta_get_all_steps_by_project_id manywithdoc" error= host="[::1]:39448" path=/v1/projects_comment/ganta/manywithdoc status=200
+time="2020-09-15T12:05:19+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:39448" path=/v1/projects_comment/ganta/withoutdocs status=200
+time="2020-09-15T12:06:35+06:00" level=info msg="Sign_in 3" error= host="[::1]:39448" path=/v1/all/signin status=200
+time="2020-09-15T12:06:54+06:00" level=info msg="check_whether_user_has_such_permission 2" error="user has not got such permission or invalid parameters have been provided" host="[::1]:39448" path=/v1/projects_see_all/project status=424
+time="2020-09-15T12:07:15+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:39448" path=/v1/projects_see_own/project status=200
+time="2020-09-15T12:13:14+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:39448" path=/v1/projects_see_all/project status=200
+time="2020-09-15T12:14:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T12:14:09+06:00" level=info msg=main port=7000
+time="2020-09-15T12:16:01+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T12:16:01+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T12:16:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T12:16:04+06:00" level=info msg=main port=7000
+time="2020-09-15T12:16:29+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:39548" path=/v1/projects_comment/ganta/withoutdoc status=200
+time="2020-09-15T12:16:54+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-15T12:16:54+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-15T12:16:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-15T12:16:58+06:00" level=info msg=main port=7000
+time="2020-09-15T12:16:58+06:00" level=info msg="Ganta_get_all_steps_by_project_id default" error= host="[::1]:39572" path=/v1/projects_comment/ganta/withoutdoc status=200

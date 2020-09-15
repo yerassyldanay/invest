@@ -37,8 +37,6 @@ var DefaultGantaChildren1 = []Ganta{
 		StartDate:     utils.GetCurrentTime(),
 		DurationInDays:      3,
 		GantaParentId: 0,			// will be set
-		DocumentId:    0,
-		Document:      Document{},
 		Status:        utils.ProjectStatusInprogress,			// this status will not be considered instead consider the status of the child
 	},
 	{
@@ -174,8 +172,6 @@ var DefaultGantaChildren2 = []Ganta{
 		StartDate:     utils.GetCurrentTime(),
 		DurationInDays:      3,
 		GantaParentId: 0,			// will be set
-		DocumentId:    0,
-		Document:      Document{},
 		Status:        "",			// this status will not be considered instead consider the status of the child
 	},
 	{

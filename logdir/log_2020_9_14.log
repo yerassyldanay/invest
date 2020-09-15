@@ -37,3 +37,18 @@ time="2020-09-14T23:30:51+06:00" level=info msg=INIT_DB message="connected to Po
 time="2020-09-14T23:30:52+06:00" level=info msg=main port=7000
 time="2020-09-14T23:38:10+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-09-14T23:38:10+06:00" level=info msg=main port=7000
+time="2020-09-14T23:42:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-14T23:42:32+06:00" level=info msg=main port=7000
+time="2020-09-14T23:42:45+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-14T23:42:45+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-14T23:42:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-14T23:42:49+06:00" level=info msg=main port=7000
+time="2020-09-14T23:55:05+06:00" level=info msg="Project_add_document_to_project project" error="this is not an investor of the project" host="[::1]:36594" path=/v1/projects_make_changes/project/docs status=405
+time="2020-09-14T23:56:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-14T23:56:21+06:00" level=info msg=main port=7000
+time="2020-09-14T23:56:29+06:00" level=info msg="Project_add_document_to_project ganta" error="the ganta step already possesses a document" host="[::1]:36620" path=/v1/projects_make_changes/project/docs status=405
+time="2020-09-14T23:56:47+06:00" level=info msg="Project_add_document_to_project ganta" error="the ganta step already possesses a document" host="[::1]:36620" path=/v1/projects_make_changes/project/docs status=405
+time="2020-09-14T23:57:29+06:00" level=info msg="Project_add_document_to_project ganta" error="the ganta step already possesses a document" host="[::1]:36620" path=/v1/projects_make_changes/project/docs status=405
+time="2020-09-14T23:57:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-14T23:57:33+06:00" level=info msg=main port=7000
+time="2020-09-14T23:58:53+06:00" level=info msg="Project_add_document_to_project 3" error= host="[::1]:36640" path=/v1/projects_make_changes/project/docs status=200

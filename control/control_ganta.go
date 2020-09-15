@@ -2,6 +2,7 @@ package control
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"invest/model"
 	"invest/utils"
 	"net/http"
@@ -44,19 +45,20 @@ var Ganta_create_update_delete = func(w http.ResponseWriter, r *http.Request) {
  */
 var Ganta_only_ganta_steps_by_project_id = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_get_all_steps_by_project_id"
-	var choice = Get_query_parameter_str(r, "choice", "")
+	var choice = mux.Vars(r)["choice"]
 	var ganta = model.Ganta{
-		ProjectId: uint64(Get_query_parameter_int(r, "project_id", 0)),
+		Id: 			Get_query_parameter_uint64(r ,"ganta_id", 0),
+		ProjectId: 		Get_query_parameter_uint64(r, "project_id", 0),
 	}
 
 	var msg = utils.Msg{}
 	switch choice {
-	case "withdoc":
-		msg = ganta.Get_ganta_with_documents_by_project_id()
-		msg.Fname = fname + " docs"
-	case "one":
+	case "onewithdoc":
 		msg = ganta.Get_only_one_with_docs()
-		msg.Fname = fname + " one"
+		msg.Fname = fname + " onewithdoc"
+	case "manywithdoc":
+		msg = ganta.Get_ganta_with_documents_by_project_id()
+		msg.Fname = fname + " manywithdoc"
 	default:
 		msg = ganta.Get_only_ganta_by_project_id()
 		msg.Fname = fname + " default"

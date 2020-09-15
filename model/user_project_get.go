@@ -55,11 +55,13 @@ func (u *User) Get_all_projects(offset string) (map[string]interface{}, error) {
 	get only own projects
 */
 func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
-
+	/*
+		if this is not an investor
+	 */
 	var main_query = "select p.* from projects p join projects_users pu on p.id = pu.project_id where pu.user_id=? " +
 		" offset ? limit ?;"
-	var projects = []Project{}
 
+	var projects = []Project{}
 	err := GetDB().Exec(main_query, u.Id, offset, GetLimit).Find(&projects).Error
 	if err != nil {
 		return utils.ErrorInternalDbError, err
@@ -68,10 +70,17 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 	var result = []map[string]interface{}{}
 	for _, project := range projects {
 		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
-		//fmt.Println("Err: ", err)
+		result = append(result, Struct_to_map(project))
+	}
 
-		_ = GetDB().Table(Document{}.TableName()).Where("project_id=?", project.Id).Select("").Find(&project.Documents).Error
+	/*
+		if this is an investor
+	 */
+	projects = []Project{}
+	_ = GetDB().Find(&projects, "offered_by_id = ?", u.Id).Error
 
+	for _, project := range projects {
+		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
 		result = append(result, Struct_to_map(project))
 	}
 

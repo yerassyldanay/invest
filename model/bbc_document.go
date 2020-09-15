@@ -15,7 +15,7 @@ type Document struct {
 	Uri							string				`json:"uri"`
 
 	ProjectId					uint64 				`json:"project_id" gorm:"foreignkey:projects.id"`
-	GantaId						uint64				`json:"ganta_id" gorm:"-"`
+	GantaId						uint64				`json:"ganta_id"`
 	
 	Status						string				`json:"status" gorm:"default:'newone'"`
 	ChangesMadeById						uint64				`json:"-" gorm:"-"`
