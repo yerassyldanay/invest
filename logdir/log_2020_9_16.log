@@ -1,0 +1,21 @@
+time="2020-09-16T14:20:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-16T14:20:57+06:00" level=info msg=main port=7000
+time="2020-09-16T14:21:25+06:00" level=info msg="User_project_get_all 1" error="can't preload field User for model.Project" host="[::1]:34584" path=/v1/projects_see_all/project status=417
+time="2020-09-16T14:22:45+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-16T14:22:45+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-16T14:22:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-16T14:22:48+06:00" level=info msg=main port=7000
+time="2020-09-16T14:22:55+06:00" level=info msg="User_project_get_all 1" error="can't preload field User for model.Project" host="[::1]:35330" path=/v1/projects_see_all/project status=417
+time="2020-09-16T14:23:54+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-16T14:23:54+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-16T14:23:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-16T14:23:57+06:00" level=info msg=main port=7000
+time="2020-09-16T14:24:01+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:35864" path=/v1/projects_see_all/project status=200
+time="2020-09-16T14:24:58+06:00" level=info msg=Categors_create_read_update_delete error= host="[::1]:35864" path=/v1/all/categor status=200
+time="2020-09-16T14:25:06+06:00" level=info msg="Get_number_of_documents 1" error= host="[::1]:35864" path=/v1/all/project/docs/stat status=200
+time="2020-09-16T14:25:26+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-16T14:25:26+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-16T14:25:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-16T14:25:29+06:00" level=info msg=main port=7000
+time="2020-09-16T14:25:38+06:00" level=info msg="Get_number_of_documents 1" error= host="[::1]:36616" path=/v1/all/project/docs/stat status=200
+time="2020-09-16T14:25:45+06:00" level=info msg="Get_number_of_documents 1" error= host="[::1]:36616" path=/v1/all/project/docs/stat status=200

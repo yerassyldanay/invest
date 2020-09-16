@@ -21,28 +21,28 @@ func Create_new_invest_router() (*mux.Router) {
 		For this reason, method that handles OPTIONS requests based on the url pattern is
 			provided below
 	*/
-	router.Methods("OPTIONS").MatcherFunc(func(r *http.Request, match *mux.RouteMatch) bool {
-		//matchCase, err := regexp.MatchString("/.*", r.URL.Path)
-		//if err != nil {
-		//	return false
-		//}
-		//return matchCase
-		return true
-	}).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		/*
-			Explicitly informs the referer how many seconds it should store the preflight
-			result. Within this time, it can just send the request,
-			and doesn't need to bother sending the preflight request again.
-		*/
-		w.Header().Set("Access-Control-Max-Age", "86400")
-
-		w.Header().Set("Access-Control-Allow-Credentials", "")
-
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:63342")
-		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Origin")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS, EAT")
-		w.Header().Add("Content-Type", "application/json")
-	})
+	//router.Methods("OPTIONS").MatcherFunc(func(r *http.Request, match *mux.RouteMatch) bool {
+	//	//matchCase, err := regexp.MatchString("/.*", r.URL.Path)
+	//	//if err != nil {
+	//	//	return false
+	//	//}
+	//	//return matchCase
+	//	return true
+	//}).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	//	/*
+	//		Explicitly informs the referer how many seconds it should store the preflight
+	//		result. Within this time, it can just send the request,
+	//		and doesn't need to bother sending the preflight request again.
+	//	*/
+	//	w.Header().Set("Access-Control-Max-Age", "86400")
+	//
+	//	w.Header().Set("Access-Control-Allow-Credentials", "")
+	//
+	//	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:63342")
+	//	w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Origin")
+	//	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS, EAT")
+	//	w.Header().Add("Content-Type", "application/json")
+	//})
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("id: ", utils.GetContext(r, utils.KeyId))

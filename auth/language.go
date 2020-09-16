@@ -6,7 +6,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-func Parse_prefered_language_of_user(next http.Handler, w http.ResponseWriter, r *http.Request) {
+func Parse_prefered_language_of_user(w http.ResponseWriter, r *http.Request) (utils.Msg) {
 	var supported = []language.Tag{
 		language.Kazakh,
 		language.Russian,
@@ -40,5 +40,5 @@ func Parse_prefered_language_of_user(next http.Handler, w http.ResponseWriter, r
 	r.Header.Set(utils.HeaderContentLanguage, user_language)
 	r.Header.Set(utils.HeaderAcceptLanguage, user_language)
 
-	next.ServeHTTP(w, r)
+	return utils.Msg{}
 }

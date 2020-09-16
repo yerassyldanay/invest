@@ -95,7 +95,7 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
  */
 func (p *Project) Get_all_after_preload(offset string) (utils.Msg) {
 	var projects = []Project{}
-	if err := GetDB().Preload("Organization").Preload("Categors").Preload("User").
+	if err := GetDB().Preload("Organization").Preload("Categors").
 		Offset(offset).Limit(utils.GetLimitProjects).Find(&projects).Error;
 		err != nil {
 			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}

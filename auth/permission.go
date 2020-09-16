@@ -19,7 +19,7 @@ import (
 			if yes: a request will be forwarded
 			else: 'the method is not allowed' message will be sent
  */
-var HasPermissionWrapper = func(next http.Handler, w http.ResponseWriter, r *http.Request) {
+var HasPermissionWrapper = func(w http.ResponseWriter, r *http.Request)  (utils.Msg) {
 		var fname = "check_whether_user_has_such_permission"
 		var up = model.UserPermission{}
 
@@ -30,13 +30,12 @@ var HasPermissionWrapper = func(next http.Handler, w http.ResponseWriter, r *htt
 		*/
 		paths := strings.Split(r.URL.Path, "/")
 		if len(paths) < 2 {
-			utils.Respond(w, r, utils.Msg{
+			return utils.Msg{
 				Message: utils.ErrorInternalServerError,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 1",
 				ErrMsg:  "the path is invalid",
-			})
-			return
+			}
 		}
 
 		up.Permission = paths[2]
@@ -45,13 +44,12 @@ var HasPermissionWrapper = func(next http.Handler, w http.ResponseWriter, r *htt
 		msg.Fname = fname + " 2"
 
 		if msg.ErrMsg != "" {
-			utils.Respond(w, r, msg)
-			return
+			return msg
 		}
 
 		/*
 			this means user has such a permission
 		 */
-		Parse_prefered_language_of_user(next, w, r)
+		return Parse_prefered_language_of_user(w, r)
 }
 

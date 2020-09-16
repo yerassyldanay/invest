@@ -106,7 +106,14 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		//	})
 		//	return
 		//}
-		EmailVerifiedWrapper(next, w, r)
+		msg := EmailVerifiedWrapper(w, r)
+
+		if msg.ErrMsg != "" {
+			utils.Respond(w, r, msg)
+			return
+		}
+
+		next.ServeHTTP(w, r)
 	})
 }
 
