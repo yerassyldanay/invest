@@ -7,6 +7,12 @@ import (
 )
 
 func Service_create_project(project *model.Project) (utils.Msg){
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("CreateProject - could not send email: ", err)
+		}
+	}()
+
 	var msg = utils.Msg{
 		Fname: "Service_create_project",
 	}
@@ -91,7 +97,7 @@ func Service_create_project(project *model.Project) (utils.Msg){
 		set receivers & send
 	*/
 	sms.ToAddresser = addressers
-	_, err = sms.SendMessageToList()
+	//_, err = sms.SendMessageToList()
 	if err != nil {
 		return utils.Msg{utils.ErrorCouldNotSendEmail, 204, "", err.Error()}
 	}

@@ -71,6 +71,7 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 	}
 
 	//fmt.Println("msg: ", msg)
+	msg.Message = nil
 	msg.Log(r)
 }
 

@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"invest/utils"
 )
 
@@ -55,33 +56,44 @@ func (u *User) Get_all_projects(offset string) (map[string]interface{}, error) {
 	get only own projects
 */
 func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
+	var result = []map[string]interface{}{}
+	var projects = []Project{}
+
+	if err := u.GetByIdPreloaded(GetDB()); err != nil {
+		return utils.ErrorInternalDbError, err
+	}
+
 	/*
 		if this is not an investor
-	 */
+	*/
 	var main_query = "select p.* from projects p join projects_users pu on p.id = pu.project_id where pu.user_id=? " +
 		" offset ? limit ?;"
 
-	var projects = []Project{}
-	err := GetDB().Exec(main_query, u.Id, offset, GetLimit).Find(&projects).Error
+	err := GetDB().Raw(main_query, u.Id, offset, GetLimit).Find(&projects).Error
 	if err != nil {
 		return utils.ErrorInternalDbError, err
 	}
 
-	var result = []map[string]interface{}{}
+	fmt.Println("Num of projects assigned to this user (if it is): ", len(projects))
+
 	for _, project := range projects {
+		_ = project.Get_all_categors_by_project_id(GetDB())
 		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
-		result = append(result, Struct_to_map(project))
+		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
 	}
 
 	/*
 		if this is an investor
-	 */
+	*/
 	projects = []Project{}
-	_ = GetDB().Find(&projects, "offered_by_id = ?", u.Id).Error
+	_ = GetDB().Find(&projects, "offered_by_id = ?", u.Id).Offset(offset).Limit(GetLimit).Error
+
+	fmt.Println("Num of projects that are offered by this investor (if it is): ", len(projects))
 
 	for _, project := range projects {
+		_ = project.Get_all_categors_by_project_id(GetDB())
 		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
-		result = append(result, Struct_to_map(project))
+		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
 	}
 
 	var resp = utils.NoErrorFineEverthingOk
@@ -103,6 +115,8 @@ func (p *Project) Get_all_after_preload(offset string) (utils.Msg) {
 
 	var rprojects = []map[string]interface{}{}
 	for _, project := range projects {
+		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
+		project.Info = ""
 		rprojects = append(rprojects, Struct_to_map(project))
 	}
 

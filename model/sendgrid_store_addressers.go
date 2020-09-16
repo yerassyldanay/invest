@@ -52,7 +52,6 @@ func (sm *SendgridMessageStore) SendMessageToList() (map[string]interface{}, err
 			SendgridMessage: &sm.SendgridMessage,
 		}
 	}
-	close(msgchan)
 
 	/*
 		receive messages from channels
@@ -84,9 +83,17 @@ func (sm *SendgridMessageStore) SendMessageToList() (map[string]interface{}, err
 		wg.Add(1)
 		Store_sendgrid_message_on_db(&wg, &temp)
 	}
+
+	select {
+	case <- time.Tick(time.Second * 3):
+		break
+	default:
+		wg.Wait()
+	}
+
+	close(msgchan)
 	close(reschan)
 
-	wg.Wait()
 	return utils.NoErrorFineEverthingOk, nil
 }
 

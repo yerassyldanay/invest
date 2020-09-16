@@ -54,6 +54,10 @@ func Struct_to_map_with_escape(cs interface{}, escape []string) (map[string]inte
 			continue
 		}
 
+		if key == "" {
+			key = strings.ToLower(typeOfS.Field(i).Name)
+		}
+
 		ok = true
 		for _, tkey := range escape {
 			if key == tkey {
