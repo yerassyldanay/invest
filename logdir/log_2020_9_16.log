@@ -62,3 +62,6 @@ time="2020-09-16T18:58:10+06:00" level=info msg="User_project_get_all 1" error= 
 time="2020-09-16T18:59:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-09-16T18:59:44+06:00" level=info msg=main port=7000
 time="2020-09-16T19:00:14+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:60020" path=/v1/projects_see_all/project status=200
+time="2020-09-16T19:37:00+06:00" level=info msg="Project_get_all_assigned_users 1" error= host="[::1]:60020" path=/v1/administrate/project/stat status=417
+time="2020-09-16T19:38:04+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-16T19:38:21+06:00" level=info msg=main port=7000

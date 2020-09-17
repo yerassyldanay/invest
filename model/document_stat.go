@@ -16,8 +16,8 @@ func (d *Document) Get_stat_on_docs_by_project_id() (utils.Msg) {
 	var docStat = DocumentStat{}
 	for _, stat := range stats {
 		switch stat.Status {
-		case utils.ProjectStatusNewone:
-			docStat.Newone += stat.Num
+		case utils.ProjectStatusDone:
+			docStat.Done += stat.Num
 
 		case utils.ProjectStatusInprogress:
 			docStat.Inprogress += stat.Num

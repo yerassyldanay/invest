@@ -144,6 +144,8 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/administrate/project", control.Assign_user_to_project).Methods("POST")
 	router.HandleFunc("/v1/administrate/project/stat", control.Get_all_assigned_users_to_project).Methods("GET")
 
+	router.HandleFunc("/v1/all/project/stat", control.Get_project_by_project_id).Methods("GET")
+
 	router.HandleFunc("/v1/projects_comment/ganta/{choice}", control.Ganta_only_ganta_steps_by_project_id).Methods("GET")
 	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("POST")
 	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("PUT")

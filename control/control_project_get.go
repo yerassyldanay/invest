@@ -59,3 +59,17 @@ var User_get_projects_info_grouped_by_statuses = func(w http.ResponseWriter, r *
 
 	utils.Respond(w, r, msg)
 }
+
+
+var Get_project_by_project_id = func(w http.ResponseWriter, r *http.Request) {
+	var fname = "Get_project_by_project_id"
+
+	var project = model.Project{
+		Id: Get_query_parameter_uint64(r, "project_id", 0),
+	}
+
+	msg := project.Get_this_project_by_project_id()
+	msg.Fname = fname + " 1"
+
+	utils.Respond(w, r, msg)
+}

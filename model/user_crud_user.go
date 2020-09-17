@@ -96,6 +96,7 @@ func (c *User) Create_user() (utils.Msg) {
 			ErrMsg:  err.Error(),
 		}
 	}
+	c.RoleId = c.Role.Id
 
 	/*
 		create email & phone on db
@@ -304,25 +305,27 @@ func (a *User) Get_users_by_roles(roles []string, offset string) (utils.Msg) {
 	return utils.Msg{resp, 200, "", ""}
 }
 
-func (a *User) Get_all_users(offset string) (utils.Msg) {
+func (a *User) Get_all_users_except_admins(offset string) (utils.Msg) {
 
 	var users []User
 	
 	if err := GetDB().Preload("Role").Preload("Email").Preload("Phone").
-		Offset(offset).Limit(GetLimit).Find(&users).Error; err != nil {
+		Offset(offset).Limit(GetLimit).Where("id != (select id from roles where name = 'admin' limit 1)").Find(&users).Error; err != nil {
 		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var wg = sync.WaitGroup{}
 	var infos = []map[string]interface{}{}
-	for _, user := range users {
+	for i, _ := range users {
 		wg.Add(1)
-		go user.Add_statistics_to_this_user_on_project_statuses(&wg)
+		go users[i].Add_statistics_to_this_user_on_project_statuses(&wg)
+	}
+	wg.Wait()
 
+	for _, user := range users {
 		user.Password = ""
 		infos = append(infos, Struct_to_map(user))
 	}
-	wg.Wait()
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = infos

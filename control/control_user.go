@@ -69,7 +69,7 @@ var User_create_read_update_delete = func(w http.ResponseWriter, r *http.Request
 		roles, ok := r.URL.Query()["role"]
 		offset := Get_query_parameter_str(r, "offset", "0")
 		if !ok && len(roles) == 0 {
-			msg = user.Get_all_users(offset)
+			msg = user.Get_all_users_except_admins(offset)
 		} else {
 			msg = user.Get_users_by_roles(roles, offset)
 		}
