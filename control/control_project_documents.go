@@ -79,6 +79,8 @@ var Project_add_document_to_project = func(w http.ResponseWriter, r *http.Reques
 	}
 
 	document.Uri = ds.Directory + ds.Filename + ds.Format
+	document.GantaId = ganta.Id
+
 	msg := document.Add()
 	msg.Fname = fname + " 3"
 

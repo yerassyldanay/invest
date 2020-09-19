@@ -45,6 +45,7 @@ func (d *Document) Add() (utils.Msg) {
 	/*
 		create a document row on db
 	 */
+	d.Status = utils.ProjectStatusInprogress
 	if err := d.Only_create(trans); err != nil {
 		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
@@ -52,11 +53,11 @@ func (d *Document) Add() (utils.Msg) {
 	/*
 		set document id to ganta
 	 */
-	var ganta = Ganta{ Id: d.GantaId }
-	err := ganta.Only_add_document_by_ganta_id(d.Id, trans)
-	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
-	}
+	//var ganta = Ganta{ Id: d.GantaId }
+	//err := ganta.Only_add_document_by_ganta_id(d.Id, trans)
+	//if err != nil {
+	//	return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	//}
 
 	trans.Commit()
 	trans = nil

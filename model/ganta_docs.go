@@ -5,6 +5,7 @@ import "github.com/jinzhu/gorm"
 /*
 	set the document id
  */
-func (g *Ganta) Only_add_document_by_ganta_id(document_id uint64, trans *gorm.DB) (error) {
-	return trans.Table(g.TableName()).Where("id = ?", g.Id).Update("document_id", document_id).Error
+func (g *Ganta) Only_add_ganta_id_to_document(document_id uint64, trans *gorm.DB) (error) {
+	return trans.Table(Document{}.TableName()).Where("id = ?", document_id).Update("ganta_id", g.Id).Error
 }
+
