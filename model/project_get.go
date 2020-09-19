@@ -22,6 +22,7 @@ func (p *Project) Get_all_categors_by_project_id(trans *gorm.DB) (err error) {
 }
 
 func (p *Project) Get_only_assigned_users_to_project(trans *gorm.DB) (err error) {
-	return GetDB().Preload("Email").Preload("Role").Omit("password, created").Find(&p.Users, "id in (select user_id from projects_users where project_id = ?)", p.Id).Error
+	return trans.Preload("Email").Preload("Role").Omit("password, created").Find(&p.Users, "id in (select user_id from projects_users where project_id = ?)", p.Id).Error
 }
+
 

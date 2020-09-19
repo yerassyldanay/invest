@@ -6,7 +6,7 @@ import (
 
 type Document struct {
 	Id							uint64				`json:"id" gorm:"AUTO_INCREMENT; primary_key"`
-	Name						string				`json:"name" gorm:"unique_index:unique_doc_per_project" validate:"required"`
+	Name						string				`json:"name" validate:"required"`
 	
 	//Info						string				`json:"info" gorm:"default:'{}'"`
 	//InfoSent					map[string]interface{}		`json:"info_sent" gorm:"-"`

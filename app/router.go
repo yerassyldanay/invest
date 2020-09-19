@@ -4,7 +4,6 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
-	"invest/model"
 	"invest/utils"
 	"net/http"
 )
@@ -72,6 +71,7 @@ func Create_new_invest_router() (*mux.Router) {
 
 	router.HandleFunc("/v1/all/info", control.User_get_own_info).Methods("GET", "POST")
 
+	router.HandleFunc("/v1/administrate/list/project", control.Get_projects_by_user_id).Methods("GET")
 	/*
 		CRUD user by admin
 	 */
@@ -163,20 +163,21 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
 
 	router.HandleFunc("/droptables", func(w http.ResponseWriter, r *http.Request) {
-		model.GetDB().Debug().DropTableIfExists(&model.Categor{}, &model.Comment{}, &model.Document{}, &model.Email{}, &model.Finance{}, &model.FinanceCol{},
-			&model.Finresult{}, &model.FinresultCol{}, &model.Ganta{}, &model.Organization{}, &model.Permission{},
-			&model.Phone{}, &model.Project{}, &model.ProjectStatus{}, &model.Role{}, &model.SendgridMessage{}, &model.SendgridMessageStore{},
-			&model.User{})
+		//model.GetDB().Debug().DropTableIfExists(&model.Categor{}, &model.Comment{}, &model.Document{}, &model.Email{}, &model.Finance{}, &model.FinanceCol{},
+		//	&model.Finresult{}, &model.FinresultCol{}, &model.Ganta{}, &model.Organization{}, &model.Permission{},
+		//	&model.Phone{}, &model.Project{}, &model.ProjectStatus{}, &model.Role{}, &model.SendgridMessage{}, &model.SendgridMessageStore{},
+		//	&model.User{})
+		//
+		//model.GetDB().Debug().AutoMigrate(&model.ProjectsUsers{})
 
-		model.GetDB().Debug().AutoMigrate(&model.ProjectsUsers{})
-
-		model.GetDB().DropTableIfExists("goose_db_version")
+		//model.GetDB().DropTableIfExists("goose_db_version")
 	})
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var project = model.Project{Id: 2}
-		msg := project.Get_this_project_with_its_users()
-		utils.Respond(w, r, msg)
+		//var p = model.ProjectList{}
+		//projects, err := p.Get_projects_by_user_id(2, model.GetDB())
+		//fmt.Println(projects)
+		//utils.Respond(w, r, utils.Msg{utils.NoErrorFineEverthingOk, 200, "", err.Error()})
 	})
 
 	/*
