@@ -1,0 +1,27 @@
+time="2020-09-20T14:18:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T14:18:26+06:00" level=info msg=main port=7000
+time="2020-09-20T14:18:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T14:19:06+06:00" level=info msg=main port=7000
+time="2020-09-20T14:22:31+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly" host="[::1]:57528" path=/v1/all/email status=421
+time="2020-09-20T14:22:47+06:00" level=info msg="Sign_in 3" error= host="[::1]:57528" path=/v1/all/signin status=200
+time="2020-09-20T14:25:06+06:00" level=info msg="Get_emails_of_any_project 1" error="pq: syntax error at or near \"to\"" host="[::1]:57528" path=/v1/all/email status=417
+time="2020-09-20T14:25:14+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T14:31:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T14:31:11+06:00" level=info msg=main port=7000
+time="2020-09-20T14:35:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T14:35:59+06:00" level=info msg=main port=7000
+time="2020-09-20T14:36:21+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:57938" path=/v1/all/email status=200
+time="2020-09-20T14:37:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T14:37:21+06:00" level=info msg=main port=7000
+time="2020-09-20T14:37:30+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:58016" path=/v1/all/email status=200
+time="2020-09-20T14:42:02+06:00" level=info msg="Sign_in 3" error= host="[::1]:58016" path=/v1/all/signin status=200
+time="2020-09-20T14:42:17+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:58016" path=/v1/all/email status=200
+time="2020-09-20T14:48:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T14:48:42+06:00" level=info msg=main port=7000
+time="2020-09-20T15:05:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T15:07:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T15:07:00+06:00" level=info msg=main port=7000
+time="2020-09-20T15:08:11+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:58500" path=/v1/all/email status=200
+time="2020-09-20T15:10:55+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:58500" path=/v1/all/email status=200
+time="2020-09-20T15:11:10+06:00" level=info msg="Sign_in 3" error= host="[::1]:58500" path=/v1/all/signin status=200
+time="2020-09-20T15:11:24+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:58500" path=/v1/all/email status=200

@@ -162,6 +162,8 @@ func Create_new_invest_router() (*mux.Router) {
 	 */
 	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
 
+	router.HandleFunc("/v1/all/email", control.Get_own_emails_by_project_id).Methods("GET")
+
 	router.HandleFunc("/droptables", func(w http.ResponseWriter, r *http.Request) {
 		//model.GetDB().Debug().DropTableIfExists(&model.Categor{}, &model.Comment{}, &model.Document{}, &model.Email{}, &model.Finance{}, &model.FinanceCol{},
 		//	&model.Finresult{}, &model.FinresultCol{}, &model.Ganta{}, &model.Organization{}, &model.Permission{},

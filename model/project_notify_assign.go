@@ -66,8 +66,8 @@ func (pu *ProjectsUsers) Notify_user(lang string) (map[string]interface{}, error
 			Subject:   		subject,
 			PlainText: 		page,
 			HTML:      		html,
-			Created:      		utils.GetCurrentTime(),
 		},
+		Created:      		utils.GetCurrentTime(),
 	}
 
 	resp, _ := sendgmsg.Send_message()

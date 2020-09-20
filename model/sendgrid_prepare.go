@@ -20,8 +20,8 @@ func (sm *SendgridMessageStore) Prepare_message_this_object(c *User, message_map
 			Subject:   	message_map[utils.KeyEmailSubject][lang],
 			PlainText: 	message_map[utils.KeyEmailPlainText][lang],
 			HTML:      	message_map[utils.KeyEmailHtml][lang],
-			Created:      	utils.GetCurrentTime(),
 		},
+		Created:      		utils.GetCurrentTime(),
 	}
 
 	return newsm, nil

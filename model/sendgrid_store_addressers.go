@@ -23,7 +23,7 @@ func (sm *SendgridMessageStore) SendMessageToList() (map[string]interface{}, err
 			this will save the body of the message on db
 		after this step, based on id of the sendgrid message
 	 */
-	sm.SendgridMessage.Created = utils.GetCurrentTime()
+	sm.Created = utils.GetCurrentTime()
 	_ = sm.SendgridMessage.Create_on_db()
 	sm.SendgridMessageId = sm.SendgridMessage.Id
 

@@ -194,9 +194,9 @@ func (c *User) Sign_Up() (utils.Msg) {
 			Subject:   subject,
 			PlainText: page,
 			HTML:      html,
-			Created:      utils.GetCurrentTime(),
 		},
 		Status: 200,
+		Created: utils.GetCurrentTime(),
 	}
 
 	resp, err := sm.Send_message()

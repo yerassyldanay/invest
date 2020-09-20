@@ -23,7 +23,6 @@ func (t *Template) Template_prepare_notify_users_about_changes_in_project(lang s
 		Subject:   		fmt.Sprintf(templates.Base_message_map_3_changes_made_to_project[utils.KeyEmailSubject][lang]),
 		PlainText: 		fmt.Sprintf(templates.Base_message_map_3_changes_made_to_project[utils.KeyEmailHtml][lang], project_name, who),
 		HTML:      		fmt.Sprintf(templates.Base_message_map_3_changes_made_to_project[utils.KeyEmailHtml][lang], project_name, who),
-		Created:   		utils.GetCurrentTime(),
 	}
 
 	return sm
