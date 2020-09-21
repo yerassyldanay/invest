@@ -12,6 +12,8 @@ type Comment struct {
 	GantaId				uint64					`json:"ganta_id"`
 
 	DocumentUrl			string					`json:"document_url"`
+	
+	DocStatuses			[]Document				`json:"doc_statuses" gorm:"-"`
 }
 
 func (Comment) TableName() string {

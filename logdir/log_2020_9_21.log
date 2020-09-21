@@ -1,0 +1,8 @@
+time="2020-09-21T17:07:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T17:07:14+06:00" level=info msg=main port=7000
+time="2020-09-21T17:33:02+06:00" level=info msg="Admin_create_user post" error="invalid character 't' looking for beginning of object key string" host="[::1]:54278" path=/v1/administrate/user status=400
+time="2020-09-21T17:34:30+06:00" level=info error= host="[::1]:54436" path=/v1/administrate/user status=201
+time="2020-09-21T17:35:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T17:35:51+06:00" level=info msg=main port=7000
+time="2020-09-21T17:36:13+06:00" level=info error= host="[::1]:54478" path=/v1/administrate/user status=201
+time="2020-09-21T17:42:46+06:00" level=info error= host="[::1]:54478" path=/v1/administrate/user status=201

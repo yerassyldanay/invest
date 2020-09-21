@@ -1,9 +1,12 @@
 package app
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
+	"invest/model"
 	"invest/utils"
 	"net/http"
 )
@@ -69,9 +72,11 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/all/confirmation/email", control.User_email_confirm).Methods("GET")
 	router.HandleFunc("/v1/all/confirmation/phone", control.User_phone_confirm).Methods("GET")
 
+	/*
+		Profile
+	 */
 	router.HandleFunc("/v1/all/info", control.User_get_own_info).Methods("GET", "POST")
 
-	router.HandleFunc("/v1/administrate/list/project", control.Get_projects_by_user_id).Methods("GET")
 	/*
 		CRUD user by admin
 	 */
@@ -110,9 +115,13 @@ func Create_new_invest_router() (*mux.Router) {
 	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_remove_document).Methods("DELETE")
 
 	/*
-		/ad../stat/project?status=?
-		/ad../stat/project?user_id=?&&status=?
-		/ad../stat/project?user_id
+		Get projects
+	*/
+	router.HandleFunc("/v1/administrate/list/project", control.Get_projects_by_user_id).Methods("GET")
+
+	/*
+		/ad../stat/project?status=? - provides all projects by status
+		/ad../stat/project?user_id=?&&status=? - provides projects by user_id & status
 	*/
 	router.HandleFunc("/v1/administrate/stat/project", control.Stats_on_projects_based_on_user_or_status).Methods("GET")
 	router.HandleFunc("/v1/all/project/docs/stat", control.Get_stat_on_documents_of_project).Methods("GET")
@@ -120,8 +129,8 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		Leave a COMMENT on the project
 	 */
-	router.HandleFunc("/v1/projects_comment/project", control.Get_comments_of_the_project).Methods("GET")
-	router.HandleFunc("/v1/projects_comment/project", control.Add_comment_to_project).Methods("POST")
+	router.HandleFunc("/v1/comment_get/spk_comment", control.Get_comments_of_the_project_or_comment_by_comment_id).Methods("GET")
+	router.HandleFunc("/v1/comment_add/spk_comment", control.Add_comment_to_project).Methods("POST")
 
 	/*
 		Read & Update financial tables
@@ -142,6 +151,10 @@ func Create_new_invest_router() (*mux.Router) {
 	 */
 	router.HandleFunc("/v1/administrate/project", control.Remove_user_from_project).Methods("DELETE")
 	router.HandleFunc("/v1/administrate/project", control.Assign_user_to_project).Methods("POST")
+
+	/*
+		get users by project
+	 */
 	router.HandleFunc("/v1/administrate/project/stat", control.Get_all_assigned_users_to_project).Methods("GET")
 
 	router.HandleFunc("/v1/all/project/stat", control.Get_project_by_project_id).Methods("GET")
@@ -176,10 +189,15 @@ func Create_new_invest_router() (*mux.Router) {
 	})
 
 	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		//var p = model.ProjectList{}
-		//projects, err := p.Get_projects_by_user_id(2, model.GetDB())
-		//fmt.Println(projects)
-		//utils.Respond(w, r, utils.Msg{utils.NoErrorFineEverthingOk, 200, "", err.Error()})
+		var comment = model.Comment{}
+
+		if err := json.NewDecoder(r.Body).Decode(&comment); err != nil {
+			msg := utils.Msg{utils.ErrorInvalidParameters, 400, "" + " 1", err.Error()}
+			utils.Respond(w, r, msg)
+			return
+		}
+
+		fmt.Println(comment)
 	})
 
 	/*

@@ -25,3 +25,34 @@ time="2020-09-20T15:08:11+06:00" level=info msg="Get_emails_of_any_project 1" er
 time="2020-09-20T15:10:55+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:58500" path=/v1/all/email status=200
 time="2020-09-20T15:11:10+06:00" level=info msg="Sign_in 3" error= host="[::1]:58500" path=/v1/all/signin status=200
 time="2020-09-20T15:11:24+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:58500" path=/v1/all/email status=200
+time="2020-09-20T17:31:56+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T17:31:57+06:00" level=info msg=main port=7000
+time="2020-09-20T17:58:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T17:58:34+06:00" level=info msg=main port=7000
+time="2020-09-20T18:23:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T18:23:02+06:00" level=info msg=main port=7000
+time="2020-09-20T18:24:41+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-20T18:24:41+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-20T18:24:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T18:24:48+06:00" level=info msg=main port=7000
+time="2020-09-20T20:10:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T20:10:10+06:00" level=info msg=main port=7000
+time="2020-09-20T20:16:18+06:00" level=info error="invalid project id" host="[::1]:34848" path=/v1/comment_add/project status=400
+time="2020-09-20T20:16:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T20:16:35+06:00" level=info msg=main port=7000
+time="2020-09-20T20:17:10+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T20:17:10+06:00" level=info msg=main port=7000
+time="2020-09-20T20:17:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T20:17:27+06:00" level=info msg=main port=7000
+time="2020-09-20T20:18:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T20:18:13+06:00" level=info msg=main port=7000
+time="2020-09-20T20:22:32+06:00" level=info error="invalid project id" host="[::1]:34942" path=/v1/comment_add/spk_comment status=400
+time="2020-09-20T20:22:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-20T20:22:38+06:00" level=info msg=main port=7000
+time="2020-09-20T20:25:41+06:00" level=info error= host="[::1]:35032" path=/v1/comment_add/spk_comment status=200
+time="2020-09-20T21:18:14+06:00" level=info msg="Get_projects_by_user_id 1" error= host="[::1]:35032" path=/v1/administrate/list/project status=200
+time="2020-09-20T21:27:47+06:00" level=info msg="Stats_on_projects_based_on_user_or_status 1" error= host="[::1]:35032" path=/v1/administrate/stat/project status=200
+time="2020-09-20T21:32:23+06:00" level=info msg="Stats_on_projects_based_on_user_or_status 1" error= host="[::1]:35032" path=/v1/administrate/stat/project status=200
+time="2020-09-20T21:33:20+06:00" level=info msg="Stats_on_projects_based_on_user_or_status 1" error="method is not allowed. status & user_id are not provided" host="[::1]:36744" path=/v1/administrate/stat/project status=405
+time="2020-09-20T21:33:36+06:00" level=info msg="Sign_in 3" error= host="[::1]:36744" path=/v1/all/signin status=200
+time="2020-09-20T21:33:44+06:00" level=info msg="Stats_on_projects_based_on_user_or_status 1" error="method is not allowed. status & user_id are not provided" host="[::1]:36744" path=/v1/administrate/stat/project status=405

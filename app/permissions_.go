@@ -27,6 +27,9 @@ func Prepare_permissions() {
 		Perm_6_projects_accept,
 		Perm_7_analysis_see,
 		Perm_8_projects_submit,
+
+		Perm_9_comment_add,
+		Perm_10_comment_get,
 	}
 
 	for i, perm := range all_perm {
