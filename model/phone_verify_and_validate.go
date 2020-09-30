@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"invest/utils"
 	"regexp"
 )
@@ -16,15 +17,27 @@ func (p *Phone) Is_verified() (map[string]interface{}, error) {
 	return utils.ErrorPhoneNumberIsNotVerified, err
 }
 
+// errors
+var errorPhoneInvalidCodeOrNumber = errors.New("invalid phone number")
+
 /*
 	the phone number must meet certain pattern requirement
 */
-func (p *Phone) Is_valid() bool {
+func (p *Phone) Validate() (err error) {
 	number, err := regexp.Compile("[0-9]+")
 	ccode, err2 := regexp.Compile("\\+[0-9]{1}")
-	if err != nil || err2 != nil {
-		return false
+
+	switch {
+	case err != nil:
+		return err
+	case err2 != nil:
+		return err2
 	}
 
-	return number.Match([]byte(p.Number)) && ccode.Match([]byte(p.Ccode))
+	ok := number.Match([]byte(p.Number)) && ccode.Match([]byte(p.Ccode))
+	if !ok {
+		return errorPhoneInvalidCodeOrNumber
+	}
+
+	return nil
 }

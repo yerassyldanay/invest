@@ -2,6 +2,8 @@ package model
 
 import (
 	"bitbucket.org/liamstask/goose/lib/goose"
+
+
 	//"github.com/pressly/goose"
 	"errors"
 	"fmt"
@@ -167,8 +169,8 @@ func Set_up_db() {
 	//&Investor{}, InvestorAndCompany{}, &Phone{}, &Position{}, &Project{}, &ProjectDoc{},
 	//&ProjectCivilConnection{}, &SendgridMessage{})
 
-	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Document{}, &Email{}, &Finance{}, &FinanceCol{},
-		&Finresult{}, FinresultCol{}, &Ganta{}, &Organization{}, &Permission{},
+	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{}, &Email{},
+		&Finance{}, &Ganta{}, &Organization{}, &Permission{},
 		&Phone{}, &Project{}, &ProjectStatus{}, &Role{}, &SendgridMessage{}, &SendgridMessageStore{},
 		&User{})
 
@@ -184,10 +186,10 @@ func Set_up_db() {
 			sequence id will be updated
 		as there is a problem with sync of seq. id.
 	 */
-	db.Callback().Create().Before("gorm:update").Register("updateSeqId", func(scope *gorm.Scope) {
-		fmt.Println("updating hook is working: ", scope.TableName())
-		_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(scope.DB(), "default")
-	})
+	//db.Callback().Create().Before("gorm:update").Register("updateSeqId", func(scope *gorm.Scope) {
+	//	//fmt.Println("updating hook is working: ", scope.TableName())
+	//	_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(scope.DB(), "default")
+	//})
 }
 
 /*

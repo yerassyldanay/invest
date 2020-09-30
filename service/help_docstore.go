@@ -1,4 +1,4 @@
-package control
+package service
 
 type DocStore struct {
 	DocumentId			uint64

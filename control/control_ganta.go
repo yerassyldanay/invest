@@ -1,69 +1,70 @@
 package control
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
 	"invest/model"
+	"invest/service"
 	"invest/utils"
 	"net/http"
 )
 
-var Ganta_create_update_delete = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "Ganta_create_update_delete"
-	var ganta = model.Ganta{}
+/*
+	which:
+		* parents - ganta steps, which are steps of a process
+		* children - ganta sub-steps, which are documents (related to one document)
+ */
+var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *http.Request) {
+	var fname = "Ganta_get_parent_ganta_steps"
+	var is = service.InvestService{}
+	is.OnlyParseRequest(r)
 
-	if err := json.NewDecoder(r.Body).Decode(&ganta); err != nil {
-		utils.Respond(w, r, utils.Msg{
-			Message: utils.ErrorInvalidParameters,
-			Status:  400,
-			Fname:   fname + " 1",
-			ErrMsg:  err.Error(),
-		})
-		return
-	}
-	defer r.Body.Close()
+	// check permission
+	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
+	msg := is.Ganta_check_permission_to_read_ganta(project_id)
+	msg.Fname = fname + " is"
 
-	var msg = utils.Msg{}
-	switch r.Method {
-	case http.MethodPost:
-		msg = ganta.Add_new_step()
-		msg.Fname = fname + " post"
-	case http.MethodPut:
-		msg = ganta.Update_ganta_step()
-		msg.Fname = fname + " put"
-	case http.MethodDelete:
-		msg.Fname = fname + " delete"
+	if msg.ErrMsg != "" { utils.Respond(w, r, msg); return }
+
+	var project = model.Project{Id: project_id}
+	err := project.GetAndUpdateStatusOfProject(model.GetDB())
+
+	switch {
+	case err != nil:
+		utils.Respond(w, r, utils.Msg{utils.ErrorInternalDbError, 417, fname + " db", err.Error()}); return
+	case project.Status == utils.ProjectStatusReject:
+		// pass
 	default:
-		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "making a not supported request: " + r.Method}
+		//
 	}
 
+	var ganta = model.Ganta{ProjectId: project_id}
+	switch which {
+	case "parents":
+		msg = ganta.Get_parent_ganta_steps_by_project_id_and_step(project.Step)
+	case "children":
+		msg = ganta.Get_child_ganta_steps_by_project_id_and_step(project.Step)
+	case "documents":
+		msg = ganta.Get_preloaded_and_restricted_child_ganta_steps(project.Step)
+	default:
+		msg = model.ReturnMethodNotAllowed("you are requesting " + which)
+	}
+
+	msg.Fname = fname + " ganta"
 	utils.Respond(w, r, msg)
 }
 
 /*
-	get only ganta steps
+	restricted - because you will get ganta steps either for project step / stage 1 or 2
  */
-var Ganta_only_ganta_steps_by_project_id = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "Ganta_get_all_steps_by_project_id"
-	var choice = mux.Vars(r)["choice"]
-	var ganta = model.Ganta{
-		Id: 			Get_query_parameter_uint64(r ,"ganta_id", 0),
-		ProjectId: 		Get_query_parameter_uint64(r, "project_id", 0),
-	}
-
-	var msg = utils.Msg{}
-	switch choice {
-	case "onewithdoc":
-		msg = ganta.Get_only_one_with_docs()
-		msg.Fname = fname + " onewithdoc"
-	case "manywithdoc":
-		msg = ganta.Get_ganta_with_documents_by_project_id()
-		msg.Fname = fname + " manywithdoc"
-	default:
-		msg = ganta.Get_only_ganta_by_project_id()
-		msg.Fname = fname + " default"
-	}
-
-	utils.Respond(w, r, msg)
+var Ganta_restricted_get_parent_ganta_steps = func(w http.ResponseWriter, r *http.Request) {
+	Ganta_restricted_get_help("parents", w, r)
 }
+
+var Ganta_restricted_get_child_ganta_steps = func(w http.ResponseWriter, r *http.Request) {
+	Ganta_restricted_get_help("children", w, r)
+}
+
+var Ganta_restricted_get_documents = func(w http.ResponseWriter, r *http.Request) {
+	Ganta_restricted_get_help("documents", w, r)
+}
+
 

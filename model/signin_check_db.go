@@ -8,7 +8,7 @@ func (si *SignIn) Is_on_db() bool {
 	}
 
 	var count int
-	if err := GetDB().Table(User{}.TableName()).Where(si.KeyUsername + "=?", si.Username).Count(&count).Error;
+	if err := GetDB().Table(User{}.TableName()).Where(si.KeyUsername + "=?", si.Value).Count(&count).Error;
 		err != nil {
 			return false
 	}

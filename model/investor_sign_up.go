@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"invest/templates"
 	"invest/utils"
+
 	"net/http"
 	"net/url"
 	"strings"
@@ -69,7 +70,7 @@ func (c *User) Sign_Up() (utils.Msg) {
 		create organization or get old one
 	 */
 	c.Organization.Lang = c.Lang
-	c.Organization.Create_or_get_organization_from_db_by_bin()
+	c.Organization.Create_or_get_organization_from_db_by_bin(GetDB())
 	c.OrganizationId = c.Organization.Id
 
 	/*
@@ -176,7 +177,7 @@ func (c *User) Sign_Up() (utils.Msg) {
 	urlPath := url.URL{
 		Scheme:     "https",
 		Host:       "tsrk.xyz",
-		Path:		"/v1/all/confirmation/email",
+		Path:		"/v1/confirmation/email",
 		RawQuery: 	queryParam.Encode(),
 	}
 
@@ -186,10 +187,10 @@ func (c *User) Sign_Up() (utils.Msg) {
 	//fmt.Println("urlPath.String(): ", urlPath.String())
 
 	var sm = SendgridMessageStore{
-		From:              utils.BaseEmailAddress,
-		To:                c.Email.Address,
-		FromName:          utils.BaseEmailName,
-		ToName:            c.Fio,
+		From:     utils.BaseEmailAddress,
+		To:       c.Email.Address,
+		FromName: utils.BaseEmailName,
+		ToName:   c.Fio,
 		SendgridMessage:   SendgridMessage{
 			Subject:   subject,
 			PlainText: page,

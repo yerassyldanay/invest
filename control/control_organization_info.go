@@ -3,7 +3,9 @@ package control
 import (
 	"encoding/json"
 	"invest/model"
+	"invest/service"
 	"invest/utils"
+
 	"net/http"
 )
 
@@ -24,13 +26,13 @@ var Update_organization_data = func(w http.ResponseWriter, r *http.Request) {
 
 	org.Lang = r.Header.Get(utils.HeaderContentLanguage)
 
-	msg := org.Update_organization_info()
+	msg := org.Update_organization_info(model.GetDB())
 	utils.Respond(w, r, msg)
 }
 
 var Get_organization_info_by_bin = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_organization_info_by_bin"
-	var bin = Get_query_parameter_str(r, "bin", "")
+	var bin = service.Get_query_parameter_str(r, "bin", "")
 	var msg = utils.Msg{
 		utils.ErrorInvalidParameters, http.StatusBadRequest, fname + " 1", "invalid parameters. invalid bin number",
 	}
@@ -41,7 +43,7 @@ var Get_organization_info_by_bin = func(w http.ResponseWriter, r *http.Request) 
 	}
 	
 	if bin != "" {
-		msg = org.Create_or_get_organization_from_db_by_bin()
+		msg = org.Create_or_get_organization_from_db_by_bin(model.GetDB())
 	}
 
 	utils.Respond(w, r, msg)

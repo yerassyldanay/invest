@@ -15,9 +15,14 @@ import (
 	422 - could not sent message & not stored on db
 	500 - internal server error
  */
-var Investor_sign_up = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "Investor_sign_up"
+var Sign_up = func(w http.ResponseWriter, r *http.Request) {
+	var fname = "Sign_up"
 	var user = model.User{}
+
+	if err := user.ValidateSignUpUser(); err != nil {
+		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " v", err.Error()})
+		return
+	}
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		utils.Respond(w, r, utils.Msg{

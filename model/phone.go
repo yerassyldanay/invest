@@ -22,7 +22,7 @@ func (p *Phone) IsSentCodeValid() bool {
 	create:
 		consider two cases
  */
-func (p *Phone) CreateOnly(trans *gorm.DB) error {
+func (p *Phone) OnlyCreate(trans *gorm.DB) error {
 	return trans.Create(p).Error
 }
 
@@ -46,7 +46,13 @@ func (p *Phone) CreateAfterValidation(trans *gorm.DB) error {
 /*
 	delete phone number
  */
-func (p *Phone) DeleteById(trans *gorm.DB) error {
-	return trans.Delete(p, "id = ?", p.Id).Error
+func (p *Phone) OnlyDeleteById(trans *gorm.DB) (err error) {
+	err = trans.Delete(p, "id = ?", p.Id).Error
+	return err
+}
+
+func (p *Phone) OnlySave(tx *gorm.DB) (err error) {
+	err = tx.Save(p).Error
+	return err
 }
 

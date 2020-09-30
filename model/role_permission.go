@@ -8,3 +8,4 @@ func (r *Role) Get_permissions_by_role_id() error {
 		"inner join permissions p on p.id = rp.permission_id where r.id =?", r.Id).Find(&r.Permissions).Error
 }
 
+

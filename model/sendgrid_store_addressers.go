@@ -5,6 +5,7 @@ import (
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"invest/utils"
+
 	"os"
 	"sync"
 	"time"

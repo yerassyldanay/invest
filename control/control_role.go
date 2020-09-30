@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"invest/model"
+	"invest/service"
 	"invest/utils"
+
 	"net/http"
 	"strconv"
 )
@@ -22,7 +24,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 	 */
 	switch r.Method {
 	case http.MethodGet:
-		offset := Get_query_parameter_str(r, utils.KeyOffset, "0")
+		offset := service.Get_query_parameter_str(r, utils.KeyOffset, "0")
 		msg = role.Get_roles(offset)
 	default:
 		if err := json.NewDecoder(r.Body).Decode(&role); err != nil {
@@ -97,6 +99,7 @@ var Role_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Reques
 		utils.Respond(w, r, msg)
 		return
 	}
+	defer r.Body.Close()
 
 	switch r.Method {
 	case http.MethodDelete:

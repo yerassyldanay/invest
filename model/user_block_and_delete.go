@@ -13,9 +13,9 @@ func (c *User) Delete_user() (utils.Msg) {
 	defer func() {if trans != nil {trans.Rollback()}}()
 
 	// first get user info
-	err := c.GetByIdOnlyUser(trans)
+	err := c.OnlyGetUserById(trans)
 	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return ReturnInternalDbError(err.Error())
 	}
 
 	/*
@@ -28,31 +28,31 @@ func (c *User) Delete_user() (utils.Msg) {
 	/*
 		delete email
 	 */
-	err = c.Email.DeleteById(trans)
+	err = c.Email.OnlyDeleteById(trans)
 	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return ReturnInternalDbError(err.Error())
 	}
 
 	/*
 		delete
 	 */
-	err = c.Phone.DeleteById(trans)
+	err = c.Phone.OnlyDeleteById(trans)
 	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return ReturnInternalDbError(err.Error())
 	}
 
 	/*
 		delete the user
 	 */
-	err = c.DeleteOnlyUserById(trans)
+	err = c.OnlyDeleteUserById(trans)
 	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return ReturnInternalDbError(err.Error())
 	}
 
 	trans.Commit()
 	trans = nil
 
-	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return ReturnNoError()
 }
 
 /*
@@ -65,14 +65,14 @@ func (c *User) Block_unblock_user() (utils.Msg) {
 	//}
 
 	if err := GetDB().First(c, "id = ?", c.Id).Error; err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return ReturnInternalDbError(err.Error())
 	}
 
 	c.Blocked = !(c.Blocked)
 
 	if err := GetDB().Save(*c).Error; err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return ReturnInternalDbError(err.Error())
 	}
 
-	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+	return ReturnNoError()
 }

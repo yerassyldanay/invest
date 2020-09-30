@@ -13,7 +13,7 @@ func (is *InvestService) Get_own_emails_by_project_id_after_check(project_id uin
 	/*
 		get email address of the user
 	 */
-	_ = user.GetByIdPreloaded(model.GetDB())
+	_ = user.OnlyGetByIdPreloaded(model.GetDB())
 
 	/*
 		prepare sendgrid message

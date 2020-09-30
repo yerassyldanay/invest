@@ -5,27 +5,6 @@ const (
 )
 
 const (
-	RoleAdmin = "admin"
-	RoleManager = "manager"
-	RoleInvestor = "investor"
-	RoleLawyer = "lawyer"
-	RoleFinancier = "financier"
-	/*
-		this is needed to track what has been done by the system
-	 */
-	RoleSystem = "system"
-)
-
-const (
-	ProjectStatusNewone = "newone"
-	ProjectStatusInprogress = "inprogress"
-	ProjectStatusDone = "done"
-	ProjectStatusRejected = "rejected"
-
-	ProjectStatusChangeTimeInHours = 48
-)
-
-const (
 	FolderLogFiles = "logdir"
 )
 
@@ -40,22 +19,21 @@ const (
 )
 
 var NoNeedToAuth = []string {
-	"/intest",
-	"/api/check",
-	"/v1/all/signup",
-	"/v1/all/signin",
-	"/v1/all/confirmation/email",
-	"/v1/all/confirmation/phone",
-	"/v1/all/organization",
-	"/droptables",
+	"/v1/intest",
+	"/v1/signup",
+	"/v1/signin",
+	"/v1/confirmation/email",
+	"/v1/organization",
 }
 
 var NoNeedToConfirmEmail = []string {}
 
 const (
 	KeyId = "Id"
-	KeyRole = "Role"
 	KeyRoleId = "Rid"
+	KeyRoleName = "Role-Name"
+
+	KeyRole = "Role"
 	KeyTime = "Time"
 	KeyLanguage = "Lang"
 	KeyOffset = "Offset"

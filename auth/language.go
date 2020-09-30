@@ -1,9 +1,10 @@
 package auth
 
 import (
-	"invest/utils"
-	"net/http"
 	"golang.org/x/text/language"
+	"invest/utils"
+
+	"net/http"
 )
 
 func Parse_prefered_language_of_user(w http.ResponseWriter, r *http.Request) (utils.Msg) {

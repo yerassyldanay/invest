@@ -2,60 +2,51 @@ package control
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"invest/model"
+	"invest/service"
 	"invest/utils"
 	"net/http"
 )
 
 var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Categors_create_read_update_delete"
-
-	var errmsg string
-	var resp = utils.ErrorInternalServerError
-	var err = errors.New("no of the switch cases. categor crud")
-
+	var msg = utils.Msg{}
 	var c = model.Categor{}
 
 	if r.Method != http.MethodGet {
-		if err = json.NewDecoder(r.Body).Decode(&c); err != nil {
-			utils.Respond(w, r, utils.Msg{
-				Message: resp,
-				Status:  400,
-				Fname:   fname + " 1",
-				ErrMsg:  err.Error(),
-			})
+		if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+			utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " json", err.Error()})
 			return
 		}
 		defer r.Body.Close()
+	} else {
+		var offset = service.Get_query_parameter_str(r, "offset", "0")
+		msg = c.Get_all_categors(offset)
+
+		utils.Respond(w, r, msg)
+		return
+	}
+
+	/*
+		only admins can get create & delete
+	 */
+	roleName := service.Get_header_parameter(r, utils.KeyRoleName, "").(string)
+	if roleName != utils.RoleAdmin {
+		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " role", "role is " + roleName})
+		return
 	}
 
 	switch r.Method {
-	case http.MethodGet:
-		var offset = Get_query_parameter_str(r, "offset", "0")
-		resp, err = c.Get_all_categors(offset)
-		fmt.Println(resp)
 
 	case http.MethodPost:
-		resp, err = c.Create_category()
+		msg = c.Create_category()
 
 	case http.MethodDelete:
-		resp, err = c.Delete_category_from_tabe_and_projects()
-		resp = utils.NoErrorFineEverthingOk
+		msg = c.Delete_category_from_tabe_and_projects()
 
 	default:
-		resp, err = utils.ErrorMethodNotAllowed, errors.New("not supported")
+		msg =  utils.Msg{}
 	}
 
-	if err != nil {
-		errmsg = err.Error()
-	}
-
-	utils.Respond(w, r, utils.Msg{
-		Message: resp,
-		Status:  utils.If_condition_then(errmsg == "", 200, 400).(int),
-		Fname:   fname,
-		ErrMsg:  errmsg,
-	})
+	utils.Respond(w, r, msg)
 }

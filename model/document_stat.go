@@ -1,6 +1,9 @@
 package model
 
-import "invest/utils"
+import (
+	"invest/utils"
+
+)
 
 func (d *Document) Get_stat_on_docs_by_project_id() (utils.Msg) {
 	var stats = []struct {
@@ -14,23 +17,23 @@ func (d *Document) Get_stat_on_docs_by_project_id() (utils.Msg) {
 	}
 
 	var docStat = DocumentStat{}
-	for _, stat := range stats {
-		switch stat.Status {
-		case utils.ProjectStatusDone:
-			docStat.Done += stat.Num
-
-		case utils.ProjectStatusInprogress:
-			docStat.Inprogress += stat.Num
-
-		case utils.ProjectStatusRejected:
-			docStat.Rejected += stat.Num
-
-		default:
-			docStat.Sum -= stat.Num
-		}
-
-		docStat.Sum += stat.Num
-	}
+	//for _, stat := range stats {
+	//	switch stat.Status {
+	//	case utils.ProjectStatusDone:
+	//		docStat.Done += stat.Num
+	//
+	//	case utils.ProjectStatusPendingAdmin:
+	//		docStat.Inprogress += stat.Num
+	//
+	//	case utils.ProjectStatusRejected:
+	//		docStat.Rejected += stat.Num
+	//
+	//	default:
+	//		docStat.Sum -= stat.Num
+	//	}
+	//
+	//	docStat.Sum += stat.Num
+	//}
 
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(docStat)

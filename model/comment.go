@@ -8,10 +8,10 @@ import (
 /*
 	error messages for validation
 */
-var errorInvalidSubject = errors.New("invalid subject name")
 var errorInvalidBody = errors.New("invalid body of the email")
 var errorInvalidProjectId = errors.New("invalid project id")
 var errorInvalidUserId = errors.New("invalid user id")
+var errorInvalidStatus = errors.New("invalid status of a project")
 
 /*
 	comment documents must be stored on disk beforehand
@@ -19,8 +19,6 @@ var errorInvalidUserId = errors.New("invalid user id")
 */
 func (c *Comment) Validate() error {
 	switch {
-	case c.Subject == "":
-		return errorInvalidSubject
 	case c.Body == "":
 		return errorInvalidBody
 	case c.ProjectId == 0:
@@ -28,6 +26,12 @@ func (c *Comment) Validate() error {
 	case c.UserId == 0:
 		return errorInvalidUserId
 	}
+
+	//if c.Status != utils.ProjectStatusDone &&
+	//	c.Status != utils.ProjectStatusPendingAdmin &&
+	//	c.Status != utils.ProjectStatusRejected {
+	//		return errorInvalidStatus
+	//}
 
 	return nil
 }
@@ -44,6 +48,4 @@ func (c *Comment) Only_get_comments_by_project_id(offset interface{}, tx *gorm.D
 func (c *Comment) Only_get_comment_by_comment_id(tx *gorm.DB) (err error) {
 	return tx.First(c, "id = ?", c.Id).Error
 }
-
-
 

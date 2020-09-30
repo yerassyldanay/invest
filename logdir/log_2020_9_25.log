@@ -1,0 +1,40 @@
+time="2020-09-25T00:03:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-25T00:03:08+06:00" level=info msg=main port=7000
+time="2020-09-25T00:05:51+06:00" level=info msg="Sign_in 3" error= host="[::1]:50220" path=/v1/signin status=200
+time="2020-09-25T00:07:54+06:00" level=info msg="Sign_in 3" error="record not found" host="[::1]:50220" path=/v1/signin status=404
+time="2020-09-25T00:08:13+06:00" level=info msg="Sign_in 3" error= host="[::1]:50220" path=/v1/signin status=200
+time="2020-09-25T00:08:49+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:50220" path=/v1/signin status=400
+time="2020-09-25T00:09:14+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:50220" path=/v1/signin status=400
+time="2020-09-25T00:10:18+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:50220" path=/v1/signin status=400
+time="2020-09-25T00:10:52+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:50220" path=/v1/signin status=400
+time="2020-09-25T00:11:03+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:50220" path=/v1/signin status=400
+time="2020-09-25T00:11:57+06:00" level=info msg="Sign_in 3" error= host="[::1]:50220" path=/v1/signin status=200
+time="2020-09-25T00:14:35+06:00" level=info msg="Sign_in 3" error= host="[::1]:50220" path=/v1/signin status=200
+time="2020-09-25T00:15:15+06:00" level=info msg="Sign_in 3" error= host="[::1]:50220" path=/v1/signin status=200
+time="2020-09-25T00:15:45+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:50220" path=/v1/signin status=400
+time="2020-09-25T00:18:33+06:00" level=info msg="Sign_in 3" error= host="[::1]:50220" path=/v1/signin status=200
+time="2020-09-25T00:18:50+06:00" level=info msg="Sign_in 3" error= host="[::1]:50220" path=/v1/signin status=200
+time="2020-09-25T00:19:03+06:00" level=info msg="User_get_by_role get" error="you cannot get a list of users" host="[::1]:50220" path=/v1/user status=405
+time="2020-09-25T00:20:14+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-25T00:20:14+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-25T00:20:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-25T00:20:18+06:00" level=info msg=main port=7000
+time="2020-09-25T00:20:19+06:00" level=info msg="User_get_by_role get" error="you cannot get a list of users" host="[::1]:50560" path=/v1/user status=405
+time="2020-09-25T00:20:21+06:00" level=info msg="User_get_by_role get" error="you cannot get a list of users" host="[::1]:50560" path=/v1/user status=405
+time="2020-09-25T00:21:00+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-25T00:21:00+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-25T00:21:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-25T00:21:17+06:00" level=info msg=main port=7000
+time="2020-09-25T00:21:25+06:00" level=info msg="User_get_by_role get" error= host="[::1]:50602" path=/v1/user status=200
+time="2020-09-25T00:21:43+06:00" level=info msg="Sign_in 3" error= host="[::1]:50602" path=/v1/signin status=200
+time="2020-09-25T00:21:55+06:00" level=info msg="User_get_by_role get" error= host="[::1]:50602" path=/v1/user status=200
+time="2020-09-25T02:13:22+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-25T02:13:22+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-25T02:20:40+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-25T02:20:41+06:00" level=info msg=main port=7000
+time="2020-09-25T04:03:05+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-09-25T04:03:05+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-25T04:03:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-25T04:03:09+06:00" level=info msg=main port=7000
+time="2020-09-26T14:59:16+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-09-26T14:59:16+06:00" level=info msg=GET_FILE message="closing the file..." ok=true

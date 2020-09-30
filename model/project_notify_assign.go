@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"invest/templates"
 	"invest/utils"
+
 )
 
 func (pu *ProjectsUsers) Notify_user(lang string) (map[string]interface{}, error) {
@@ -58,10 +59,10 @@ func (pu *ProjectsUsers) Notify_user(lang string) (map[string]interface{}, error
 	page = fmt.Sprintf(page, both.Project.Name, both.Project.Description)
 
 	var sendgmsg = SendgridMessageStore{
-		From:              utils.BaseEmailAddress,
-		To:                both.User.Email.Address,
-		FromName:          utils.BaseEmailName,
-		ToName:            both.User.Fio,
+		From:     utils.BaseEmailAddress,
+		To:       both.User.Email.Address,
+		FromName: utils.BaseEmailName,
+		ToName:   both.User.Fio,
 		SendgridMessage:   SendgridMessage{
 			Subject:   		subject,
 			PlainText: 		page,

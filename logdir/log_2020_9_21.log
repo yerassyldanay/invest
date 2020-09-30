@@ -6,3 +6,30 @@ time="2020-09-21T17:35:07+06:00" level=info msg=INIT_DB message="connected to Po
 time="2020-09-21T17:35:51+06:00" level=info msg=main port=7000
 time="2020-09-21T17:36:13+06:00" level=info error= host="[::1]:54478" path=/v1/administrate/user status=201
 time="2020-09-21T17:42:46+06:00" level=info error= host="[::1]:54478" path=/v1/administrate/user status=201
+time="2020-09-21T22:51:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T22:51:36+06:00" level=info msg=main port=7000
+time="2020-09-21T22:53:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T22:53:20+06:00" level=info msg=main port=7000
+time="2020-09-21T22:54:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T22:54:27+06:00" level=info msg=main port=7000
+time="2020-09-21T22:56:05+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T22:56:05+06:00" level=info msg=main port=7000
+time="2020-09-21T23:26:07+06:00" level=info msg="Add_comment_to_project 2" error="invalid status of the project" host="[::1]:57340" path=/v1/comment_add/spk_comment status=400
+time="2020-09-21T23:26:44+06:00" level=info msg="Add_comment_to_project 2" error= host="[::1]:57340" path=/v1/comment_add/spk_comment status=200
+time="2020-09-21T23:28:38+06:00" level=info msg="Add_comment_to_project 2" error= host="[::1]:57340" path=/v1/comment_add/spk_comment status=200
+time="2020-09-21T23:29:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T23:29:34+06:00" level=info msg=main port=7000
+time="2020-09-21T23:29:52+06:00" level=info msg="Add_comment_to_project 2" error= host="[::1]:57838" path=/v1/comment_add/spk_comment status=200
+time="2020-09-21T23:49:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T23:49:17+06:00" level=info msg=main port=7000
+time="2020-09-21T23:50:14+06:00" level=info msg="Get_comments_of_the_project 1" error= host="[::1]:58102" path=/v1/comment_get/spk_comment status=200
+time="2020-09-21T23:52:37+06:00" level=info msg="Get_projects_by_user_id 1" error= host="[::1]:58102" path=/v1/administrate/list/project status=200
+time="2020-09-21T23:55:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T23:55:53+06:00" level=info msg=main port=7000
+time="2020-09-21T23:55:54+06:00" level=info msg="Get_projects_by_user_id 1" error= host="[::1]:58216" path=/v1/administrate/list/project status=200
+time="2020-09-21T23:56:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T23:56:46+06:00" level=info msg=main port=7000
+time="2020-09-21T23:57:08+06:00" level=info msg="Get_projects_by_user_id 1" error= host="[::1]:58240" path=/v1/administrate/list/project status=200
+time="2020-09-21T23:58:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-09-21T23:58:17+06:00" level=info msg=main port=7000
+time="2020-09-21T23:58:29+06:00" level=info msg="Get_projects_by_user_id 1" error= host="[::1]:58270" path=/v1/administrate/list/project status=200

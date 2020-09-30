@@ -2,20 +2,21 @@ package control
 
 import (
 	"invest/model"
+	"invest/service"
 	"invest/utils"
 	"net/http"
 	"strings"
 )
 
-var Stats_on_projects_based_on_user_or_status = func(w http.ResponseWriter, r *http.Request) {
+var Get_projects_based_on_user_or_status = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Stats_on_projects_based_on_user_or_status"
 	var msg utils.Msg
 
 	var pus = model.ProjectUserStat{
-		UserId:    Get_query_parameter_uint64(r, "user_id", 0),
-		Status:    strings.ToLower(Get_query_parameter_str(r, "status", "")),
+		UserId: service.Get_query_parameter_uint64(r, "user_id", 0),
+		Status: strings.ToLower(service.Get_query_parameter_str(r, "status", "")),
 	}
-	offset := Get_query_parameter_str(r, "offset", "0")
+	offset := service.Get_query_parameter_str(r, "offset", "0")
 
 	ok := pus.Status != "" && pus.UserId != 0
 	if ok {

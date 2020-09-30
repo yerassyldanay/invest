@@ -4,6 +4,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"invest/model"
 	"invest/utils"
+
 	"net/http"
 	"os"
 	"strconv"
@@ -78,10 +79,11 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		/*
-			pass parameters using context
+			context is not working properly
 		 */
 		r = utils.SetHeader(r, utils.KeyId, strconv.FormatUint(tokenStruct.UserId, 10))
 		r = utils.SetHeader(r, utils.KeyRoleId, strconv.FormatUint(tokenStruct.RoleId, 10))
+		r = utils.SetHeader(r, utils.KeyRoleName, tokenStruct.RoleName)
 
 		//var redis_key = fmt.Sprintf("%v_%v", tokenStruct.Role, tokenStruct.UserID)
 		//redis_result, err := iredis.GetRedis().Get(redis_key).Result()

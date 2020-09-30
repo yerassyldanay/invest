@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"invest/utils"
+
 	"sync"
 )
 
@@ -39,23 +40,8 @@ func (u *User) Add_statistics_to_this_user_on_project_statuses(wg *sync.WaitGrou
 	}
 
 	var user_stat = UserStats{}
-	for _, stat := range stats {
-		switch stat.Status {
-		case utils.ProjectStatusInprogress:
-			user_stat.Inprogress += stat.Number
+	for _, _ = range stats {
 
-		case utils.ProjectStatusRejected:
-			user_stat.Rejected += stat.Number
-
-		case utils.ProjectStatusNewone:
-			user_stat.Newone += stat.Number
-
-		case utils.ProjectStatusDone:
-			user_stat.Done += stat.Number
-
-		default:
-
-		}
 	}
 
 	u.Statistics = user_stat

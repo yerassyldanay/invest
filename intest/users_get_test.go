@@ -3,7 +3,7 @@ package intest
 import (
 	"fmt"
 	"invest/app"
-	"invest/utils"
+
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -37,12 +37,12 @@ func TestGetUsersByAdmin(t *testing.T) {
 		}
 		//defer func() {if r != nil {r.Body.Close()} }()
 
-		r.Header.Add(utils.HeaderContentType, "application/x-www-form-urlencoded")
-		r.Header.Set(utils.HeaderAuthorization, utils.AuthorizationAdminToken)
+		r.Header.Add(constants.HeaderContentType, "application/x-www-form-urlencoded")
+		r.Header.Set(constants.HeaderAuthorization, constants.AuthorizationAdminToken)
 
 		router.ServeHTTP(resp, r)
 
-		status, _ := strconv.Atoi(resp.Header().Get(utils.HeaderCustomStatus))
+		status, _ := strconv.Atoi(resp.Header().Get(constants.HeaderCustomStatus))
 
 		if status != data.RespStatus {
 			t.Errorf(fmt.Sprintf("%s 3" + " | %d", fname, resp.Code))

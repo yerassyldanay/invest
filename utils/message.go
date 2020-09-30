@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	logr "github.com/sirupsen/logrus"
+
 	"net/http"
 	"strconv"
 )
@@ -34,6 +35,10 @@ func (msg *Msg) Log(r *http.Request) {
 	}).Info(msg.Fname)
 }
 
+func (msg *Msg) IsThereAnError() bool {
+	return msg.ErrMsg != ""
+}
+
 /*
 	note: the order, how headers are set, matters
 		1. headers
@@ -59,6 +64,8 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 	w.WriteHeader(msg.Status)
 
 	//fmt.Println("w.WriteHeader: ", w.Header(), msg.Status)
+
+	msg.Message["error"] = msg.ErrMsg
 
 	if err := json.NewEncoder(w).Encode(msg.Message); err != nil {
 		SysMessage {

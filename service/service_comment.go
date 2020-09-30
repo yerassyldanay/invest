@@ -30,11 +30,17 @@ func (is InvestService) Comment_on_project_documents(comment model.Comment) (uti
 	/*
 		update statuses of a document
 	*/
-	var document = model.Document{
-		ProjectId: comment.ProjectId,
+	//var document = model.Document{}
+	//err := document.Only_update_statuses(comment.ProjectId, comment.DocStatuses, trans)
+	//if err != nil {
+	//	return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	//}
+
+	var project = model.Project{
+		Id: comment.ProjectId,
+		Status: comment.Status,
 	}
-	err := document.Only_update_statuses(comment.DocStatuses, trans)
-	if err != nil {
+	if err := project.OnlyUpdateStatusById(trans); err != nil {
 		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 

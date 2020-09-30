@@ -2,7 +2,7 @@ package model
 
 import "invest/utils"
 
-func (p Project) Get_projects_grouped_by_statuses() (utils.Msg) {
+func (p Project) Get_stats_on_projects_grouped_by_statuses() (utils.Msg) {
 	var stats = []ProjectStatsRaw{}
 	var main_query = `select count(*) as number, status from projects group by status;`
 

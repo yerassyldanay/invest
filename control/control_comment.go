@@ -5,6 +5,7 @@ import (
 	"invest/model"
 	"invest/service"
 	"invest/utils"
+
 	"net/http"
 )
 
@@ -97,8 +98,9 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var is = service.InvestService{
-		service.BasicInfo{
-			UserId: Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64),
+		Offset: "",
+		BasicInfo: service.BasicInfo {
+			UserId: service.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64),
 		},
 	}
 
@@ -117,9 +119,9 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 var Get_comments_of_the_project_or_comment_by_comment_id = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_comments_of_the_project"
 
-	comment_id := Get_query_parameter_uint64(r, "comment_id", 0)
-	project_id := Get_query_parameter_uint64(r, "project_id", 0)
-	offset := Get_query_parameter_str(r, "offset", "0")
+	comment_id := service.Get_query_parameter_uint64(r, "comment_id", 0)
+	project_id := service.Get_query_parameter_uint64(r, "project_id", 0)
+	offset := service.Get_query_parameter_str(r, "offset", "0")
 
 	var c = model.Comment{
 		ProjectId: 		project_id,

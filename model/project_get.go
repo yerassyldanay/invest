@@ -1,28 +1,48 @@
 package model
 
 import (
-	"encoding/json"
-	"github.com/jinzhu/gorm"
+	"invest/utils"
+	"sync"
 )
 
-func (p *Project) Unmarshal_info() error {
-	return json.Unmarshal([]byte(p.Info), &p.InfoSent)
+func (p *Project) Get_this_project_with_its_users() (utils.Msg) {
+	if err := p.OnlyGetById(GetDB()); err != nil {
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	}
+
+	_ = p.OnlyGetCategorsByProjectId(GetDB())
+	_ = p.OnlyUnmarshalInfo()
+
+	if err := p.OnlyGetAssignedUsers(GetDB()); err != nil {
+		return utils.Msg{utils.ErrorInternalDbError, 417, "",err.Error()}
+	}
+
+	var wg = sync.WaitGroup{}
+	for i, _ := range p.Users {
+		wg.Add(1)
+		p.Users[i].Password = ""
+		go p.Users[i].Add_statistics_to_this_user_on_project_statuses(&wg)
+	}
+	wg.Wait()
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = Struct_to_map(*p)
+
+	return utils.Msg{resp, 200, "", ""}
 }
 
-/*
-	get project by id
- */
-func (p *Project) Get_by_id(trans *gorm.DB) error {
-	return trans.First(p, "id=?", p.Id).Error
+func (p *Project) Get_this_project_by_project_id() (utils.Msg) {
+	err := p.OnlyGetById(GetDB())
+	if err != nil { return ReturnInternalDbError(err.Error())}
+
+	err = p.OnlyGetCategorsByProjectId(GetDB())
+	if err != nil { return ReturnInternalDbError(err.Error())}
+
+	err = p.OnlyUnmarshalInfo()
+	if err != nil { return ReturnInternalDbError(err.Error()) }
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = Struct_to_map(*p)
+
+	return ReturnNoErrorWithResponseMessage(resp)
 }
-
-func (p *Project) Get_all_categors_by_project_id(trans *gorm.DB) (err error) {
-	err = trans.Raw("select distinct c.* from projects_categors pc join categors c on pc.categor_id = c.id where pc.project_id = ? ;", p.Id).Scan(&p.Categors).Error
-	return err
-}
-
-func (p *Project) Get_only_assigned_users_to_project(trans *gorm.DB) (err error) {
-	return trans.Preload("Email").Preload("Role").Omit("password, created").Find(&p.Users, "id in (select user_id from projects_users where project_id = ?)", p.Id).Error
-}
-
-

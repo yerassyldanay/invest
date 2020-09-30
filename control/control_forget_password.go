@@ -3,7 +3,9 @@ package control
 import (
 	"encoding/json"
 	"invest/model"
+	"invest/service"
 	"invest/utils"
+
 	"net/http"
 )
 
@@ -26,12 +28,12 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 	}
 
 	var fp = model.ForgetPassword{
-		Lang: Get_header_parameter(r, utils.HeaderAcceptLanguage, "").(string),
+		Lang: service.Get_header_parameter(r, utils.HeaderAcceptLanguage, "").(string),
 	}
 	
 	switch r.Method {
 	case http.MethodGet:
-		fp.EmailAddress = Get_query_parameter_str(r, "email", "")
+		fp.EmailAddress = service.Get_query_parameter_str(r, "email", "")
 		msg = fp.SendMessage()
 
 	case http.MethodPost:
@@ -39,6 +41,7 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 			utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
 			return
 		}
+		defer r.Body.Close()
 
 		msg = fp.Change_password_of_user_by_hash()
 	}

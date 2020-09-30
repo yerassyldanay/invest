@@ -1,51 +1,35 @@
 package model
 
 import (
-	"invest/utils"
-	"sync"
+	"errors"
+	"github.com/jinzhu/gorm"
 )
 
-func (p *Project) Get_this_project_with_its_users() (utils.Msg) {
-	if err := p.Get_by_id(GetDB()); err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+func (pu *ProjectsUsers) Chech_whether_user_is_assigned_to_project(tx *gorm.DB) (error) {
+	var count int
+	err := tx.Table("projects_users").Where("project_id = ? and user_id = ?", pu.ProjectId, pu.UserId).Count(&count).Error
+	if err != nil {
+		return err
 	}
 
-	_ = p.Get_all_categors_by_project_id(GetDB())
-	_ = p.Unmarshal_info()
-
-	if err := p.Get_only_assigned_users_to_project(GetDB()); err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "",err.Error()}
+	if count == 0 {
+		return errors.New("there is no such user & project relation")
 	}
 
-	var wg = sync.WaitGroup{}
-	for i, _ := range p.Users {
-		wg.Add(1)
-		p.Users[i].Password = ""
-		go p.Users[i].Add_statistics_to_this_user_on_project_statuses(&wg)
-	}
-	wg.Wait()
-
-	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = Struct_to_map(*p)
-
-	return utils.Msg{resp, 200, "", ""}
+	return nil
 }
 
-func (p *Project) Get_this_project_by_project_id() (utils.Msg) {
-	err := p.Get_by_id(GetDB())
-	err2 := p.Get_all_categors_by_project_id(GetDB())
+func (pu *ProjectsUsers) OnlyCreate(tx *gorm.DB) (err error) {
+	err = tx.Create(pu).Error
+	return err
+}
 
-	if err != nil || err2 != nil {
-		var errmsg string
+func (pu *ProjectsUsers) OnlyDelete(tx *gorm.DB) (err error) {
+	err = tx.Delete(pu, "project_id = ? and user_id = ?", pu.ProjectId, pu.UserId).Error
+	return err
+}
 
-		if err != nil { errmsg += err.Error() + " " }
-		if err != nil { errmsg += err.Error() }
-
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", errmsg}
-	}
-
-	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = Struct_to_map(*p)
-
-	return utils.Msg{resp, 200, "", ""}
+func (pu *ProjectsUsers) OnlyDeleteRelation (tx *gorm.DB) (err error) {
+	err = tx.Delete(pu, "project_di = ? and user_id = ?", pu.ProjectId, pu.UserId).Error
+	return err
 }

@@ -1,9 +1,10 @@
 package auth
 
 import (
-	"invest/control"
 	"invest/model"
+	"invest/service"
 	"invest/utils"
+
 	"net/http"
 	"strings"
 )
@@ -23,7 +24,7 @@ var HasPermissionWrapper = func(w http.ResponseWriter, r *http.Request)  (utils.
 		var fname = "check_whether_user_has_such_permission"
 		var up = model.UserPermission{}
 
-		up.UserId = control.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
+		up.UserId = service.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
 
 		/*
 			/v1/permission/1/2 -> [v1, permission, 1, 2]

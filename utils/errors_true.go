@@ -18,22 +18,22 @@ var ErrorNoSuchUser = map[string]interface{}{
 	"kaz": "қолданушы тіркелмеген",
 }
 
+var ErrorNotFound = map[string]interface{} {
+	"eng": "not found",
+	"rus": "",
+	"kaz": "",
+}
+
 var ErrorAccountNotVerified = map[string]interface{}{
 	"eng": "account is not verified",
 	"rus": "подтвердите аккаунт",
 	"kaz": "аккаунт расталмаған",
 }
 
-var ErrorCouldNotGet = map[string]interface{}{
-	"eng": "failed to get all civil servants",
-	"rus": "",
-	"kaz": "",
-}
-
 var ErrorMethodNotAllowed = map[string]interface{}{
 	"eng": "this functionality is not allowed for you",
-	"rus": "",
-	"kaz": "",
+	"rus": "вы не можете использовать эту функцию",
+	"kaz": "сіз бұл функцияны қолдана алмайсыз",
 }
 
 var ErrorInternalServerError = map[string]interface{} {

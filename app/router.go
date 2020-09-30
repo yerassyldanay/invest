@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"invest/auth"
@@ -12,41 +11,16 @@ import (
 )
 
 func Create_new_invest_router() (*mux.Router) {
+
 	/*
 		new router
 	*/
-	var router = mux.NewRouter().StrictSlash(true)
+	var generalRouter = mux.NewRouter().StrictSlash(true)
 
-	/*
-		When POST request is going to be made, client agent (browser) sends first OPTIONS requests
-			to check whether CORS is enables or not
-		For this reason, method that handles OPTIONS requests based on the url pattern is
-			provided below
-	*/
-	//router.Methods("OPTIONS").MatcherFunc(func(r *http.Request, match *mux.RouteMatch) bool {
-	//	//matchCase, err := regexp.MatchString("/.*", r.URL.Path)
-	//	//if err != nil {
-	//	//	return false
-	//	//}
-	//	//return matchCase
-	//	return true
-	//}).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	//	/*
-	//		Explicitly informs the referer how many seconds it should store the preflight
-	//		result. Within this time, it can just send the request,
-	//		and doesn't need to bother sending the preflight request again.
-	//	*/
-	//	w.Header().Set("Access-Control-Max-Age", "86400")
-	//
-	//	w.Header().Set("Access-Control-Allow-Credentials", "")
-	//
-	//	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:63342")
-	//	w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Origin")
-	//	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS, EAT")
-	//	w.Header().Add("Content-Type", "application/json")
-	//})
+	var v1 = generalRouter.PathPrefix("/v1").Subrouter()
+	var docRouter = generalRouter.PathPrefix("/documents").Subrouter()
 
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	v1.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("id: ", utils.GetContext(r, utils.KeyId))
 		//fmt.Println("role: ", utils.GetContext(r, utils.KeyRole))
 		utils.Respond(w, r, utils.Msg{
@@ -60,159 +34,152 @@ func Create_new_invest_router() (*mux.Router) {
 		})
 	}).Methods("GET", "POST")
 
-	router.HandleFunc("/v1/all/signup", control.Investor_sign_up).Methods("POST")
-	router.HandleFunc("/v1/all/signin", control.Sign_in).Methods("POST")
+	var STATIC_DIR = "/documents/docs"
+	docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("." + STATIC_DIR))))
 
 	/*
-		create
+		Registration
 	 */
-	//router.HandleFunc("/v1/all/check/fio", control.Investor_sign_up).Methods("GET")
-	//router.HandleFunc("/v1/all/check/email", control.Investor_sign_up)
+	v1.HandleFunc("/signup", control.Sign_up).Methods("POST")
+	v1.HandleFunc("/signin", control.Sign_in).Methods("POST")
 
-	router.HandleFunc("/v1/all/confirmation/email", control.User_email_confirm).Methods("GET")
-	router.HandleFunc("/v1/all/confirmation/phone", control.User_phone_confirm).Methods("GET")
+	/*
+		Confirm
+	 */
+	v1.HandleFunc("/confirmation/email", control.User_email_confirm).Methods("GET")
+	//v1.HandleFunc("/confirmation/phone", control.User_phone_confirm).Methods("GET")
 
 	/*
 		Profile
 	 */
-	router.HandleFunc("/v1/all/info", control.User_get_own_info).Methods("GET", "POST")
+	v1.HandleFunc("/profile", control.Get_full_user_info).Methods("GET")
+	v1.HandleFunc("/profile/own", control.User_get_own_info).Methods("GET")
+	v1.HandleFunc("/profile/other", control.Get_full_user_info).Methods("GET")
+
+	v1.HandleFunc("/profile/own", control.Update_own_profile).Methods("PUT")
+	v1.HandleFunc("/profile/other", control.Update_other_profile).Methods("PUT")
+
+	v1.HandleFunc("/profile/password/own", control.Update_own_password).Methods("PUT")
+	v1.HandleFunc("/profile/password/other", control.Update_other_password).Methods("PUT")
 
 	/*
 		CRUD user by admin
-	 */
-	router.HandleFunc("/v1/administrate/user/{which}", control.User_create_read_update_delete).Methods("PUT")
-	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("GET")
-	router.HandleFunc("/v1/administrate/user", control.User_create_read_update_delete).Methods("POST")
-
-	router.HandleFunc("/v1/administrate/profile", control.Get_full_user_info)
+	*/
+	v1.HandleFunc("/user", control.Users_get_by_role).Methods("GET")
+	v1.HandleFunc("/user", control.Create_user).Methods("POST")
 
 	/*
-		CRUD role & assign permissions
-	 */
-	router.HandleFunc("/v1/administrate/role", control.Role_create_update_add_and_remove_permissions).Methods("GET", "POST", "PUT")
-	router.HandleFunc("/v1/administrate/role/{role_id}", control.Role_delete_or_get_with_role_id).Methods("GET", "DELETE")
-	router.HandleFunc("/v1/administrate/permissions", control.Role_add_and_remove_permissions).Methods( "POST", "DELETE")
+		Assign & remove user from project
+	*/
+	v1.HandleFunc("/assign", control.Remove_user_from_project).Methods("DELETE")
+	v1.HandleFunc("/assign", control.Assign_user_to_project).Methods("POST")
 
 	/*
-		list users & their roles, who are assigned to the project
+		Ganta
 	 */
-	router.HandleFunc("/v1/administrate/", nil).Methods("GET")
+	v1.HandleFunc("/ganta/restricted/parents", control.Ganta_restricted_get_parent_ganta_steps).Methods("GET")
+	v1.HandleFunc("/ganta/restricted/children", control.Ganta_restricted_get_child_ganta_steps).Methods("GET")
+
+	v1.HandleFunc("/ganta/change/check_permission", control.Ganta_can_user_change_current_status).Methods("GET")
+	v1.HandleFunc("/ganta/change/status", control.Ganta_confirm_the_ganta_step).Methods("POST")
+	v1.HandleFunc("/ganta/change/time", control.Ganta_change_ganta_time).Methods("POST")
+
+	/*
+		Documents
+	 */
+	v1.HandleFunc("/project/docs", control.Ganta_restricted_get_documents).Methods("GET")
+	v1.HandleFunc("/project/docs", control.Project_add_document_to_project).Methods("POST")
+	v1.HandleFunc("/project/docs", control.Project_remove_document).Methods("DELETE")
+
+	/*
+		Project
+	*/
+	v1.HandleFunc("/project", control.Get_project_by_project_id).Methods("GET")
+	v1.HandleFunc("/project", control.Create_project).Methods("POST")
+
+	/*
+		Status
+	 */
+	v1.HandleFunc("/project/status", control.Project_get_status_of_project).Methods("GET")
+
+	/*
+		Role & Permissions
+	 */
+	v1.HandleFunc("/role", control.Role_create_update_add_and_remove_permissions).Methods("GET")
+	//v1.HandleFunc("/role/{role_id}", control.Role_delete_or_get_with_role_id).Methods("GET", "DELETE")
+	//v1.HandleFunc("/permissions", control.Role_add_and_remove_permissions).Methods( "POST", "DELETE")
 
 	/*
 		Categories
 	 */
-	router.HandleFunc("/v1/all/categor", control.Categors_create_read_update_delete).Methods("GET")
-	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("POST")
-	router.HandleFunc("/v1/administrate/categor", control.Categors_create_read_update_delete).Methods("DELETE")
+	v1.HandleFunc("/categor", control.Categors_create_read_update_delete).Methods("GET", "POST", "DELETE")
 
 	/*
-		Project & Document
-	 */
-	router.HandleFunc("/v1/projects_make_changes/project", control.Update_project).Methods("PUT")
-	router.HandleFunc("/v1/projects_make_changes/project", control.Create_project).Methods("POST")
-
-	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_add_document_to_project).Methods("POST")
-	router.HandleFunc("/v1/projects_make_changes/project/docs", control.Project_remove_document).Methods("DELETE")
-
-	/*
-		Get projects
+		List of something or someone
 	*/
-	router.HandleFunc("/v1/administrate/list/project", control.Get_projects_by_user_id).Methods("GET")
+	v1.HandleFunc("/list/users/by_project", control.Get_all_assigned_users_to_project).Methods("GET")
+	v1.HandleFunc("/list/projects/by_user", control.Get_projects_by_user_id).Methods("GET")
+	v1.HandleFunc("/list/projects/all", control.Get_all_user_projects).Methods("GET")
+	v1.HandleFunc("/list/projects/own", control.Get_own_projects).Methods("GET")
+	//v1.HandleFunc("/list/projects/by_user_and_status", control.Get_projects_based_on_user_or_status).Methods("GET")
 
 	/*
 		/ad../stat/project?status=? - provides all projects by status
 		/ad../stat/project?user_id=?&&status=? - provides projects by user_id & status
 	*/
-	router.HandleFunc("/v1/administrate/stat/project", control.Stats_on_projects_based_on_user_or_status).Methods("GET")
-	router.HandleFunc("/v1/all/project/docs/stat", control.Get_stat_on_documents_of_project).Methods("GET")
+	v1.HandleFunc("/stats/projects/grouped_by_status", control.User_get_projects_info_grouped_by_statuses).Methods("GET")
+	v1.HandleFunc("/stats/docs/by_project", control.Get_stat_on_documents_of_project).Methods("GET")
 
 	/*
 		Leave a COMMENT on the project
 	 */
-	router.HandleFunc("/v1/comment_get/spk_comment", control.Get_comments_of_the_project_or_comment_by_comment_id).Methods("GET")
-	router.HandleFunc("/v1/comment_add/spk_comment", control.Add_comment_to_project).Methods("POST")
+	v1.HandleFunc("/spk_comment", control.Get_comments_of_the_project_or_comment_by_comment_id).Methods("GET")
+	v1.HandleFunc("/spk_comment", control.Add_comment_to_project).Methods("POST")
 
 	/*
 		Read & Update financial tables
 			they are automatically created
 	 */
-	router.HandleFunc("/v1/projects_make_changes/finance", control.Finance_table_get).Methods("GET")
-	router.HandleFunc("/v1/projects_make_changes/finance", control.Finance_table_update).Methods("PUT")
-
-	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_table_get).Methods("GET")
-	router.HandleFunc("/v1/projects_make_changes/finresult", control.Finresult_table_update).Methods("PUT")
-
-	router.HandleFunc("/v1/projects_see_all/project/analysis", control.User_get_projects_info_grouped_by_statuses).Methods("GET")
-	router.HandleFunc("/v1/projects_see_all/project", control.User_project_get_all).Methods("GET")
-	router.HandleFunc("/v1/projects_see_own/project", control.User_project_get_own).Methods("GET")
+	//v1.HandleFunc("/finance_table", control.Finance_table_get).Methods("GET", "PUT")
+	//v1.HandleFunc("/finance_results", control.Finresult_table_get).Methods("GET", "PUT")
 
 	/*
-		Assign & remove user from project
+		Organization
 	 */
-	router.HandleFunc("/v1/administrate/project", control.Remove_user_from_project).Methods("DELETE")
-	router.HandleFunc("/v1/administrate/project", control.Assign_user_to_project).Methods("POST")
+	v1.HandleFunc("/organization", control.Get_organization_info_by_bin).Methods("GET")
+	v1.HandleFunc("/organization", control.Update_organization_data).Methods("PUT")
 
 	/*
-		get users by project
+		Reset password
 	 */
-	router.HandleFunc("/v1/administrate/project/stat", control.Get_all_assigned_users_to_project).Methods("GET")
-
-	router.HandleFunc("/v1/all/project/stat", control.Get_project_by_project_id).Methods("GET")
-
-	router.HandleFunc("/v1/projects_comment/ganta/{choice}", control.Ganta_only_ganta_steps_by_project_id).Methods("GET")
-	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("POST")
-	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("PUT")
-	router.HandleFunc("/v1/projects_comment/ganta", control.Ganta_create_update_delete).Methods("DELETE")
+	v1.HandleFunc("/reset_password", control.Forget_password_send_message).Methods("GET", "POST")
 
 	/*
-		check
+		Notifications
 	 */
-	router.HandleFunc("/v1/all/organization", control.Get_organization_info_by_bin).Methods("GET")
-	router.HandleFunc("/v1/administrate/organization", control.Update_organization_data).Methods("PUT")
+	v1.HandleFunc("/notifications_by_project", control.Get_own_emails_by_project_id).Methods("GET")
 
 	/*
-		check
+		Test API
 	 */
-	router.HandleFunc("/v1/all/password", control.Forget_password_send_message).Methods("GET", "POST")
-
-	router.HandleFunc("/v1/all/email", control.Get_own_emails_by_project_id).Methods("GET")
-
-	router.HandleFunc("/droptables", func(w http.ResponseWriter, r *http.Request) {
-		//model.GetDB().Debug().DropTableIfExists(&model.Categor{}, &model.Comment{}, &model.Document{}, &model.Email{}, &model.Finance{}, &model.FinanceCol{},
-		//	&model.Finresult{}, &model.FinresultCol{}, &model.Ganta{}, &model.Organization{}, &model.Permission{},
-		//	&model.Phone{}, &model.Project{}, &model.ProjectStatus{}, &model.Role{}, &model.SendgridMessage{}, &model.SendgridMessageStore{},
-		//	&model.User{})
-		//
-		//model.GetDB().Debug().AutoMigrate(&model.ProjectsUsers{})
-
-		//model.GetDB().DropTableIfExists("goose_db_version")
+	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
+		var project = model.Project{Id: 1}
+		msg := project.Create_ganta_table_for_this_project()
+		fmt.Println(msg)
 	})
 
-	router.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var comment = model.Comment{}
-
-		if err := json.NewDecoder(r.Body).Decode(&comment); err != nil {
-			msg := utils.Msg{utils.ErrorInvalidParameters, 400, "" + " 1", err.Error()}
-			utils.Respond(w, r, msg)
-			return
-		}
-
-		fmt.Println(comment)
+	v1.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.Header)
 	})
-
-	/*
-		admin's functionality
-		GET: /admin/civil?role=&offset=
-	 */
 
 	/*
 		check for session token
-			also will go through: auth.EmailVerifiedWrapper, auth.HasPermissionWrapper
+			also will go through: auth.EmailVerifiedWrapper
 	 */
-	router.Use(auth.JwtAuthentication)
-	router.Use(mux.CORSMethodMiddleware(router))
+	v1.Use(auth.JwtAuthentication)
+	v1.Use(mux.CORSMethodMiddleware(v1))
 
-	return router
+	return generalRouter
 }
 
 

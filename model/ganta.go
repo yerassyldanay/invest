@@ -1,120 +1,144 @@
 package model
 
 import (
-	"fmt"
+	"errors"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
-	"time"
 )
 
-var GantaDefaultStepHours time.Duration = 3 * 24
-
 /*
-	required:
-		project id
-		trans - transaction
- */
-func (p Project) create_default_parents(trans *gorm.DB) (p1, p2 uint64, err error) {
-	/*
-		create the first parent
-	 */
-	var ganta = DefaultGantaParent1
-	ganta.ProjectId = p.Id
-	if err = GetDB().Create(&ganta).Error; err != nil {
-		return 0, 0, err
+	prettify the description
+*/
+func (g *Ganta) prepare_name_and_validate() bool {
+
+	var temp string
+	for _, lang := range []string{g.Kaz, g.Rus, g.Eng} {
+		if lang != "" {
+			temp = lang
+			break
+		}
 	}
-	p1 = ganta.Id
 
-	/*
-		create the second parent
-	 */
-	ganta = DefaultGantaParent2
-	ganta.ProjectId = p.Id
-	ganta.Status = utils.ProjectStatusInprogress
-
-	if err = GetDB().Create(&ganta).Error; err != nil {
-		return 0, 0, err
+	if temp == "" {
+		return false
 	}
-	p2 = ganta.Id
 
-	return p1, p2, err
+	if g.Kaz == "" {
+		g.Kaz = temp
+	}
+
+	if g.Rus == "" {
+		g.Rus = temp
+	}
+
+	if g.Eng == "" {
+		g.Eng = temp
+	}
+
+	return true
 }
 
-func (p *Project) create_child_steps_of_the_ganta_table(p1 uint64, steps []Ganta, trans *gorm.DB) (err error) {
-	for _, step := range steps {
-		/*
-			set project_id & parent_id
-		 */
-		step.GantaParentId = p1
-		step.ProjectId = p.Id
+/*
+	one or none of the field out of kaz, rus & eng might be set
+		fill them by hand
+*/
+var errorGantaInvalidName = errors.New("invalid ganta name")
+var errorGantaInvalidProjectId = errors.New("invalid project id")
+var errorGantaInvalidDuration = errors.New("invalid duration in days")
 
-		/*
-			using transaction create steps
-				in case of an error
-				we will use rollback
-		 */
-		if err = trans.Create(&step).Error; err != nil {
-			return err
-		}
+func (g *Ganta) Validate() error {
+	switch {
+	case !g.prepare_name_and_validate():
+		return errorGantaInvalidName
+	case g.ProjectId < 1:
+		return errorGantaInvalidProjectId
+	case g.DurationInDays < 1:
+		return errorGantaInvalidDuration
 	}
 
 	return nil
 }
 
+func (g *Ganta) OnlyCreate(tx *gorm.DB) (error) {
+	return tx.Create(g).Error
+}
+
+func (g *Ganta) OnlyGetGantaById(tx *gorm.DB) (error) {
+	return tx.First(g, "id = ?", g.Id).Error
+}
+
+func (g *Ganta) OnlyGetParentsByProjectId(stage interface{}, tx *gorm.DB) (gantas []Ganta, err error) {
+	err = tx.Raw("select * from gantas where project_id = ? and ganta_parent_id = 0 and step = ?  order by is_done desc, start_date asc ; ", g.ProjectId, stage).Scan(&gantas).Error
+	return gantas, err
+}
+
+func (g *Ganta) OnlyGetChildrenByIdAndProjectId(tx *gorm.DB) (error) {
+	return tx.Find(g.GantaChildren, "ganta_parent_id = ? and project_id = ?", g.Id, g.ProjectId).Error
+}
+
+func (g *Ganta) OnlyGetChildrenByIdAndProjectIdStep(project_step interface{}, tx *gorm.DB) (error) {
+	return tx.Find(g.GantaChildren, "ganta_parent_id = ? and project_id = ? and step = ?", g.Id, g.ProjectId, project_step).Error
+}
+
+func (g *Ganta) OnlyCountChildrenByIdAndProjectIdStep(project_step interface{}, tx *gorm.DB) (count int, err error) {
+	var counter = struct {
+		Count				int
+	}{}
+	err = tx.Raw("select count(*) as count from gantas where ganta_parent_id = ? and project_id = ? and step = ? ; ", g.Id, g.ProjectId, project_step).Scan(&counter).Error
+	return counter.Count, err
+}
+
+func (g *Ganta) OnlyGetCurrentStepByProjectId(tx *gorm.DB) (err error) {
+	err = tx.Raw("select * from gantas where is_done = false and ganta_parent_id = 0 order by start_date limit 1;").Scan(g).Error
+	return err
+}
+
+func (g *Ganta) OnlyGetPreloadedChildStepsByProjectIdAndStep(project_step interface{}, tx *gorm.DB) (err error) {
+	err = tx.Preload("Document").Find(&g.GantaChildren, "project_id = ? and step = ? and ganta_parent_id != 0", g.ProjectId, project_step).Error
+	return err
+}
+
+func (g *Ganta) OnlyGetById(trans *gorm.DB) error {
+	return trans.First(g, "id = ?", g.Id).Error
+}
+
+// must never be changed
+func (g *Ganta) OnlyChangeStatusById(tx *gorm.DB) (err error) {
+	return nil
+}
+
+// 'is_done' field is set to true
+func (g *Ganta) OnlyChangeStatusToDoneById(tx *gorm.DB) (err error) {
+	err = tx.Model(&Ganta{Id: g.Id}).Update("is_done", true).Error
+	return err
+}
+
 /*
-	CREATE A GANTA TABLE FOR THE PROJECT
-
-	provide:
-		project_id
+	Project
  */
-func (p * Project) Create_ganta_table_for_this_project() (utils.Msg) {
-	if p.Id == 0 {
-		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "invalid project id. id = 0"}
-	}
+func (g *Ganta) OnlyUpdateReconsiderStatusByProjectId(status bool, tx *gorm.DB) (err error) {
+	err = tx.Model(&Project{Id: g.ProjectId}).Update("reconsider", status).Error
+	return err
+}
 
-	trans := GetDB().Begin()
-	defer func() { if trans != nil {trans.Rollback()} }()
+func (g *Ganta) OnlyUpdateRejectStatusByProjectId(status bool, tx *gorm.DB) (err error) {
+	err = tx.Model(&Project{Id: g.ProjectId}).Update("reject", status).Error
+	return err
+}
 
-	/*
-		check whether the project already contains a ganta table
-	 */
-	var count int
-	if GetDB().Table(Ganta{}.TableName()).Where("project_id = ?", p.Id).Count(&count);
-		count > 0 {
-			return utils.Msg{utils.ErrorMethodNotAllowed, 405, "", ""}
-	}
+func (g *Ganta) OnlySetReconsiderStatusForProjectByProjectId(tx *gorm.DB) (err error) {
+	err = tx.Model(&Project{Id: g.ProjectId}).Updates(map[string]interface{}{
+		"status": utils.ProjectStatusReconsider,
+	}).Error
+	return err
+}
 
-	/*
-		create parents
-	 */
-	p1, p2, err := p.create_default_parents(trans)
-	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
-	}
-
-	fmt.Println(p1, p2)
-
-	/*
-		create child processes
-	 */
-	if err = p.create_child_steps_of_the_ganta_table(p1, DefaultGantaChildren1, trans); err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
-	}
-
-	if err = p.create_child_steps_of_the_ganta_table(p2, DefaultGantaChildren2, trans); err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
-	}
-
-	/*
-		in case everything is ok, commit changes to db
-	 */
-	err = trans.Commit().Error
-	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
-	}
-
-	trans = nil
-	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+func (g *Ganta) OnlySetRejectStatusForProjectByProjectId(tx *gorm.DB) (err error) {
+	err = tx.Model(&Project{Id: g.ProjectId}).Updates(map[string]interface{}{
+		"status": utils.ProjectStatusReject,
+		"responsible": utils.RoleInvestor,
+	}).Error
+	return err
 }
 
 

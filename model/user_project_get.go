@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"invest/utils"
+
 )
 
 /*
@@ -59,7 +60,7 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 	var result = []map[string]interface{}{}
 	var projects = []Project{}
 
-	if err := u.GetByIdPreloaded(GetDB()); err != nil {
+	if err := u.OnlyGetByIdPreloaded(GetDB()); err != nil {
 		return utils.ErrorInternalDbError, err
 	}
 
@@ -77,7 +78,7 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 	fmt.Println("Num of projects assigned to this user (if it is): ", len(projects))
 
 	for _, project := range projects {
-		_ = project.Get_all_categors_by_project_id(GetDB())
+		_ = project.OnlyGetCategorsByProjectId(GetDB())
 		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
 		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
 	}
@@ -91,7 +92,7 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 	fmt.Println("Num of projects that are offered by this investor (if it is): ", len(projects))
 
 	for _, project := range projects {
-		_ = project.Get_all_categors_by_project_id(GetDB())
+		_ = project.OnlyGetCategorsByProjectId(GetDB())
 		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
 		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
 	}

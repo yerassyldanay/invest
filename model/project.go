@@ -1,144 +1,122 @@
 package model
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
+	"errors"
+	"github.com/jinzhu/gorm"
 	"invest/utils"
-	"net/http"
-	"strings"
 )
 
-func (p *Project) IsValid() (bool) {
-	if p.OfferedById == 0 || p.OfferedByPosition == "" || p.Email == "" || p.PhoneNumber == "" || p.Name == "" || p.Description == "" || p.EmployeeCount <= 0 {
-		return false
+/*
+	errors to validate
+ */
+var errorProjectInvalidOfferedById = errors.New("id of user (who offered) is not indicated")
+var errorProjectInvalidInitiatorPosition = errors.New("invalid position of an initiator")
+var errorProjectInvlaidProjectName = errors.New("invalid project name")
+var errorProjectInvalidProjectDescription = errors.New("invalid project description")
+var errorProjectInvalidEmployeeCount = errors.New("invalid employee count")
+
+func (p *Project) Validate() (error) {
+	switch {
+	case p.OfferedById < 1:
+		return errorProjectInvalidOfferedById
+	case p.OfferedByPosition == "":
+		return errorProjectInvalidInitiatorPosition
+	case p.Name == "":
+		return errorProjectInvlaidProjectName
+	case p.Description == "":
+		return errorProjectInvalidProjectDescription
+	case p.EmployeeCount < 1:
+		return errorProjectInvalidEmployeeCount
 	}
-	return true
+
+	return nil
 }
 
-func (p *Project) Create_project() (utils.Msg){
-	if p.Lang == "" {
-		p.Lang = utils.DefaultContentLanguage
-	}
+func (p *Project) OnlyUpdateStatusById (tx *gorm.DB) (error) {
+	return tx.Model(&Project{Id: p.Id}).Update("status", p.Status).Error
+}
 
-	if ok := p.IsValid(); !ok {
-		return utils.Msg{
-			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid parameters have been passed",
-		}
-	}
-	
-	/*
-		convert map to string
-	 */
-	b, err := json.Marshal(p.InfoSent)
-	if err == nil {
-		p.Info = string(b)
-	}
-	
-	/*
-		get org. id by bin or create one
-	 */
-	p.Organization.Lang = p.Lang
-	if msg := p.Organization.Create_or_get_organization_from_db_by_bin(); msg.ErrMsg != "" {
-		return msg
-	}
+// check whether this is an investor of the project
+func (p *Project) OnlyCheckInvestorByProjectAndInvestorId(tx *gorm.DB) (err error) {
+	err = tx.First(p, "id = ? and offered_by_id = ?", p.Id, p.OfferedById).Error
+	return err
+}
 
-	p.OrganizationId = p.Organization.Id
-	p.Created = utils.GetCurrentTime()
+// check whether this is a user, who is assign to the project
+func (p *Project) OnlyCheckUserByProjectAndUserId(project_id uint64, user_id uint64, tx *gorm.DB) (err error) {
+	err = tx.Raw("select p.* from projects_users pu join projects p on pu.project_id = p.id where pu.project_id = ? and pu.user_id = ? limit 1;", project_id, user_id).Scan(p).Error
+	return err
+}
 
-	var categors = p.Categors
-	p.Categors = []Categor{}
+// create only
+func (p *Project) OnlyCreate(tx *gorm.DB) error {
+	return tx.Create(p).Error
+}
 
-	var trans = GetDB().Begin()
-	defer func() { if trans != nil {trans.Rollback()} }()
+func (p *Project) OnlyUnmarshalInfo() (err error) {
+	err = json.Unmarshal([]byte(p.Info), &p.InfoSent)
+	p.Info = ""
+	return err
+}
 
-	if err := trans.Create(p).Error; err != nil {
-		if strings.Contains(err.Error(), "duplicate key") {
-			return utils.Msg{
-				utils.ErrorDupicateKeyOnDb, http.StatusConflict, "", err.Error(),
-			}
-		}
-		return utils.Msg{
-			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
-		}
-	}
+// get project by id
+func (p *Project) OnlyGetById(trans *gorm.DB) error {
+	return trans.First(p, "id=?", p.Id).Error
+}
 
-	if len(categors) > 0 {
-		var main_query = bytes.Buffer{}
-		main_query.WriteString(" insert into projects_categors (project_id, categor_id) values ")
-		for i, categor := range categors {
-			if i != 0 {
-				main_query.WriteString(", ")
-			}
-			main_query.WriteString(fmt.Sprintf("(%d, %d)", p.Id, categor.Id))
-		}
+func (p *Project) OnlyGetCategorsByProjectId(trans *gorm.DB) (err error) {
+	err = trans.Raw("select distinct c.* from projects_categors pc join categors c on pc.categor_id = c.id where pc.project_id = ? ;", p.Id).Scan(&p.Categors).Error
+	return err
+}
 
-		main_query.WriteString(";")
+func (p *Project) OnlyGetAssignedUsers(trans *gorm.DB) (err error) {
+	return trans.Preload("Email").Preload("Role").Omit("password, created").Find(&p.Users, "id in (select user_id from projects_users where project_id = ?)", p.Id).Error
+}
 
-
-		var so = main_query.String()
-		_ = trans.Exec(so).Error
-	}
-
-	err = trans.Commit().Error
+func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
+	err = tx.First(p, "id = ?", p.Id).Error
 	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return err
 	}
 
-	trans = nil
-	return utils.Msg{
-		utils.NoErrorFineEverthingOk, http.StatusOK, "", "",
-	}
-}
+	// get status & step of the project by ganta step
+	var ganta = Ganta{}
+	err = ganta.OnlyGetCurrentStepByProjectId(tx)
 
-func (p *Project) Update() (utils.Msg) {
-	if p.Lang == "" {
-		p.Lang = utils.DefaultContentLanguage
-	}
-
-	if p.Id == 0 {
-		return utils.Msg{
-			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "invalid id. project update",
-		}
-	}
-	
-	/*
-		get org id
-	 */
-	org, err := p.Organization.Get_and_assign_info_on_organization_by_bin()
 	if err == nil {
-		p.OrganizationId = org.Id
+		p.Status = ganta.Status
+		p.Step = ganta.Step
+		p.CurrentStep = ganta
+	} else if err == gorm.ErrRecordNotFound {
+		// means the project is finished
+		p.Completed = true
 	} else {
-		return utils.Msg{
-			utils.ErrorInvalidParameters, http.StatusBadRequest, "", "could not get info on organization",
-		}
+		return err
 	}
 
-	/*
-		convert info_sent to string
-	 */
-	b, err := json.Marshal(p.InfoSent)
-	if err == nil {
-		_ = GetDB().Table(Project{}.TableName()).Select("info").Where("id=?", p.Id).First(&p.Info).Error
-	} else { p.Info = string(b) }
-
-	if err := GetDB().Model(&Project{}).Where("id=?", p.Id).Updates(Project{
-		Name:           	p.Name,
-		Description:    	p.Description,
-		Info:           	p.Info,
-		EmployeeCount:  	p.EmployeeCount,
-		Email:          	p.Email,
-		PhoneNumber: 		p.PhoneNumber,
-		OrganizationId: 	p.OrganizationId,
-	}).Error; err != nil {
-		return utils.Msg{
-			utils.ErrorInternalDbError, http.StatusExpectationFailed, "", err.Error(),
-		}
+	// if the status is such then ganta step will not be considered
+	if p.Reject || p.Reconsider {
+		return nil
 	}
 
-	return utils.Msg{
-		utils.NoErrorFineEverthingOk, http.StatusOK, "", "",
-	}
+	return tx.Save(p).Error
 }
 
+func (p *Project) Get_project_with_current_status() (utils.Msg) {
+	err := p.GetAndUpdateStatusOfProject(GetDB())
+	if err != nil {
+		return ReuturnInternalServerError(err.Error())
+	}
+
+	err = p.CurrentStep.OnlyGetCurrentStepByProjectId(GetDB())
+	if err != nil {
+		return ReturnInternalDbError(err.Error())
+	}
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = Struct_to_map(*p)
+
+	return ReturnNoErrorWithResponseMessage(resp)
+}
 
