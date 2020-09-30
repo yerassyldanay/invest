@@ -1,51 +1,60 @@
 package model
 
 import (
-	"errors"
-	"github.com/jinzhu/gorm"
+	"invest/utils"
 )
 
 /*
-	error messages for validation
+	create & store a comment on db
 */
-var errorInvalidBody = errors.New("invalid body of the email")
-var errorInvalidProjectId = errors.New("invalid project id")
-var errorInvalidUserId = errors.New("invalid user id")
-var errorInvalidStatus = errors.New("invalid status of a project")
-
-/*
-	comment documents must be stored on disk beforehand
-		comment can have no docs attached
-*/
-func (c *Comment) Validate() error {
-	switch {
-	case c.Body == "":
-		return errorInvalidBody
-	case c.ProjectId == 0:
-		return errorInvalidProjectId
-	case c.UserId == 0:
-		return errorInvalidUserId
+func (c *Comment) Create_comment_after_saving_its_document() (utils.Msg) {
+	if err := c.Validate(); err != nil {
+		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
 	}
 
-	//if c.Status != utils.ProjectStatusDone &&
-	//	c.Status != utils.ProjectStatusPendingAdmin &&
-	//	c.Status != utils.ProjectStatusRejected {
-	//		return errorInvalidStatus
-	//}
+	if err := c.OnlyCreate(GetDB()); err != nil {
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	}
 
-	return nil
+	var resp = utils.NoErrorFineEverthingOk
+
+	return utils.Msg{resp, 200, "", ""}
 }
 
-func (c *Comment) Only_create(trans *gorm.DB) error {
-	return trans.Create(c).Error
+/*
+	get comments of the project
+*/
+func (c *Comment) Get_all_comments_of_the_project_by_project_id(offset interface{}) (utils.Msg) {
+
+	var commentsMap = []map[string]interface{}{}
+	comments, err := c.OnlyGetCommentsByProjectId(offset, GetDB())
+
+	for _, comment := range comments {
+		commentsMap = append(commentsMap, Struct_to_map(comment))
+	}
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = commentsMap
+
+	var errMsg string
+	if err != nil {
+		errMsg = err.Error()
+	}
+
+	return utils.Msg{resp, 200, "", errMsg}
 }
 
-func (c *Comment) Only_get_comments_by_project_id(offset interface{}, tx *gorm.DB) (comments []Comment, err error) {
-	err = tx.Offset(offset).Find(&comments, "project_id = ?", c.ProjectId).Error
-	return comments, err
-}
+func (c *Comment) Get_comment_by_comment_id() (utils.Msg) {
+	/*
+		get only one comment
+	 */
+	err := c.OnlyGetById(GetDB())
+	if err != nil {
+		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+	}
 
-func (c *Comment) Only_get_comment_by_comment_id(tx *gorm.DB) (err error) {
-	return tx.First(c, "id = ?", c.Id).Error
-}
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = Struct_to_map(*c)
 
+	return utils.Msg{resp, 200, "", ""}
+}

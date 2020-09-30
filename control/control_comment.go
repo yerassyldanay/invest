@@ -2,6 +2,7 @@ package control
 
 import (
 	"encoding/json"
+	"fmt"
 	"invest/model"
 	"invest/service"
 	"invest/utils"
@@ -86,27 +87,47 @@ import (
 //	utils.Respond(w, r, msg)
 //}
 
-var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
+var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Add_comment_to_project"
-	var comment = model.Comment{}
+	var spkComment = model.SpkComment{}
 
-	if err := json.NewDecoder(r.Body).Decode(&comment); err != nil {
-		msg := utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error()}
-		utils.Respond(w, r, msg)
+	// parse request body
+	if err := json.NewDecoder(r.Body).Decode(&spkComment); err != nil {
+		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error()})
 		return
 	}
 	defer r.Body.Close()
 
-	var is = service.InvestService{
-		Offset: "",
-		BasicInfo: service.BasicInfo {
-			UserId: service.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64),
-		},
+	// parse headers
+	var is = service.InvestService{}
+	is.OnlyParseRequest(r)
+
+	/*
+		Security:
+			* only users, who are assigned to the project, can comment
+	 */
+	var project = model.Project{
+		Id: spkComment.Comment.ProjectId,
+	}
+	if err := project.OnlyCheckUserByProjectAndUserId(spkComment.Comment.ProjectId, is.UserId, model.GetDB()); err != nil {
+		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " security", err.Error()})
+		return
 	}
 
-	comment.UserId = is.UserId
+	/*
+		Security:
+			* is this user responsible?
+	 */
+	err := project.GetAndUpdateStatusOfProject(model.GetDB())
+	if err != nil { fmt.Println(err) }
 
-	msg := is.Comment_on_project_documents(comment)
+	if project.CurrentStep.Responsible != is.RoleName {
+		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " step", "this user is not responsible for the current step"})
+		return
+	}
+
+	// the logic
+	msg := is.Comment_on_project_documents(spkComment)
 	msg.Fname = fname + " 2"
 
 	utils.Respond(w, r, msg)
@@ -116,24 +137,24 @@ var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 	provide
 		* project_id
  */
-var Get_comments_of_the_project_or_comment_by_comment_id = func(w http.ResponseWriter, r *http.Request) {
+var Project_get_comments = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_comments_of_the_project"
 
-	comment_id := service.Get_query_parameter_uint64(r, "comment_id", 0)
-	project_id := service.Get_query_parameter_uint64(r, "project_id", 0)
-	offset := service.Get_query_parameter_str(r, "offset", "0")
+	// parse
+	is := service.InvestService{}
+	is.OnlyParseRequest(r)
 
-	var c = model.Comment{
-		ProjectId: 		project_id,
-		Id: 			comment_id,
+	// get query parameters
+	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
+
+	// security
+	msg := is.Ganta_check_permission_to_read_ganta(project_id)
+	if msg.ErrMsg != "" {
+		utils.Respond(w, r, msg);
 	}
 
-	var msg = utils.Msg{}
-	if c.Id != 0 {
-		msg = c.Get_comment_by_comment_id()
-	} else {
-		msg = c.Get_all_comments_of_the_project_by_project_id(offset)
-	}
+	// get comments
+	msg = is.Get_comments_of_project(project_id)
 
 	msg.Fname = fname + " 1"
 	utils.Respond(w, r, msg)

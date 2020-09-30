@@ -88,3 +88,4 @@ time="2020-09-30T16:59:11+06:00" level=info msg=INIT_DB message="connected to Po
 time="2020-09-30T16:59:11+06:00" level=info msg=main port=7000
 time="2020-09-30T17:04:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-09-30T17:04:39+06:00" level=info msg=main port=7000
+time="2020-09-30T22:12:24+06:00" level=info msg="Ganta_get_parent_ganta_steps ganta" error= host="[::1]:36808" path=/v1/project/docs status=200

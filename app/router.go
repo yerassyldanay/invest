@@ -133,8 +133,8 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		Leave a COMMENT on the project
 	 */
-	v1.HandleFunc("/spk_comment", control.Get_comments_of_the_project_or_comment_by_comment_id).Methods("GET")
-	v1.HandleFunc("/spk_comment", control.Add_comment_to_project).Methods("POST")
+	v1.HandleFunc("/spk_comment", control.Project_get_comments).Methods("GET")
+	v1.HandleFunc("/spk_comment", control.Project_comment_on_documents).Methods("POST")
 
 	/*
 		Read & Update financial tables
@@ -163,9 +163,10 @@ func Create_new_invest_router() (*mux.Router) {
 		Test API
 	 */
 	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var project = model.Project{Id: 1}
-		msg := project.Create_ganta_table_for_this_project()
-		fmt.Println(msg)
+		var du = model.DocumentUserStatus{}
+		ok := du.AreAllValidGantaIds([]uint64{2, 3, 5}, 1, model.GetDB())
+
+		fmt.Println(ok)
 	})
 
 	v1.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {
