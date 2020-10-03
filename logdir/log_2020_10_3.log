@@ -258,3 +258,45 @@ time="2020-10-03T06:22:15+06:00" level=info msg=INIT_DB message="connected to Po
 time="2020-10-03T06:22:16+06:00" level=info msg=main port=7000
 time="2020-10-03T06:22:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-10-03T06:22:44+06:00" level=info msg=main port=7000
+time="2020-10-03T12:21:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T12:21:55+06:00" level=info msg=main port=7000
+time="2020-10-03T12:26:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T12:26:16+06:00" level=info msg=main port=7000
+time="2020-10-03T12:28:53+06:00" level=info msg="Update_user_profile update" error= host="[::1]:54942" path=/v1/profile/other status=200
+time="2020-10-03T12:28:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T12:29:06+06:00" level=info msg=main port=7000
+time="2020-10-03T12:29:15+06:00" level=info msg="Update_user_profile update" error= host="[::1]:54982" path=/v1/profile/other status=200
+time="2020-10-03T12:44:40+06:00" level=info msg="Update_user_profile update" error= host="[::1]:54982" path=/v1/profile/other status=200
+time="2020-10-03T14:13:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T14:13:39+06:00" level=info msg=main port=7000
+time="2020-10-03T14:16:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T14:17:04+06:00" level=info msg=main port=7000
+time="2020-10-03T14:17:09+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:43154" path=/v1/list/projects/by_user status=200
+time="2020-10-03T14:19:45+06:00" level=info msg="Sign_in 3" error= host="[::1]:43154" path=/v1/signin status=200
+time="2020-10-03T16:20:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:20:30+06:00" level=info msg=main port=7000
+time="2020-10-03T16:20:51+06:00" level=info msg="Get_all_assigned_users_to_project get" error= host="[::1]:46668" path=/v1/list/users/by_project status=200
+time="2020-10-03T16:20:55+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:46668" path=/v1/list/projects/by_user status=200
+time="2020-10-03T16:23:03+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T16:23:03+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T16:23:06+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:23:06+06:00" level=info msg=main port=7000
+time="2020-10-03T16:23:06+06:00" level=info msg="Get_all_projects get" error= host="[::1]:47784" path=/v1/list/projects/all status=200
+time="2020-10-03T16:23:15+06:00" level=info msg="User_project_get_all own" error= host="[::1]:47784" path=/v1/list/projects/own status=200
+time="2020-10-03T16:24:34+06:00" level=info msg="Get_all_assigned_users_to_project get" error= host="[::1]:47784" path=/v1/list/users/by_project status=200
+time="2020-10-03T16:25:59+06:00" level=info msg="Sign_in 3" error= host="[::1]:47784" path=/v1/signin status=200
+time="2020-10-03T16:26:45+06:00" level=info msg="Admin_assign_user_to_project assign" error="record not found" host="[::1]:47784" path=/v1/assign status=417
+time="2020-10-03T16:26:58+06:00" level=info msg="Admin_assign_user_to_project assign" error="record not found" host="[::1]:47784" path=/v1/assign status=417
+time="2020-10-03T16:27:07+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T16:27:07+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T16:27:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:27:12+06:00" level=info msg=main port=7000
+time="2020-10-03T16:27:33+06:00" level=info msg="Admin_assign_user_to_project assign" error="record not found" host="[::1]:49828" path=/v1/assign status=417
+time="2020-10-03T16:28:05+06:00" level=info msg="Admin_assign_user_to_project assign" error="record not found" host="[::1]:49828" path=/v1/assign status=417
+time="2020-10-03T16:28:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:28:10+06:00" level=info msg=main port=7000
+time="2020-10-03T16:28:37+06:00" level=info msg="Admin_assign_user_to_project assign" error= host="[::1]:50310" path=/v1/assign status=200
+time="2020-10-03T16:30:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:30:20+06:00" level=info msg=main port=7000
+time="2020-10-03T16:30:25+06:00" level=info msg="Admin_assign_user_to_project assign" error="pq: duplicate key value violates unique constraint \"projects_users_pkey\"" host="[::1]:51410" path=/v1/assign status=417
+time="2020-10-03T16:31:08+06:00" level=info error= host="[::1]:51410" path=/v1/assign status=200

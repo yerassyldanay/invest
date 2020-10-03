@@ -45,6 +45,8 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 		tempuser.PhoneId = tempuser.Phone.Id
 	}
 
+	tempuser.Fio = user.Fio
+
 	// save changes
 	if err := tempuser.OnlySave(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())

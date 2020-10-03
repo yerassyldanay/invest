@@ -13,7 +13,7 @@ func (pu *ProjectsUsers) Assign_user_after_check() (utils.Msg) {
 	}
 
 	// check whether a user exists (preloaded means gets also role, email & phone)
-	var user = User{}
+	var user = User{Id: pu.UserId}
 	err = user.OnlyGetByIdPreloaded(GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())

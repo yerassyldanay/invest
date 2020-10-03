@@ -62,7 +62,7 @@ var Get_all_projects_by_statuses = func(w http.ResponseWriter, r *http.Request) 
 	is.OnlyParseRequest(r)
 
 	// security check
-	if is.RoleName != utils.RoleInvestor {
+	if is.RoleName != utils.RoleAdmin {
 		msg := model.ReturnMethodNotAllowed("only admin. your role is " + is.RoleName)
 		msg.Fname = fname + " role"
 		utils.Respond(w, r, msg)

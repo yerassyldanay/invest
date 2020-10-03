@@ -30,6 +30,7 @@ func (is *InvestService) Get_own_projects(statuses []string) (utils.Msg) {
 		i := i
 		wg.Add(1)
 		go func(proj *model.Project, wg *sync.WaitGroup) {
+			defer wg.Done()
 			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
 		}(&projects[i], &wg)
 	}
@@ -69,9 +70,15 @@ func (is *InvestService) Get_all_projects_by_statuses(statuses []string) (utils.
 	// get projects
 	projects, _ := project.OnlyGetProjectsByStatuses(is.Offset, statuses, model.GetDB())
 
+	// convert projects to map
+	var projectsMap = []map[string]interface{}{}
+	for _, project = range projects {
+		projectsMap = append(projectsMap, model.Struct_to_map(project))
+	}
+
 	// convert
 	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = model.Struct_to_map(projects)
+	resp["info"] = projectsMap
 
 	return model.ReturnNoErrorWithResponseMessage(resp)
 }
