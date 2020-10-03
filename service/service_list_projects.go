@@ -70,9 +70,20 @@ func (is *InvestService) Get_all_projects_by_statuses(statuses []string) (utils.
 	// get projects
 	projects, _ := project.OnlyGetProjectsByStatuses(is.Offset, statuses, model.GetDB())
 
-	// convert projects to map
+	// get categories
+	var wg = sync.WaitGroup{}
 	var projectsMap = []map[string]interface{}{}
-	for _, project = range projects {
+	for i, _ := range projects {
+		wg.Add(1)
+		go func(proj *model.Project, gwg *sync.WaitGroup) {
+			defer gwg.Done()
+			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
+		}(&projects[i], &wg)
+	}
+	wg.Wait()
+
+	// convert to map
+	for _, project := range projects {
 		projectsMap = append(projectsMap, model.Struct_to_map(project))
 	}
 

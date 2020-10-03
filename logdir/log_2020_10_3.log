@@ -300,3 +300,13 @@ time="2020-10-03T16:30:20+06:00" level=info msg=INIT_DB message="connected to Po
 time="2020-10-03T16:30:20+06:00" level=info msg=main port=7000
 time="2020-10-03T16:30:25+06:00" level=info msg="Admin_assign_user_to_project assign" error="pq: duplicate key value violates unique constraint \"projects_users_pkey\"" host="[::1]:51410" path=/v1/assign status=417
 time="2020-10-03T16:31:08+06:00" level=info error= host="[::1]:51410" path=/v1/assign status=200
+time="2020-10-03T16:50:08+06:00" level=info msg="User_project_get_all own" error= host="[::1]:51410" path=/v1/list/projects/own status=200
+time="2020-10-03T16:52:14+06:00" level=info msg="Get_all_projects get" error= host="[::1]:51410" path=/v1/list/projects/all status=200
+time="2020-10-03T16:54:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:54:44+06:00" level=info msg=main port=7000
+time="2020-10-03T16:54:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:54:52+06:00" level=info msg=main port=7000
+time="2020-10-03T16:54:54+06:00" level=info msg="Get_all_projects get" error= host="[::1]:33318" path=/v1/list/projects/all status=200
+time="2020-10-03T16:57:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T16:57:10+06:00" level=info msg=main port=7000
+time="2020-10-03T16:57:13+06:00" level=info msg="Get_all_projects get" error= host="[::1]:33372" path=/v1/list/projects/all status=200
