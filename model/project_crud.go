@@ -2,18 +2,16 @@ package model
 
 import (
 	"encoding/json"
+	"github.com/jinzhu/gorm"
 	"invest/utils"
 
 	"strings"
 )
 
-func (p *Project) Create_project() (utils.Msg){
+func (p *Project) Create_project(trans *gorm.DB) (utils.Msg){
 	if p.Lang == "" {
 		p.Lang = utils.DefaultContentLanguage
 	}
-
-	var trans = GetDB().Begin()
-	defer func() { if trans != nil {trans.Rollback()} }()
 
 	if err := p.Validate(); err != nil {
 		return ReturnInvalidParameters(err.Error())
@@ -54,12 +52,6 @@ func (p *Project) Create_project() (utils.Msg){
 		return ReturnInternalDbError(err.Error())
 	}
 
-	err = trans.Commit().Error
-	if err != nil {
-		return ReturnInternalDbError(err.Error())
-	}
-
-	trans = nil
 	return ReturnNoError()
 }
 

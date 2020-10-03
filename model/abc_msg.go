@@ -2,7 +2,6 @@ package model
 
 import (
 	"invest/utils"
-	"net/http"
 )
 
 func ReturnInternalDbError(errmsg string) utils.Msg {
@@ -26,15 +25,15 @@ func ReturnEmailAlreadyInUse(errmsg string) (utils.Msg) {
 }
 
 func ReturnDuplicateKeyError(errmsg string) (utils.Msg) {
-	return utils.Msg{utils.ErrorDupicateKeyOnDb, http.StatusConflict, "", errmsg}
+	return utils.Msg{utils.ErrorDupicateKeyOnDb, 409, "", errmsg}
 }
 
 func ReturnNoErrorWithResponseMessage(resp map[string]interface{}) utils.Msg {
-	return utils.Msg{resp, http.StatusOK, "", ""}
+	return utils.Msg{resp, 200, "", ""}
 }
 
 func ReuturnInternalServerError(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorInternalServerError, http.StatusInternalServerError, "", errmsg}
+	return utils.Msg{utils.ErrorInternalServerError, 500, "", errmsg}
 }
 
 func ReturnNotFoundError(errmsg string) utils.Msg {

@@ -1,0 +1,260 @@
+time="2020-10-03T00:59:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T00:59:21+06:00" level=info msg=main port=7000
+time="2020-10-03T01:06:20+06:00" level=info msg="Create_project ser" error= host="[::1]:35838" path=/v1/project status=200
+time="2020-10-03T01:07:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T01:07:07+06:00" level=info msg=main port=7000
+time="2020-10-03T01:07:59+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T01:07:59+06:00" level=info msg=main port=7000
+time="2020-10-03T01:10:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T01:10:29+06:00" level=info msg=main port=7000
+time="2020-10-03T01:11:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T01:11:41+06:00" level=info msg=main port=7000
+time="2020-10-03T01:11:56+06:00" level=info msg="Create_project service" error= host="[::1]:36032" path=/v1/project status=200
+time="2020-10-03T01:26:57+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:36032" path=/v1/project status=200
+time="2020-10-03T01:32:51+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T01:32:51+06:00" level=info msg=main port=7000
+time="2020-10-03T01:50:03+06:00" level=info msg="User_get_by_role get" error= host="[::1]:36618" path=/v1/user status=200
+time="2020-10-03T02:07:06+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:07:07+06:00" level=info msg=main port=7000
+time="2020-10-03T02:07:12+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:36856" path=/v1/user status=417
+time="2020-10-03T02:07:36+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T02:07:36+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T02:07:40+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:07:41+06:00" level=info msg=main port=7000
+time="2020-10-03T02:11:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:11:27+06:00" level=info msg=main port=7000
+time="2020-10-03T02:11:30+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:36948" path=/v1/user status=417
+time="2020-10-03T02:12:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:12:25+06:00" level=info msg=main port=7000
+time="2020-10-03T02:12:29+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:36972" path=/v1/user status=417
+time="2020-10-03T02:14:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:14:27+06:00" level=info msg=main port=7000
+time="2020-10-03T02:14:33+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37016" path=/v1/user status=417
+time="2020-10-03T02:20:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:20:22+06:00" level=info msg=main port=7000
+time="2020-10-03T02:23:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:23:58+06:00" level=info msg=main port=7000
+time="2020-10-03T02:25:40+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:25:41+06:00" level=info msg=main port=7000
+time="2020-10-03T02:25:46+06:00" level=info msg="User_get_by_role get" error="pq: missing FROM-clause entry for table \"u\"" host="[::1]:37458" path=/v1/user status=417
+time="2020-10-03T02:26:06+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:26:06+06:00" level=info msg=main port=7000
+time="2020-10-03T02:26:14+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37474" path=/v1/user status=417
+time="2020-10-03T02:27:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:27:28+06:00" level=info msg=main port=7000
+time="2020-10-03T02:27:50+06:00" level=info msg="User_get_by_role get" error= host="[::1]:37504" path=/v1/user status=200
+time="2020-10-03T02:27:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:27:55+06:00" level=info msg=main port=7000
+time="2020-10-03T02:28:04+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37526" path=/v1/user status=417
+time="2020-10-03T02:29:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:29:28+06:00" level=info msg=main port=7000
+time="2020-10-03T02:31:47+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37564" path=/v1/user status=417
+time="2020-10-03T02:31:53+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:31:54+06:00" level=info msg=main port=7000
+time="2020-10-03T02:34:12+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37610" path=/v1/user status=417
+time="2020-10-03T02:34:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:34:17+06:00" level=info msg=main port=7000
+time="2020-10-03T02:34:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:34:36+06:00" level=info msg=main port=7000
+time="2020-10-03T02:34:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:34:47+06:00" level=info msg=main port=7000
+time="2020-10-03T02:35:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:35:03+06:00" level=info msg=main port=7000
+time="2020-10-03T02:35:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:35:29+06:00" level=info msg=main port=7000
+time="2020-10-03T02:37:02+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37760" path=/v1/user status=417
+time="2020-10-03T02:37:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:37:35+06:00" level=info msg=main port=7000
+time="2020-10-03T02:38:45+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37814" path=/v1/user status=417
+time="2020-10-03T02:38:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:38:54+06:00" level=info msg=main port=7000
+time="2020-10-03T02:39:50+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:39:54+06:00" level=info msg=main port=7000
+time="2020-10-03T02:41:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:41:24+06:00" level=info msg=main port=7000
+time="2020-10-03T02:42:16+06:00" level=info msg="User_get_by_role get" error="pq: syntax error at or near \".\"" host="[::1]:37916" path=/v1/user status=417
+time="2020-10-03T02:42:22+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:42:31+06:00" level=info msg=main port=7000
+time="2020-10-03T02:43:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:43:19+06:00" level=info msg=main port=7000
+time="2020-10-03T02:47:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:47:24+06:00" level=info msg=main port=7000
+time="2020-10-03T02:48:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:48:11+06:00" level=info msg=main port=7000
+time="2020-10-03T02:48:45+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:48:45+06:00" level=info msg=main port=7000
+time="2020-10-03T02:48:49+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38088" path=/v1/user status=200
+time="2020-10-03T02:49:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:49:16+06:00" level=info msg=main port=7000
+time="2020-10-03T02:49:19+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38120" path=/v1/user status=200
+time="2020-10-03T02:50:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:50:09+06:00" level=info msg=main port=7000
+time="2020-10-03T02:50:36+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38158" path=/v1/user status=200
+time="2020-10-03T02:50:50+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:50:51+06:00" level=info msg=main port=7000
+time="2020-10-03T02:50:54+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38184" path=/v1/user status=200
+time="2020-10-03T02:51:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:51:12+06:00" level=info msg=main port=7000
+time="2020-10-03T02:51:17+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38208" path=/v1/user status=200
+time="2020-10-03T02:51:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:51:42+06:00" level=info msg=main port=7000
+time="2020-10-03T02:51:49+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38238" path=/v1/user status=200
+time="2020-10-03T02:52:10+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:52:11+06:00" level=info msg=main port=7000
+time="2020-10-03T02:52:15+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38254" path=/v1/user status=200
+time="2020-10-03T02:52:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T02:52:33+06:00" level=info msg=main port=7000
+time="2020-10-03T02:52:36+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38272" path=/v1/user status=200
+time="2020-10-03T02:52:45+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38272" path=/v1/user status=200
+time="2020-10-03T03:06:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T03:06:59+06:00" level=info msg=main port=7000
+time="2020-10-03T03:07:03+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38456" path=/v1/user status=200
+time="2020-10-03T03:07:45+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T03:07:46+06:00" level=info msg=main port=7000
+time="2020-10-03T03:07:49+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38484" path=/v1/user status=200
+time="2020-10-03T03:08:14+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T03:08:15+06:00" level=info msg=main port=7000
+time="2020-10-03T03:08:20+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38504" path=/v1/user status=200
+time="2020-10-03T03:08:35+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38504" path=/v1/user status=200
+time="2020-10-03T03:09:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T03:09:19+06:00" level=info msg=main port=7000
+time="2020-10-03T03:09:22+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38538" path=/v1/user status=200
+time="2020-10-03T03:10:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T03:10:08+06:00" level=info msg=main port=7000
+time="2020-10-03T03:10:12+06:00" level=info msg="User_get_by_role get" error= host="[::1]:38568" path=/v1/user status=200
+time="2020-10-03T04:04:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:04:30+06:00" level=info msg=main port=7000
+time="2020-10-03T04:15:07+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:39378" path=/v1/project status=200
+time="2020-10-03T04:16:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:16:28+06:00" level=info msg=main port=7000
+time="2020-10-03T04:18:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:18:49+06:00" level=info msg=main port=7000
+time="2020-10-03T04:18:53+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:39468" path=/v1/project status=200
+time="2020-10-03T04:26:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:26:48+06:00" level=info msg=main port=7000
+time="2020-10-03T04:27:08+06:00" level=info msg="Get_project_by_project_id 1" error="pq: syntax error at or near \")\"" host="[::1]:39586" path=/v1/project status=417
+time="2020-10-03T04:27:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:27:13+06:00" level=info msg=main port=7000
+time="2020-10-03T04:27:37+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:39610" path=/v1/project status=200
+time="2020-10-03T04:28:47+06:00" level=info error= host="[::1]:39610" path=/v1/project/status status=200
+time="2020-10-03T04:29:51+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:29:51+06:00" level=info msg=main port=7000
+time="2020-10-03T04:30:01+06:00" level=info error= host="[::1]:39676" path=/v1/project/status status=200
+time="2020-10-03T04:32:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:32:17+06:00" level=info msg=main port=7000
+time="2020-10-03T04:34:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:34:45+06:00" level=info msg=main port=7000
+time="2020-10-03T04:35:32+06:00" level=info msg="Update_password_help update" error="requesting other" host="[::1]:39768" path=/v1/profile/password/other status=405
+time="2020-10-03T04:36:07+06:00" level=info msg="Sign_in 3" error= host="[::1]:39768" path=/v1/signin status=200
+time="2020-10-03T04:36:30+06:00" level=info msg="Update_password_help update" error="no upper letter characters" host="[::1]:39768" path=/v1/profile/password/other status=400
+time="2020-10-03T04:39:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:39:12+06:00" level=info msg=main port=7000
+time="2020-10-03T04:40:05+06:00" level=info msg="Update_password_help update" error= host="[::1]:39858" path=/v1/profile/password/other status=200
+time="2020-10-03T04:41:12+06:00" level=info msg="Update_password_help update" error= host="[::1]:39858" path=/v1/profile/password/other status=200
+time="2020-10-03T04:41:23+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:39858" path=/v1/signin status=400
+time="2020-10-03T04:42:14+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:42:14+06:00" level=info msg=main port=7000
+time="2020-10-03T04:42:15+06:00" level=info msg="Sign_in 3" error= host="[::1]:39934" path=/v1/signin status=200
+time="2020-10-03T04:43:23+06:00" level=info msg="Update_password_help update" error="cannot delete default users" host="[::1]:39934" path=/v1/profile/password/other status=417
+time="2020-10-03T04:43:46+06:00" level=info msg="Update_password_help update" error= host="[::1]:39934" path=/v1/profile/password/other status=200
+time="2020-10-03T04:44:32+06:00" level=info msg="Update_password_help update" error= host="[::1]:39934" path=/v1/profile/password/other status=200
+time="2020-10-03T04:44:39+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:44:40+06:00" level=info msg=main port=7000
+time="2020-10-03T04:44:44+06:00" level=info msg="Update_password_help update" error= host="[::1]:40008" path=/v1/profile/password/other status=200
+time="2020-10-03T04:45:08+06:00" level=info msg="Sign_in 3" error= host="[::1]:40008" path=/v1/signin status=200
+time="2020-10-03T04:45:21+06:00" level=info msg="Update_password_help update" error= host="[::1]:40008" path=/v1/profile/password/other status=200
+time="2020-10-03T04:48:21+06:00" level=info msg="Update_user_profile update" error="record not found" host="[::1]:40008" path=/v1/profile/other status=417
+time="2020-10-03T04:48:43+06:00" level=info msg="Create_user_based_on_role 1" error= host="[::1]:40008" path=/v1/user status=201
+time="2020-10-03T04:49:54+06:00" level=info msg="Create_user_based_on_role 1" error="pq: duplicate key value violates unique constraint \"users_username_key\"" host="[::1]:40008" path=/v1/user status=417
+time="2020-10-03T04:50:15+06:00" level=info msg="Create_user_based_on_role 1" error="invalid username: must contain at least 8 and at most 30 characters (digits & letters)" host="[::1]:40008" path=/v1/user status=400
+time="2020-10-03T04:50:28+06:00" level=info msg="Create_user_based_on_role 1" error="record not found" host="[::1]:40008" path=/v1/user status=417
+time="2020-10-03T04:51:42+06:00" level=info msg="Create_user_based_on_role 1" error="record not found" host="[::1]:40008" path=/v1/user status=417
+time="2020-10-03T04:52:19+06:00" level=info msg="Create_user_based_on_role 1" error= host="[::1]:40008" path=/v1/user status=201
+time="2020-10-03T04:54:03+06:00" level=info msg="Create_user_based_on_role 1" error= host="[::1]:40008" path=/v1/user status=201
+time="2020-10-03T04:55:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:55:30+06:00" level=info msg=main port=7000
+time="2020-10-03T04:56:45+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T04:56:46+06:00" level=info msg=main port=7000
+time="2020-10-03T04:58:54+06:00" level=info msg="Create_user_based_on_role 1" error= host="[::1]:40204" path=/v1/user status=200
+time="2020-10-03T05:46:32+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:40204" path=/v1/project status=200
+time="2020-10-03T05:47:59+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T05:48:00+06:00" level=info msg=main port=7000
+time="2020-10-03T05:48:05+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41068" path=/v1/project status=200
+time="2020-10-03T05:48:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T05:48:24+06:00" level=info msg=main port=7000
+time="2020-10-03T05:48:53+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:48:58+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:01+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:04+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:08+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:13+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:15+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:18+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:18+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:23+06:00" level=info msg="Get_project_by_project_id 1" error="record not found" host="[::1]:41088" path=/v1/project status=417
+time="2020-10-03T05:49:26+06:00" level=info msg="Get_project_by_project_id 1" error="record not found" host="[::1]:41088" path=/v1/project status=417
+time="2020-10-03T05:49:30+06:00" level=info msg="Get_project_by_project_id 1" error="record not found" host="[::1]:41088" path=/v1/project status=417
+time="2020-10-03T05:49:31+06:00" level=info msg="Get_project_by_project_id 1" error="record not found" host="[::1]:41088" path=/v1/project status=417
+time="2020-10-03T05:49:35+06:00" level=info msg="Get_project_by_project_id 1" error= host="[::1]:41088" path=/v1/project status=200
+time="2020-10-03T05:49:53+06:00" level=info error= host="[::1]:41088" path=/v1/project/status status=200
+time="2020-10-03T05:52:04+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T05:52:04+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T05:52:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T05:52:08+06:00" level=info msg=main port=7000
+time="2020-10-03T05:54:03+06:00" level=info msg="Create_project service" error="there is a nil element inside the map. get info by bin" host="[::1]:41840" path=/v1/project status=503
+time="2020-10-03T05:54:18+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T05:54:18+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T05:54:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T05:54:22+06:00" level=info msg=main port=7000
+time="2020-10-03T05:56:06+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T05:56:06+06:00" level=info msg=main port=7000
+time="2020-10-03T06:00:06+06:00" level=info error= host="[::1]:43088" path=/v1/organization status=200
+time="2020-10-03T06:00:52+06:00" level=info error= host="[::1]:43088" path=/v1/organization status=200
+time="2020-10-03T06:03:50+06:00" level=info error= host="[::1]:43088" path=/v1/organization status=200
+time="2020-10-03T06:04:54+06:00" level=info error= host="[::1]:43088" path=/v1/organization status=200
+time="2020-10-03T06:06:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:06:46+06:00" level=info error= host= path=/v1/organization status=200
+time="2020-10-03T06:06:46+06:00" level=info error= host= path=/v1/organization status=200
+time="2020-10-03T06:11:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:11:55+06:00" level=info msg=main port=7000
+time="2020-10-03T06:11:57+06:00" level=info msg="Get_all_assigned_users_to_project get" error="pq: syntax error at or near \".\"" host="[::1]:50692" path=/v1/list/users/by_project status=417
+time="2020-10-03T06:13:09+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T06:13:09+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T06:13:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:13:12+06:00" level=info msg=main port=7000
+time="2020-10-03T06:13:14+06:00" level=info msg="Get_all_assigned_users_to_project get" error="pq: syntax error at or near \".\"" host="[::1]:51326" path=/v1/list/users/by_project status=417
+time="2020-10-03T06:14:51+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T06:14:51+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T06:14:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:14:54+06:00" level=info msg=main port=7000
+time="2020-10-03T06:15:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:15:04+06:00" level=info msg=main port=7000
+time="2020-10-03T06:16:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:16:33+06:00" level=info msg=main port=7000
+time="2020-10-03T06:16:56+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:16:57+06:00" level=info msg=main port=7000
+time="2020-10-03T06:17:44+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:17:45+06:00" level=info msg=main port=7000
+time="2020-10-03T06:18:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:18:54+06:00" level=info msg=main port=7000
+time="2020-10-03T06:19:05+06:00" level=info msg="Get_all_assigned_users_to_project get" error= host="[::1]:54284" path=/v1/list/users/by_project status=200
+time="2020-10-03T06:20:25+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T06:20:25+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T06:20:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:20:28+06:00" level=info msg=main port=7000
+time="2020-10-03T06:20:29+06:00" level=info msg="Get_all_assigned_users_to_project get" error= host="[::1]:54988" path=/v1/list/users/by_project status=200
+time="2020-10-03T06:20:55+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T06:20:55+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T06:20:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:20:58+06:00" level=info msg=main port=7000
+time="2020-10-03T06:20:59+06:00" level=info msg="Get_all_assigned_users_to_project get" error= host="[::1]:55242" path=/v1/list/users/by_project status=200
+time="2020-10-03T06:21:32+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T06:21:32+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T06:21:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:21:35+06:00" level=info msg=main port=7000
+time="2020-10-03T06:22:13+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-03T06:22:13+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-03T06:22:15+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:22:16+06:00" level=info msg=main port=7000
+time="2020-10-03T06:22:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T06:22:44+06:00" level=info msg=main port=7000

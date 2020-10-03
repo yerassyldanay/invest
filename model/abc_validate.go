@@ -1,22 +1,10 @@
 package model
 
 import (
+	"errors"
 	"net/http"
 	"regexp"
 )
-
-//var ValidatorOfThisProject = &validator.Validator{}
-//
-//func PrepareValidator() {
-//	var fname = "AddValidator "
-//	//fmt.Println(fname + " 1", ValidatorOfThisProject.SetTag("passwordFunc"))
-//	fmt.Println(fname + " 2", ValidatorOfThisProject.AddFunction("passwordFunc", Validate_password))
-//}
-//
-//func init() {
-//	fmt.Println("Preparing validator...")
-//	PrepareValidator()
-//}
 
 /*
 	password is valid if:
@@ -25,21 +13,30 @@ import (
 		* a-z
 		* 0-9
 */
-func Validate_password(val interface{}, field interface{}, param string) bool {
+var errorPasswordInvalidLength = errors.New("invalid length: must be 8-20 characters")
+var errorPasswordNoUpperLetter = errors.New("no upper letter characters")
+var errorPasswordNoLowerLetter = errors.New("no lower letter characters")
+var errorPasswordNoDigits = errors.New("no digits")
+
+func Validate_password(val string) error {
 	upper := regexp.MustCompile("[A-Z]+")
 	lower := regexp.MustCompile("[a-z]+")
 	number := regexp.MustCompile("[0-9]+")
 
-	var ok bool
-
-	//fmt.Println("Validate_password: ", val, field, param)
-
-	switch val.(type) {
-	case string:
-		ok = upper.FindString(val.(string)) != "" && lower.FindString(val.(string)) != "" && number.FindString(val.(string)) != ""
+	switch {
+	case upper.FindString(val) == "":
+		return errorPasswordNoUpperLetter
+	case lower.FindString(val) == "":
+		return errorPasswordNoLowerLetter
+	case number.FindString(val) == "":
+		return errorPasswordNoDigits
+	case len(val) > 20:
+		return errorPasswordInvalidLength
+	case len(val) < 8:
+		return errorPasswordInvalidLength
 	}
 
-	return ok
+	return nil
 }
 
 /*

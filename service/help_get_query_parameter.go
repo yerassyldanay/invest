@@ -26,6 +26,10 @@ func Get_query_parameter_uint64(r *http.Request, key string, default_value uint6
 	return default_value
 }
 
+func OnlyGetQueryParameterAsList(r *http.Request, key string) ([]string) {
+	return r.URL.Query()[key]
+}
+
 func OnlyGetQueryParameter(r *http.Request, key string, defval interface{}) interface{} {
 	values := r.URL.Query()[key]
 	if len(values) < 1 {

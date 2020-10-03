@@ -54,6 +54,10 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 	w.Header().Set("Access-Control-Allow-Methods", "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT")
 	w.Header().Set("Content-Type", "application/json")
 
+	if msg.Status == 0 {
+		msg.Status = 200
+	}
+
 	w.Header().Set(HeaderCustomStatus, strconv.Itoa(msg.Status))
 
 	/*

@@ -13,6 +13,15 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 		}
 	}()
 
+	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "finances")
+	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "costs")
+	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "projects")
+	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "users")
+	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "organizations")
+
+	var trans = model.GetDB().Begin()
+	defer func() { if trans != nil {trans.Rollback()} }()
+
 	var msg = utils.Msg{}
 
 	// set fields
@@ -23,20 +32,20 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 	/*
 		create a project
 	 */
-	msg = projectWithFinTable.Project.Create_project()
+	msg = projectWithFinTable.Project.Create_project(trans)
 	if msg.ErrMsg != "" {
 		return msg
 	}
 
 	// create finance table
 	projectWithFinTable.Finance.ProjectId = projectWithFinTable.Project.Id
-	if err := projectWithFinTable.Finance.OnlyCreate(model.GetDB()); err != nil {
+	if err := projectWithFinTable.Finance.OnlyCreate(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	// create cost table
 	projectWithFinTable.Cost.ProjectId = projectWithFinTable.Project.Id
-	if err := projectWithFinTable.Cost.OnlyCreate(model.GetDB()); err != nil {
+	if err := projectWithFinTable.Cost.OnlyCreate(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
@@ -46,20 +55,31 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 			* Parent steps - will be shown for other
 			* Child steps - will carry documents
 	 */
-	msg = projectWithFinTable.Project.Create_ganta_table_for_this_project()
+	msg = projectWithFinTable.Project.Create_ganta_table_for_this_project(trans)
 	if msg.ErrMsg != "" {
 		return msg
 	}
+
+	// update project status
+	_ = projectWithFinTable.Project.GetAndUpdateStatusOfProject(trans)
 
 	/*
 		NOTIFICATION:
 			* inform administrators about it
 	 */
 	var user = model.User{Id: is.UserId}
-	err := user.OnlyGetUserById(model.GetDB())
+	err := user.OnlyGetUserById(trans)
 	if err != nil {
 		user.Fio = "инвестор"
 	}
+
+	// commit changes
+	err = trans.Commit().Error
+	if err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	trans = nil
 
 	/*
 		create a template & set values
@@ -80,7 +100,7 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 
 	// to who
 	var addressers = []model.EmailAddresser{}
-	var admins, _ = user.OnlyGetPreloadedUsersByRole(utils.RoleAdmin, model.GetDB())
+	var admins, _ = user.OnlyGetPreloadedUsersByRole(utils.RoleAdmin, trans)
 	for _, admin := range admins {
 		addressers = append(addressers, model.EmailAddresser{
 			Name:    admin.Fio,

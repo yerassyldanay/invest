@@ -56,12 +56,12 @@ func (u *User) Get_all_projects(offset string) (map[string]interface{}, error) {
 /*
 	get only own projects
 */
-func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
+func (u *User) Get_own_projects_spk(offset string) (utils.Msg) {
 	var result = []map[string]interface{}{}
 	var projects = []Project{}
 
 	if err := u.OnlyGetByIdPreloaded(GetDB()); err != nil {
-		return utils.ErrorInternalDbError, err
+		return ReturnInternalDbError(err.Error())
 	}
 
 	/*
@@ -72,7 +72,7 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 
 	err := GetDB().Raw(main_query, u.Id, offset, GetLimit).Find(&projects).Error
 	if err != nil {
-		return utils.ErrorInternalDbError, err
+		return ReturnInternalDbError(err.Error())
 	}
 
 	fmt.Println("Num of projects assigned to this user (if it is): ", len(projects))
@@ -87,9 +87,9 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 		if this is an investor
 	*/
 	projects = []Project{}
-	_ = GetDB().Find(&projects, "offered_by_id = ?", u.Id).Offset(offset).Limit(GetLimit).Error
+	_ = GetDB().Preload("Organization").Find(&projects, "offered_by_id = ?", u.Id).Offset(offset).Limit(GetLimit).Error
 
-	fmt.Println("Num of projects that are offered by this investor (if it is): ", len(projects))
+	//fmt.Println("Num of projects that are offered by this investor (if it is): ", len(projects))
 
 	for _, project := range projects {
 		_ = project.OnlyGetCategorsByProjectId(GetDB())
@@ -100,7 +100,57 @@ func (u *User) Get_own_projects(offset string) (map[string]interface{}, error) {
 	var resp = utils.NoErrorFineEverthingOk
 	resp["info"] = result
 
-	return resp, nil
+	return ReturnNoError()
+}
+
+/*
+	get only own projects
+*/
+func (u *User) Get_own_projects_spk_(offset string) (utils.Msg) {
+	var result = []map[string]interface{}{}
+	var projects = []Project{}
+
+	if err := u.OnlyGetByIdPreloaded(GetDB()); err != nil {
+		return ReturnInternalDbError(err.Error())
+	}
+
+	/*
+		if this is not an investor
+	*/
+	var main_query = "select p.* from projects p join projects_users pu on p.id = pu.project_id where pu.user_id=? " +
+		" offset ? limit ?;"
+
+	err := GetDB().Raw(main_query, u.Id, offset, GetLimit).Find(&projects).Error
+	if err != nil {
+		return ReturnInternalDbError(err.Error())
+	}
+
+	fmt.Println("Num of projects assigned to this user (if it is): ", len(projects))
+
+	for _, project := range projects {
+		_ = project.OnlyGetCategorsByProjectId(GetDB())
+		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
+		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
+	}
+
+	/*
+		if this is an investor
+	*/
+	projects = []Project{}
+	_ = GetDB().Preload("Organization").Find(&projects, "offered_by_id = ?", u.Id).Offset(offset).Limit(GetLimit).Error
+
+	//fmt.Println("Num of projects that are offered by this investor (if it is): ", len(projects))
+
+	for _, project := range projects {
+		_ = project.OnlyGetCategorsByProjectId(GetDB())
+		_ = json.Unmarshal([]byte(project.Info), &project.InfoSent)
+		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
+	}
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = result
+
+	return ReturnNoError()
 }
 
 /*

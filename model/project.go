@@ -65,17 +65,54 @@ func (p *Project) OnlyGetById(trans *gorm.DB) error {
 	return trans.First(p, "id=?", p.Id).Error
 }
 
+// get by id (+ add info about organization)
+func (p *Project) OnlyGetByIdPreloaded(tx *gorm.DB) (err error) {
+	err = tx.Preload("Organization").First(p, "id = ?", p.Id).Error
+	return err
+}
+
 func (p *Project) OnlyGetCategorsByProjectId(trans *gorm.DB) (err error) {
 	err = trans.Raw("select distinct c.* from projects_categors pc join categors c on pc.categor_id = c.id where pc.project_id = ? ;", p.Id).Scan(&p.Categors).Error
 	return err
 }
 
-func (p *Project) OnlyGetAssignedUsers(trans *gorm.DB) (err error) {
-	return trans.Preload("Email").Preload("Role").Omit("password, created").Find(&p.Users, "id in (select user_id from projects_users where project_id = ?)", p.Id).Error
+func (p *Project) OnlyGetAssignedUsersByProjectId(trans *gorm.DB) (err error) {
+	err = trans.Preload("Email").Preload("Role").Preload("Phone").
+		Find(&p.Users, "id in (select user_id from projects_users where project_id = ?)", p.Id).
+		Error
+	return err
+}
+
+func (p *Project) OnlyPreloadOrganizationByOrganizationId(tx *gorm.DB) (err error) {
+	err = tx.First(&p.Organization, "id = ?", p.OrganizationId).Error
+	return err
+}
+
+// get projects of manager, lawyer and financier (and other spk users if they are)
+// except for an admin, who has access to all projects
+func (p *Project) OnlyGetProjectsOfSpkUsers(user_id uint64, statuses []string, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
+	err = tx.Preload("Organization").Table("projects as p").
+		Joins("join projects_users pu on p.id = pu.project_id").Select("p.*").
+		Find(&projects, "pu.user_id = ? and p.status in (?)", user_id, statuses).
+		Offset(offset).Limit(GetLimit).Error
+	return projects, err
+}
+
+// get projects of a particular investor
+func (p *Project) OnlyGetProjectsOfInvestor(user_id uint64, statuses []string, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
+	err = tx.Preload("Organization").Find(&projects, "offered_by_id = ? and status in (?)", user_id, statuses).
+		Offset(offset).Limit(GetLimit).Error
+	return projects, err
+}
+
+// get all projects, but based on statuses
+func (p *Project) OnlyGetProjectsByStatuses(offset interface{}, statuses []string, tx *gorm.DB) (projects []Project, err error) {
+	err = tx.Preload("Organization").Find(&projects, "status in (?)", statuses).Offset(offset).Limit(GetLimit).Error
+	return projects, err
 }
 
 func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
-	err = tx.First(p, "id = ?", p.Id).Error
+	err = p.OnlyGetByIdPreloaded(tx)
 	if err != nil {
 		return err
 	}
@@ -100,15 +137,19 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 		return nil
 	}
 
-	return tx.Save(p).Error
+	err = tx.Save(p).Error
+	return err
 }
 
 func (p *Project) Get_project_with_current_status() (utils.Msg) {
+	// update & set status
+	// set the current ganta step
 	err := p.GetAndUpdateStatusOfProject(GetDB())
 	if err != nil {
 		return ReuturnInternalServerError(err.Error())
 	}
 
+	// no need
 	err = p.CurrentStep.OnlyGetCurrentStepByProjectId(GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())

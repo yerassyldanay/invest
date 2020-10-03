@@ -4,25 +4,31 @@ import (
 	"fmt"
 	"invest/app"
 	"invest/utils"
-
 	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"testing"
 )
 
-func TestGetUsersByAdmin(t *testing.T) {
-	var fname = "TestGetUsersByAdmin"
+/*
+var org = model.Organization{Bin: "190441005334"}
+msg := org.Create_or_get_organization_from_db_by_bin(model.GetDB())
+
+fmt.Println(msg)
+ */
+
+func TestGetOrganization(t *testing.T) {
+	var fname = "TestGetOrganization"
 	var router = app.Create_new_invest_router()
 
 	var datas = []TestData{
 		{
-			URL:        "/v1/administrate/user?offset=0&role=manager&role=investor",
+			URL:        "/v1/organization?bin=190840000779",
 			Method:     http.MethodGet,
 			RespStatus: 200,
 		},
 		{
-			URL: 		"/v1/administrate/user?offset=0",
+			URL: 		"/v1/organization?bin=190840026603",
 			Method: 	http.MethodGet,
 			RespStatus: 200,
 		},

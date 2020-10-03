@@ -118,8 +118,8 @@ func Create_new_invest_router() (*mux.Router) {
 		List of something or someone
 	*/
 	v1.HandleFunc("/list/users/by_project", control.Get_all_assigned_users_to_project).Methods("GET")
-	v1.HandleFunc("/list/projects/by_user", control.Get_projects_by_user_id).Methods("GET")
-	v1.HandleFunc("/list/projects/all", control.Get_all_user_projects).Methods("GET")
+	v1.HandleFunc("/list/projects/by_user", control.Get_all_projects_by_user_and_status).Methods("GET")
+	v1.HandleFunc("/list/projects/all", control.Get_all_projects_by_statuses).Methods("GET")
 	v1.HandleFunc("/list/projects/own", control.Get_own_projects).Methods("GET")
 	//v1.HandleFunc("/list/projects/by_user_and_status", control.Get_projects_based_on_user_or_status).Methods("GET")
 
@@ -127,7 +127,7 @@ func Create_new_invest_router() (*mux.Router) {
 		/ad../stat/project?status=? - provides all projects by status
 		/ad../stat/project?user_id=?&&status=? - provides projects by user_id & status
 	*/
-	v1.HandleFunc("/stats/projects/grouped_by_status", control.User_get_projects_info_grouped_by_statuses).Methods("GET")
+	v1.HandleFunc("/stats/projects/grouped_by_status", nil).Methods("GET")
 	v1.HandleFunc("/stats/docs/by_project", control.Get_stat_on_documents_of_project).Methods("GET")
 
 	/*
@@ -163,10 +163,11 @@ func Create_new_invest_router() (*mux.Router) {
 		Test API
 	 */
 	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var du = model.DocumentUserStatus{}
-		ok := du.AreAllValidGantaIds([]uint64{2, 3, 5}, 1, model.GetDB())
+		var project = model.Project{Id: 2}
+		err := project.OnlyGetAssignedUsersByProjectId(model.GetDB())
 
-		fmt.Println(ok)
+		fmt.Println(project)
+		fmt.Println(err)
 	})
 
 	v1.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {

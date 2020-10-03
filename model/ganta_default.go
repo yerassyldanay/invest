@@ -87,14 +87,7 @@ func (p *Project) Create_ganta_parent_with_its_children(start_date time.Time, ga
 	provide:
 		project_id
  */
-func (p *Project) Create_ganta_table_for_this_project() (utils.Msg) {
-
-	trans := GetDB().Begin()
-	defer func() {
-		if trans != nil {
-			trans.Rollback()
-		}
-	}()
+func (p *Project) Create_ganta_table_for_this_project(trans *gorm.DB) (utils.Msg) {
 
 	_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(trans, "gantas")
 
@@ -112,12 +105,6 @@ func (p *Project) Create_ganta_table_for_this_project() (utils.Msg) {
 		return ReturnInternalDbError(err.Error())
 	}
 
-	err = trans.Commit().Error
-	if err != nil {
-		return ReturnInternalDbError(err.Error())
-	}
-
-	trans = nil
 	return ReturnNoError()
 }
 

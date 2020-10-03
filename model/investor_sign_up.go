@@ -51,11 +51,15 @@ func (c *User) Sign_Up() (utils.Msg) {
 		return utils.Msg{utils.ErrorUsernameOrFioIsAreadyInUse, http.StatusConflict, "", "already in use: " + c.Fio}
 	}
 
-	ok := Validate_password(c.Password, nil, "")
-	hashed, err := utils.Convert_string_to_hash(c.Password)
+	// validate & hash
+	err := Validate_password(c.Password)
+	hashed, err2 := utils.Convert_string_to_hash(c.Password)
 
-	if !ok || err != nil {
-		return utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "invalid password"}
+	switch {
+	case err != nil:
+		return ReturnInternalDbError(err.Error())
+	case err2 != nil:
+		return ReturnInternalDbError(err2.Error())
 	}
 
 	if err := GetDB().Table(Role{}.TableName()).Where("name = ?", utils.RoleInvestor).

@@ -6,7 +6,7 @@ type Project struct {
 	Name				string						`json:"name" gorm:"index:unique_project" validate:"required"`
 	Description			string						`json:"description" gorm:"default:''; index:unique_project" validate:"required"`
 
-	Info				string						`json:"info" default:"''"`
+	Info				string						`json:"-" default:"''"`
 	InfoSent			map[string]interface{}		`json:"info_sent" gorm:"-"`
 	
 	EmployeeCount			uint					`json:"employee_count" validate:"required"`
@@ -18,18 +18,18 @@ type Project struct {
 	Organization			Organization			`json:"organization" gorm:"foreignkey:OrganizationId"`
 
 	Users					[]User					`json:"user" gorm:"many2many:projects_users;"`
-	Documents				[]Document				`json:"documents" gorm:"-"`
+	//Documents				[]Document				`json:"documents" gorm:"-"`
 	Categors				[]Categor				`json:"categors" gorm:"many2many:projects_categors"`
 
 	OfferedById					uint64					`json:"offered_by_id" gorm:"not null"`
 	OfferedByPosition			string					`json:"offered_by_position" gorm:"not null"`
 
-	Reject						bool					`json:"-" gorm:"default:false"`
-	Reconsider					bool					`json:"-" gorm:"default:false"`
-	Completed					bool					`json:"-" gorm:"default:false"`
+	Reject						bool					`json:"reject" gorm:"default:false"`
+	Reconsider					bool					`json:"reconsider" gorm:"default:false"`
+	Completed					bool					`json:"completed" gorm:"default:false"`
 	
 	Status						string					`json:"status" gorm:"default:'pending_admin'"`
-	Step						int						`json:"stage"`
+	Step						int						`json:"step"`
 	
 	LandPlotFrom				string					`json:"land_plot_from" gorm:"default:'investor'"`
 	LandArea 						int						`json:"land_area"`

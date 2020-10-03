@@ -1,0 +1,20 @@
+time="2020-10-02T11:14:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T11:14:49+06:00" level=info msg=main port=7000
+time="2020-10-02T16:31:12+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:32772" path=/v1/list/projects/own status=200
+time="2020-10-02T17:16:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:16:30+06:00" level=info msg=main port=7000
+time="2020-10-02T17:20:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:20:04+06:00" level=info msg=main port=7000
+time="2020-10-02T17:20:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:20:18+06:00" level=info msg=main port=7000
+time="2020-10-02T17:21:27+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:21:27+06:00" level=info msg=main port=7000
+time="2020-10-02T17:21:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:21:48+06:00" level=info msg=main port=7000
+time="2020-10-02T17:26:51+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:26:51+06:00" level=info msg=main port=7000
+time="2020-10-02T17:27:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:27:08+06:00" level=info msg=main port=7000
+time="2020-10-02T17:34:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-02T17:34:57+06:00" level=info msg=main port=7000
+time="2020-10-03T00:52:18+06:00" level=info msg="Create_project ser" error= host="[::1]:35656" path=/v1/project status=200

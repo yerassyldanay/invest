@@ -33,8 +33,8 @@ func (c *User) ValidateSpkUser() (error) {
 }
 
 func (c *User) ValidateForUpdate() error {
-	if !Validate_password(c.Password, "", "") {
-		return errorSignUpInvalidPassword
+	if err := Validate_password(c.Password); err != nil {
+		return err
 	}
 
 	if len(c.Fio) < 5 {
@@ -74,6 +74,22 @@ func (c *User) OnlyGetUserById(trans *gorm.DB) error {
 	return trans.First(c, "id = ?", c.Id).Error
 }
 
+// save changes
 func (c *User) OnlySave(trans *gorm.DB) error {
 	return trans.Save(c).Error
+}
+
+// update password
+func (c *User) OnlyUpdatePasswordById(pass string, tx *gorm.DB) (err error) {
+	err = tx.Model(&User{Id: c.Id}).Update("password", pass).Error
+	return err
+}
+
+// get users by roles (manager, expert and so on) - preloaded (add info about email, phone, etc)
+func (c *User) OnlyGetUsersByRolePreloaded(roles []string, offset interface{}, tx *gorm.DB) (users []User, err error) {
+	err = tx.Preload("Organization").Preload("Role").Preload("Email").Preload("Phone").
+		Limit(GetLimit).Offset(offset).
+		Find(&users, "role_id in (select id from roles where name in (?))", roles).
+		Error
+	return users, err
 }

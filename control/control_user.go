@@ -13,22 +13,24 @@ import (
 var Users_get_by_role = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "User_get_by_role"
 
+	// headers
 	var is = service.InvestService{}
 	is.OnlyParseRequest(r)
 
+	// only admins can get users by role
 	if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
 		utils.Respond(w, r, msg);
 		return
 	}
 
-	var user = model.User{}
+	// if nothing is provided then all manager & expert will be given
 	var roles = r.URL.Query()["role"]
-
 	if len(roles) < 1 {
 		roles = []string{utils.RoleManager, utils.RoleExpert}
 	}
 
-	msg := user.Get_users_by_roles(roles, is.Offset)
+	// logic
+	msg := is.Get_users_by_roles(roles)
 	msg.Fname = fname + " get"
 
 	utils.Respond(w, r, msg)
@@ -55,6 +57,9 @@ var Create_user = func(w http.ResponseWriter, r *http.Request) {
 
 	// create
 	msg := is.Create_user_based_on_role(&user)
+	if msg.IsThereAnError() != true {
+		msg = model.ReturnNoError()
+	}
 	msg.Fname = fname + " 1"
 
 	utils.Respond(w, r, msg)
@@ -102,8 +107,42 @@ var Update_other_profile = func(w http.ResponseWriter, r *http.Request) {
 /*
 	Password
  */
-var Update_password_help = func(whose string, w http.ResponseWriter, r* http.Request) {
-	utils.Respond(w, r, utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""})
+var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Request) {
+	var fname = "Update_password_help"
+	var user = model.User{}
+
+	var msg utils.Msg
+
+	// get request body
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		msg = model.ReturnInvalidParameters(err.Error())
+		msg.Fname = fname + " json"
+		utils.Respond(w, r, msg)
+		return
+	}
+	defer r.Body.Close()
+
+	// headers
+	is := service.InvestService{}
+	is.OnlyParseRequest(r)
+
+	// security check
+	switch {
+	case whose == "own":
+		// if this is own then is.UserId will be used
+		msg = is.Update_user_password(user.Password)
+	case whose == "other" && is.RoleName == utils.RoleAdmin:
+		// if this is a profile of another user
+		// then set is.UserId to the id of that user
+		is.UserId = user.Id
+		msg = is.Update_user_password(user.Password)
+	default:
+		// this is not allowed
+		msg = model.ReturnMethodNotAllowed("requesting " + whose + " | role is " + is.RoleName)
+	}
+
+	msg.Fname = fname + " update"
+	utils.Respond(w, r, msg)
 }
 
 var Update_own_password = func(w http.ResponseWriter, r *http.Request) {

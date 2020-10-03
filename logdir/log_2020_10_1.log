@@ -85,3 +85,13 @@ time="2020-10-01T05:48:26+06:00" level=info msg=main port=7000
 time="2020-10-01T05:50:15+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-10-01T05:50:16+06:00" level=info msg=main port=7000
 time="2020-10-01T05:52:15+06:00" level=info msg="Sign_in 3" error= host="[::1]:46606" path=/v1/signin status=200
+time="2020-10-01T19:02:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-01T19:02:04+06:00" level=info msg=main port=7000
+time="2020-10-01T19:02:22+06:00" level=info msg="Create_project ser" error="pq: duplicate key value violates unique constraint \"finances_pkey\"" host="[::1]:52212" path=/v1/project status=417
+time="2020-10-01T19:05:51+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-01T19:05:51+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-01T19:05:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-01T19:05:55+06:00" level=info msg=main port=7000
+time="2020-10-01T19:05:59+06:00" level=info msg="Create_project ser" error= host="[::1]:53962" path=/v1/project status=200
+time="2020-10-01T21:12:09+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-01T21:12:09+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

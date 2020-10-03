@@ -2,6 +2,7 @@ package control
 
 import (
 	"encoding/json"
+	"errors"
 	"invest/model"
 	"invest/service"
 	"invest/utils"
@@ -39,12 +40,12 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 
 	// logic is inside this func
 	var msg = is.Service_create_project(&projectWithFinTable)
-	msg.Fname = fname + " ser"
 
-	if msg.ErrMsg == "" {
-		msg.Message = utils.NoErrorFineEverthingOk
+	if msg.Status == 0 {
+		msg = model.ReturnNoError()
 	}
 
+	msg.Fname = fname + " service"
 	utils.Respond(w, r, msg)
 }
 
@@ -69,4 +70,40 @@ var Update_project = func(w http.ResponseWriter, r *http.Request) {
 	utils.Respond(w, r, msg)
 }
 
+var Get_project_by_project_id = func(w http.ResponseWriter, r *http.Request) {
+	var fname = "Get_project_by_project_id"
+	var id = service.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
 
+	var project_id = service.Get_query_parameter_uint64(r, "project_id", 0)
+	var project = model.Project{Id: project_id}
+	var err error = nil
+
+	/*
+		Permission
+	*/
+	roleName := service.Get_header_parameter(r, utils.KeyRoleName, "").(string)
+	if roleName == utils.RoleManager || roleName == utils.RoleExpert {
+		err = project.OnlyCheckUserByProjectAndUserId(project_id, id, model.GetDB())
+	} else if roleName == utils.RoleInvestor {
+		project.OfferedById = id
+		err = project.OnlyCheckInvestorByProjectAndInvestorId(model.GetDB())
+	} else if roleName == utils.RoleAdmin {
+		// green light is on for admins
+	} else {
+		err = errors.New("your role is " + roleName)
+	}
+
+	// err means there is something wrong
+	if err != nil {
+		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, "", err.Error()})
+		return
+	}
+
+	/*
+		getting project here
+	*/
+	msg := project.Get_this_project_by_project_id()
+	msg.Fname = fname + " 1"
+
+	utils.Respond(w, r, msg)
+}
