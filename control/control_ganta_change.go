@@ -62,6 +62,7 @@ var Ganta_confirm_the_ganta_step = func(w http.ResponseWriter, r *http.Request) 
 var Ganta_change_ganta_time = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_change_ganta_time"
 
+	// parsing the request body
 	var ganta = model.Ganta{}
 	if err := json.NewDecoder(r.Body).Decode(&ganta); err != nil {
 		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " json", err.Error()})
@@ -74,19 +75,33 @@ var Ganta_change_ganta_time = func(w http.ResponseWriter, r *http.Request) {
 	is.OnlyParseRequest(r)
 
 	// security check
+	if is.RoleName != utils.RoleAdmin {
+		errmsg := "only admin can access. your role is " + is.RoleName
+		OnlyReturnMethodNotAllowed(w, r, errmsg, fname, "role")
+		return
+	}
 
+	// logic
+	msg := is.Ganta_change_time(ganta)
+	msg.SetFname(fname, "time")
+
+	utils.Respond(w, r, msg)
 }
 
+// change time of gantt step
 var Ganta_can_user_change_current_status = func (w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_can_user_change_current_status"
 
+	// headers
 	var is = service.InvestService{}
 	is.OnlyParseRequest(r)
 
+	// parameters
 	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 
+	// logic
 	_, msg := is.Ganta_can_user_change_current_status(project_id)
-	msg.Fname = fname + " ganta"
+	msg.SetFname(fname, "ganta")
 
 	utils.Respond(w, r, msg)
 }

@@ -4,12 +4,12 @@ import "invest/utils"
 
 func Prepare_project_statuses(status string) (statuses []string) {
 	switch status {
-	case "new_one":
+	case "investor":
 		statuses = []string{
 			utils.ProjectStatusPendingInvestor,
 			utils.ProjectStatusReconsider,
 		}
-	case "pending":
+	case "spk":
 		statuses = []string{
 			utils.ProjectStatusPendingManager,
 			utils.ProjectStatusPendingExpert,
@@ -17,15 +17,18 @@ func Prepare_project_statuses(status string) (statuses []string) {
 			utils.ProjectStatusRegistrationOfLandPlot,
 			utils.ProjectStatusPendingBoard,
 		}
-	case "waiting":
+	case "admin":
 		statuses = []string{
 			utils.ProjectStatusPendingAdmin,
+			utils.ProjectStatusPreliminaryReject,
+			utils.ProjectStatusPreliminaryReconsider,
+			utils.ProjectStatusPreliminaryAccept,
 		}
-	case "rejected":
+	case "reject":
 		statuses = []string{
 			utils.ProjectStatusReject,
 		}
-	case "completed":
+	case "agreement":
 		statuses = []string{
 			utils.ProjectStatusAgreement,
 		}
@@ -39,7 +42,6 @@ func Prepare_project_statuses(status string) (statuses []string) {
 			utils.ProjectStatusRegistrationOfLandPlot,
 			utils.ProjectStatusPendingBoard,
 			utils.ProjectStatusAgreement,
-			utils.ProjectStatusDelay,
 			utils.ProjectStatusReject,
 			utils.ProjectStatusReconsider,
 			utils.ProjectStatusAccept,

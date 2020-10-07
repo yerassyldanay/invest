@@ -9,7 +9,7 @@ import (
 
 type DocumentUserStatus struct {
 	DocumentId				uint64				`json:"document_id"` // gorm:"unique:unique_doc_status"`
-	Document 				Document			`json:"document" gorm:"foreignkey:documents.id"`
+	//Document 				Document			`json:"document" gorm:"foreignkey:documents.id"`
 
 	UserId					uint64				`json:"user_id" gorm:"users.id"` //; unique:unique_doc_status"`
 	Status					string				`json:"status" gorm:"not null"`

@@ -154,3 +154,22 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 
 	return model.ReturnNoError()
 }
+
+func (is *InvestService) Ganta_change_time(ganta model.Ganta) (utils.Msg) {
+
+	// validate
+	if ganta.Start < 1 {
+		return model.ReturnInvalidParameters("gantt start time is not valid")
+	}
+
+	// set start time
+	ganta.StartDate = time.Unix(ganta.Start, 0)
+
+	// update gantt step time
+	if err := ganta.OnlyUpdateTimeByIdAndProjectId(model.GetDB()); err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	return model.ReturnNoError()
+}
+

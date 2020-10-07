@@ -36,6 +36,8 @@ func (is *InvestService) Document_get_by_project_id(project_id uint64, stepsRaw 
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+
+
 	documentsMap := []map[string]interface{}{}
 	for _, document := range documents {
 		documentsMap = append(documentsMap, model.Struct_to_map(document))
@@ -81,3 +83,5 @@ func (is *InvestService) Document_remove_document_from_project(document_id uint6
 	trans = nil
 	return model.ReturnNoError()
 }
+
+

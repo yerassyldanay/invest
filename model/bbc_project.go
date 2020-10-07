@@ -23,7 +23,7 @@ type Project struct {
 	EmployeeCount			uint					`json:"employee_count" validate:"required"`
 
 	Email					string						`json:"email" gorm:"default:''"`
-	PhoneNumber				string						`json:"phone_number" default:"''"`
+	PhoneNumber				string						`json:"phone_number" gorm:"default:''"`
 
 	OrganizationId			uint64					`json:"organization_id"`
 	Organization			Organization			`json:"organization" gorm:"foreignkey:OrganizationId"`

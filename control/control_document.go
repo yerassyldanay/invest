@@ -68,4 +68,24 @@ var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Re
 	utils.Respond(w, r, msg)
 }
 
-
+//var Document_get_statuses = func(w http.ResponseWriter, r *http.Request) {
+//	var fname = "Document_get_statuses"
+//
+//	// headers
+//	is := service.InvestService{}
+//	is.OnlyParseRequest(r)
+//
+//	// parse parameters
+//	project_id := service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
+//	stepRaw := service.OnlyGetQueryParameterAsList(r, "step")
+//
+//	// security check
+//	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
+//	if msg.IsThereAnError() {
+//		utils.Respond(w, r, msg)
+//		return
+//	}
+//
+//	// logic
+//
+//}

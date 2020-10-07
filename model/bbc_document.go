@@ -27,6 +27,8 @@ type Document struct {
 
 	ProjectId					uint64 				`json:"project_id"`
 	Responsible					string				`json:"responsible" gorm:"manager"`
+
+	Statuses					[]DocumentUserStatus			`json:"statuses" gorm:"-"'`
 }
 
 func (Document) TableName() string {
@@ -148,4 +150,9 @@ func (d *Document) OnlyCountNumberOfNotAcceptedDocuments(project_id uint64, step
 		" on d.id = dus.document_id where project_id = ? and step = ? and status != ?; "
 	_ = tx.Raw(main_query, project_id, step, utils.ProjectStatusAccept).Count(&count).Error
 	return count
+}
+
+func (d *Document) OnlyUploadStatusesById(tx *gorm.DB) (err error) {
+	err = tx.Find(&d.Statuses, "document_id = ?", d.Id).Error
+	return err
 }

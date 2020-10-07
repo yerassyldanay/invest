@@ -6,7 +6,7 @@ import (
 )
 
 // errors
-var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 30 characters (digits & letters)")
+var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 30 characters")
 var errorSignUpInvalidPassword = errors.New("invalid password: must contain at least 8 and at most 30 characters (digits & letters)")
 var errorSignUpInvalidFio = errors.New("invalid fio: must contain at least 5 characters")
 

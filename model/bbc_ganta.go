@@ -152,15 +152,11 @@ func (g *Ganta) OnlyChangeStatusToDoneById(tx *gorm.DB) (err error) {
 	return err
 }
 
-/*
-	Project
-*/
-func (g *Ganta) OnlyUpdateReconsiderStatusByProjectId(status bool, tx *gorm.DB) (err error) {
-	err = tx.Model(&Project{Id: g.ProjectId}).Update("reconsider", status).Error
-	return err
-}
-
-func (g *Ganta) OnlyUpdateRejectStatusByProjectId(status bool, tx *gorm.DB) (err error) {
-	err = tx.Model(&Project{Id: g.ProjectId}).Update("reject", status).Error
+func (g *Ganta) OnlyUpdateTimeByIdAndProjectId(tx *gorm.DB) (err error) {
+	err = tx.Model(&Ganta{}).Where("id = ? and project_id = ?", g.Id, g.ProjectId).
+		Updates(map[string]interface{}{
+			"start_date": g.StartDate,
+			"duration_in_days": g.DurationInDays,
+	}).Error
 	return err
 }
