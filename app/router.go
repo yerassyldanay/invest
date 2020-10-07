@@ -75,7 +75,7 @@ func Create_new_invest_router() (*mux.Router) {
 	v1.HandleFunc("/assign", control.Assign_user_to_project).Methods("POST")
 
 	/*
-		Ganta
+		Gantt
 	 */
 	v1.HandleFunc("/ganta/restricted/parents", control.Ganta_restricted_get_parent_ganta_steps).Methods("GET")
 	v1.HandleFunc("/ganta/restricted/children", control.Ganta_restricted_get_child_ganta_steps).Methods("GET")
@@ -87,9 +87,10 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		Documents
 	 */
-	v1.HandleFunc("/project/docs", control.Ganta_restricted_get_documents).Methods("GET")
-	v1.HandleFunc("/project/docs", control.Project_add_document_to_project).Methods("POST")
-	v1.HandleFunc("/project/docs", control.Project_remove_document).Methods("DELETE")
+	v1.HandleFunc("/project/docs/box", control.Document_add_box_to_upload_document).Methods("POST")
+	v1.HandleFunc("/project/docs/file", control.Document_upload_document).Methods("POST")
+	v1.HandleFunc("/project/docs/file", control.Document_remove_file).Methods("DELETE")
+	v1.HandleFunc("/project/docs", control.Document_get).Methods("GET")
 
 	/*
 		Project
@@ -101,6 +102,11 @@ func Create_new_invest_router() (*mux.Router) {
 		Status
 	 */
 	v1.HandleFunc("/project/status", control.Project_get_status_of_project).Methods("GET")
+
+	/*
+		Analysis
+	 */
+	v1.HandleFunc("/analysis", control.Analysis_get).Methods("POST")
 
 	/*
 		Role & Permissions
@@ -128,7 +134,7 @@ func Create_new_invest_router() (*mux.Router) {
 		/ad../stat/project?user_id=?&&status=? - provides projects by user_id & status
 	*/
 	v1.HandleFunc("/stats/projects/grouped_by_status", nil).Methods("GET")
-	v1.HandleFunc("/stats/docs/by_project", control.Get_stat_on_documents_of_project).Methods("GET")
+	v1.HandleFunc("/stats/docs/by_project", nil).Methods("GET")
 
 	/*
 		Leave a COMMENT on the project
@@ -163,10 +169,8 @@ func Create_new_invest_router() (*mux.Router) {
 		Test API
 	 */
 	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var project = model.Project{Id: 2}
-		err := project.OnlyGetAssignedUsersByProjectId(model.GetDB())
-
-		fmt.Println(project)
+		var ganta = model.Ganta{Id: 35}
+		err := ganta.OnlyChangeStatusToDoneById(model.GetDB())
 		fmt.Println(err)
 	})
 
@@ -183,7 +187,6 @@ func Create_new_invest_router() (*mux.Router) {
 
 	return generalRouter
 }
-
 
 // Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlX2lkIjozLCJleHAiOiIyMDIwLTA4LTA4VDIzOjE5OjIwLjI1ODQ2NTQyMSswNjowMCJ9.Ffqpg5W0VK-1sxGZdXsX6tEzSgN4Jv19WFGmdGBBeUs
 //

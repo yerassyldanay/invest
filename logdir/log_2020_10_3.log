@@ -310,3 +310,7 @@ time="2020-10-03T16:54:54+06:00" level=info msg="Get_all_projects get" error= ho
 time="2020-10-03T16:57:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-10-03T16:57:10+06:00" level=info msg=main port=7000
 time="2020-10-03T16:57:13+06:00" level=info msg="Get_all_projects get" error= host="[::1]:33372" path=/v1/list/projects/all status=200
+time="2020-10-03T17:01:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T17:01:49+06:00" level=info msg=main port=7000
+time="2020-10-03T17:56:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-03T17:56:39+06:00" level=info msg=main port=7000

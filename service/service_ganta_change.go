@@ -4,6 +4,7 @@ import (
 	"invest/model"
 	"invest/utils"
 	"strings"
+	"time"
 )
 
 func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64) (ganta model.Ganta, msg utils.Msg) {
@@ -11,19 +12,9 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 	var project = model.Project{Id: project_id}
 
 	// get project with an updated status
-	_ = project.GetAndUpdateStatusOfProject(model.GetDB())
-
-	// check for validity
-	switch {
-	case project.Id < 1:
-		return model.Ganta{}, model.ReturnInvalidParameters("project_id is invalid")
-	case (project.Reject || project.Reconsider) && is.RoleName != utils.RoleAdmin:
-		/*
-			in case if it is rejected, let admins change the status of the project
-				cases:
-					* manager claims rejected, but admin might not agree
-		*/
-		return model.Ganta{}, model.ReturnMethodNotAllowed("the project is either rejected or in consideration by an investor")
+	err := project.GetAndUpdateStatusOfProject(model.GetDB())
+	if err != nil {
+		return model.Ganta{}, model.ReturnInternalDbError(err.Error())
 	}
 
 	ganta = project.CurrentStep
@@ -58,62 +49,108 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 	return ganta, msg
 }
 
+/*
+	there are several cases that might happen after any of the users changes the status of the project
+ */
 func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, status string) (utils.Msg) {
-	// check permission
-	ganta, msg := is.Ganta_can_user_change_current_status(project_id)
-	if msg.IsThereAnError() {
-		return msg
+
+	// get the current gantt step
+	var ganta = model.Ganta{ProjectId: project_id}
+	if err := ganta.OnlyGetCurrentStepByProjectId(model.GetDB()); err != nil {
+		return model.ReturnInternalDbError(err.Error())
 	}
 
+	var trans = model.GetDB().Begin()
+	defer func() { if trans != nil {trans.Rollback()} }()
+
 	var err error
+	var project = model.Project{Id: project_id}
 	status = strings.ToLower(status)
 
+	// whose is changing the status
 	switch {
 	case is.RoleName == utils.RoleInvestor:
 		// investor never can change status manually
 		return model.ReturnMethodNotAllowed("investor cannot change status")
 	case is.RoleName == utils.RoleAdmin:
 		/*
-			admin can change status:
-				* reject - then nobody can change it back
-				* reconsider - investor need make changes in documentation | admin can change status back
-				* accept - next step
+			choices of an admin:
+				* reject - status of the project will be reject
+				* reconsider - create new gantt step & add status - pending_investor
+										responsible - investor
+				* accept - move to the next step
 		 */
-		switch strings.ToLower(status) {
-		case utils.ProjectStatusReject:
-			err = ganta.OnlySetRejectStatusForProjectByProjectId(model.GetDB())
-		case utils.ProjectStatusReconsider:
-			err = ganta.OnlySetReconsiderStatusForProjectByProjectId(model.GetDB())
-		case utils.ProjectStatusAccept:
-			_ = ganta.OnlyUpdateRejectStatusByProjectId(false, model.GetDB())
-			_ = ganta.OnlyUpdateReconsiderStatusByProjectId(false, model.GetDB())
-			err = ganta.OnlyChangeStatusToDoneById(model.GetDB())
-		default:
-			return model.ReturnMethodNotAllowed("status is invalid. it is " + status)
+		switch {
+		case status == utils.ProjectStatusReject:
+			// status will change to 'reject'
+			project.Status = utils.ProjectStatusReject
+			err = project.OnlyUpdateStatusById(trans)
+		case status == utils.ProjectStatusAccept:
+			// go to the next step
+			err = ganta.OnlyChangeStatusToDoneById(trans)
+		case status == utils.ProjectStatusReconsider:
+			// prepare gantt step
+			newGanta := model.Ganta{
+				IsAdditional:   true,
+				ProjectId:      project_id,
+				Kaz:            "Доработка инициатором проекта",
+				Rus:            "Доработка инициатором проекта",
+				Eng:            "Доработка инициатором проекта",
+				DurationInDays: 3,
+				Step:           ganta.Step,
+				Status:         utils.ProjectStatusPendingInvestor,
+				StartDate: 		ganta.StartDate.Add(time.Hour * (-1)),
+				IsDone:         false,
+				Responsible:    utils.RoleInvestor,
+			}
+
+			if err = newGanta.OnlyCreate(trans); err != nil {
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+			// add new step to the top
+			if err = ganta.OnlyChangeStatusToDoneById(trans); err != nil {
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+			// change the status of the user
+			project.Status = status
+			err = project.OnlyUpdateStatusById(trans)
 		}
 
 	case is.RoleName == utils.RoleManager || is.RoleName == utils.RoleExpert:
-		/*
-			manager & expert:
-				* reject - 'reject' field is set to true
-				* reconsider - 'reconsider' field is set to true
-				* accept - move to the next step
-		 */
-		switch status {
-		case utils.ProjectStatusReject:
-			err = ganta.OnlyUpdateRejectStatusByProjectId(true, model.GetDB())
-		case utils.ProjectStatusReconsider:
-			err = ganta.OnlyUpdateReconsiderStatusByProjectId(true, model.GetDB())
-		case utils.ProjectStatusAccept:
-			err = ganta.OnlyChangeStatusToDoneById(model.GetDB())
-		default:
-			return model.ReturnMethodNotAllowed("status is invalid. it is " + status)
+		//var project = model.Project{Id: project_id}
+		switch {
+		case status == utils.ProjectStatusReject:
+			// set pre-reject status as this must be confirmed by admin
+			project.Status = utils.ProjectStatusPreliminaryReject
+			err = project.OnlyUpdateStatusById(trans)
+		case status == utils.ProjectStatusReconsider:
+			// set pre-reject status as this must be confirmed by admin
+			project.Status = utils.ProjectStatusPreliminaryReconsider
+			err = project.OnlyUpdateStatusById(trans)
+		case status == utils.ProjectStatusAccept:
+
 		}
+
+		if err != nil {
+			return model.ReturnInternalDbError(err.Error())
+		}
+
+		// in any case we have to switch to the next gantt step
+		err = ganta.OnlyChangeStatusToDoneById(trans)
 	}
 
 	if err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
+
+	if err := trans.Commit().Error; err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	project.Id = project_id
+	_ = project.GetAndUpdateStatusOfProject(model.GetDB())
 
 	return model.ReturnNoError()
 }

@@ -20,6 +20,7 @@ var Ganta_confirm_the_ganta_step = func(w http.ResponseWriter, r *http.Request) 
 		ProjectId				uint64				`json:"project_id"`
 		Status					string				`json:"status"`
 	}{}
+
 	//var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 	//var status = service.OnlyGetQueryParameter(r, "status", "").(string)
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
@@ -31,7 +32,28 @@ var Ganta_confirm_the_ganta_step = func(w http.ResponseWriter, r *http.Request) 
 	is := service.InvestService{}
 	is.OnlyParseRequest(r)
 
-	msg := is.Ganta_change_the_status_of_project(reqBody.ProjectId, reqBody.Status)
+	// security check - access to project
+	msg := is.Check_whether_this_user_can_get_access_to_project_info(reqBody.ProjectId)
+	if msg.IsThereAnError() {
+		utils.Respond(w, r, msg)
+		return
+	}
+
+	// security check - can change status
+	msg = is.Check_whether_this_user_responsible_for_current_step(reqBody.ProjectId)
+	if msg.IsThereAnError() {
+		utils.Respond(w, r, msg)
+		return
+	}
+
+	// security check
+	_, msg = is.Ganta_can_user_change_current_status(reqBody.ProjectId)
+	if msg.IsThereAnError() {
+		utils.Respond(w, r, msg)
+		return
+	}
+
+	msg = is.Ganta_change_the_status_of_project(reqBody.ProjectId, reqBody.Status)
 	msg.Fname = fname + " status"
 
 	utils.Respond(w, r, msg)
@@ -47,16 +69,12 @@ var Ganta_change_ganta_time = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
+	// headers
 	is := service.InvestService{}
 	is.OnlyParseRequest(r)
 
-	var msg = model.ReturnMethodNotAllowed("role name is " + is.RoleName)
-	if is.RoleName == utils.RoleAdmin {
-		msg = ganta.Change_time()
-	}
+	// security check
 
-	msg.Fname = fname + " resp"
-	utils.Respond(w, r, msg)
 }
 
 var Ganta_can_user_change_current_status = func (w http.ResponseWriter, r *http.Request) {

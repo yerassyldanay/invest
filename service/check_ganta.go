@@ -12,14 +12,13 @@ func (is *InvestService) Ganta_check_permission_to_read_ganta(project_id uint64)
 			* assigned to the project
 			* investor of the project
 	*/
-	var permission = model.Permission{}
 	var project = model.Project{
 		Id: project_id,
 		OfferedById: is.UserId,
 	}
 
 	switch {
-	case permission.Check_permission_by_role_id(is.RoleId, "administrate", model.GetDB()) == nil:
+	case is.RoleName == utils.RoleAdmin:
 		// nothing to do - this is a user with admin privileges
 	case project.OnlyCheckInvestorByProjectAndInvestorId(model.GetDB()) == nil:
 		// nothing to do - this is an investor of the project
@@ -32,6 +31,3 @@ func (is *InvestService) Ganta_check_permission_to_read_ganta(project_id uint64)
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Check_who_can_shift(project_id uint64) (utils.Msg) {
-	return utils.Msg{}
-}

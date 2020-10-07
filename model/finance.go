@@ -23,3 +23,8 @@ func (fi *Finance) OnlySave(tx *gorm.DB) error {
 func (fi *Finance) OnlyUpdateAll(tx *gorm.DB) error {
 	return tx.Updates(*fi).Error
 }
+
+func (fi *Finance) OnlyGetByProjectId(tx *gorm.DB) (err error) {
+	err = tx.First(fi, "project_id = ?", fi.ProjectId).Error
+	return err
+}

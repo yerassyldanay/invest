@@ -17,9 +17,12 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	/*
 		only an investor can create a project
 	 */
-	roleName := service.Get_header_parameter(r, utils.KeyRoleName, "").(string)
-	if roleName != utils.RoleInvestor {
-		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " role", "role must be investor. role is " + roleName})
+	is := service.InvestService{}
+	is.OnlyParseRequest(r)
+
+	//
+	if is.RoleName != utils.RoleInvestor {
+		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " role", "role must be investor. role is " + is.RoleName})
 		return
 	}
 
@@ -29,14 +32,6 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-
-	is := service.InvestService{
-		BasicInfo: service.BasicInfo{
-			UserId:   service.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64),
-			RoleName: roleName,
-			Lang:     service.Get_header_parameter(r, utils.HeaderContentLanguage, "").(string),
-		},
-	}
 
 	// logic is inside this func
 	var msg = is.Service_create_project(&projectWithFinTable)

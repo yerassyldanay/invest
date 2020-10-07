@@ -149,3 +149,69 @@ func Get_header_parameter(r *http.Request, key string, defval interface{}) inter
 
 	return defval
 }
+
+func OnlyConvertString(val string, defval interface{}) interface{} {
+	if val != "" {
+		return OnlyConvert([]string{val}, defval)
+	}
+	return defval
+}
+
+func OnlyConvert(values []string, defval interface{}) interface{} {
+	if len(values) < 1 {
+		return defval
+	}
+
+	t := values[0]
+
+	if t == "" {
+		return defval
+	}
+
+	/*
+		string & bool values are parsed here
+	*/
+	switch defval.(type) {
+	case bool:
+		i, err := strconv.ParseBool(t)
+		if err != nil {
+			return defval
+		}
+		return i
+	case string:
+		return t
+	}
+
+	/*
+		will parse as integer then encapsulate the value
+	*/
+	i, err := strconv.ParseInt(t, 10, 64)
+	if err != nil {
+		return defval
+	}
+
+	switch defval.(type) {
+	case int:
+		return int(i)
+	case int8:
+		return int8(i)
+	case int16:
+		return int16(i)
+	case int32:
+		return int32(i)
+	case int64:
+		return int64(i)
+	case uint:
+		return uint(i)
+	case uint8:
+		return uint8(i)
+	case uint16:
+		return uint16(i)
+	case uint32:
+		return uint32(i)
+	case uint64:
+		return uint64(i)
+	}
+
+	return defval
+}

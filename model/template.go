@@ -11,7 +11,7 @@ import (
 	prepare notify users message
 */
 func (t *Template) Template_prepare_notify_users_about_changes_in_project(lang string, project_name string, who string) (SendgridMessage) {
-	var langs = []interface{}{"kaz", "rus"}
+	var langs = []string{"kaz", "rus"}
 	if yes := utils.Does_a_slice_contain_element(langs, lang); !yes {
 		lang = "eng"
 	}

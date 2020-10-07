@@ -8,12 +8,12 @@ import (
 
 type Comment struct {
 	Id					uint64					`json:"id" gorm:"primary key"`
-	Body				string					`json:"body" gorm:"not null"`
+	Body				string					`json:"body" gorm:"default:''"`
 
 	UserId				uint64					`json:"user_id" gorm:"foreignkey:users.id"`
 	ProjectId			uint64					`json:"project_id" gorm:"foreignkey:projects.id"`
 
-	Status				string					`json:"status" gorm:"-"`
+	Status				string					`json:"status" gorm:"not null"`
 }
 
 func (Comment) TableName() string {
@@ -69,4 +69,37 @@ func (c *Comment) OnlyGetCommentsByProjectId(offset interface{}, tx *gorm.DB) (c
 
 func (c *Comment) OnlyGetById(tx *gorm.DB) (err error) {
 	return tx.First(c, "id = ?", c.Id).Error
+}
+
+func (sc *SpkComment) OnlyCreateStatuses(tx *gorm.DB) (err error) {
+	// store statuses of each document on db
+	//var wg = sync.WaitGroup{}
+	var errorChan = make(chan error, 1)
+
+	for _, docStatus := range sc.DocStatuses {
+		docStatus := docStatus
+
+		//defer wg.Add(1)
+		func(docStatus *DocumentUserStatus, trans *gorm.DB) {
+			//defer wg.Done()
+			err := docStatus.OnlyCreate(trans)
+			if err != nil {
+				select {
+				case errorChan <- err:
+				default:
+					// pass if the chan is full
+				}
+			}
+		}(&docStatus, tx)
+	}
+	//wg.Wait()
+
+	select {
+	case err := <- errorChan:
+		return err
+	default:
+	}
+
+	close(errorChan)
+	return nil
 }

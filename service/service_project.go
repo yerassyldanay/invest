@@ -18,6 +18,7 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "projects")
 	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "users")
 	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "organizations")
+	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "documents")
 
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil {trans.Rollback()} }()
@@ -51,35 +52,41 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 
 	/*
 		create:
-			* Ganta table (parent & child steps)
+			* Ganta table (parent)
 			* Parent steps - will be shown for other
-			* Child steps - will carry documents
 	 */
 	msg = projectWithFinTable.Project.Create_ganta_table_for_this_project(trans)
 	if msg.ErrMsg != "" {
 		return msg
 	}
 
+	// create default documents with deadline, but empty uri
+	var document = model.Document{}
+	msg = document.Create_default_documents(projectWithFinTable.Project.Id, trans)
+	if msg.IsThereAnError() {
+		return msg
+	}
+
+	// commit changes
+	err := trans.Commit().Error
+	if err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	trans = nil
+
 	// update project status
-	_ = projectWithFinTable.Project.GetAndUpdateStatusOfProject(trans)
+	//_ = projectWithFinTable.Project.GetAndUpdateStatusOfProject(trans)
 
 	/*
 		NOTIFICATION:
 			* inform administrators about it
 	 */
 	var user = model.User{Id: is.UserId}
-	err := user.OnlyGetUserById(trans)
+	err = user.OnlyGetUserById(model.GetDB())
 	if err != nil {
 		user.Fio = "инвестор"
 	}
-
-	// commit changes
-	err = trans.Commit().Error
-	if err != nil {
-		return model.ReturnInternalDbError(err.Error())
-	}
-
-	trans = nil
 
 	/*
 		create a template & set values

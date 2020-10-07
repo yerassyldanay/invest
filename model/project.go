@@ -12,7 +12,7 @@ import (
  */
 var errorProjectInvalidOfferedById = errors.New("id of user (who offered) is not indicated")
 var errorProjectInvalidInitiatorPosition = errors.New("invalid position of an initiator")
-var errorProjectInvlaidProjectName = errors.New("invalid project name")
+var errorProjectInvalidProjectName = errors.New("invalid project name")
 var errorProjectInvalidProjectDescription = errors.New("invalid project description")
 var errorProjectInvalidEmployeeCount = errors.New("invalid employee count")
 
@@ -23,7 +23,7 @@ func (p *Project) Validate() (error) {
 	case p.OfferedByPosition == "":
 		return errorProjectInvalidInitiatorPosition
 	case p.Name == "":
-		return errorProjectInvlaidProjectName
+		return errorProjectInvalidProjectName
 	case p.Description == "":
 		return errorProjectInvalidProjectDescription
 	case p.EmployeeCount < 1:
@@ -52,6 +52,12 @@ func (p *Project) OnlyCheckUserByProjectAndUserId(project_id uint64, user_id uin
 // create only
 func (p *Project) OnlyCreate(tx *gorm.DB) error {
 	return tx.Create(p).Error
+}
+
+// save
+func (p *Project) OnlySave(tx *gorm.DB) (err error) {
+	err = tx.Save(p).Error
+	return err
 }
 
 func (p *Project) OnlyUnmarshalInfo() (err error) {
@@ -117,24 +123,24 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 		return err
 	}
 
-	// get status & step of the project by ganta step
-	var ganta = Ganta{}
+	// get status & step of the project by gantt step
+	var ganta = Ganta{ProjectId: p.Id}
 	err = ganta.OnlyGetCurrentStepByProjectId(tx)
 
-	if err == nil {
+	switch {
+	case err == nil && !utils.Does_a_slice_contain_element([]string{utils.ProjectStatusPreliminaryReject, utils.ProjectStatusPreliminaryReconsider}, p.Status):
+		p.CurrentStep = ganta
+		p.Step = ganta.Step
 		p.Status = ganta.Status
+	case err == nil:
+		// in case it is preliminary reject or reconsider (status is set by manager or expert)
+		// no need to set step & status to new values
 		p.Step = ganta.Step
 		p.CurrentStep = ganta
-	} else if err == gorm.ErrRecordNotFound {
-		// means the project is finished
-		p.Completed = true
-	} else {
-		return err
-	}
-
-	// if the status is such then ganta step will not be considered
-	if p.Reject || p.Reconsider {
+	case err == gorm.ErrRecordNotFound :
 		return nil
+	default:
+		return err
 	}
 
 	err = tx.Save(p).Error

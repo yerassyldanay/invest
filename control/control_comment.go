@@ -119,7 +119,9 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 			* is this user responsible?
 	 */
 	err := project.GetAndUpdateStatusOfProject(model.GetDB())
-	if err != nil { fmt.Println(err) }
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	if project.CurrentStep.Responsible != is.RoleName {
 		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " step", "this user is not responsible for the current step"})
@@ -128,7 +130,7 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 
 	// the logic
 	msg := is.Comment_on_project_documents(spkComment)
-	msg.Fname = fname + " 2"
+	msg.SetFname(fname, "2")
 
 	utils.Respond(w, r, msg)
 }
@@ -148,14 +150,16 @@ var Project_get_comments = func(w http.ResponseWriter, r *http.Request) {
 	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 
 	// security
-	msg := is.Ganta_check_permission_to_read_ganta(project_id)
+	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
 	if msg.ErrMsg != "" {
-		utils.Respond(w, r, msg);
+		msg.SetFname(fname, "acc")
+		utils.Respond(w, r, msg)
+		return
 	}
 
 	// get comments
 	msg = is.Get_comments_of_project(project_id)
+	msg.SetFname(fname, "get")
 
-	msg.Fname = fname + " 1"
 	utils.Respond(w, r, msg)
 }

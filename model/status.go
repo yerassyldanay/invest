@@ -32,12 +32,17 @@ func Prepare_project_statuses(status string) (statuses []string) {
 	default:
 		statuses = []string{
 			utils.ProjectStatusPendingInvestor,
-			utils.ProjectStatusReconsider,
 			utils.ProjectStatusPendingManager,
+			utils.ProjectStatusPendingAdmin,
 			utils.ProjectStatusPendingExpert,
 			utils.ProjectStatusPendingInvCommittee,
 			utils.ProjectStatusRegistrationOfLandPlot,
 			utils.ProjectStatusPendingBoard,
+			utils.ProjectStatusAgreement,
+			utils.ProjectStatusDelay,
+			utils.ProjectStatusReject,
+			utils.ProjectStatusReconsider,
+			utils.ProjectStatusAccept,
 		}
 	}
 

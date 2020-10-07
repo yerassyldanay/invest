@@ -16,16 +16,18 @@ var Project_get_status_of_project = func(w http.ResponseWriter, r *http.Request)
 	is.OnlyParseRequest(r)
 
 	// check whether this user has permission
-	msg := is.Ganta_check_permission_to_read_ganta(project_id)
+	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
 	msg.Fname = fname + " check"
 
 	if msg.ErrMsg != "" {
-		utils.Respond(w, r, msg); return
+		utils.Respond(w, r, msg)
+		return
 	}
 
 	// get status
 	var project = model.Project{Id: project_id}
 	msg = project.Get_project_with_current_status()
+	msg.SetFname(fname, "proj")
 
 	utils.Respond(w, r, msg)
 }

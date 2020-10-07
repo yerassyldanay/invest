@@ -19,16 +19,31 @@ var Assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
+	// headers
 	is := service.InvestService{}
 	is.OnlyParseRequest(r)
 
+	// security check
 	if is.RoleName != utils.RoleAdmin {
 		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " role", "not admin"})
 		return
 	}
 
-	msg := pu.Assign_user_after_check()
-	msg.Fname = fname + " assign"
+	// check project
+	if msg := is.Does_project_exist(pu.ProjectId); msg.IsThereAnError() {
+		utils.Respond(w, r, msg)
+		return
+	}
+
+	// check user
+	if msg := is.Does_user_has_given_role(pu.UserId, []string{utils.RoleExpert, utils.RoleManager}); msg.IsThereAnError() {
+		utils.Respond(w, r, msg)
+		return
+	}
+
+	// logic
+	msg := is.Assign_user_to_project(pu)
+	msg.Fname = fname + " asg"
 
 	utils.Respond(w, r, msg)
 }
@@ -51,7 +66,12 @@ var Remove_user_from_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	msg := pu.Remove_relation()
+	// headers
+	is := service.InvestService{}
+	is.OnlyParseRequest(r)
+
+	// logic
+	msg := is.Assign_remove_relation(pu)
 	utils.Respond(w, r, msg)
 }
 

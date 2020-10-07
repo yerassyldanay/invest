@@ -1,0 +1,164 @@
+time="2020-10-06T07:25:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:25:41+06:00" level=info msg=main port=7000
+time="2020-10-06T07:25:52+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-06T07:25:52+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-06T07:25:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:25:55+06:00" level=info msg=main port=7000
+time="2020-10-06T07:32:11+06:00" level=info msg="Add_comment_to_project 1" error="invalid character '}' looking for beginning of object key string" host="[::1]:37640" path=/v1/spk_comment status=400
+time="2020-10-06T07:32:20+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-06T07:32:20+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-06T07:32:22+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:32:23+06:00" level=info msg=main port=7000
+time="2020-10-06T07:33:11+06:00" level=info msg="Add_comment_to_project security" error="record not found" host="[::1]:37656" path=/v1/spk_comment status=405
+time="2020-10-06T07:38:10+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:38:11+06:00" level=info msg=main port=7000
+time="2020-10-06T07:39:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:39:23+06:00" level=info msg=main port=7000
+time="2020-10-06T07:41:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:41:27+06:00" level=info msg=main port=7000
+time="2020-10-06T07:43:10+06:00" level=info msg="Document_add_box  add_box" error="pq: duplicate key value violates unique constraint \"projects_pkey\"" host="[::1]:37760" path=/v1/project/docs/box status=417
+time="2020-10-06T07:43:28+06:00" level=info error="record not found" host="[::1]:37760" path=/v1/project/docs/box status=417
+time="2020-10-06T07:47:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:47:25+06:00" level=info msg=main port=7000
+time="2020-10-06T07:48:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:48:30+06:00" level=info msg=main port=7000
+time="2020-10-06T07:49:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:49:07+06:00" level=info msg=main port=7000
+time="2020-10-06T07:49:25+06:00" level=info msg="Document_add_box  add_box" error= host="[::1]:37848" path=/v1/project/docs/box status=200
+time="2020-10-06T07:52:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:52:18+06:00" level=info msg=main port=7000
+time="2020-10-06T07:53:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:53:47+06:00" level=info msg=main port=7000
+time="2020-10-06T07:53:48+06:00" level=info msg="Project_add_document_to_project access doc" error="responsible: spk | your role: investor" host="[::1]:37922" path=/v1/project/docs/file status=405
+time="2020-10-06T07:54:15+06:00" level=info msg="Sign_in 3" error= host="[::1]:37922" path=/v1/signin status=200
+time="2020-10-06T07:54:33+06:00" level=info msg="Project_add_document_to_project add" error="sql: expected 12 destination arguments in Scan, not 1" host="[::1]:37922" path=/v1/project/docs/file status=417
+time="2020-10-06T07:57:34+06:00" level=info msg="Project_add_document_to_project add" error="sql: expected 12 destination arguments in Scan, not 1" host="[::1]:37922" path=/v1/project/docs/file status=417
+time="2020-10-06T07:58:12+06:00" level=info msg="Project_add_document_to_project add" error="sql: expected 12 destination arguments in Scan, not 1" host="[::1]:37922" path=/v1/project/docs/file status=417
+time="2020-10-06T07:58:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T07:58:31+06:00" level=info msg=main port=7000
+time="2020-10-06T08:01:23+06:00" level=info msg="Project_add_document_to_project add" error="sql: expected 12 destination arguments in Scan, not 1" host="[::1]:37978" path=/v1/project/docs/file status=417
+time="2020-10-06T08:01:53+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:01:54+06:00" level=info msg=main port=7000
+time="2020-10-06T08:02:17+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:38016" path=/v1/project/docs/file status=200
+time="2020-10-06T08:02:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:02:46+06:00" level=info msg=main port=7000
+time="2020-10-06T08:04:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:04:29+06:00" level=info msg=main port=7000
+time="2020-10-06T08:04:51+06:00" level=info msg="Project_add_document_to_project add" error="sql: expected 12 destination arguments in Scan, not 1" host="[::1]:38062" path=/v1/project/docs/file status=417
+time="2020-10-06T08:09:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:09:37+06:00" level=info msg=main port=7000
+time="2020-10-06T08:09:52+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:38106" path=/v1/project/docs/file status=200
+time="2020-10-06T08:11:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:11:41+06:00" level=info msg=main port=7000
+time="2020-10-06T08:12:10+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:38142" path=/v1/project/docs/file status=200
+time="2020-10-06T08:12:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:12:27+06:00" level=info msg=main port=7000
+time="2020-10-06T08:12:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:12:50+06:00" level=info msg=main port=7000
+time="2020-10-06T08:13:27+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:38172" path=/v1/project/docs/file status=200
+time="2020-10-06T08:21:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:21:26+06:00" level=info msg=main port=7000
+time="2020-10-06T08:21:41+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:38244" path=/v1/project/docs/file status=200
+time="2020-10-06T08:32:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:32:09+06:00" level=info msg=main port=7000
+time="2020-10-06T08:33:36+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:33:37+06:00" level=info msg=main port=7000
+time="2020-10-06T08:34:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:34:26+06:00" level=info msg=main port=7000
+time="2020-10-06T08:56:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:56:18+06:00" level=info msg=main port=7000
+time="2020-10-06T08:57:25+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:57:26+06:00" level=info msg=main port=7000
+time="2020-10-06T08:58:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T08:58:48+06:00" level=info msg=main port=7000
+time="2020-10-06T09:05:15+06:00" level=info msg="Ganta_can_user_change_current_status ganta" error= host="[::1]:38620" path=/v1/ganta/change/check_permission status=200
+time="2020-10-06T09:21:20+06:00" level=info error= host="[::1]:38620" path=/v1/project/status status=200
+time="2020-10-06T09:24:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T09:24:19+06:00" level=info msg=main port=7000
+time="2020-10-06T09:26:23+06:00" level=info error= host="[::1]:38822" path=/v1/project/status status=200
+time="2020-10-06T09:26:29+06:00" level=info error= host="[::1]:38822" path=/v1/project/status status=200
+time="2020-10-06T09:29:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T09:29:13+06:00" level=info msg=main port=7000
+time="2020-10-06T09:30:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T09:30:50+06:00" level=info msg=main port=7000
+time="2020-10-06T09:30:56+06:00" level=info error="pq: column \"rpoject_id\" does not exist" host="[::1]:38900" path=/v1/project/status status=500
+time="2020-10-06T09:31:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T09:31:39+06:00" level=info msg=main port=7000
+time="2020-10-06T09:31:45+06:00" level=info error= host="[::1]:38934" path=/v1/project/status status=200
+time="2020-10-06T10:04:45+06:00" level=info msg="Document_get 2" error= host="[::1]:38934" path=/v1/project/docs status=200
+time="2020-10-06T10:05:07+06:00" level=info msg="Document_get 2" error= host="[::1]:38934" path=/v1/project/docs status=200
+time="2020-10-06T10:06:04+06:00" level=info msg="Document_get 2" error= host="[::1]:38934" path=/v1/project/docs status=200
+time="2020-10-06T10:08:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T10:08:47+06:00" level=info msg=main port=7000
+time="2020-10-06T10:09:04+06:00" level=info msg="Document_get 2" error= host="[::1]:39176" path=/v1/project/docs status=200
+time="2020-10-06T10:11:45+06:00" level=info msg="Document_get 2" error= host="[::1]:39176" path=/v1/project/docs status=200
+time="2020-10-06T10:11:56+06:00" level=info msg="Document_get 2" error= host="[::1]:39176" path=/v1/project/docs status=200
+time="2020-10-06T10:14:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T10:14:44+06:00" level=info msg=main port=7000
+time="2020-10-06T10:14:46+06:00" level=info msg="Sign_in 3" error= host="[::1]:39230" path=/v1/signin status=200
+time="2020-10-06T10:21:26+06:00" level=info msg="Sign_in 3" error= host="[::1]:39230" path=/v1/signin status=200
+time="2020-10-06T10:21:40+06:00" level=info msg="Ganta_can_user_change_current_status ganta" error="the project is either rejected or in consideration by an investor" host="[::1]:39230" path=/v1/ganta/change/check_permission status=405
+time="2020-10-06T10:22:19+06:00" level=info msg="Sign_in 3" error= host="[::1]:39230" path=/v1/signin status=200
+time="2020-10-06T10:22:33+06:00" level=info msg="Ganta_can_user_change_current_status ganta" error= host="[::1]:39230" path=/v1/ganta/change/check_permission status=200
+time="2020-10-06T10:24:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T10:24:30+06:00" level=info msg=main port=7000
+time="2020-10-06T18:16:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T18:16:52+06:00" level=info msg=main port=7000
+time="2020-10-06T18:18:28+06:00" level=info msg="Admin_assign_user_to_project asg" error= host="[::1]:42454" path=/v1/assign status=200
+time="2020-10-06T18:19:05+06:00" level=info msg="Project_get_status_of_project check" error="not admin, investor of the project or spk user, who is assigned to it" host="[::1]:42454" path=/v1/project/status status=405
+time="2020-10-06T18:20:29+06:00" level=info msg="Project_get_status_of_project check" error="not admin, investor of the project or spk user, who is assigned to it" host="[::1]:42454" path=/v1/project/status status=405
+time="2020-10-06T18:21:17+06:00" level=info msg="Project_get_status_of_project check" error="not admin, investor of the project or spk user, who is assigned to it" host="[::1]:42454" path=/v1/project/status status=405
+time="2020-10-06T18:22:48+06:00" level=info error= host="[::1]:42454" path=/v1/project/status status=200
+time="2020-10-06T18:26:59+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T18:27:00+06:00" level=info msg=main port=7000
+time="2020-10-06T18:27:59+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T18:27:59+06:00" level=info msg=main port=7000
+time="2020-10-06T18:30:50+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:42566" path=/v1/project/docs/file status=200
+time="2020-10-06T18:32:20+06:00" level=info error= host="[::1]:42566" path=/v1/project/status status=200
+time="2020-10-06T18:33:19+06:00" level=info msg="Sign_in 3" error= host="[::1]:42566" path=/v1/signin status=200
+time="2020-10-06T18:33:34+06:00" level=info msg="Admin_assign_user_to_project asg" error="pq: duplicate key value violates unique constraint \"projects_users_pkey\"" host="[::1]:42566" path=/v1/assign status=417
+time="2020-10-06T18:34:24+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error= host="[::1]:42566" path=/v1/ganta/change/status status=200
+time="2020-10-06T18:35:17+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error= host="[::1]:42566" path=/v1/ganta/change/status status=200
+time="2020-10-06T18:35:35+06:00" level=info error= host="[::1]:42566" path=/v1/project/status status=200
+time="2020-10-06T18:37:59+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error= host="[::1]:42566" path=/v1/ganta/change/status status=200
+time="2020-10-06T18:38:13+06:00" level=info error= host="[::1]:42566" path=/v1/project/status status=200
+time="2020-10-06T18:43:12+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error= host="[::1]:42566" path=/v1/ganta/change/status status=200
+time="2020-10-06T18:45:53+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T18:45:53+06:00" level=info msg=main port=7000
+time="2020-10-06T18:48:43+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error= host="[::1]:42710" path=/v1/ganta/change/status status=200
+time="2020-10-06T18:48:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T18:48:48+06:00" level=info msg=main port=7000
+time="2020-10-06T18:49:18+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error= host="[::1]:42748" path=/v1/ganta/change/status status=200
+time="2020-10-06T18:49:51+06:00" level=info error= host="[::1]:42748" path=/v1/project/status status=200
+time="2020-10-06T19:39:13+06:00" level=info msg="Add_comment_to_project 2" error="includes invalid ganta child ids" host="[::1]:42748" path=/v1/spk_comment status=405
+time="2020-10-06T19:39:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T19:39:49+06:00" level=info msg=main port=7000
+time="2020-10-06T19:44:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T19:44:17+06:00" level=info msg=main port=7000
+time="2020-10-06T19:49:12+06:00" level=info msg="Add_comment_to_project 2" error="includes invalid ganta child ids" host="[::1]:43208" path=/v1/spk_comment status=405
+time="2020-10-06T19:49:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T19:49:22+06:00" level=info msg=main port=7000
+time="2020-10-06T19:52:44+06:00" level=info msg="Add_comment_to_project 2" error="includes invalid document ids" host="[::1]:43264" path=/v1/spk_comment status=405
+time="2020-10-06T19:52:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T19:52:52+06:00" level=info msg=main port=7000
+time="2020-10-06T19:54:15+06:00" level=info msg="Add_comment_to_project 2" error= host="[::1]:43304" path=/v1/spk_comment status=200
+time="2020-10-06T19:58:24+06:00" level=info msg="Add_comment_to_project 2" error= host="[::1]:43304" path=/v1/spk_comment status=200
+time="2020-10-06T20:00:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T20:00:24+06:00" level=info msg=main port=7000
+time="2020-10-06T20:02:07+06:00" level=info msg="Add_comment_to_project 2" error="the project is either rejected or in consideration by an investor" host="[::1]:43378" path=/v1/spk_comment status=405
+time="2020-10-06T20:02:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T20:02:49+06:00" level=info msg=main port=7000
+time="2020-10-06T20:03:28+06:00" level=info msg="Add_comment_to_project 2" error="the project is either rejected or in consideration by an investor" host="[::1]:43426" path=/v1/spk_comment status=405
+time="2020-10-06T20:09:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T20:09:18+06:00" level=info msg=main port=7000
+time="2020-10-06T20:09:54+06:00" level=info msg="Add_comment_to_project 2" error="the project is either rejected or in consideration by an investor" host="[::1]:43490" path=/v1/spk_comment status=405
+time="2020-10-06T20:12:39+06:00" level=info msg="Add_comment_to_project 2" error="the project is either rejected or in consideration by an investor" host="[::1]:43490" path=/v1/spk_comment status=405
+time="2020-10-06T20:12:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T20:12:48+06:00" level=info msg=main port=7000
+time="2020-10-06T20:15:08+06:00" level=info msg="Add_comment_to_project 2" error="a manager or expert is trying to change the status, while not having documents checked" host="[::1]:43546" path=/v1/spk_comment status=405
+time="2020-10-06T20:17:05+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T20:17:06+06:00" level=info msg=main port=7000
+time="2020-10-06T21:05:59+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-06T21:05:59+06:00" level=info msg=main port=7000
+time="2020-10-06T21:10:27+06:00" level=info msg="Add_comment_to_project 2" error= host="[::1]:44078" path=/v1/spk_comment status=200
+time="2020-10-07T00:55:31+06:00" level=info msg="Project_get_status_of_project check" error="not admin, investor of the project or spk user, who is assigned to it" host="[::1]:44078" path=/v1/project/status status=405

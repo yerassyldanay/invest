@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/jinzhu/gorm"
 	"invest/utils"
 	"time"
 )
@@ -118,5 +119,51 @@ func (g *Ganta) Change_time() (utils.Msg) {
 		g.StartDate = utils.GetCurrentTime()
 	}
 
-	return g.Update_ganta_step("start_date", "duration_in_days")
+	msg := g.Update_ganta_step("start_date", "duration_in_days")
+	return msg
 }
+
+func (g *Ganta) Add_ganta_step_to_the_top(tx *gorm.DB) (error) {
+	var project_id = g.ProjectId
+
+	var tempGanta = Ganta{Id: g.Id}
+	err := tempGanta.OnlyGetCurrentStepByProjectId(tx);
+
+	if err == gorm.ErrRecordNotFound {
+		// create a new one
+		g = &Ganta{
+			IsAdditional:   true,
+			ProjectId:		project_id,
+			Kaz:            g.Kaz,
+			Rus: 			g.Rus,
+			Eng: 			g.Eng,
+			StartDate:      utils.GetCurrentTime(),
+			DurationInDays: g.DurationInDays,
+			Step:           g.Step,
+			Status:         g.Status,
+			Responsible:    g.Responsible,
+			IsDocCheck:     g.IsDocCheck,
+		}
+	} else if err != nil {
+		return err
+	} else {
+		// this puts this gantt step on the top
+		g.StartDate = tempGanta.StartDate.Add(time.Hour * (-1))
+	}
+
+	// make sure id is 0
+	g.Id = 0
+
+	// prettify name of the gantt step
+	if err = g.Validate(); err != nil {
+		return err
+	}
+
+	// create a new gantt step
+	if err := g.OnlyCreate(tx); err != nil {
+		return err
+	}
+
+	return nil
+}
+

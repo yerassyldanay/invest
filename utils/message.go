@@ -39,6 +39,10 @@ func (msg *Msg) IsThereAnError() bool {
 	return msg.ErrMsg != ""
 }
 
+func (msg *Msg) SetFname(fname string, appendix string) {
+	msg.Fname = fname + " " + appendix
+}
+
 /*
 	note: the order, how headers are set, matters
 		1. headers

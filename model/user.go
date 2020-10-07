@@ -93,3 +93,15 @@ func (c *User) OnlyGetUsersByRolePreloaded(roles []string, offset interface{}, t
 		Error
 	return users, err
 }
+
+func (c *User) DoesOwnThisProjectById(project_id uint64, tx *gorm.DB) (err error) {
+	var project = Project{}
+	err = tx.First(&project, "id = ? and offered_by_id = ?", project_id, c.Id).Error
+	return err
+}
+
+func (c *User) IsAssignedToThisProjectById(project_id uint64, tx *gorm.DB) (err error) {
+	var pu = ProjectsUsers{}
+	err = tx.Find(&pu, "project_id = ? and user_id = ?", project_id, c.Id).Error
+	return err
+}

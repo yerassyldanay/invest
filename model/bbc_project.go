@@ -1,5 +1,16 @@
 package model
 
+/*
+	A project might have different statuses, which are mainly set by the current
+		(top after sorting) Gantt step
+
+	However, there are some nuances:
+		* pre-reject, pre-reconsider are the statuses,
+		which are set to this project apart from the Gantt step
+
+		These statuses indicates admin that a project was not accepted
+		by manager or expert
+ */
 type Project struct {
 	Id					uint64					`json:"id" gorm:"primary key"`
 
@@ -24,10 +35,6 @@ type Project struct {
 	OfferedById					uint64					`json:"offered_by_id" gorm:"not null"`
 	OfferedByPosition			string					`json:"offered_by_position" gorm:"not null"`
 
-	Reject						bool					`json:"reject" gorm:"default:false"`
-	Reconsider					bool					`json:"reconsider" gorm:"default:false"`
-	Completed					bool					`json:"completed" gorm:"default:false"`
-	
 	Status						string					`json:"status" gorm:"default:'pending_admin'"`
 	Step						int						`json:"step"`
 	
@@ -42,6 +49,12 @@ type Project struct {
 
 type ProjectWithFinanceTables struct {
 	Project						Project					`json:"project"`
+	Cost						Cost					`json:"cost"`
+	Finance						Finance					`json:"finance"`
+}
+
+type ProjectExtended struct {
+	Project
 	Cost						Cost					`json:"cost"`
 	Finance						Finance					`json:"finance"`
 }
