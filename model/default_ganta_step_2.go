@@ -23,6 +23,35 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
+		Kaz:            "Рассмотрение заявки / документов",
+		Rus:            "Рассмотрение заявки / документов",
+		Eng:            "Рассмотрение заявки / документов",
+		DurationInDays: 1,
+		GantaChildren:  []Ganta{},
+
+		Step:           2,
+		Status: 		utils.ProjectStatusPendingManager,
+
+		Responsible:    utils.RoleManager,
+		IsDone: 		false, // always false
+		IsDocCheck: 	true,
+	},
+	{
+		IsAdditional:   false,
+		Kaz:            "Рассмотрение главой инвестиционного департамента",
+		Rus:            "Рассмотрение главой инвестиционного департамента",
+		Eng:            "Рассмотрение главой инвестиционного департамента",
+		DurationInDays: 1,
+		GantaChildren:  []Ganta{},
+
+		Step:           2,
+		Status: 		utils.ProjectStatusPendingAdmin,
+
+		Responsible:    utils.RoleAdmin,
+		IsDone: 		false, // always false
+	},
+	{
+		IsAdditional:   false,
 		Kaz:            "Экспертиза Проекта (ДИП, ДЭП, ЮД, ДБиНУ)",
 		Rus:            "Экспертиза Проекта (ДИП, ДЭП, ЮД, ДБиНУ)",
 		Eng:            "Экспертиза Проекта (ДИП, ДЭП, ЮД, ДБиНУ)",

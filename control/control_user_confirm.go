@@ -30,19 +30,5 @@ var User_email_confirm = func(w http.ResponseWriter, r *http.Request) {
 	utils.Respond(w, r, msg)
 }
 
-/*
-	after getting code on your phone, you can confirm that you own the phone number
- */
-var User_phone_confirm = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "User_phone_confirm"
-	var p = model.Phone{}
 
-	p.Number = model.Get_value_from_query(r, "number")
-	p.SentCode = model.Get_value_from_query(r, "sent_code")
-
-	msg := p.Confirm()
-	msg.Fname = fname + " 1"
-
-	utils.Respond(w, r, msg)
-}
 

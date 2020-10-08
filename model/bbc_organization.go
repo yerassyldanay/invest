@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"github.com/jinzhu/gorm"
+	"time"
+)
 
 /*
 	указывает БИН – для роли Инвестора , при этом БИН может являться логином Инвестора
@@ -33,3 +36,15 @@ func (Organization) TableName() string {
 	return "organizations"
 }
 
+func (o *Organization) OnlyGetByBinAndLang(tx *gorm.DB) error {
+	return tx.Table(Organization{}.TableName()).
+		Where("bin=? and lang=?", o.Bin, o.Lang).Find(o).Error
+}
+
+func (o *Organization) OnlyCreate(tx *gorm.DB) error {
+	return tx.Create(o).Error
+}
+
+func (o *Organization) Save(tx *gorm.DB) error {
+	return tx.Save(o).Error
+}
