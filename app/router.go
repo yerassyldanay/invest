@@ -5,7 +5,6 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
-	"invest/model"
 	"invest/utils"
 	"net/http"
 )
@@ -170,9 +169,7 @@ func Create_new_invest_router() (*mux.Router) {
 		Test API
 	 */
 	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var ganta = model.Ganta{Id: 35}
-		err := ganta.OnlyChangeStatusToDoneById(model.GetDB())
-		fmt.Println(err)
+
 	})
 
 	v1.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {

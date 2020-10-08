@@ -45,6 +45,9 @@ func Prepare_project_statuses(status string) (statuses []string) {
 			utils.ProjectStatusReject,
 			utils.ProjectStatusReconsider,
 			utils.ProjectStatusAccept,
+			utils.ProjectStatusPreliminaryReject,
+			utils.ProjectStatusPreliminaryReconsider,
+			utils.ProjectStatusPreliminaryAccept,
 		}
 	}
 

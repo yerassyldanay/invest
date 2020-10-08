@@ -6,6 +6,7 @@ const (
 	RoleExpert = "expert"
 	RoleAdmin = "admin"
 	RoleSpk = "spk"
+	RoleNobody = "nobody"
 )
 
 const (

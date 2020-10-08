@@ -16,19 +16,18 @@ type Document struct {
 	
 	Uri							string				`json:"uri" gorm:"default:''"`
 	
-	Modified					time.Time			`json:"modified" gorm:"default:now()"`
-	
-	SetDeadline					int64					`json:"set_deadline" gorm:"-"`
+	SetDeadline					int64				`json:"set_deadline" gorm:"-"`
 	Deadline					time.Time			`json:"deadline" gorm:"default:null"`
 	Notified					time.Time			`json:"notified" gorm:"default:now()"`
 
+	Modified					time.Time			`json:"modified" gorm:"default:now()"`
+
+	Status						string				`json:"status" gorm:"default:'new_one'"`
 	Step						int					`json:"step" gorm:"default:1"`
 	IsAdditional				bool				`json:"is_additional" gorm:"default:false"`
 
-	ProjectId					uint64 				`json:"project_id"`
+	ProjectId					uint64 				`json:"project_id" gorm:"foreignkey:projects.id"`
 	Responsible					string				`json:"responsible" gorm:"manager"`
-
-	Statuses					[]DocumentUserStatus			`json:"statuses" gorm:"-"'`
 }
 
 func (Document) TableName() string {
@@ -103,8 +102,13 @@ func (d *Document) OnlySave(tx *gorm.DB) (err error) {
 }
 
 // only update uri
-func (d *Document) OnlyUpdateUriById(tx *gorm.DB) (err error) {
-	err = tx.Model(&Document{Id: d.Id}).Update("uri", d.Uri).Error
+func (d *Document) OnlyUpdateUriAndDeadlineById(tx *gorm.DB) (err error) {
+	err = tx.Model(&Document{Id: d.Id}).Updates(map[string]interface{}{
+		"uri": d.Uri,
+		"status": utils.ProjectStatusNewOne,
+		"modified": utils.GetCurrentTime(),
+		"deadline": utils.GetCurrentTime(),
+	}).Error
 	return err
 }
 
@@ -134,7 +138,10 @@ func (d *Document) OnlyDeleteById(tx *gorm.DB) (err error) {
 
 // set uri to ''
 func (d *Document) OnlyEmptyUriById(tx *gorm.DB) (err error) {
-	err = tx.Model(&Document{Id: d.Id}).Update("uri", "").Error
+	err = tx.Model(&Document{Id: d.Id}).Updates(map[string]interface{}{
+		"uri": "",
+		"modified": utils.GetCurrentTime(),
+	}).Error
 	return err
 }
 
@@ -145,14 +152,29 @@ func (d *Document) OnlyCountNumberOfEmptyDocuments(roleName string, step int, tx
 	return count
 }
 
-func (d *Document) OnlyCountNumberOfNotAcceptedDocuments(project_id uint64, step int, tx *gorm.DB) (count int) {
-	main_query := " select * from documents d join document_user_statuses dus " +
-		" on d.id = dus.document_id where project_id = ? and step = ? and status != ?; "
-	_ = tx.Raw(main_query, project_id, step, utils.ProjectStatusAccept).Count(&count).Error
-	return count
+// a number of documents with undesirable statuses
+// those are: reject & accept
+// desirable ones are: accept & new_one
+func (d *Document) OnlyCountNumberOfDocumentsWithUndesirableStatus(roleName string, project_id uint64, step int, tx *gorm.DB) (count int, err error) {
+	err = tx.Table(d.TableName()).Where("project_id = ? and step = ? and status not in (?) and responsible = ?",
+		project_id, step, []string{utils.ProjectStatusNewOne, utils.ProjectStatusAccept}, roleName).Count(&count).Error
+	return count, err
 }
 
-func (d *Document) OnlyUploadStatusesById(tx *gorm.DB) (err error) {
-	err = tx.Find(&d.Statuses, "document_id = ?", d.Id).Error
+func (d *Document) OnlyUpdateStatusById(tx *gorm.DB) (err error) {
+	err = tx.Model(&Document{Id: d.Id}).Updates(map[string]interface{}{
+		"status": d.Status,
+		"modified": utils.GetCurrentTime(),
+	}).Error
 	return err
+}
+
+func (d *Document) AreAllValidDocumentIds(ids []uint64, project_id uint64, tx *gorm.DB) (bool) {
+	var count int
+	err := tx.Table(d.TableName()).
+		Where("id in (?) and project_id = ?", ids, project_id).
+		Count(&count).Error
+
+	ok := (err == nil) && (count == len(ids))
+	return ok
 }

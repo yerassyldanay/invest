@@ -94,7 +94,7 @@ func (p *Project) OnlyPreloadOrganizationByOrganizationId(tx *gorm.DB) (err erro
 	return err
 }
 
-// get projects of manager, lawyer and financier (and other spk users if they are)
+// get projects of manager, lawyer and financier (and other spk user if there is any)
 // except for an admin, who has access to all projects
 func (p *Project) OnlyGetProjectsOfSpkUsers(user_id uint64, statuses []string, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
 	err = tx.Preload("Organization").Table("projects as p").
@@ -128,9 +128,13 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 	err = ganta.OnlyGetCurrentStepByProjectId(tx)
 
 	switch {
-	case err == nil && !utils.Does_a_slice_contain_element([]string{utils.ProjectStatusPreliminaryReject, utils.ProjectStatusPreliminaryReconsider}, p.Status):
+	case err == nil && !utils.Does_a_slice_contain_element([]string{utils.ProjectStatusPreliminaryReject,
+			utils.ProjectStatusPreliminaryReconsider,
+				utils.ProjectStatusReject}, p.Status):
 		p.CurrentStep = ganta
 		p.Step = ganta.Step
+		// status will be changed
+		// if the project is not rejected by spk or put into reconsideration
 		p.Status = ganta.Status
 	case err == nil:
 		// in case it is preliminary reject or reconsider (status is set by manager or expert)
@@ -138,7 +142,9 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 		p.Step = ganta.Step
 		p.CurrentStep = ganta
 	case err == gorm.ErrRecordNotFound :
-		return nil
+		p.Step = 3
+		p.Status = utils.ProjectStatusAgreement
+		p.CurrentStep = DefaultGantaFinalStep
 	default:
 		return err
 	}
@@ -157,7 +163,9 @@ func (p *Project) Get_project_with_current_status() (utils.Msg) {
 
 	// no need
 	err = p.CurrentStep.OnlyGetCurrentStepByProjectId(GetDB())
-	if err != nil {
+	if err == gorm.ErrRecordNotFound {
+		// pass
+	} else if err != nil {
 		return ReturnInternalDbError(err.Error())
 	}
 

@@ -33,60 +33,65 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 	// set new fields
 	tempDoc.Modified = utils.GetCurrentTime()
 	tempDoc.Uri = document.Uri
-	tempDoc.Deadline = utils.GetCurrentTime().Add(time.Hour * (-24))
+	tempDoc.Deadline = utils.GetCurrentTime()
 
-	// save changes
-	if err = tempDoc.OnlyUpdateUriById(trans); err != nil {
+	// update fields: uri, modified & deadline
+	// changes saved
+	if err = tempDoc.OnlyUpdateUriAndDeadlineById(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	/*
+		Automatic shift - has nothing to do with the very process of document upload
+
 		get gantt table
 
 		here we need to shift the step at gantt table, in case:
-			* investor has uploaded all documents
-			* investor has reconsidered documents, which are sent back
+			* an investor has uploaded all documents
+			* an investor has reconsidered documents, which are sent back
 	 */
-	var ganta = model.Ganta{ProjectId: document.ProjectId}
-	if err := ganta.OnlyGetCurrentStepByProjectId(trans); err != nil {
+	var currentGanta = model.Ganta{ProjectId: document.ProjectId}
+	if err := currentGanta.OnlyGetCurrentStepByProjectId(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	/*
-		Investor:
-			case: when investor is responsible & nothing to upload (all documents are uploaded)
-			case: when investor is responsible to reconsider documents
+		Automatically shifts to the next stage:
+			* when an investor uploaded all documents
+			* when an investor reconsidered (removed & uploaded) documents with an undesirable status
 	 */
 	var countNumberOfEmptyDocuments, countNumberOfDocumentsWithUndesirableStatus int
-	if ganta.Responsible == is.RoleName && is.RoleName == utils.RoleInvestor {
+	if currentGanta.Responsible == is.RoleName && is.RoleName == utils.RoleInvestor {
 		// number of documents with empty uri
-		countNumberOfEmptyDocuments = document.OnlyCountNumberOfEmptyDocuments(is.RoleName, ganta.Step, trans)
+		// which does not allow to move to the next step
+		countNumberOfEmptyDocuments = document.OnlyCountNumberOfEmptyDocuments(is.RoleName, currentGanta.Step, trans)
 
 		// if there is any document with undesirable status then do not move to the next gantt step
-		countNumberOfDocumentsWithUndesirableStatus = document.OnlyCountNumberOfNotAcceptedDocuments(ganta.ProjectId, ganta.Step, trans)
-
-		var dus = model.DocumentUserStatus{
-			DocumentId: document.Id,
-			Status: utils.ProjectStatusNewOne,
-		}
-		if err := dus.OnlyUpdate(trans); err != nil {
+		countNumberOfDocumentsWithUndesirableStatus, err = document.OnlyCountNumberOfDocumentsWithUndesirableStatus(is.RoleName, currentGanta.ProjectId, currentGanta.Step, trans)
+		if err != nil {
 			return model.ReturnInternalDbError(err.Error())
 		}
 
 		// count the number of documents, which are to be reconsidered or uploaded
 		if countNumberOfEmptyDocuments + countNumberOfDocumentsWithUndesirableStatus != 0 {
 			// there are still documents
-		} else if err = ganta.OnlyChangeStatusToDoneById(trans); err != nil {
+		} else if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
+			// if there is no document to change or upload -> shift gantt step
 			return model.ReturnInternalDbError(err.Error())
 		}
-	} else if utils.Does_a_slice_contain_element([]string{utils.RoleSpk, utils.RoleManager, utils.RoleExpert}, ganta.Responsible) &&
+
+	} else if utils.Does_a_slice_contain_element([]string{utils.RoleSpk, utils.RoleManager, utils.RoleExpert}, currentGanta.Responsible) &&
 		utils.Does_a_slice_contain_element([]string{utils.RoleSpk, utils.RoleManager, utils.RoleExpert}, is.RoleName) {
-		fmt.Println(is.RoleName + " | " + ganta.Responsible)
+		fmt.Println(is.RoleName + " | " + currentGanta.Responsible)
 	}
 
 	if err = trans.Commit().Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
+
+	// update the status of the project
+	var project = model.Project{Id: document.ProjectId}
+	_ = project.GetAndUpdateStatusOfProject(model.GetDB())
 
 	return model.ReturnNoError()
 }

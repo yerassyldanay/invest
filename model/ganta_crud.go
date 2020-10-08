@@ -84,7 +84,7 @@ func (g *Ganta) Update_ganta_step(fields... string) (utils.Msg) {
 		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
-	return MsgNoErrorEverythingIsOk
+	return ReturnNoError()
 }
 
 /*
@@ -94,7 +94,7 @@ func (g *Ganta) Update_ganta_step(fields... string) (utils.Msg) {
 		* delete all documents
  */
 func (g *Ganta) Delete_ganta_step() (utils.Msg) {
-	return MsgNoErrorEverythingIsOk
+	return ReturnNoError()
 }
 
 /*

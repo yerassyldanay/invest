@@ -71,7 +71,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		IsAdditional:   false,
 		Kaz:            "Протокол Решения Правления",
 		Rus:            "Протокол Решения Правления",
-		Eng:            "Протокол Решения Правления)",
+		Eng:            "Протокол Решения Правления",
 		StartDate:      utils.GetCurrentTime(),
 		DurationInDays: 10,
 		GantaParentId:  0,
@@ -119,4 +119,19 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	//	
 	//	GantaChildren:  []Ganta{},
 	//},
+}
+
+var DefaultGantaFinalStep = Ganta{
+	IsAdditional:   false,
+	Kaz:            "Проект прошел все этапы",
+	Rus:            "Проект прошел все этапы",
+	Eng:            "Проект прошел все этапы",
+	StartDate:      utils.GetCurrentTime(),
+	DurationInDays: 0,
+
+	Step:           3,
+	Status: 		utils.ProjectStatusAgreement,
+	Responsible:    utils.RoleNobody,
+
+	GantaChildren:  []Ganta{},
 }

@@ -169,9 +169,9 @@ func Set_up_db() {
 	//&Investor{}, InvestorAndCompany{}, &Phone{}, &Position{}, &Project{}, &ProjectDoc{},
 	//&ProjectCivilConnection{}, &SendgridMessage{})
 
-	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{}, &DocumentUserStatus{},
+	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{},
 		&Email{}, &Finance{}, &Ganta{}, &Organization{}, &Permission{},
-		&Phone{}, &Project{}, &ProjectStatus{}, &Role{}, &SendgridMessage{}, &SendgridMessageStore{},
+		&Phone{}, &Project{}, &Role{}, &SendgridMessage{}, &SendgridMessageStore{},
 		&User{})
 
 	db.Debug().AutoMigrate(&ProjectsUsers{})

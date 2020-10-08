@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/jinzhu/gorm"
 	"invest/model"
 	"invest/utils"
 	"strings"
@@ -55,8 +56,17 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, status string) (utils.Msg) {
 
 	// get the current gantt step
-	var ganta = model.Ganta{ProjectId: project_id}
-	if err := ganta.OnlyGetCurrentStepByProjectId(model.GetDB()); err != nil {
+	var currentGanta = model.Ganta{ProjectId: project_id}
+	if err := currentGanta.OnlyGetCurrentStepByProjectId(model.GetDB()); err == gorm.ErrRecordNotFound {
+		var project = model.Project{Id: project_id}
+		_ = project.OnlyGetById(model.GetDB())
+		project.CurrentStep = model.DefaultGantaFinalStep
+
+		var resp = utils.NoErrorFineEverthingOk
+		resp["info"] = model.Struct_to_map(project)
+
+		return model.ReturnNoErrorWithResponseMessage(resp)
+	} else if err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
@@ -87,7 +97,10 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			err = project.OnlyUpdateStatusById(trans)
 		case status == utils.ProjectStatusAccept:
 			// go to the next step
-			err = ganta.OnlyChangeStatusToDoneById(trans)
+			err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans)
+			// update the status of the project
+			project.Status = utils.ProjectStatusAccept
+			err = project.OnlyUpdateStatusById(trans)
 		case status == utils.ProjectStatusReconsider:
 			// prepare gantt step
 			newGanta := model.Ganta{
@@ -97,24 +110,27 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				Rus:            "Доработка инициатором проекта",
 				Eng:            "Доработка инициатором проекта",
 				DurationInDays: 3,
-				Step:           ganta.Step,
+				Step:           currentGanta.Step,
 				Status:         utils.ProjectStatusPendingInvestor,
-				StartDate: 		ganta.StartDate.Add(time.Hour * (-1)),
+				StartDate: 		utils.GetCurrentTime(),
+				Deadline: 		utils.GetCurrentTime().Add(time.Hour * 24 * 3),
 				IsDone:         false,
 				Responsible:    utils.RoleInvestor,
 			}
 
+			// create a new gantt step
 			if err = newGanta.OnlyCreate(trans); err != nil {
 				return model.ReturnInternalDbError(err.Error())
 			}
 
-			// add new step to the top
-			if err = ganta.OnlyChangeStatusToDoneById(trans); err != nil {
+			// add a new step to the top
+			// by indicating that current one is done
+			if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
 				return model.ReturnInternalDbError(err.Error())
 			}
 
-			// change the status of the user
-			project.Status = status
+			// change the status of the project
+			project.Status = utils.ProjectStatusReconsider
 			err = project.OnlyUpdateStatusById(trans)
 		}
 
@@ -137,12 +153,26 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			return model.ReturnInternalDbError(err.Error())
 		}
 
-		// in any case we have to switch to the next gantt step
-		err = ganta.OnlyChangeStatusToDoneById(trans)
+		// anyway case we have to switch to the next gantt step
+		err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans)
+	default:
+		return model.ReturnMethodNotAllowed("role is not supported. role is " + is.RoleName)
 	}
 
 	if err != nil {
 		return model.ReturnInternalDbError(err.Error())
+	}
+
+	/*
+		there is a problem, the project status must be updated
+	 */
+	nextGanta := model.Ganta{ProjectId: project_id}
+	if err = nextGanta.OnlyGetCurrentStepByProjectId(trans); err == gorm.ErrRecordNotFound	{
+		// pass
+	} else if err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	} else {
+		nextGanta.Deadline.Add(time.Hour * 24 * nextGanta.DurationInDays)
 	}
 
 	if err := trans.Commit().Error; err != nil {

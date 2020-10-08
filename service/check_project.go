@@ -39,7 +39,10 @@ func (is *InvestService) Check_whether_this_user_responsible_for_current_step(pr
 	}
 
 	var responsible = project.CurrentStep.Responsible
-	if responsible != is.RoleName {
+
+	if is.RoleName == utils.RoleAdmin {
+		// pass
+	} else if responsible != is.RoleName {
 		return model.ReturnMethodNotAllowed("responsible: " + responsible + " | your role: " + is.RoleName)
 	}
 

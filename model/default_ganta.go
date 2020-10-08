@@ -30,15 +30,30 @@ func (p *Project) Create_ganta_parent_with_its_children(start_date time.Time, ga
 	/*
 		prepare parent ganta step
 	 */
+	var duration time.Duration
 	for i, _ := range ganta_parent_steps {
 		ganta_parent_steps[i].ProjectId = p.Id
+
+		// how many days
+		duration = ganta_parent_steps[i].DurationInDays
+
+		// start <-> deadline (end)
 		ganta_parent_steps[i].StartDate = start_date.Add(time.Hour * 24 * days_to_add)
-		days_to_add += ganta_parent_steps[i].DurationInDays
+		ganta_parent_steps[i].Deadline = ganta_parent_steps[i].StartDate.Add(time.Hour * 24 * duration)
+
+		// for next step must start after this step
+		days_to_add += duration
+
+		// additional gantt steps will be added
 		ganta_parent_steps[i].IsAdditional = false
 
+		// prepare child gantt steps
 		for j, _ := range ganta_parent_steps[i].GantaChildren {
 			ganta_parent_steps[i].GantaChildren[j].ProjectId = p.Id
+
 			ganta_parent_steps[i].GantaChildren[j].StartDate = ganta_parent_steps[i].StartDate
+			ganta_parent_steps[i].GantaChildren[j].Deadline = ganta_parent_steps[i].Deadline
+
 			ganta_parent_steps[i].GantaChildren[j].DurationInDays = 3
 			ganta_parent_steps[i].GantaChildren[j].IsAdditional = false
 		}
@@ -46,6 +61,11 @@ func (p *Project) Create_ganta_parent_with_its_children(start_date time.Time, ga
 
 	//var errorChan = make(chan error, 1)
 
+	/*
+		cannot use goroutines with transaction
+			because if it is blocked one goroutine, at the level of database,
+			transaction will be rolled back
+	 */
 	//var wg = sync.WaitGroup{}
 	for _, parent_step := range ganta_parent_steps {
 		parent_step := parent_step

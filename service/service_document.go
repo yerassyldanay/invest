@@ -72,7 +72,7 @@ func (is *InvestService) Document_remove_document_from_project(document_id uint6
 	path, _ = filepath.Abs("./" + path)
 	fmt.Println("remove file path: " + path)
 	if err := os.Remove(path); err != nil {
-		return model.ReturnInternalDbError(err.Error())
+		fmt.Println(err.Error())
 	}
 
 	// commit changes

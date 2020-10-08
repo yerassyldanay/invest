@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
+	"invest/utils"
 	"time"
 )
 
@@ -33,6 +34,7 @@ type Ganta struct {
 	Start 							int64					`json:"start" gorm:"-"`
 	StartDate						time.Time				`json:"start_date" gorm:"default:now()"`
 	DurationInDays					time.Duration			`json:"duration_in_days"`
+	Deadline						time.Time				`json:"deadline" gorm:"default:null"`
 
 	GantaParentId					uint64					`json:"ganta_parent_id"`
 	GantaChildren					[]Ganta					`json:"ganta_children" gorm:"-"`
@@ -147,8 +149,25 @@ func (g *Ganta) OnlyChangeStatusById(tx *gorm.DB) (err error) {
 }
 
 // 'is_done' field is set to true
-func (g *Ganta) OnlyChangeStatusToDoneById(tx *gorm.DB) (err error) {
-	err = tx.Model(&Ganta{Id: g.Id}).Update("is_done", true).Error
+func (g *Ganta) OnlyChangeStatusToDoneAndUpdateDeadlineById(tx *gorm.DB) (err error) {
+	var days = int(utils.GetCurrentTime().Sub(g.StartDate).Hours() / 24)
+
+	switch {
+	case days == 0:
+		g.StartDate = utils.GetCurrentTime().Add(time.Hour * (-24))
+	case days < 0:
+		g.StartDate = utils.GetCurrentTime().Add(time.Hour * time.Duration(days))
+	}
+
+	// deadline ends up where it is
+	g.Deadline = utils.GetCurrentTime()
+
+	err = tx.Model(&Ganta{Id: g.Id}).Updates(map[string]interface{}{
+		"is_done": true,
+		"deadline": g.Deadline,
+		"start_date": g.StartDate,
+		"duration_in_days": days,
+	}).Error
 	return err
 }
 

@@ -26,6 +26,8 @@ func Update_sequence_id_thus_avoid_duplicate_primary_key_error(tx *gorm.DB, byca
 		main_query = `select setval('users_id_seq', (select max(id) from users) + 1);`
 	case "roles":
 		main_query = `select setval('roles_id_seq', (select max(id) from roles) + 1);`
+	case "projects":
+		main_query = `select setval('projects_id_seq', (select max(id) from projects) + 1);`
 	default:
 		main_query = `select current_time;`
 	}
