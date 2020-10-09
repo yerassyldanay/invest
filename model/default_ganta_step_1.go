@@ -13,7 +13,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		Kaz:            "Загрузка документов Инициатором проекта",
 		Rus:            "Загрузка документов Инициатором проекта",
 		Eng:            "Загрузка документов Инициатором проекта",
-		DurationInDays: 4,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           1,
@@ -27,7 +27,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		Kaz:            "Прикрепление сотрудников СПК к проекту",
 		Rus:            "Прикрепление сотрудников СПК к проекту",
 		Eng:            "Прикрепление сотрудников СПК к проекту",
-		DurationInDays: 1,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           1,
@@ -41,7 +41,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		Kaz:            "Рассмотрение заявки / документов",
 		Rus:            "Рассмотрение заявки / документов",
 		Eng:            "Рассмотрение заявки / документов",
-		DurationInDays: 1,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           1,
@@ -56,7 +56,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		Kaz:            "Рассмотрение главой инвестиционного департамента",
 		Rus:            "Рассмотрение главой инвестиционного департамента",
 		Eng:            "Рассмотрение главой инвестиционного департамента",
-		DurationInDays: 1,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           1,
@@ -70,7 +70,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		Kaz:            "Предварительная экспертиза (ДИП, ДЭП, ЮД, ДБ и НУ)",
 		Rus:            "Предварительная экспертиза (ДИП, ДЭП, ЮД, ДБ и НУ)",
 		Eng:            "Предварительная экспертиза (ДИП, ДЭП, ЮД, ДБ и НУ)",
-		DurationInDays: 6,
+		DurationInDays: 7,
 		GantaChildren:  []Ganta{},
 
 		Step:           1,
@@ -83,7 +83,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		Kaz:            "Рассмотрение Заявки на ИК СПК",
 		Rus:            "Рассмотрение Заявки на ИК СПК",
 		Eng:            "Рассмотрение Заявки на ИК СПК",
-		DurationInDays: 5,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           1,
@@ -95,7 +95,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		Kaz:            "Протокол Решения ИК",
 		Rus:            "Протокол Решения ИК",
 		Eng:            "Протокол Решения ИК",
-		DurationInDays: 5,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           1,
@@ -104,9 +104,9 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Оформление ДИП документов на право землепользования",
-		Rus:            "Оформление ДИП документов на право землепользования",
-		Eng:            "Оформление ДИП документов на право землепользования",
+		Kaz:            "Заявки в ЦОН",
+		Rus:            "Заявки в ЦОН",
+		Eng:            "Заявки в ЦОН",
 		DurationInDays: 5,
 		GantaChildren:  []Ganta{},
 
@@ -116,9 +116,9 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Предоставление в СПК ПСД с экспертизой",
-		Rus:            "Предоставление в СПК ПСД с экспертизой",
-		Eng:            "Предоставление в СПК ПСД с экспертизой",
+		Kaz:            "Предоставление в СПК ПСД с экспертизой, ТЭО*",
+		Rus:            "Предоставление в СПК ПСД с экспертизой, ТЭО*",
+		Eng:            "Предоставление в СПК ПСД с экспертизой, ТЭО*",
 		DurationInDays: 5,
 		GantaChildren:  []Ganta{},
 

@@ -20,9 +20,6 @@ func Prepare_project_statuses(status string) (statuses []string) {
 	case "admin":
 		statuses = []string{
 			utils.ProjectStatusPendingAdmin,
-			utils.ProjectStatusPreliminaryReject,
-			utils.ProjectStatusPreliminaryReconsider,
-			utils.ProjectStatusPreliminaryAccept,
 		}
 	case "reject":
 		statuses = []string{
@@ -45,9 +42,6 @@ func Prepare_project_statuses(status string) (statuses []string) {
 			utils.ProjectStatusReject,
 			utils.ProjectStatusReconsider,
 			utils.ProjectStatusAccept,
-			utils.ProjectStatusPreliminaryReject,
-			utils.ProjectStatusPreliminaryReconsider,
-			utils.ProjectStatusPreliminaryAccept,
 		}
 	}
 

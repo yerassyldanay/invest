@@ -24,10 +24,6 @@ const (
 	ProjectStatusReconsider = "reconsider"
 	ProjectStatusAccept = "accept"
 
-	ProjectStatusPreliminaryReject = "pre-reject"
-	ProjectStatusPreliminaryReconsider = "pre-reconsider"
-	ProjectStatusPreliminaryAccept = "pre-accept"
-
 	ProjectStatusNewOne = "new_one"
 
 	ProjectStatusChangeTimeInHours = 48

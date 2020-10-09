@@ -12,13 +12,13 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Rus:            "Пакет документов предоставляемый Инициатором проекта на втором этапе",
 		Eng:            "Пакет документов предоставляемый Инициатором проекта на втором этапе",
 		StartDate:      utils.GetCurrentTime(),
-		DurationInDays: 10,
+		DurationInDays: 3,
 		GantaParentId:  0,
 
 		Step:           2,
 		Status: 		utils.ProjectStatusPendingInvestor,
 		Responsible:    utils.RoleInvestor,
-		
+
 		GantaChildren:  []Ganta{},
 	},
 	{
@@ -26,7 +26,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Kaz:            "Рассмотрение заявки / документов",
 		Rus:            "Рассмотрение заявки / документов",
 		Eng:            "Рассмотрение заявки / документов",
-		DurationInDays: 1,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           2,
@@ -41,7 +41,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Kaz:            "Рассмотрение главой инвестиционного департамента",
 		Rus:            "Рассмотрение главой инвестиционного департамента",
 		Eng:            "Рассмотрение главой инвестиционного департамента",
-		DurationInDays: 1,
+		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
 		Step:           2,
@@ -56,7 +56,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Rus:            "Экспертиза Проекта (ДИП, ДЭП, ЮД, ДБиНУ)",
 		Eng:            "Экспертиза Проекта (ДИП, ДЭП, ЮД, ДБиНУ)",
 		StartDate:      utils.GetCurrentTime(),
-		DurationInDays: 10,
+		DurationInDays: 7,
 		GantaParentId:  0,
 
 		Step:           2,
@@ -72,7 +72,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Rus:            "Пояснительная записка на Правление СПК с приложением пакета документов",
 		Eng:            "Пояснительная записка на Правление СПК с приложением пакета документов",
 		StartDate:      utils.GetCurrentTime(),
-		DurationInDays: 10,
+		DurationInDays: 3,
 		GantaParentId:  0,
 
 		Step:           2,
@@ -87,7 +87,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Rus:            "Рассмотрение Проекта на Правлении СПК",
 		Eng:            "Рассмотрение Проекта на Правлении СПК",
 		StartDate:      utils.GetCurrentTime(),
-		DurationInDays: 10,
+		DurationInDays: 15,
 		GantaParentId:  0,
 
 		Step:           2,
@@ -102,7 +102,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Rus:            "Протокол Решения Правления",
 		Eng:            "Протокол Решения Правления",
 		StartDate:      utils.GetCurrentTime(),
-		DurationInDays: 10,
+		DurationInDays: 3,
 		GantaParentId:  0,
 
 		Step:           2,
@@ -117,7 +117,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Rus:            "Заключение договора ДСД / или создание СП",
 		Eng:            "Заключение договора ДСД / или создание СП",
 		StartDate:      utils.GetCurrentTime(),
-		DurationInDays: 10,
+		DurationInDays: 3,
 		GantaParentId:  0,
 
 		Step:           2,
@@ -136,7 +136,11 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 			//	
 			//},
 		},
+
 	},
+
+	DefaultGantaFinalStep,
+
 	//{
 	//	IsAdditional:   false,
 	//	Kaz:            "Переход на инвестиционную стадию",
@@ -158,7 +162,7 @@ var DefaultGantaFinalStep = Ganta{
 	StartDate:      utils.GetCurrentTime(),
 	DurationInDays: 0,
 
-	Step:           3,
+	Step:           2,
 	Status: 		utils.ProjectStatusAgreement,
 	Responsible:    utils.RoleNobody,
 

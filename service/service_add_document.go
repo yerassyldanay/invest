@@ -101,7 +101,7 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (ut
 
 	// set a due date
 	if document.SetDeadline > 0 {
-		document.Deadline = time.Unix(document.SetDeadline, 0)
+		document.Deadline = time.Unix(document.SetDeadline, 0).UTC()
 	}
 
 	document.IsAdditional = true

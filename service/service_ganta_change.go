@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/jinzhu/gorm"
 	"invest/model"
 	"invest/utils"
 	"strings"
@@ -57,24 +56,20 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 
 	// get the current gantt step
 	var currentGanta = model.Ganta{ProjectId: project_id}
-	if err := currentGanta.OnlyGetCurrentStepByProjectId(model.GetDB()); err == gorm.ErrRecordNotFound {
-		var project = model.Project{Id: project_id}
-		_ = project.OnlyGetById(model.GetDB())
-		project.CurrentStep = model.DefaultGantaFinalStep
-
-		var resp = utils.NoErrorFineEverthingOk
-		resp["info"] = model.Struct_to_map(project)
-
-		return model.ReturnNoErrorWithResponseMessage(resp)
-	} else if err != nil {
+	if err := currentGanta.OnlyGetCurrentStepByProjectId(model.GetDB()); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	// there two cases when nobody is responsible
+	if currentGanta.Responsible == utils.RoleNobody {
+		return model.ReturnMethodNotAllowed("the project is either rejected or there is no more gantt step")
+	}
+
+	// create transaction
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil {trans.Rollback()} }()
 
 	var err error
-	var project = model.Project{Id: project_id}
 	status = strings.ToLower(status)
 
 	// whose is changing the status
@@ -82,26 +77,78 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 	case is.RoleName == utils.RoleInvestor:
 		// investor never can change status manually
 		return model.ReturnMethodNotAllowed("investor cannot change status")
-	case is.RoleName == utils.RoleAdmin:
+	case is.RoleName == utils.RoleAdmin || is.RoleName == utils.RoleManager || is.RoleName == utils.RoleExpert:
 		/*
-			choices of an admin:
-				* reject - status of the project will be reject
-				* reconsider - create new gantt step & add status - pending_investor
-										responsible - investor
-				* accept - move to the next step
+			choices:
+				* reject: a new gantt step will be created and put in front of all (with status of 'reject')
+						thus the status of the project will be the status of this gantt step
+				* reconsider: a new gantt step will be created (status: pending_investor),
+						the current gantt step will be put after this step
+				* accept: move to the next step
 		 */
 		switch {
 		case status == utils.ProjectStatusReject:
-			// status will change to 'reject'
-			project.Status = utils.ProjectStatusReject
-			err = project.OnlyUpdateStatusById(trans)
-		case status == utils.ProjectStatusAccept:
-			// go to the next step
+			// create a new gantt step, which indicates that the project has been rejected
+			// it helps when dealing with notifications
+			newGanta := model.Ganta{
+				IsAdditional:   false,
+				ProjectId:      project_id,
+				Kaz:            "Проект отклонен",
+				Rus:            "Проект отклонен",
+				Eng:            "Проект отклонен",
+				DurationInDays: 3,
+				Step:           currentGanta.Step,
+				Status:         utils.ProjectStatusReject,
+				StartDate: 		utils.GetCurrentTime(),
+				Deadline: 		time.Time{}, // to avoid sending notifications
+				IsDone:         false,
+				Responsible:    utils.RoleNobody,
+			}
+
+			// creates this gantt step
+			err = newGanta.OnlyCreate(trans)
+			if err != nil {
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+			// set current status to done
+			// it must not appear at the top after ordering by start date
 			err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans)
-			// update the status of the project
-			project.Status = utils.ProjectStatusAccept
-			err = project.OnlyUpdateStatusById(trans)
+			if err != nil {
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+		case status == utils.ProjectStatusAccept:
+			// set that the current step is done
+			if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+			/*
+				if the current step is done, we need to shift all gantt steps to left
+					this is what we are doing here
+			 */
+
+			// now the current step is
+			// at the end this step will the default final step
+			err = currentGanta.OnlyGetCurrentStepByProjectId(trans);
+			if err != nil {
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+			// difference in hour between the current
+			var difference = int(utils.GetCurrentTime().Sub(currentGanta.StartDate).Hours())
+
+			// shift all gantt step to the current date (to left or to right)
+			// they must start from this date
+			err = currentGanta.OnlyUpdateStartDatesOfAllUndoneGantaStepsByProjectId(difference, trans)
+			if err != nil {
+				return model.ReturnInternalDbError(err.Error())
+			}
+
 		case status == utils.ProjectStatusReconsider:
+			daysGivenToInvestor := time.Duration(3)
+
 			// prepare gantt step
 			newGanta := model.Ganta{
 				IsAdditional:   true,
@@ -109,7 +156,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				Kaz:            "Доработка инициатором проекта",
 				Rus:            "Доработка инициатором проекта",
 				Eng:            "Доработка инициатором проекта",
-				DurationInDays: 3,
+				DurationInDays: daysGivenToInvestor,
 				Step:           currentGanta.Step,
 				Status:         utils.ProjectStatusPendingInvestor,
 				StartDate: 		utils.GetCurrentTime(),
@@ -123,62 +170,25 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				return model.ReturnInternalDbError(err.Error())
 			}
 
-			// add a new step to the top
-			// by indicating that current one is done
-			if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
+			// put the current gantt step after the new gantt step
+			currentGanta.StartDate = utils.GetCurrentTime().Add(daysGivenToInvestor)
+			//currentGanta.Deadline = currentGanta.StartDate.Add(currentGanta.DurationInDays * time.Hour * 24)
+
+			// update the start date
+			if err = currentGanta.OnlyUpdateStartDateById(trans); err != nil {
 				return model.ReturnInternalDbError(err.Error())
 			}
-
-			// change the status of the project
-			project.Status = utils.ProjectStatusReconsider
-			err = project.OnlyUpdateStatusById(trans)
 		}
 
-	case is.RoleName == utils.RoleManager || is.RoleName == utils.RoleExpert:
-		//var project = model.Project{Id: project_id}
-		switch {
-		case status == utils.ProjectStatusReject:
-			// set pre-reject status as this must be confirmed by admin
-			project.Status = utils.ProjectStatusPreliminaryReject
-			err = project.OnlyUpdateStatusById(trans)
-		case status == utils.ProjectStatusReconsider:
-			// set pre-reject status as this must be confirmed by admin
-			project.Status = utils.ProjectStatusPreliminaryReconsider
-			err = project.OnlyUpdateStatusById(trans)
-		case status == utils.ProjectStatusAccept:
-
-		}
-
-		if err != nil {
-			return model.ReturnInternalDbError(err.Error())
-		}
-
-		// anyway case we have to switch to the next gantt step
-		err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans)
 	default:
 		return model.ReturnMethodNotAllowed("role is not supported. role is " + is.RoleName)
-	}
-
-	if err != nil {
-		return model.ReturnInternalDbError(err.Error())
-	}
-
-	/*
-		there is a problem, the project status must be updated
-	 */
-	nextGanta := model.Ganta{ProjectId: project_id}
-	if err = nextGanta.OnlyGetCurrentStepByProjectId(trans); err == gorm.ErrRecordNotFound	{
-		// pass
-	} else if err != nil {
-		return model.ReturnInternalDbError(err.Error())
-	} else {
-		nextGanta.Deadline.Add(time.Hour * 24 * nextGanta.DurationInDays)
 	}
 
 	if err := trans.Commit().Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	var project = model.Project{Id: project_id}
 	project.Id = project_id
 	_ = project.GetAndUpdateStatusOfProject(model.GetDB())
 
@@ -193,10 +203,10 @@ func (is *InvestService) Ganta_change_time(ganta model.Ganta) (utils.Msg) {
 	}
 
 	// set start time
-	ganta.StartDate = time.Unix(ganta.Start, 0)
+	ganta.StartDate = time.Unix(ganta.Start, 0).UTC()
 
 	// update gantt step time
-	if err := ganta.OnlyUpdateTimeByIdAndProjectId(model.GetDB()); err != nil {
+	if err := ganta.OnlyUpdateStartDateById(model.GetDB()); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
+	"strconv"
 	"time"
 )
 
@@ -126,6 +127,18 @@ func (g *Ganta) OnlyGetChildrenByIdAndProjectIdStep(project_step interface{}, tx
 	return tx.Find(g.GantaChildren, "ganta_parent_id = ? and project_id = ? and step = ?", g.Id, g.ProjectId, project_step).Error
 }
 
+func (g *Ganta) OnlyUpdateStartDatesOfAllUndoneGantaStepsByProjectId(shiftInHours int, tx *gorm.DB) (err error) {
+	var shift = strconv.Itoa(shiftInHours)
+	if shiftInHours == -1 || shiftInHours == 1 {
+		shift = shift + " hour"
+	} else {
+		shift = shift + " hours"
+	}
+
+	err = tx.Exec("update gantas set start_date = start_date + $1, deadline = deadline + $1 where project_id = $2 and is_done = false;", shift, g.ProjectId).Error
+	return err
+}
+
 func (g *Ganta) OnlyCountChildrenByIdAndProjectIdStep(project_step interface{}, tx *gorm.DB) (count int, err error) {
 	var counter = struct {
 		Count				int
@@ -136,6 +149,12 @@ func (g *Ganta) OnlyCountChildrenByIdAndProjectIdStep(project_step interface{}, 
 
 func (g *Ganta) OnlyGetCurrentStepByProjectId(tx *gorm.DB) (err error) {
 	err = tx.Raw("select * from gantas where is_done = false and ganta_parent_id = 0 and project_id = ? order by start_date limit 1;", g.ProjectId).Scan(g).Error
+	if err == gorm.ErrRecordNotFound {
+		var temp = DefaultGantaFinalStep
+		g = &temp
+		return nil
+	}
+
 	return err
 }
 
@@ -154,8 +173,10 @@ func (g *Ganta) OnlyChangeStatusToDoneAndUpdateDeadlineById(tx *gorm.DB) (err er
 
 	switch {
 	case days == 0:
-		g.StartDate = utils.GetCurrentTime().Add(time.Hour * (-24))
+		days = 1
+		g.StartDate = utils.GetCurrentTime()
 	case days < 0:
+		days = 1
 		g.StartDate = utils.GetCurrentTime().Add(time.Hour * time.Duration(days))
 	}
 
@@ -171,6 +192,16 @@ func (g *Ganta) OnlyChangeStatusToDoneAndUpdateDeadlineById(tx *gorm.DB) (err er
 	return err
 }
 
+// 'is_done' field is set to true
+func (g *Ganta) OnlyUpdateStartDateById(tx *gorm.DB) (err error) {
+	g.Deadline = g.StartDate.Add(g.DurationInDays * time.Hour * 24)
+	err = tx.Model(&Ganta{Id: g.Id}).Updates(map[string]interface{}{
+		"deadline": g.Deadline,
+		"start_date": g.StartDate,
+	}).Error
+	return err
+}
+
 func (g *Ganta) OnlyUpdateTimeByIdAndProjectId(tx *gorm.DB) (err error) {
 	err = tx.Model(&Ganta{}).Where("id = ? and project_id = ?", g.Id, g.ProjectId).
 		Updates(map[string]interface{}{
@@ -178,4 +209,21 @@ func (g *Ganta) OnlyUpdateTimeByIdAndProjectId(tx *gorm.DB) (err error) {
 			"duration_in_days": g.DurationInDays,
 	}).Error
 	return err
+}
+
+func (g *Ganta) Get_current_ganta_step_and_handle_error_by_project_id(tx *gorm.DB) (err error) {
+	if err := g.OnlyGetCurrentStepByProjectId(tx); err == gorm.ErrRecordNotFound {
+		// send default final step in case it is the last gantt step
+		var project = Project{Id: g.ProjectId}
+		_ = project.OnlyGetById(tx)
+
+		// set the current step to the final gantt step
+		project.CurrentStep = DefaultGantaFinalStep
+
+	} else if err != nil {
+		// an unknown error occurred
+		return err
+	}
+
+	return nil
 }

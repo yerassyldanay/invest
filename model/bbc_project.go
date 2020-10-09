@@ -181,6 +181,7 @@ func (p *Project) OnlyGetProjectsByStatuses(offset interface{}, statuses []strin
 }
 
 func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
+	// get project
 	err = p.OnlyGetByIdPreloaded(tx)
 	if err != nil {
 		return err
@@ -191,20 +192,16 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 	err = ganta.OnlyGetCurrentStepByProjectId(tx)
 
 	switch {
-	case err == nil && !utils.Does_a_slice_contain_element([]string{utils.ProjectStatusPreliminaryReject,
-		utils.ProjectStatusPreliminaryReconsider,
-		utils.ProjectStatusReject}, p.Status):
+	case err == nil && utils.ProjectStatusReject == p.Status:
+		p.Step = ganta.Step
+		p.CurrentStep = ganta
+	case err == nil:
 		p.CurrentStep = ganta
 		p.Step = ganta.Step
 		// status will be changed
 		// if the project is not rejected by spk or put into reconsideration
 		p.Status = ganta.Status
-	case err == nil:
-		// in case it is preliminary reject or reconsider (status is set by manager or expert)
-		// no need to set step & status to new values
-		p.Step = ganta.Step
-		p.CurrentStep = ganta
-	case err == gorm.ErrRecordNotFound :
+	case err == gorm.ErrRecordNotFound:
 		p.Step = 3
 		p.Status = utils.ProjectStatusAgreement
 		p.CurrentStep = DefaultGantaFinalStep
