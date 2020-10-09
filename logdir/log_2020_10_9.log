@@ -76,3 +76,45 @@ time="2020-10-09T07:59:26+06:00" level=info msg="Ganta_shift_to_the_next_ganta_s
 time="2020-10-09T07:59:31+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:37646" path=/v1/project/status status=200
 time="2020-10-09T08:00:06+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error="the project is rejected or there is no more gantt step" host="[::1]:37646" path=/v1/ganta/change/status status=405
 time="2020-10-09T08:00:29+06:00" level=info msg="Ganta_shift_to_the_next_ganta_step status" error="the project is rejected or there is no more gantt step" host="[::1]:37646" path=/v1/ganta/change/status status=405
+time="2020-10-09T08:28:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T08:28:49+06:00" level=info msg=main port=7000
+time="2020-10-09T09:41:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:41:42+06:00" level=info msg=main port=7000
+time="2020-10-09T09:42:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:42:37+06:00" level=info msg=main port=7000
+time="2020-10-09T09:44:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:44:23+06:00" level=info msg=main port=7000
+time="2020-10-09T09:45:07+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:45:08+06:00" level=info msg=main port=7000
+time="2020-10-09T09:45:24+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:45:24+06:00" level=info msg=main port=7000
+time="2020-10-09T09:48:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:48:54+06:00" level=info msg=main port=7000
+time="2020-10-09T09:49:56+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-09T09:49:56+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-09T09:50:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:50:00+06:00" level=info msg=main port=7000
+time="2020-10-09T09:50:38+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-09T09:50:38+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-09T09:50:42+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:50:43+06:00" level=info msg=main port=7000
+time="2020-10-09T09:51:04+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-09T09:51:04+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-09T09:51:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:51:08+06:00" level=info msg=main port=7000
+time="2020-10-09T09:51:16+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-09T09:51:16+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-09T09:51:20+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T09:51:20+06:00" level=info msg=main port=7000
+time="2020-10-09T10:04:34+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-09T10:04:34+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-09T10:04:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T10:04:37+06:00" level=info msg=main port=7000
+time="2020-10-09T10:13:44+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-09T10:13:44+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-09T10:13:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T10:13:47+06:00" level=info msg=main port=7000
+time="2020-10-09T10:14:45+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-09T10:14:45+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-09T10:14:50+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-09T10:14:50+06:00" level=info msg=main port=7000

@@ -63,7 +63,7 @@ func (o *Organization) Make_request_to_get_organization() (*Organization, error)
 
 	o.Name = strings.Replace(name.(string), "\\\"", "", 50)
 	o.Fio = strings.Replace(fio.(string), "\\\"", "", 50)
-	o.Regdate = ti.UTC()
+	o.Regdate = ti
 	o.Address = strings.Replace(katoAddress.(string), "\\\"", "", 50)
 
 	o.Bin = bin

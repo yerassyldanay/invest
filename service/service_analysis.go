@@ -16,7 +16,7 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (util
 		analysis.StartDate = utils.GetCurrentTime().Add(time.Hour * 24 * (-365) * 5)
 	default:
 		// convert it to
-		analysis.StartDate = time.Unix(analysis.Start, 0).UTC()
+		analysis.StartDate = time.Unix(analysis.Start, 0)
 	}
 
 	// convert end date
@@ -26,7 +26,7 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (util
 		analysis.EndDate = utils.GetCurrentTime()
 	default:
 		// convert
-		analysis.EndDate = time.Unix(analysis.End, 0).UTC()
+		analysis.EndDate = time.Unix(analysis.End, 0)
 	}
 
 	// get projects

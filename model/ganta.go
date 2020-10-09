@@ -16,7 +16,7 @@ func (g *Ganta) Add_new_step() (utils.Msg) {
 	}
 
 	if g.Start != 0 {
-		g.StartDate = time.Unix(g.Start, 0).UTC()
+		g.StartDate = time.Unix(g.Start, 0)
 		if g.StartDate.Before(utils.GetCurrentTime()) {
 			g.StartDate = utils.GetCurrentTime()
 		}
@@ -114,7 +114,7 @@ func (g *Ganta) Get_only_one_with_docs() (utils.Msg) {
 
 func (g *Ganta) Change_time() (utils.Msg) {
 
-	g.StartDate = time.Unix(g.Start, 0).UTC()
+	g.StartDate = time.Unix(g.Start, 0)
 	if g.StartDate.Before(utils.GetCurrentTime()) {
 		g.StartDate = utils.GetCurrentTime()
 	}

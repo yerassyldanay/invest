@@ -106,7 +106,7 @@ func (c *User) Sign_Up() (utils.Msg) {
 		if c.Email.Verified {
 			return utils.Msg{utils.ErrorEmailIsAreadyInUse, http.StatusConflict, "", "email address already in use"}
 
-		} else if c.Email.Verified == false && c.Email.Deadline.UTC().Before(time.Now().UTC()) {
+		} else if c.Email.Verified == false && c.Email.Deadline.Before(time.Now()) {
 			var tuser = User{}
 			if err := trans.Exec("select u.* from users u inner join emails e on u.email_id = e.id where u.email_id = ?;", c.Email.Id).First(&tuser).Error;
 				err != nil && err != gorm.ErrRecordNotFound {

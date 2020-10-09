@@ -203,7 +203,7 @@ func (is *InvestService) Ganta_change_time(ganta model.Ganta) (utils.Msg) {
 	}
 
 	// set start time
-	ganta.StartDate = time.Unix(ganta.Start, 0).UTC()
+	ganta.StartDate = time.Unix(ganta.Start, 0)
 
 	// update gantt step time
 	if err := ganta.OnlyUpdateStartDateById(model.GetDB()); err != nil {
