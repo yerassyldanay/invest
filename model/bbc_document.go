@@ -121,14 +121,16 @@ func (d *Document) OnlyGetDocumentById(tx *gorm.DB) (err error) {
 }
 
 // get documents
-func (d *Document) OnlyGetDocumentsByProjectId(project_id uint64, tx *gorm.DB) (documents []Document, err error) {
-	err = tx.Find(&documents, "project_id = ?", project_id).Error
+func (d *Document) OnlyGetDocumentsByProjectId(project_id uint64, tx *gorm.DB) ([]Document, error) {
+	var documents = []Document{}
+	err := tx.Find(&documents, "project_id = ?", project_id).Error
 	return documents, err
 }
 
 // get documents based on steps
-func (d *Document) OnlyGetDocumentsByStepsAndProjectId(project_id uint64, steps []interface{}, tx *gorm.DB) (documents []Document, err error) {
-	err = tx.Find(&documents, "step in (?) and project_id = ?", steps, project_id).Order("id").Error
+func (d *Document) OnlyGetDocumentsByStepsAndProjectId(project_id uint64, steps []interface{}, tx *gorm.DB) ([]Document, error) {
+	var documents = []Document{}
+	err := tx.Find(&documents, "step in (?) and project_id = ?", steps, project_id).Order("id").Error
 	return documents, err
 }
 

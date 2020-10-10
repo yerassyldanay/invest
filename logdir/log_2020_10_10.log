@@ -189,3 +189,18 @@ time="2020-10-10T19:38:35+06:00" level=info msg=INIT_DB message="connected to Po
 time="2020-10-10T19:39:30+06:00" level=info msg=main port=7000
 time="2020-10-10T19:39:56+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:33896" path=/v1/project/docs/file status=200
 time="2020-10-10T19:40:03+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:33896" path=/v1/project/status status=200
+time="2020-10-10T20:05:31+06:00" level=info msg="Document_get 2" error= host="[::1]:33896" path=/v1/project/docs status=200
+time="2020-10-10T20:05:51+06:00" level=warning msg=RESPOND message="json: error calling MarshalJSON for type time.Time: Time.MarshalJSON: year outside of range [0,9999]" ok=false
+time="2020-10-10T20:06:40+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T20:07:12+06:00" level=info msg=main port=7000
+time="2020-10-10T20:08:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T20:08:38+06:00" level=info msg=main port=7000
+time="2020-10-10T20:09:14+06:00" level=warning msg=RESPOND message="json: error calling MarshalJSON for type time.Time: Time.MarshalJSON: year outside of range [0,9999]" ok=false
+time="2020-10-10T20:10:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T20:10:13+06:00" level=info msg=main port=7000
+time="2020-10-10T20:10:38+06:00" level=warning msg=RESPOND message="json: error calling MarshalJSON for type time.Time: Time.MarshalJSON: year outside of range [0,9999]" ok=false
+time="2020-10-10T20:16:18+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T20:16:30+06:00" level=info msg=main port=7000
+time="2020-10-10T20:19:15+06:00" level=info msg="Project_add_document_to_project add" error="document is already uploaded. first delete" host="[::1]:34696" path=/v1/project/docs/file status=405
+time="2020-10-10T20:20:13+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:34696" path=/v1/project/docs/file status=200
+time="2020-10-10T20:20:23+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:34696" path=/v1/project/status status=200
