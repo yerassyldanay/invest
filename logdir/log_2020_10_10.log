@@ -180,3 +180,12 @@ time="2020-10-10T18:50:16+06:00" level=info msg="Document_get 1" error="record n
 time="2020-10-10T18:50:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
 time="2020-10-10T18:50:56+06:00" level=info msg=main port=7000
 time="2020-10-10T18:51:03+06:00" level=info msg="Document_get 2" error= host="[::1]:33242" path=/v1/project/docs status=200
+time="2020-10-10T19:29:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T19:29:20+06:00" level=info msg=main port=7000
+time="2020-10-10T19:34:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T19:35:24+06:00" level=info msg=main port=7000
+time="2020-10-10T19:37:17+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:33816" path=/v1/project/status status=200
+time="2020-10-10T19:38:35+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T19:39:30+06:00" level=info msg=main port=7000
+time="2020-10-10T19:39:56+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:33896" path=/v1/project/docs/file status=200
+time="2020-10-10T19:40:03+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:33896" path=/v1/project/status status=200

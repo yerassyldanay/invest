@@ -149,7 +149,7 @@ func (d *Document) OnlyEmptyUriById(tx *gorm.DB) (err error) {
 
 // count the number of documents, which are needed to be uploaded by investor
 func (d *Document) OnlyCountNumberOfEmptyDocuments(roleName string, step int, tx *gorm.DB) (int) {
-	_ = tx.Raw("select count(*) from documents where project_id = ? and step = ? and responsible = ?;", d.ProjectId, step, roleName).
+	_ = tx.Raw("select count(*) from documents where uri = '' and project_id = ? and step = ? and responsible = ?;", d.ProjectId, step, roleName).
 		Count(&d.Count).Error
 	return d.Count
 }
