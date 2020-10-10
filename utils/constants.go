@@ -25,6 +25,7 @@ var NoNeedToAuth = []string {
 	"/v1/confirmation/email",
 	"/v1/organization",
 	"/v1/reset_password",
+	"/v1/home",
 }
 
 var NoNeedToConfirmEmail = []string {}

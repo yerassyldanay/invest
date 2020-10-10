@@ -101,3 +101,82 @@ time="2020-10-10T09:30:05+06:00" level=info msg="Forget_password_send_message  2
 time="2020-10-10T09:30:16+06:00" level=info msg="Forget_password_send_message  2" error="record not found" host="[::1]:59400" path=/v1/reset_password status=417
 time="2020-10-10T09:30:56+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59400" path=/v1/reset_password status=200
 time="2020-10-10T09:31:34+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59400" path=/v1/reset_password status=200
+time="2020-10-10T16:15:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T16:15:09+06:00" level=info msg=main port=7000
+time="2020-10-10T16:15:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T16:15:34+06:00" level=info msg=main port=7000
+time="2020-10-10T16:16:47+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T16:16:47+06:00" level=info msg=main port=7000
+time="2020-10-10T16:17:11+06:00" level=info msg="Project_remove_document remove" error= host="[::1]:59930" path=/v1/project/docs/file/delete status=200
+time="2020-10-10T17:10:29+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:10:30+06:00" level=info msg=main port=7000
+time="2020-10-10T17:12:47+06:00" level=info msg="Create_project service" error= host="[::1]:60184" path=/v1/project status=200
+time="2020-10-10T17:13:02+06:00" level=info msg="Document_get 1" error="record not found" host="[::1]:60184" path=/v1/project/docs status=417
+time="2020-10-10T17:13:17+06:00" level=info msg="Document_get 2" error= host="[::1]:60184" path=/v1/project/docs status=200
+time="2020-10-10T17:31:40+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-10T17:31:40+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-10T17:31:43+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:31:44+06:00" level=info msg=main port=7000
+time="2020-10-10T17:31:45+06:00" level=info msg=MAIN error= host="127.0.0.1:39580" path=/v1/home status=400
+time="2020-10-10T17:33:34+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:60392" path=/v1/project/docs/file status=200
+time="2020-10-10T17:33:37+06:00" level=info msg="Document_get 2" error= host="[::1]:60392" path=/v1/project/docs status=200
+time="2020-10-10T17:34:29+06:00" level=info msg="Project_remove_document project" error="record not found" host="[::1]:60392" path=/v1/project/docs/file/delete status=417
+time="2020-10-10T17:35:12+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-10T17:35:12+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-10T17:35:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:35:16+06:00" level=info msg=main port=7000
+time="2020-10-10T17:35:17+06:00" level=info msg="Project_remove_document project" error="record not found" host="[::1]:60424" path=/v1/project/docs/file/delete status=417
+time="2020-10-10T17:35:52+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:35:52+06:00" level=info msg=main port=7000
+time="2020-10-10T17:37:08+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:37:08+06:00" level=info msg=main port=7000
+time="2020-10-10T17:37:15+06:00" level=info msg="Project_remove_document step" error="responsible: admin | your role: investor" host="[::1]:60460" path=/v1/project/docs/file/delete status=405
+time="2020-10-10T17:40:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:40:11+06:00" level=info msg=main port=7000
+time="2020-10-10T17:41:41+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:60506" path=/v1/project/docs/file status=200
+time="2020-10-10T17:42:33+06:00" level=info msg="Project_add_document_to_project add" error="document is already uploaded. first delete" host="[::1]:60506" path=/v1/project/docs/file status=405
+time="2020-10-10T17:43:06+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:43:06+06:00" level=info msg=main port=7000
+time="2020-10-10T17:46:26+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:46:26+06:00" level=info msg=main port=7000
+time="2020-10-10T17:47:09+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:47:09+06:00" level=info msg=main port=7000
+time="2020-10-10T17:48:53+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:48:54+06:00" level=info msg=main port=7000
+time="2020-10-10T17:56:03+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T17:56:04+06:00" level=info msg=main port=7000
+time="2020-10-10T17:56:58+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:60760" path=/v1/project/docs/file status=200
+time="2020-10-10T18:03:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T18:03:46+06:00" level=info msg=main port=7000
+time="2020-10-10T18:03:56+06:00" level=info msg="Project_remove_document remove" error= host="[::1]:60844" path=/v1/project/docs/file/delete status=200
+time="2020-10-10T18:04:56+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:60844" path=/v1/project/docs/file status=200
+time="2020-10-10T18:06:19+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T18:06:19+06:00" level=info msg=main port=7000
+time="2020-10-10T18:06:44+06:00" level=info msg="Project_add_document_to_project add" error="document is already uploaded. first delete" host="[::1]:60884" path=/v1/project/docs/file status=405
+time="2020-10-10T18:06:51+06:00" level=info msg="Document_get 2" error= host="[::1]:60884" path=/v1/project/docs status=200
+time="2020-10-10T18:07:23+06:00" level=info msg="Project_remove_document remove" error= host="[::1]:60884" path=/v1/project/docs/file/delete status=200
+time="2020-10-10T18:10:13+06:00" level=info msg="User_project_get_all 1" error= host="[::1]:60884" path=/v1/list/projects/by_user status=200
+time="2020-10-10T18:11:44+06:00" level=info msg="Get_all_projects get" error= host="[::1]:60884" path=/v1/list/projects/all status=200
+time="2020-10-10T18:13:45+06:00" level=info msg="Get_all_projects get" error= host="[::1]:60884" path=/v1/list/projects/all status=200
+time="2020-10-10T18:14:04+06:00" level=info msg="Get_all_projects get" error= host="[::1]:60884" path=/v1/list/projects/all status=200
+time="2020-10-10T18:16:28+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T18:16:28+06:00" level=info msg=main port=7000
+time="2020-10-10T18:16:31+06:00" level=info msg="Get_all_projects get" error= host="[::1]:32768" path=/v1/list/projects/all status=200
+time="2020-10-10T18:16:51+06:00" level=info msg="Get_all_projects get" error= host="[::1]:32768" path=/v1/list/projects/all status=200
+time="2020-10-10T18:18:39+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T18:18:40+06:00" level=info msg=main port=7000
+time="2020-10-10T18:18:45+06:00" level=info msg="Get_all_projects get" error= host="[::1]:32812" path=/v1/list/projects/all status=200
+time="2020-10-10T18:44:46+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:32812" path=/v1/project/status status=200
+time="2020-10-10T18:45:25+06:00" level=info msg="Admin_assign_user_to_project asg" error= host="[::1]:32812" path=/v1/assign status=200
+time="2020-10-10T18:45:54+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:32812" path=/v1/project/status status=200
+time="2020-10-10T18:48:41+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:32812" path=/v1/project/status status=200
+time="2020-10-10T18:49:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T18:49:13+06:00" level=info msg=main port=7000
+time="2020-10-10T18:49:17+06:00" level=info msg="Document_add_box  add_box" error= host="[::1]:33198" path=/v1/project/docs/box status=200
+time="2020-10-10T18:49:40+06:00" level=info msg="Document_get 2" error= host="[::1]:33198" path=/v1/project/docs status=200
+time="2020-10-10T18:49:49+06:00" level=info msg="Document_get 1" error="record not found" host="[::1]:33198" path=/v1/project/docs status=417
+time="2020-10-10T18:50:02+06:00" level=info msg="Document_get 1" error="record not found" host="[::1]:33198" path=/v1/project/docs status=417
+time="2020-10-10T18:50:16+06:00" level=info msg="Document_get 1" error="record not found" host="[::1]:33198" path=/v1/project/docs status=417
+time="2020-10-10T18:50:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T18:50:56+06:00" level=info msg=main port=7000
+time="2020-10-10T18:51:03+06:00" level=info msg="Document_get 2" error= host="[::1]:33242" path=/v1/project/docs status=200

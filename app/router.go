@@ -19,7 +19,7 @@ func Create_new_invest_router() (*mux.Router) {
 	var v1 = generalRouter.PathPrefix("/v1").Subrouter()
 	var docRouter = generalRouter.PathPrefix("/documents").Subrouter()
 
-	v1.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	v1.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("id: ", utils.GetContext(r, utils.KeyId))
 		//fmt.Println("role: ", utils.GetContext(r, utils.KeyRole))
 		utils.Respond(w, r, utils.Msg{
@@ -35,6 +35,9 @@ func Create_new_invest_router() (*mux.Router) {
 
 	var STATIC_DIR = "/documents/docs"
 	docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("." + STATIC_DIR))))
+
+	var STATIC_DIR_ANALYSIS = "/documents/analysis"
+	docRouter.Handle("/analysis/{file}", http.StripPrefix(STATIC_DIR_ANALYSIS, http.FileServer(http.Dir("." + STATIC_DIR_ANALYSIS))))
 
 	/*
 		Registration

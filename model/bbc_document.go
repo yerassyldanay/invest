@@ -28,6 +28,8 @@ type Document struct {
 
 	ProjectId					uint64 				`json:"project_id" gorm:"foreignkey:projects.id"`
 	Responsible					string				`json:"responsible" gorm:"manager"`
+
+	Count						int					`json:"-" gorm:"-"`
 }
 
 func (Document) TableName() string {
@@ -126,7 +128,7 @@ func (d *Document) OnlyGetDocumentsByProjectId(project_id uint64, tx *gorm.DB) (
 
 // get documents based on steps
 func (d *Document) OnlyGetDocumentsByStepsAndProjectId(project_id uint64, steps []interface{}, tx *gorm.DB) (documents []Document, err error) {
-	err = tx.Find(&documents, "step in (?) and project_id = ?", steps, project_id).Error
+	err = tx.Find(&documents, "step in (?) and project_id = ?", steps, project_id).Order("id").Error
 	return documents, err
 }
 
@@ -146,17 +148,18 @@ func (d *Document) OnlyEmptyUriById(tx *gorm.DB) (err error) {
 }
 
 // count the number of documents, which are needed to be uploaded by investor
-func (d *Document) OnlyCountNumberOfEmptyDocuments(roleName string, step int, tx *gorm.DB) (count int) {
-	_ = tx.Raw("select * from documents where project_id = ? and step = ? and responsible = ?;", d.ProjectId, step, roleName).
-		Count(&count).Error
-	return count
+func (d *Document) OnlyCountNumberOfEmptyDocuments(roleName string, step int, tx *gorm.DB) (int) {
+	_ = tx.Raw("select count(*) from documents where project_id = ? and step = ? and responsible = ?;", d.ProjectId, step, roleName).
+		Count(&d.Count).Error
+	return d.Count
 }
 
 // a number of documents with undesirable statuses
 // those are: reject & accept
 // desirable ones are: accept & new_one
-func (d *Document) OnlyCountNumberOfDocumentsWithUndesirableStatus(roleName string, project_id uint64, step int, tx *gorm.DB) (count int, err error) {
-	err = tx.Table(d.TableName()).Where("project_id = ? and step = ? and status not in (?) and responsible = ?",
+func (d *Document) OnlyCountNumberOfDocumentsWithUndesirableStatus(roleName string, project_id uint64, step int, tx *gorm.DB) (int, error) {
+	var count int
+	err := tx.Table(d.TableName()).Where("project_id = ? and step = ? and status not in (?) and responsible = ?",
 		project_id, step, []string{utils.ProjectStatusNewOne, utils.ProjectStatusAccept}, roleName).Count(&count).Error
 	return count, err
 }

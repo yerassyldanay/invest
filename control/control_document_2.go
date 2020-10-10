@@ -98,7 +98,7 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 			* project_id
 	 */
 	var document_id = service.OnlyGetQueryParameter(r, "document_id", uint64(0)).(uint64)
-	var project_id = service.OnlyGetQueryParameter(r, "document_id", uint64(0)).(uint64)
+	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 
 	// parse header
 	is := service.InvestService{}

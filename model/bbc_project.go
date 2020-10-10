@@ -163,20 +163,20 @@ func (p *Project) OnlyGetProjectsOfSpkUsers(user_id uint64, statuses []string, o
 	err = tx.Preload("Organization").Table("projects as p").
 		Joins("join projects_users pu on p.id = pu.project_id").Select("p.*").
 		Find(&projects, "pu.user_id = ? and p.status in (?)", user_id, statuses).
-		Offset(offset).Limit(GetLimit).Error
+		Order("p.created").Offset(offset).Limit(GetLimit).Error
 	return projects, err
 }
 
 // get projects of a particular investor
 func (p *Project) OnlyGetProjectsOfInvestor(user_id uint64, statuses []string, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
 	err = tx.Preload("Organization").Find(&projects, "offered_by_id = ? and status in (?)", user_id, statuses).
-		Offset(offset).Limit(GetLimit).Error
+	Order("created").Offset(offset).Limit(GetLimit).Error
 	return projects, err
 }
 
 // get all projects, but based on statuses
 func (p *Project) OnlyGetProjectsByStatuses(offset interface{}, statuses []string, tx *gorm.DB) (projects []Project, err error) {
-	err = tx.Preload("Organization").Find(&projects, "status in (?)", statuses).Offset(offset).Limit(GetLimit).Error
+	err = tx.Preload("Organization").Find(&projects, "status in (?)", statuses).Order("created").Offset(offset).Limit(GetLimit).Error
 	return projects, err
 }
 
