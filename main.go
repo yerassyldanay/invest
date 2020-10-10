@@ -69,7 +69,7 @@ func main() {
 	/*
 		prepare permissions table
 	 */
-	app.Prepare_permissions()
+	//app.Prepare_permissions()
 
 	/*
 		creating a router instance

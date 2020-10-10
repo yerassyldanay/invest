@@ -1,0 +1,103 @@
+time="2020-10-10T03:51:13+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T03:51:13+06:00" level=info msg=main port=7000
+time="2020-10-10T03:51:24+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-10T03:51:24+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-10T03:51:32+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T03:51:32+06:00" level=info msg=main port=7000
+time="2020-10-10T03:54:56+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T03:54:56+06:00" level=info msg=main port=7000
+time="2020-10-10T03:55:51+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:55714" path=/v1/analysis status=200
+time="2020-10-10T03:55:58+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T03:55:58+06:00" level=info msg=main port=7000
+time="2020-10-10T03:57:18+06:00" level=info msg="Analysis_get analysis" error="pq: got 11 parameters but the statement requires 5" host="[::1]:55754" path=/v1/analysis status=417
+time="2020-10-10T03:57:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T03:58:05+06:00" level=info msg=main port=7000
+time="2020-10-10T03:59:48+06:00" level=info msg="Analysis_get analysis" error="pq: got 11 parameters but the statement requires 5" host="[::1]:55818" path=/v1/analysis status=417
+time="2020-10-10T04:03:41+06:00" level=info msg="Analysis_get analysis" error="pq: got 11 parameters but the statement requires 5" host="[::1]:55818" path=/v1/analysis status=417
+time="2020-10-10T04:03:46+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T04:04:06+06:00" level=info msg=main port=7000
+time="2020-10-10T04:05:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T04:05:10+06:00" level=info msg=main port=7000
+time="2020-10-10T04:06:01+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T04:06:15+06:00" level=info msg=main port=7000
+time="2020-10-10T04:08:51+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:56042" path=/v1/analysis status=200
+time="2020-10-10T04:09:17+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:56042" path=/v1/analysis status=200
+time="2020-10-10T05:16:30+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T05:16:38+06:00" level=info msg=main port=7000
+time="2020-10-10T05:19:04+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57144" path=/v1/analysis/save status=200
+time="2020-10-10T05:19:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T05:19:42+06:00" level=info msg=main port=7000
+time="2020-10-10T05:21:02+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57170" path=/v1/analysis/save status=200
+time="2020-10-10T05:22:06+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T05:22:16+06:00" level=info msg=main port=7000
+time="2020-10-10T05:23:30+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57226" path=/v1/analysis/save status=200
+time="2020-10-10T05:24:35+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T05:25:01+06:00" level=info msg=main port=7000
+time="2020-10-10T05:25:26+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57274" path=/v1/analysis/save status=200
+time="2020-10-10T05:27:11+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T05:27:17+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T05:27:24+06:00" level=info msg=main port=7000
+time="2020-10-10T05:27:26+06:00" level=info msg="Analysis_get analysis" error="this file already exists. cannot create one" host="[::1]:57316" path=/v1/analysis/save status=417
+time="2020-10-10T05:27:38+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57316" path=/v1/analysis/save status=200
+time="2020-10-10T06:02:18+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-10T06:02:18+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-10T06:02:22+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T06:02:34+06:00" level=info msg=main port=7000
+time="2020-10-10T06:02:52+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57652" path=/v1/analysis/save status=200
+time="2020-10-10T06:04:38+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T06:04:57+06:00" level=info msg=main port=7000
+time="2020-10-10T06:05:11+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57734" path=/v1/analysis/save status=200
+time="2020-10-10T06:07:31+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T06:07:42+06:00" level=info msg=main port=7000
+time="2020-10-10T06:07:58+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57772" path=/v1/analysis/save status=200
+time="2020-10-10T06:08:18+06:00" level=info msg="Analysis_get analysis" error= host="[::1]:57772" path=/v1/analysis status=200
+time="2020-10-10T08:52:34+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-10T08:52:34+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-10T08:57:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T08:57:54+06:00" level=info msg=main port=7000
+time="2020-10-10T09:00:20+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-10T09:00:20+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-10T09:00:23+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:00:23+06:00" level=info msg=main port=7000
+time="2020-10-10T09:00:26+06:00" level=info msg="Forget_password_send_message  2" error="record not found" host="[::1]:58772" path=/v1/reset_password status=400
+time="2020-10-10T09:00:33+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-10T09:00:33+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-10T09:00:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:00:37+06:00" level=info msg=main port=7000
+time="2020-10-10T09:01:00+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:01:00+06:00" level=info msg=main port=7000
+time="2020-10-10T09:01:57+06:00" level=info msg="Forget_password_send_message  2" error="record not found" host="[::1]:58802" path=/v1/reset_password status=400
+time="2020-10-10T09:04:02+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:04:02+06:00" level=info msg=main port=7000
+time="2020-10-10T09:05:33+06:00" level=info msg="Forget_password_send_message  2" error="record not found" host="[::1]:58820" path=/v1/reset_password status=400
+time="2020-10-10T09:06:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:06:42+06:00" level=info msg=main port=7000
+time="2020-10-10T09:07:16+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:07:16+06:00" level=info msg=main port=7000
+time="2020-10-10T09:07:55+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:07:56+06:00" level=info msg=main port=7000
+time="2020-10-10T09:09:22+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:09:23+06:00" level=info msg=main port=7000
+time="2020-10-10T09:10:41+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:10:41+06:00" level=info msg=main port=7000
+time="2020-10-10T09:11:06+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59034" path=/v1/reset_password status=200
+time="2020-10-10T09:12:08+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59034" path=/v1/reset_password status=200
+time="2020-10-10T09:12:50+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59034" path=/v1/reset_password status=200
+time="2020-10-10T09:19:21+06:00" level=info msg="Forget_password_send_message 2" error="invalid character '}' looking for beginning of object key string" host="[::1]:59034" path=/v1/reset_password status=400
+time="2020-10-10T09:20:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:20:48+06:00" level=info msg=main port=7000
+time="2020-10-10T09:20:54+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:20:55+06:00" level=info msg=main port=7000
+time="2020-10-10T09:21:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:21:49+06:00" level=info msg=main port=7000
+time="2020-10-10T09:23:16+06:00" level=info msg="Forget_password_send_message  2" error="no upper letter characters" host="[::1]:59264" path=/v1/reset_password status=417
+time="2020-10-10T09:24:01+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59264" path=/v1/reset_password status=200
+time="2020-10-10T09:27:57+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:27:58+06:00" level=info msg=main port=7000
+time="2020-10-10T09:28:27+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59356" path=/v1/reset_password status=200
+time="2020-10-10T09:29:48+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T09:29:48+06:00" level=info msg=main port=7000
+time="2020-10-10T09:30:05+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59400" path=/v1/reset_password status=200
+time="2020-10-10T09:30:16+06:00" level=info msg="Forget_password_send_message  2" error="record not found" host="[::1]:59400" path=/v1/reset_password status=417
+time="2020-10-10T09:30:56+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59400" path=/v1/reset_password status=200
+time="2020-10-10T09:31:34+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:59400" path=/v1/reset_password status=200

@@ -3,6 +3,7 @@ package service
 import (
 	"invest/model"
 	"invest/utils"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -16,7 +17,7 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (util
 		analysis.StartDate = utils.GetCurrentTime().Add(time.Hour * 24 * (-365) * 5)
 	default:
 		// convert it to
-		analysis.StartDate = time.Unix(analysis.Start, 0)
+		analysis.StartDate = utils.OnlyPrettifyTime(time.Unix(analysis.Start, 0))
 	}
 
 	// convert end date
@@ -30,12 +31,11 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (util
 	}
 
 	// get projects
-	projects, err := analysis.Get_projects_by_steps(is.Offset, model.GetDB())
+	projects, err := analysis.OnlyGetProjectsByExtendedFields(model.GetDB())
 	if err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	var projectsList = []model.ProjectExtended{}
 	var projExtended = model.ProjectExtended{}
 
 	for _, project := range projects {
@@ -48,32 +48,61 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (util
 				ProjectId: project.Id,
 			},
 		}
-		projectsList = append(projectsList, projExtended)
+		analysis.ProjectExtendedList = append(analysis.ProjectExtendedList, projExtended)
 	}
 
 	var wg = sync.WaitGroup{}
 
 	// load cost & finance tables
-	for i, _ := range projectsList {
+	for i, _ := range analysis.ProjectExtendedList {
 		i := i
 		wg.Add(1)
 		go func(proj *model.ProjectExtended, gwg *sync.WaitGroup) {
 			defer gwg.Done()
 			_ = proj.Cost.OnlyGetByProjectId(model.GetDB())
 			_ = proj.Finance.OnlyGetByProjectId(model.GetDB())
-		}(&projectsList[i], &wg)
+			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
+			_ = proj.OnlyPreloadOrganizationByOrganizationId(model.GetDB())
+
+			// check categories
+			if len(proj.Categors) < 1 {
+				proj.Categors = []model.Categor{}
+			}
+
+		}(&analysis.ProjectExtendedList[i], &wg)
 	}
 	wg.Wait()
 
-	// convert it to map
-	var projectsMapList = []map[string]interface{}{}
-	for _, proj := range projectsList {
-		projectsMapList = append(projectsMapList, model.Struct_to_map(proj))
-	}
-
 	// return response
 	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = projectsMapList
+	if analysis.WriteToFile {
+
+		// create file name + indicate file path
+		fileName := utils.Generate_Random_String(40)
+		filePath, err := filepath.Abs("./documents/analysis/" + fileName + ".xlsx")
+		if err != nil {
+			return model.ReturnInternalDbError(err.Error())
+		}
+
+		// write to this file
+		err = analysis.OnlyWriteDataToFile(filePath, is.Lang)
+		if err != nil {
+			return model.ReturnInternalDbError(err.Error())
+		}
+
+		// indicate in in info
+		resp["info"] = "/documents/analysis/" + fileName + ".xlsx"
+
+	} else {
+		// convert it to map
+		var projectsMapList = []map[string]interface{}{}
+		for _, proj := range analysis.ProjectExtendedList {
+			projectsMapList = append(projectsMapList, model.Struct_to_map(proj))
+		}
+
+		// enter to the response map
+		resp["info"] = projectsMapList
+	}
 
 	return model.ReturnNoErrorWithResponseMessage(resp)
 }

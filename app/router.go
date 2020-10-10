@@ -107,7 +107,7 @@ func Create_new_invest_router() (*mux.Router) {
 		Analysis
 	 */
 	v1.HandleFunc("/analysis", control.Analysis_get).Methods("POST")
-	v1.HandleFunc("/analysis/save", control.Analysis_get).Methods("POST")
+	v1.HandleFunc("/analysis/file", control.Analysis_get_file).Methods("POST")
 
 	/*
 		Role & Permissions
@@ -170,40 +170,7 @@ func Create_new_invest_router() (*mux.Router) {
 		Test API
 	 */
 	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		//excel := xlsx.NewFile()
-		//sheet, err := excel.AddSheet("stats")
-		//if err != nil {
-		//	fmt.Println(err)
-		//	return
-		//}
-		//
-		//row := sheet.AddRow()
-		//
-		//numCell := row.AddCell()
-		//numCell.Value = "i"
-		//
-		//valueCell := row.AddCell()
-		//valueCell.Value = "val"
-		//
-		//for i, val := range []string{"first", "second", "third"} {
-		//	row := sheet.AddRow()
-		//
-		//	numCell := row.AddCell()
-		//	numCell.Value = strconv.Itoa(i)
-		//
-		//	valueCell := row.AddCell()
-		//	valueCell.Value = val
-		//}
-		//
-		//err = os.Mkdir("./documents/smthnew/", 777)
-		//if err != nil {
-		//	fmt.Println("folder: ", err)
-		//}
-		//
-		//err = excel.Save("./documents/smthnew/file.xls")
-		//if err != nil {
-		//	fmt.Println("save: ", err)
-		//}
+
 
 	})
 

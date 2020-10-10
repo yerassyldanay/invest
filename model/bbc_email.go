@@ -56,8 +56,14 @@ func (e *Email) CreateEmailWithHashAfterValidation(trans *gorm.DB) error {
 	pay attention to transaction:
 		refer to documentation
 */
-func (e *Email) OnlyGetById(trans *gorm.DB) error {
-	return trans.First(e, "id = ?", e.Id).Error
+func (e *Email) OnlyGetById(trans *gorm.DB) (err error) {
+	err = trans.First(e, "id = ?", e.Id).Error
+	return err
+}
+
+func (e *Email) OnlyGetByAddress(tx *gorm.DB) (err error) {
+	err = tx.First(e, "address = ?", e.Address).Error
+	return err
 }
 
 func (e *Email) OnlySave (tx *gorm.DB) (error) {

@@ -154,6 +154,14 @@ func (c *User) OnlyGetByIdPreloaded(trans *gorm.DB) error {
 		Where("id = ?", c.Id).First(c).Error
 }
 
+// get by email address preloaded
+func (c *User) OnlyGetByEmailAddress(tx *gorm.DB) (err error) {
+	err = tx.Raw("select u.* from users u join emails e " +
+		" on u.email_id = e.id where e.address = ? limit 1;", c.Email.Address).
+		Scan(c).Error
+	return err
+}
+
 func (c *User) OnlyGetUserById(trans *gorm.DB) error {
 	return trans.First(c, "id = ?", c.Id).Error
 }

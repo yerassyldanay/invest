@@ -20,8 +20,8 @@ var ErrorNoSuchUser = map[string]interface{}{
 
 var ErrorNotFound = map[string]interface{} {
 	"eng": "not found",
-	"rus": "",
-	"kaz": "",
+	"rus": "не найден",
+	"kaz": "табылмады",
 }
 
 var ErrorAccountNotVerified = map[string]interface{}{
@@ -60,10 +60,6 @@ var ErrorPhoneNumberIsNotVerified = map[string]interface{} {
 	"kaz": "телефон нөміріңізді растаңыз",
 }
 
-var ErrorFailedToMakeChanges = map[string]interface{} {
-	"eng": "failed to make changes to the db",
-}
-
 var ErrorInternalIssueOrInvalidPassword = map[string]interface{}{
 	"eng": "internal problem has occurred or the password is invalid",
 	"rus": "произошла внутренняя ошибка или неверный пароль",
@@ -90,10 +86,14 @@ var ErrorFailedToUpdateSomeValues = map[string]interface{}{
 
 var ErrorExternalServiceErrorNoOrganizationInfo = map[string]interface{} {
 	"eng": "failed to obtain organization info",
+	"rus": "не удалось получить информацию об организации",
+	"kaz": "ұйым туралы ақпарат ала мүмкін болмады",
 }
 
 var ErrorCouldNotSendEmail = map[string]interface{} {
 	"eng": "failed to send an email",
+	"rus": "не удалось отправить электронное письмо",
+	"kaz": "электрондық хат жіберілмеді",
 }
 
 var ErrorAlreadySentLinkToEmail = map[string]interface{}{
@@ -118,5 +118,11 @@ var ErrorTokenInvalidOrExpired = map[string]interface{}{
 	"eng": "invalid or expired token",
 	"rus": "токен невалидный или устарел",
 	"kaz": "токен дүрыс емес немесе ескірген",
+}
+
+var ErrorTokenInvalid = map[string]interface{}{
+	"eng": "invalid token",
+	"rus": "невалидный токен",
+	"kaz": "қате токен",
 }
 

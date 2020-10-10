@@ -2,21 +2,17 @@ package model
 
 import (
 	"invest/utils"
-
-	"strings"
 )
 
 /*
 	prepare sendgrid message store object
  */
-func (sm *SendgridMessageStore) Prepare_message_this_object(c *User, message_map map[string]map[string]string) (SendgridMessageStore, error) {
-	var lang = strings.ToLower(c.Lang)
+func (sm *SendgridMessageStore) Prepare_message_this_object(e *Email, lang string, message_map map[string]map[string]string) (SendgridMessageStore, error) {
 	var newsm = SendgridMessageStore{
 		From:              utils.BaseEmailAddress,
 		FromName:          utils.BaseEmailName,
-		To:                c.Email.Address,
-		ToName:            c.Fio,
-		SendgridMessageId: 0,
+		To:                e.Address,
+		ToName:            "Қолданушы. Пользователь. User",
 		SendgridMessage:   SendgridMessage{
 			Subject:   	message_map[utils.KeyEmailSubject][lang],
 			PlainText: 	message_map[utils.KeyEmailPlainText][lang],

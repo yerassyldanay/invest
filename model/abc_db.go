@@ -174,6 +174,8 @@ func Set_up_db() {
 		&Phone{}, &Project{}, &Role{}, &SendgridMessage{}, &SendgridMessageStore{},
 		&User{})
 
+	db.Debug().AutoMigrate(&ForgetPassword{})
+
 	db.Debug().AutoMigrate(&ProjectsUsers{})
 
 	/*

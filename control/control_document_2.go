@@ -1,7 +1,6 @@
 package control
 
 import (
-	"encoding/json"
 	"fmt"
 	"invest/model"
 	"invest/service"
@@ -98,11 +97,8 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 			* document_id
 			* project_id
 	 */
-	var document = model.Document{}
-	if err := json.NewDecoder(r.Body).Decode(&document); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error()})
-	}
-	defer r.Body.Close()
+	var document_id = service.OnlyGetQueryParameter(r, "document_id", uint64(0)).(uint64)
+	var project_id = service.OnlyGetQueryParameter(r, "document_id", uint64(0)).(uint64)
 
 	// parse header
 	is := service.InvestService{}
@@ -113,14 +109,14 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 			* check that exactly this user can access project
 			* is this user responsible for current step
 	 */
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(document.ProjectId)
+	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
 	if msg.IsThereAnError() {
 		msg.SetFname(fname, "project")
 		utils.Respond(w ,r, msg)
 		return
 	}
 
-	msg = is.Check_whether_this_user_responsible_for_current_step(document.ProjectId)
+	msg = is.Check_whether_this_user_responsible_for_current_step(project_id)
 	if msg.IsThereAnError() {
 		msg.SetFname(fname, "step")
 		utils.Respond(w, r, msg)
@@ -128,7 +124,7 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// delete a document by doc & project id
-	msg = is.Document_remove_document_from_project(document.Id)
+	msg = is.Document_remove_document_from_project(document_id)
 	msg.SetFname(fname, "remove")
 
 	utils.Respond(w, r, msg)

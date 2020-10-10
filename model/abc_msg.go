@@ -47,3 +47,7 @@ func ReturnMethodNotAllowed(errmsg string) utils.Msg {
 func ReturnNoSuchUser(errmsg string) utils.Msg {
 	return utils.Msg{utils.ErrorNoSuchUser, 404, "", errmsg}
 }
+
+func ReturnCouldNotSendEmailError(errmsg string) (utils.Msg) {
+	return utils.Msg{utils.ErrorCouldNotSendEmail, 422, "", errmsg}
+}

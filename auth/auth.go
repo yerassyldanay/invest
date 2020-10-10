@@ -37,12 +37,10 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		var splits = strings.Split(tokenHeader, " ")
 		if len(splits) != 2 {
 			utils.Respond(w, r, utils.Msg{
-				Message: map[string]interface{}{
-					"eng": "invalid token",
-				},
+				Message: utils.ErrorMethodNotAllowed,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 1",
-				ErrMsg:  "could not be split correctly",
+				ErrMsg:  "could not be split correctly | len: " + strconv.Itoa(len(splits)) + " | token: " +tokenHeader,
 			})
 			return
 		}
@@ -54,6 +52,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			_ = model.Load_env_values()
 		}
 
+		// var token, err
 		var token, err = jwt.ParseWithClaims(tokenNeeded, tokenStruct, func(token *jwt.Token) (i interface{}, e error) {
 			return []byte(os.Getenv("TOKEN_PASSWORD")), nil
 		})
@@ -68,15 +67,19 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		if !token.Valid {
-			utils.Respond(w, r, utils.Msg{
-				Message: utils.ErrorTokenInvalidOrExpired,
-				Status:  http.StatusMisdirectedRequest,
-				Fname:   fname + " 3",
-				ErrMsg:  "token has been expired",
-			})
-			return
-		}
+		_ = token
+
+		//fmt.Printf("token: %#v \n", token)
+
+		//if !token.Valid {
+		//	utils.Respond(w, r, utils.Msg{
+		//		Message: utils.ErrorTokenInvalidOrExpired,
+		//		Status:  http.StatusMisdirectedRequest,
+		//		Fname:   fname + " 3",
+		//		ErrMsg:  "token has been expired",
+		//	})
+		//	return
+		//}
 
 		/*
 			context is not working properly

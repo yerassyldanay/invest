@@ -64,7 +64,7 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 
 	w.Header().Set(HeaderCustomStatus, strconv.Itoa(msg.Status))
 
-	/*
+	/*HEAD
 		this header will bear a auth token
 	 */
 	w.Header().Add(HeaderAuthorization, r.Header.Get(HeaderAuthorization))

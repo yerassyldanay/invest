@@ -1,105 +1,64 @@
 package model
 
 import (
+	"errors"
 	"github.com/jinzhu/gorm"
-	"gopkg.in/validator.v2"
-	"invest/templates"
-	"invest/utils"
-
+	"net/mail"
 	"time"
 )
 
 type ForgetPassword struct {
-	NewPassword			string				`json:"new_password"`
-	EmailAddress				string				`json:"email_address" validate:"email"`
+	NewPassword			string						`json:"new_password" gorm:"-"`
+	EmailAddress		string						`json:"email_address" gorm:"primaryKey"`
 
 	Code				string				`json:"code"`
 	Deadline			time.Time			`json:"deadline"`
 	
-	Lang 				string				`json:"lang"`
-	UserId				uint64				`json:"user_id"`
+	Lang 				string				`json:"lang" gorm:"-"`
 }
 
-func (fp *ForgetPassword) SendMessage() (utils.Msg) {
-	if err := validator.Validate(*fp); err != nil {
-		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
-	}
-
-	var codeChan = make(chan string, 1)
-	go func(codeCh chan<- string) {
-		codeCh <- utils.Generate_Random_String(utils.MaxNumberOfCharactersSentByEmail)
-	}(codeChan)
-
-	var user = User{}
-	if err := GetDB().First(&user.Email, "address = ?", fp.EmailAddress).Error;
-		err == gorm.ErrRecordNotFound {
-		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
-	} else if err != nil || !user.Email.Verified {
-		return utils.Msg{utils.ErrorInvalidParameters, 400, "", "email is not confirmed or internal data base error occurred"}
-	}
-
-	var email = user.Email
-	err := GetDB().First(&user, "email_id = ?", user.Email.Id).Error
-	if err != nil {
-		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
-	}
-
-	user.Email = email
-
-	/*
-		create a hash that will be sent to email address
-	 */
-	var code string
-	select {
-	case code = <- codeChan:
-		fp.Code = code
-	case  <- time.Tick(time.Second * 10):
-		return utils.Msg{utils.ErrorInternalServerError, 500, "", "timeout. ForgetPassword Link"}
-	}
-
-	/*
-		this will create a message to send
-	 */
-	var sms = SendgridMessageStore{}
-	sms, err = sms.Prepare_message_this_object(&user, templates.Base_message_map_2_forget_password)
-	if err != nil {
-		return ReturnInternalDbError(err.Error())
-	}
-
-	/*
-		store this code in redis
-			{
-				"somehash": 1, (this is valid for one day)
-			}
-	 */
-	GetRedis().Set(fp.Code, fp.UserId, time.Hour * 24)
-
-	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+func (fp *ForgetPassword) TableName() string {
+	return "forget_passwords"
 }
 
-func (fp *ForgetPassword) Change_password_of_user_by_hash() (utils.Msg) {
-	// check hash is in redis
-	user_id, err := GetRedis().Get(fp.Code).Uint64()
-	if err != nil || user_id != fp.UserId || user_id == 0 {
-		return ReturnInvalidParameters("invalid code has been provided")
-	}
+// errors
+var errorForgetPasswordInvalidEmail = errors.New("invalid email address is provided")
 
-	if err = Validate_password(fp.NewPassword); err != nil {
-		return ReturnInternalDbError(err.Error())
-	}
-
-	hashed_password, err := utils.Convert_string_to_hash(fp.NewPassword)
-	if err != nil {
-		return ReturnInternalDbError(err.Error())
-	}
-
-	if err := GetDB().Table(User{}.TableName()).Where("id = ?", fp.UserId).Update("password", hashed_password).Error;
-		err != nil {
-			return ReturnInternalDbError(err.Error())
-	}
-
-	return ReturnNoError()
+func (fp *ForgetPassword) Validate() (error) {
+	_, err := mail.ParseAddress(fp.EmailAddress)
+	return err
 }
 
+// create
+func (fp *ForgetPassword) OnlyCreate(tx *gorm.DB) (err error) {
+	err = tx.Create(fp).Error
+	return err
+}
 
+// update
+func (fp *ForgetPassword) OnlyUpdateByEmailAddress(tx *gorm.DB, fields... string) (err error) {
+	err = tx.Model(&ForgetPassword{EmailAddress: fp.EmailAddress}).Select(fields).
+		Updates(map[string]interface{}{
+			"code": fp.Code,
+			"deadline": fp.Deadline,
+	}).Error
+
+	return err
+}
+
+// delete
+func (fp *ForgetPassword) OnlyDelete(tx *gorm.DB) (err error) {
+	err = tx.Delete(fp, "email_address = ?", fp.EmailAddress).Error
+	return err
+}
+
+func (fp *ForgetPassword) OnlyGet(tx *gorm.DB) (err error) {
+	err = tx.First(fp, "email_address = ?", fp.EmailAddress).Error
+	return err
+}
+
+func (fp *ForgetPassword) OnlyGetByCode(tx *gorm.DB) (err error) {
+	err = tx.First(fp, "code = ?", fp.Code).Error
+	return err
+}
 
