@@ -88,7 +88,7 @@ func Create_new_invest_router() (*mux.Router) {
 	 */
 	v1.HandleFunc("/project/docs/box", control.Document_add_box_to_upload_document).Methods("POST")
 	v1.HandleFunc("/project/docs/file", control.Document_upload_document).Methods("POST")
-	v1.HandleFunc("/project/docs/file", control.Document_remove_file).Methods("DELETE")
+	v1.HandleFunc("/project/docs/file/delete", control.Document_remove_file).Methods("GET")
 	v1.HandleFunc("/project/docs", control.Document_get).Methods("GET")
 	//v1.HandleFunc("/project/docs", control.Document_get).Methods("GET")
 
