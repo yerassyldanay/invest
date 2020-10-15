@@ -1,0 +1,28 @@
+time="2020-10-14T08:35:51+06:00" level=info msg=main port=7000
+time="2020-10-14T08:35:54+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T08:35:54+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T08:38:41+06:00" level=info msg=main port=7000
+time="2020-10-14T08:38:54+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T08:38:54+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T08:38:56+06:00" level=info msg=main port=7000
+time="2020-10-14T08:39:00+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T08:39:00+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T08:41:09+06:00" level=info msg=main port=7000
+time="2020-10-14T08:41:10+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T08:41:10+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T08:48:06+06:00" level=info msg=main port=7000
+time="2020-10-14T08:48:07+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T08:48:07+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T15:53:33+06:00" level=info msg=main port=7000
+time="2020-10-14T15:53:36+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T15:53:36+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T15:53:58+06:00" level=info msg=main port=7000
+time="2020-10-14T15:54:00+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T15:54:00+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T16:28:44+06:00" level=info msg=main port=7000
+time="2020-10-14T16:28:55+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-14T16:28:55+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-14T16:28:58+06:00" level=info msg=main port=7000
+time="2020-10-14T16:29:14+06:00" level=info msg="Sign_in 3" error= host="[::1]:45044" path=/v1/signin status=200
+time="2020-10-15T06:29:55+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-15T06:29:55+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

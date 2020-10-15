@@ -2,7 +2,9 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
+	"invest/utils"
 )
 
 func (pu *ProjectsUsers) Chech_whether_user_is_assigned_to_project(tx *gorm.DB) (error) {
@@ -30,6 +32,23 @@ func (pu *ProjectsUsers) OnlyDelete(tx *gorm.DB) (err error) {
 }
 
 func (pu *ProjectsUsers) OnlyDeleteRelation (tx *gorm.DB) (err error) {
-	err = tx.Delete(pu, "project_di = ? and user_id = ?", pu.ProjectId, pu.UserId).Error
+	err = tx.Delete(pu, "project_id = ? and user_id = ?", pu.ProjectId, pu.UserId).Error
 	return err
 }
+
+//
+func (pu *ProjectsUsers) OnlyAssignExpertsToProject(project_id uint64, tx *gorm.DB) (error) {
+	main_query := `insert into projects_users select ? as project_id, u.id as id from users u ` +
+		` join roles r on r.id = u.role_id where r.name = '` + utils.RoleExpert + `' ;`
+	err := tx.Exec(main_query, project_id).Error
+
+	return err
+}
+
+func (pu *ProjectsUsers) OnlyDeleteByProjectId(project_id uint64, tx *gorm.DB) error {
+	fmt.Println(project_id)
+	err := tx.Delete(pu, "project_id = ?", project_id).Error
+	return err
+}
+
+

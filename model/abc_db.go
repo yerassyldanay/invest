@@ -170,28 +170,37 @@ func Set_up_db() {
 	//&ProjectCivilConnection{}, &SendgridMessage{})
 
 	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{},
-		&Email{}, &Finance{}, &Ganta{}, &Organization{}, &Permission{},
-		&Phone{}, &Project{}, &Role{}, &SendgridMessage{}, &SendgridMessageStore{},
+		&Email{}, &Finance{}, &ForgetPassword{}, &Ganta{}, &Organization{},
+		&Permission{}, &Phone{}, &Project{}, &Role{}, &SmtpServer{},
 		&User{})
 
-	db.Debug().AutoMigrate(&ForgetPassword{})
-
-	db.Debug().AutoMigrate(&ProjectsUsers{})
+	db.Debug().AutoMigrate(&Notification{}, &NotificationInstance{}, &ProjectsUsers{})
 
 	/*
 		parameters of db
 	 */
 	db.DB().SetMaxOpenConns(utils.MaxNumberOpenConnToDb)
 
-	/*
-		these lines of code will make sure that everytime we create a row
-			sequence id will be updated
-		as there is a problem with sync of seq. id.
-	 */
-	//db.Callback().Create().Before("gorm:update").Register("updateSeqId", func(scope *gorm.Scope) {
-	//	//fmt.Println("updating hook is working: ", scope.TableName())
-	//	_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(scope.DB(), "default")
-	//})
+	err = PrepareSequenceId()
+	if err != nil {
+		fmt.Printf("could not prepare sequence id. err: ", err)
+	}
+}
+
+func PrepareSequenceId() error {
+	main_query := `
+		select setval('costs_id_seq', (select max(id) from costs) + 1);
+		select setval('finances_id_seq', (select max(id) from finances) + 1);
+		select setval('gantas_id_seq', (select coalesce(max(id), 0) as id from gantas) + 1);
+		select setval('emails_id_seq', (select max(id) from emails) + 1);
+		select setval('phones_id_seq', (select max(id) from phones) + 1);
+		select setval('users_id_seq', (select max(id) from users) + 1);
+		select setval('roles_id_seq', (select max(id) from roles) + 1);
+		select setval('projects_id_seq', (select max(id) from projects) + 1);
+		select setval('organizations_id_seq', (select max(id) from organizations) + 1);
+	`
+	err := GetDB().Exec(main_query).Error
+	return err
 }
 
 /*
@@ -199,6 +208,7 @@ func Set_up_db() {
  */
 func GetDB () *gorm.DB {
 	if db == nil {
+		fmt.Printf("[CONN] Establishing a new db connection...")
 		Set_up_db()
 	}
 	return db

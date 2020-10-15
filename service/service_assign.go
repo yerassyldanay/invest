@@ -12,6 +12,18 @@ func (is *InvestService) Assign_user_to_project(pu model.ProjectsUsers) (utils.M
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	// send message
+	na := model.NotifyAssign{
+		UserId:    pu.UserId,
+		ProjectId: pu.ProjectId,
+	}
+
+	// this handles everything
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &na:
+	default:
+	}
+
 	return model.ReturnNoError()
 }
 

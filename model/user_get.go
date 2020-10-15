@@ -69,13 +69,6 @@ func (c *User) Get_full_info_of_this_user(by string) (utils.Msg) {
 
 	wg.Wait()
 
-	/*
-		add statistics
-	*/
-	wg.Add(1)
-	c.Add_statistics_to_this_user_on_project_statuses(&wg)
-	wg.Wait()
-
 	var password = c.Password
 	c.Password = ""
 

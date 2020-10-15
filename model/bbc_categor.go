@@ -2,6 +2,7 @@ package model
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
@@ -9,11 +10,24 @@ import (
 
 type Categor struct {
 	Id				uint64				`json:"id" gorm:"primary key"`
-	Name			string				`json:"name" gorm:"unique;not null"`
+	Kaz				string				`json:"kaz" gorm:"unique;not null"`
+	Rus				string				`json:"rus" gorm:"unique;not null"`
+	Eng				string				`json:"eng" gorm:"unique;not null"`
 }
 
 func (Categor) TableName() string {
 	return "categors"
+}
+
+func (c *Categor) BeforeDelete(tx *gorm.DB) error {
+	var count int
+	GetDB().Table("projects_categories").Where("categor_id = ?", c.Id).Count(&count)
+
+	if count != 0 {
+		return errors.New("categor is being used")
+	}
+
+	return nil
 }
 
 /*
@@ -30,8 +44,12 @@ func(ca *Categor) Create_category() (utils.Msg) {
 /*
 
  */
-func (ca *Categor) Update() (utils.Msg) {
-	if err := GetDB().Table(Categor{}.TableName()).Update("name", ca.Name).Error; err != nil {
+func (ca *Categor) UpdateById() (utils.Msg) {
+	if err := GetDB().Model(Categor{Id: ca.Id}).Updates(map[string]interface{}{
+		"kaz": ca.Kaz,
+		"rus": ca.Rus,
+		"eng": ca.Eng,
+	}).Error; err != nil {
 		return ReturnInternalDbError(err.Error())
 	}
 

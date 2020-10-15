@@ -149,7 +149,7 @@ func (fr *FileRotator) Set_log_file() {
 /*
 	initiate the log file
  */
-func init() {
+func InitiateLogFile() {
 	fmt.Println("logging ...")
 	Get_file_rotator().Set_log_file()
 

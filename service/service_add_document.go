@@ -127,5 +127,20 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (ut
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	// send notification
+	na := model.NotifyAddDoc{
+		Name:        document.Kaz,
+		Deadline:    document.Deadline,
+		Responsible: utils.MapRole[document.Responsible][is.Lang],
+		UserId:      is.UserId,
+		ProjectId:   document.ProjectId,
+	}
+
+	// handles everything
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &na:
+	default:
+	}
+
 	return model.ReturnNoError()
 }

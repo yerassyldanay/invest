@@ -2,6 +2,7 @@ package model
 
 import (
 	"invest/utils"
+	"net/http"
 )
 
 func ReturnInternalDbError(errmsg string) utils.Msg {
@@ -50,4 +51,8 @@ func ReturnNoSuchUser(errmsg string) utils.Msg {
 
 func ReturnCouldNotSendEmailError(errmsg string) (utils.Msg) {
 	return utils.Msg{utils.ErrorCouldNotSendEmail, 422, "", errmsg}
+}
+
+func ReturnFailedToCreateAnAccount(errmsg string) (utils.Msg) {
+	return utils.Msg{utils.ErrorFailedToCreateAnAccount, http.StatusExpectationFailed, "", errmsg}
 }

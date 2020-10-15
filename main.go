@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/gorilla/handlers"
 	logr "github.com/sirupsen/logrus"
@@ -15,21 +16,19 @@ import (
 )
 
 func main() {
-	/*
-		prepare validator:
-			* add custom functions such as password, bin, etc. validators
-	 */
-	//model.PrepareValidator()
 
 	/*
 		Set up a connection with db
 	 */
 	model.Set_up_db()
 
-	//var b map[string][]string
-	//_ = json.Unmarshal([]byte(`{"eng":["aa","bb"]}`), &b)
-	//fmt.Println(b)
-	//fmt.Println(b["eng"])
+	/*
+		setup mailer queue, which receives & handles notifications in one place
+	 */
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	mq := model.InitiateNewMailerQueue()
+	go mq.Handle(ctx)
 
 	/*
 		migration
@@ -52,6 +51,7 @@ func main() {
 	/*
 		close the file at the end of the
 	*/
+	utils.InitiateLogFile()
 	defer utils.Get_file()
 
 	/*

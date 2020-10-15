@@ -1,60 +1,87 @@
 package intest
 
 import (
-	"invest/app"
-	_ "invest/model"
+	"invest/model"
+	"reflect"
+	"testing"
 )
 
-var InvestTestRouter = app.Create_new_invest_router()
+type signInDataStruct struct {
+	Sis						model.SignIn
+	ResultError				error
+	ResultErrorString		string
+}
 
-//func TestSignIn(t *testing.T) {
-//	var fname = "TestSignIn"
-//	router := InvestTestRouter
-//
-//	var datas = []TestData{
-//		{
-//			Body: map[string]interface{}{
-//				"username": "investor",
-//				"password": "KeRXaTaq5Ce8ULO",
-//				"role": "investor",
-//				"key": "username",
-//			},
-//			RespStatus: 200,
-//		},
-//		{
-//			Body: map[string]interface{}{
-//				"username": "investor",
-//				"password": "invalidpassword",
-//				"role": "investor",
-//				"key": "username",
-//			},
-//			RespStatus: 400,
-//		},
-//	}
-//
-//	//cln := http.Client{}
-//
-//	resp := httptest.NewRecorder()
-//	for _, data := range datas {
-//
-//		var datastr = data.Convert_body_to_string()
-//		//fmt.Println(datastr)
-//
-//		r, err := http.NewRequest(http.MethodPost, "/v1/all/signin", bytes.NewBuffer([]byte(datastr)))
-//		if err != nil {
-//			t.Errorf(fname + " 2" + " | " + err.Error())
-//			continue
-//		}
-//		defer r.Body.Close()
-//
-//		r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-//		router.ServeHTTP(resp, r)
-//
-//		status, _ := strconv.Atoi(resp.Header().Get(utils.HeaderCustomStatus))
-//
-//		if status != data.RespStatus {
-//			t.Errorf(fmt.Sprintf("%s 3" + " | %d", fname, resp.Code))
-//		}
-//	}
-//}
+func TestSignInData(t *testing.T) {
+	var siCases = []signInDataStruct{
+		{
+			Sis:	model.SignIn{
+				KeyUsername:   "",
+				Value:         "investor",
+				Password:      "KeRXaTaq5Ce8ULO",
+			},
+			ResultError: model.ErrorInvalidSignInKey,
+		},
+		{
+			Sis: model.SignIn{
+				KeyUsername:   "username",
+				Value:         "investor",
+				Password:      "",
+				Id:            0,
+				TokenCompound: "",
+			},
+			ResultError: model.ErrorInvalidSignInPassword,
+		},
+		{
+			Sis: model.SignIn{
+				KeyUsername:   "username",
+				Value:         "investor",
+				Password:      "somepassword",
+			},
+			ResultError: nil,
+		},
+	}
 
+	for _, siCase := range siCases {
+		err := siCase.Sis.Validate()
+		if !reflect.DeepEqual(err, siCase.ResultError) {
+			t.Error("expected: ", siCase.ResultError, "  but got: ", err)
+		}
+	}
+}
+
+func TestSignIn(t *testing.T) {
+	var siCases = []signInDataStruct{
+		{
+			Sis:               model.SignIn{
+				KeyUsername:   "username",
+				Value:         "investor",
+				Password:      "KeRXaTaq5Ce8ULO",
+			},
+			ResultErrorString: "",
+		},
+		{
+			Sis:               model.SignIn{
+				KeyUsername:   "username",
+				Value:         "investor",
+				Password:      "KeRXaTaq5Ce8ULO",
+			},
+			ResultErrorString: "",
+		},
+		{
+			Sis: 	model.SignIn{
+				KeyUsername:   "username",
+				Value:         "investor",
+				Password:      "invalidpassword",
+			},
+			ResultErrorString: "password either does not match or invalid",
+		},
+	}
+
+	for _, si := range siCases {
+		msg := si.Sis.Sign_in()
+		if msg.ErrMsg != si.ResultErrorString {
+			t.Error("expected nil, but got error: ", msg.ErrMsg)
+		}
+	}
+}

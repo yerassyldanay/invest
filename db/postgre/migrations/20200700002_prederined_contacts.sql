@@ -3,12 +3,12 @@
 -- SQL in section 'Up' is executed when this migration is applied
 -- insert into admins (username, password, fio) values('admin', '$2a$11$dQ4HxX824pacAoqhXDQ/0em0ebug8gN6AETJU3HhbHZB1KPB0N5FW', 'default admin');
 
-insert into emails (id, address, sent_code, sent_hash, deadline, verified) values
-                (1, 'invest.dept.spk@inbox.ru', '', '', null, true),
-                (2, 'manager.spk@inbox.ru', '', '', null, true),
-                (3, 'investor.spk@inbox.ru', '', '', null, true),
-                (4, 'financier.spk@inbox.ru', '', '', null, true),
-                (5, 'lawyer.spk@inbox.ru', '', '', null, true);
+insert into emails (id, address, sent_code, deadline, verified) values
+                (1, 'invest.dept.spk@inbox.ru', '', null, true),
+                (2, 'manager.spk@inbox.ru', '', null, true),
+                (3, 'investor.spk@inbox.ru', '', null, true),
+                (4, 'financier.spk@inbox.ru', '', null, true),
+                (5, 'lawyer.spk@inbox.ru', '', null, true);
 --                 (2, 'finans.dept.spk@inbox.ru', '', '', null, true);
 
 insert into phones (id, ccode, number, sent_code, verified) values

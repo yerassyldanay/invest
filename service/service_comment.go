@@ -6,7 +6,7 @@ import (
 )
 
 // comment on project with document statuses
-func (is InvestService) Comment_on_project_documents(spkComment model.SpkComment) (utils.Msg) {
+func (is *InvestService) Comment_on_project_documents(spkComment model.SpkComment) (utils.Msg) {
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil { trans.Rollback() } }()
 
@@ -43,6 +43,20 @@ func (is InvestService) Comment_on_project_documents(spkComment model.SpkComment
 	}
 
 	trans = nil
+
+	// send notification
+	nc := model.NotifyAddComment {
+		CommentedById: 	is.UserId,
+		ProjectId:     	spkComment.Comment.ProjectId,
+		CommentBody:   	spkComment.Comment.Body,
+		Status:        	spkComment.Comment.Status,
+	}
+
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &nc:
+	default:
+	}
+
 	return model.ReturnNoError()
 }
 

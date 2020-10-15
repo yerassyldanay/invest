@@ -77,7 +77,7 @@ func (a *Analysis) OnlyWriteDataToFile(absFilepath string, lang string) (error) 
 
 		projCategory := ""
 		if len(projectEx.Categors) > 0 {
-			projCategory = projectEx.Categors[0].Name
+			projCategory = projectEx.Categors[0].Rus
 		}
 
 		projectEx.Status = a.ConvertStatus(projectEx.Status, lang)

@@ -41,7 +41,7 @@ func (c *User) Create_user_without_check() (utils.Msg) {
 	_, _ = c.Remove_all_users_with_not_confirmed_email()
 
 	// validate password
-	if err := Validate_password(c.Password); err != nil {
+	if err := OnlyValidatePassword(c.Password); err != nil {
 		return ReturnInvalidParameters(err.Error())
 	}
 
@@ -59,7 +59,6 @@ func (c *User) Create_user_without_check() (utils.Msg) {
 	c.RoleId = c.Role.Id
 	c.Email.Verified = true
 	c.Email.SentCode = ""
-	c.Email.SentHash = ""
 	c.Email.Deadline = time.Time{}
 
 	// store email

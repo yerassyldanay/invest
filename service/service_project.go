@@ -7,10 +7,12 @@ import (
 )
 
 func (is *InvestService) Service_create_project(projectWithFinTable *model.ProjectWithFinanceTables) (utils.Msg){
-	defer func() {
+	defer func() utils.Msg {
 		if err := recover(); err != nil {
 			fmt.Println("CreateProject - could not send email: ", err)
+			return model.ReturnInternalDbError("the function createProject failed")
 		}
+		return model.ReturnNoError()
 	}()
 
 	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "finances")
@@ -75,53 +77,27 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 
 	trans = nil
 
-	// update project status
-	//_ = projectWithFinTable.Project.GetAndUpdateStatusOfProject(trans)
-
-	/*
-		NOTIFICATION:
-			* inform administrators about it
-	 */
-	var user = model.User{Id: is.UserId}
-	err = user.OnlyGetUserById(model.GetDB())
-	if err != nil {
-		user.Fio = "инвестор"
+	// update the status of the project
+	if err := projectWithFinTable.Project.GetAndUpdateStatusOfProject(model.GetDB()); err != nil {
+		return model.ReturnInternalDbError(err.Error())
 	}
 
-	/*
-		create a template & set values
-	*/
-	var t = model.Template{}
-	sm := t.Template_prepare_notify_users_about_changes_in_project(projectWithFinTable.Project.Lang, projectWithFinTable.Project.Name, user.Fio)
-
-	/*
-		set default values such as an email address of a message sender
-	*/
-	var sms = model.SendgridMessageStore{}
-	sms.Set_default_values()
-
-	/*
-		set template
-	*/
-	sms.SendgridMessage = sm
-
-	// to who
-	var addressers = []model.EmailAddresser{}
-	var admins, _ = user.OnlyGetPreloadedUsersByRole(utils.RoleAdmin, trans)
-	for _, admin := range admins {
-		addressers = append(addressers, model.EmailAddresser{
-			Name:    admin.Fio,
-			Address: admin.Email.Address,
-		})
+	// send notification
+	nps := model.NotifyProjectCreation{
+		ProjectId: projectWithFinTable.Project.Id,
+		UserId:    is.UserId,
 	}
 
-	/*
-		set receivers & send
-	*/
-	sms.ToAddresser = addressers
-	_, err = sms.SendMessageToList()
-	if err != nil {
-		return utils.Msg{utils.ErrorCouldNotSendEmail, 204, "", err.Error()}
+	//
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &nps:
+	default:
+	}
+
+	// assign all experts to the project
+	var pu = model.ProjectsUsers{ProjectId: projectWithFinTable.Project.Id}
+	if err := pu.OnlyAssignExpertsToProject(projectWithFinTable.Project.Id, model.GetDB()); err != nil {
+		fmt.Println("could not assign experts to project: ", err)
 	}
 
 	return model.ReturnNoError()

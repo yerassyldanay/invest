@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors"
-	"net/http"
+	"net/mail"
 	"regexp"
 )
 
@@ -17,18 +17,24 @@ var errorPasswordInvalidLength = errors.New("invalid length: must be 8-20 charac
 var errorPasswordNoUpperLetter = errors.New("no upper letter characters")
 var errorPasswordNoLowerLetter = errors.New("no lower letter characters")
 var errorPasswordNoDigits = errors.New("no digits")
+var errorNonWordCharacter = errors.New("contains non-word character. must contain only [a-zA-Z0-9]{n+}")
+var errorNonDigitCharacter = errors.New("contains non digit character")
 
-func Validate_password(val string) error {
-	upper := regexp.MustCompile("[A-Z]+")
-	lower := regexp.MustCompile("[a-z]+")
-	number := regexp.MustCompile("[0-9]+")
+var containUpperLetter = regexp.MustCompile("[A-Z]+")
+var containLowerLetter = regexp.MustCompile("[a-z]+")
+var containDigit = regexp.MustCompile("[0-9]+")
+var containOneNonDigit = regexp.MustCompile("[^0-9]{1}")
+var containNonWordCharacter = regexp.MustCompile("[^0-9A-Za-z]{1}")
+
+// validate password
+func OnlyValidatePassword(val string) error {
 
 	switch {
-	case upper.FindString(val) == "":
+	case containUpperLetter.FindString(val) == "":
 		return errorPasswordNoUpperLetter
-	case lower.FindString(val) == "":
+	case containLowerLetter.FindString(val) == "":
 		return errorPasswordNoLowerLetter
-	case number.FindString(val) == "":
+	case containDigit.FindString(val) == "":
 		return errorPasswordNoDigits
 	case len(val) > 20:
 		return errorPasswordInvalidLength
@@ -39,33 +45,38 @@ func Validate_password(val string) error {
 	return nil
 }
 
-/*
-	validate bin
- */
-func Validate_bin(s string) bool {
-	ok, _ := regexp.MatchString("^[0-9]+$", s)
-	return ok
+// validate username
+func OnlyValidateUsername(username string) error {
+	switch {
+	case containNonWordCharacter.FindString(username) != "":
+
+	}
+
+	return nil
 }
 
-/*
-	validate that all fields contain at least one character
- */
-func Validate_all_contain_at_least_one_char(ss... string) bool {
-	for _, s := range ss {
-		if s == "" {
-			return false
-		}
+// validate org bin
+func OnlyValidateBin(bin string) error {
+	switch {
+	case containOneNonDigit.FindString(bin) != "":
+		return errorNonDigitCharacter
 	}
-	return true
+
+	return nil
 }
 
-/*
-	DRY - get value from query
- */
-func Get_value_from_query(r *http.Request, key string) string {
-	l := r.URL.Query()[key]
-	if len(l) == 0 {
-		return ""
+// email
+func OnlyValidateEmailAddress(emailAddress string) error {
+	// parse name & address
+	addr, err := mail.ParseAddress(emailAddress)
+	if err != nil {
+		return err
 	}
-	return l[0]
+
+	// check address
+	if addr.Address == "" {
+		return errors.New("invalid email address")
+	}
+
+	return nil
 }

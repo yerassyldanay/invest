@@ -66,7 +66,7 @@ func (is *InvestService) Update_user_password(new_password string) (utils.Msg) {
 
 	// check validity of the password
 	// for more info refer to the description of the function below
-	if err := model.Validate_password(new_password); err != nil {
+	if err := model.OnlyValidatePassword(new_password); err != nil {
 		return model.ReturnInvalidParameters(err.Error())
 	}
 
@@ -95,6 +95,19 @@ func (is *InvestService) Create_user_based_on_role(new_user *model.User) (utils.
 	}
 
 	msg := new_user.Create_user_without_check()
+
+	// send notification
+	np := model.NotifyCreateProfile{
+		UserId:      new_user.Id,
+		User:        *new_user,
+		CreatedById: 	is.UserId,
+	}
+
+	// handles everything
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &np:
+	default:
+	}
 
 	return msg
 }

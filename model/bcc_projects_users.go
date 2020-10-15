@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+type ProjectUserStat struct {
+	ProjectId				uint64				`json:"project_id;omitempty"`
+	UserId					uint64				`json:"user_id;omitempty"`
+	Status					string				`json:"status"`
+}
+
 type ProjectsUsers struct {
 	ProjectId				uint64					`json:"project_id" gorm:"foreignkey:projects.id"`
 	UserId					uint64					`json:"user_id" gorm:"foreignkey:users.id"`
@@ -22,14 +28,14 @@ func (ProjectsUsers) TableName() string {
 	* do not allow to delete default users
 	* do not allow assign investor to the project
  */
-func (pu *ProjectsUsers) BeforeDelete(tx *gorm.DB) error {
-
-	if pu.UserId <= utils.DefaultNotAllowedUserToDelete {
-		return errorDafultUsersAreBeingAltered
-	}
-
-	return nil
-}
+//func (pu *ProjectsUsers) BeforeDelete(tx *gorm.DB) error {
+//
+//	if pu.UserId <= utils.DefaultNotAllowedUserToDelete {
+//		return errorDafultUsersAreBeingAltered
+//	}
+//
+//	return nil
+//}
 
 func (pu *ProjectsUsers) BeforeCreate(tx *gorm.DB) error {
 
@@ -45,3 +51,4 @@ func (pu *ProjectsUsers) BeforeCreate(tx *gorm.DB) error {
 
 	return nil
 }
+

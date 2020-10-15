@@ -21,6 +21,7 @@ type Document struct {
 	Notified					time.Time			`json:"notified" gorm:"default:now()"`
 
 	Modified					time.Time			`json:"modified" gorm:"default:now()"`
+	Created						time.Time			`json:"created" gorm:"default:now()"`
 
 	Status						string				`json:"status" gorm:"default:'new_one'"`
 	Step						int					`json:"step" gorm:"default:1"`
@@ -39,6 +40,7 @@ func (Document) TableName() string {
 // errors for doc validation
 var errorDocumentInvalidUri = errors.New("invalid / empty uri")
 var errorDocumentInvalidName = errors.New("invalid document name")
+var errorDocumentInvalidDeadline = errors.New("invalid year. it is too large")
 
 // prettify name of the document
 func (d *Document) PrettifyName() (err error) {
@@ -73,6 +75,9 @@ func (d *Document) Validate() error {
 		return errorDocumentInvalidName
 	case d.ProjectId < 1:
 		return errorInvalidProjectId
+	case d.Deadline.After(utils.GetCurrentTime().Add(time.Hour * 24 * 365 * 5)):
+		// the time difference 5 years
+		return errorDocumentInvalidDeadline
 	//case d.Uri == "":
 	//	return errorDocumentInvalidUri
 	}
@@ -93,6 +98,7 @@ func (d *Document) Validate() error {
 
 // create a document
 func (d *Document) OnlyCreate(trans *gorm.DB) (err error) {
+	d.Created = utils.GetCurrentTime()
 	err = trans.Create(d).Error
 	return err
 }
@@ -123,14 +129,14 @@ func (d *Document) OnlyGetDocumentById(tx *gorm.DB) (err error) {
 // get documents
 func (d *Document) OnlyGetDocumentsByProjectId(project_id uint64, tx *gorm.DB) ([]Document, error) {
 	var documents = []Document{}
-	err := tx.Find(&documents, "project_id = ?", project_id).Error
+	err := tx.Find(&documents, "project_id = ?", project_id).Order("created").Error
 	return documents, err
 }
 
 // get documents based on steps
 func (d *Document) OnlyGetDocumentsByStepsAndProjectId(project_id uint64, steps []interface{}, tx *gorm.DB) ([]Document, error) {
 	var documents = []Document{}
-	err := tx.Find(&documents, "step in (?) and project_id = ?", steps, project_id).Order("id").Error
+	err := tx.Order("created").Find(&documents, "step in (?) and project_id = ?", steps, project_id).Error
 	return documents, err
 }
 

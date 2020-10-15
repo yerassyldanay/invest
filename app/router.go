@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
+	"invest/model"
 	"invest/utils"
 	"net/http"
 )
@@ -48,7 +49,7 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		Confirm
 	 */
-	v1.HandleFunc("/confirmation/email", control.User_email_confirm).Methods("GET")
+	v1.HandleFunc("/confirmation/email", control.User_email_confirm).Methods("POST")
 	//v1.HandleFunc("/confirmation/phone", control.User_phone_confirm).Methods("GET")
 
 	/*
@@ -147,13 +148,6 @@ func Create_new_invest_router() (*mux.Router) {
 	v1.HandleFunc("/spk_comment", control.Project_comment_on_documents).Methods("POST")
 
 	/*
-		Read & Update financial tables
-			they are automatically created
-	 */
-	//v1.HandleFunc("/finance_table", control.Finance_table_get).Methods("GET", "PUT")
-	//v1.HandleFunc("/finance_results", control.Finresult_table_get).Methods("GET", "PUT")
-
-	/*
 		Organization
 	 */
 	v1.HandleFunc("/organization", control.Get_organization_info_by_bin).Methods("GET")
@@ -167,14 +161,20 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		Notifications
 	 */
-	v1.HandleFunc("/notifications", control.Get_own_emails_by_project_id).Methods("GET")
+	//v1.HandleFunc("/notifications", control.).Methods("GET")
 
 	/*
 		Test API
 	 */
 	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
+		var doc = model.Document{ProjectId: 1}
+		docs, err := doc.OnlyGetDocumentsByProjectId(doc.ProjectId, model.GetDB())
+		if err != nil {
+			fmt.Println("test: ", err)
+			return
+		}
 
-
+		fmt.Println(docs)
 	})
 
 	v1.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {

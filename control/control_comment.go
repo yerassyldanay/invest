@@ -109,7 +109,10 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 	var project = model.Project{
 		Id: spkComment.Comment.ProjectId,
 	}
-	if err := project.OnlyCheckUserByProjectAndUserId(spkComment.Comment.ProjectId, is.UserId, model.GetDB()); err != nil {
+
+	if is.RoleName == utils.RoleAdmin {
+		// if this is an admin then pass this point
+	} else if err := project.OnlyCheckUserByProjectAndUserId(spkComment.Comment.ProjectId, is.UserId, model.GetDB()); err != nil {
 		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " security", err.Error()})
 		return
 	}

@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/jinzhu/gorm"
 	"invest/model"
-	"invest/templates"
 	"invest/utils"
 	"time"
 )
@@ -51,21 +50,20 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (u
 		}
 	}
 
-	// this will create a message to send
-	var sms = model.SendgridMessageStore{}
-	sms, err = sms.Prepare_message_this_object(&email, is.Lang, templates.Base_message_map_2_forget_password)
-	if err != nil {
-		return model.ReturnInternalDbError(err.Error())
+	// send notification
+	nc := model.NotifyCode{
+		Code:    fp.Code,
+		Address: fp.EmailAddress,
 	}
 
-	//// send message
-	//_, err = sms.Send_message()
-	//if err != nil {
-	//	return model.ReturnCouldNotSendEmailError(err.Error())
-	//}
+	// this handle all further operation
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &nc:
+	default:
+	}
 
 	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = model.Struct_to_map(fp)
+	//resp["info"] = model.Struct_to_map(fp)
 
 	return model.ReturnNoErrorWithResponseMessage(resp)
 }
@@ -89,7 +87,7 @@ func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword)
 	}
 
 	// validate password
-	if err := model.Validate_password(fp.NewPassword); err != nil {
+	if err := model.OnlyValidatePassword(fp.NewPassword); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 

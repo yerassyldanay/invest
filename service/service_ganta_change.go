@@ -60,6 +60,8 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	var statusBefore = currentGanta.Status
+
 	// there two cases when nobody is responsible
 	if currentGanta.Responsible == utils.RoleNobody {
 		return model.ReturnMethodNotAllowed("the project is either rejected or there is no more gantt step")
@@ -186,6 +188,24 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 
 	if err := trans.Commit().Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// send notification
+	notifyStatusChangeMessage := &model.NotifyProjectStatus{
+		UserId:			is.UserId,
+		ChangedByFio: is.RoleName,
+		StatusBefore: statusBefore,
+		StatusAfter:  currentGanta.Status,
+		ProjectId:    project_id,
+		Step:         currentGanta.Step,
+		Lang:         is.Lang,
+	}
+
+	// send message (handles everything: stores on db, prepares smtp message,
+	// gets smtp server credentials, dials to smtp server & sends message )
+	select {
+	case model.GetMailerQueue().NotificationChannel <- notifyStatusChangeMessage:
+	default:
 	}
 
 	var project = model.Project{Id: project_id}

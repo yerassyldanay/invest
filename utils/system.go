@@ -1,5 +1,33 @@
 package utils
 
+var MapRole = map[string]map[string]string {
+	RoleAdmin: {
+		"kaz": "админ",
+		"rus": "админ",
+		"eng": "admin",
+	},
+	RoleManager: {
+		"kaz": "менеджер",
+		"rus": "менеджер",
+		"eng": "manager",
+	},
+	RoleExpert: {
+		"kaz": "эксперт",
+		"rus": "эксперт",
+		"eng": "expert",
+	},
+	RoleNobody: {
+		"kaz": "ешкім",
+		"rus": "никто",
+		"eng": "nobody",
+	},
+	RoleSpk: {
+		"kaz": "",
+		"rus": "",
+		"eng": "",
+	},
+}
+
 const (
 	RoleInvestor = "investor"
 	RoleManager = "manager"

@@ -36,11 +36,11 @@ type User struct {
 
 	Blocked			bool				`json:"blocked" gorm:"default:false"`
 	Created				time.Time			`json:"created" gorm:"default:now()"`
-
-	Statistics			UserStats				`json:"statistics" gorm:"-"`
 }
 
 /*
+
+	Statistics			UserStats				`json:"statistics" gorm:"-"`
 	this returns the name of the table in the database
 		gorm must automatically set the name by itself (adding 's' at the end)
 		but it is worth to make sure that the name set correctly
@@ -117,7 +117,7 @@ func (c *User) ValidateSpkUser() (error) {
 }
 
 func (c *User) ValidateForUpdate() error {
-	if err := Validate_password(c.Password); err != nil {
+	if err := OnlyValidatePassword(c.Password); err != nil {
 		return err
 	}
 
@@ -135,9 +135,9 @@ func (c *User) ValidateForUpdate() error {
 	function assumes that email, role & phone id are set
 */
 func (c *User) OnlyCreate(trans *gorm.DB) error {
-	if c.RoleId == 0 || c.EmailId == 0 || c.PhoneId == 0 {
-		return errors.New("email, role or phone id is 0")
-	}
+	//if c.RoleId == 0 || c.EmailId == 0 || c.PhoneId == 0 {
+	//	return errors.New("email, role or phone id is 0")
+	//}
 	return trans.Create(c).Error
 }
 
@@ -198,3 +198,41 @@ func (c *User) IsAssignedToThisProjectById(project_id uint64, tx *gorm.DB) (err 
 	return err
 }
 
+// get spk users
+func (c *User) OnlyGetSpkUsersByProjectId(project_id uint64, tx *gorm.DB) ([]User, error) {
+	var users = []User{}
+	err := tx.Raw("select u.* from users u join projects_users pu on u.id = pu.user_id where pu.project_id = ?;", project_id).Scan(&users).Error
+	return users, err
+}
+
+// get investor
+func (c *User) OnlyGetInvestorByProjectId(project_id uint64, tx *gorm.DB) (error) {
+	err := tx.Raw("select u.* from projects p join users u on p.offered_by_id = u.id where p.id = ? limit 1", project_id).Error
+	return err
+}
+
+// get all users who has connection to project + investor + admins
+func (c *User) GetAllUsersAndAdminsByProjectId(project_id uint64, tx *gorm.DB) ([]User, error) {
+	// get all admins
+	var admins = []User{}
+	if admins, err := c.OnlyGetPreloadedUsersByRole(utils.RoleAdmin, tx); err != nil && err != gorm.ErrRecordNotFound {
+		return admins, err
+	}
+
+	var spkUsers = []User{}
+	if spkUsers, err := c.OnlyGetSpkUsersByProjectId(project_id, tx); err != nil && err != gorm.ErrRecordNotFound {
+		return spkUsers, err
+	}
+
+	var investor = User{}
+	if err := investor.OnlyGetInvestorByProjectId(project_id, tx); err != nil {
+		return []User{}, err
+	}
+
+	admins = append(admins, investor)
+	for _, spkUsers := range spkUsers {
+		admins = append(admins, spkUsers)
+	}
+
+	return admins, nil
+}

@@ -204,3 +204,14 @@ time="2020-10-10T20:16:30+06:00" level=info msg=main port=7000
 time="2020-10-10T20:19:15+06:00" level=info msg="Project_add_document_to_project add" error="document is already uploaded. first delete" host="[::1]:34696" path=/v1/project/docs/file status=405
 time="2020-10-10T20:20:13+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:34696" path=/v1/project/docs/file status=200
 time="2020-10-10T20:20:23+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:34696" path=/v1/project/status status=200
+time="2020-10-10T21:56:34+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T21:56:37+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T21:56:49+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T21:56:49+06:00" level=info msg=main port=7000
+time="2020-10-10T22:28:21+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T22:28:21+06:00" level=info msg=main port=7000
+time="2020-10-10T22:28:33+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T22:28:53+06:00" level=info msg=main port=7000
+time="2020-10-10T22:30:12+06:00" level=info msg=INIT_DB message="connected to Postgres..." ok=true
+time="2020-10-10T22:30:54+06:00" level=info msg=main port=7000
+time="2020-10-10T22:31:14+06:00" level=info msg="Get_emails_of_any_project 1" error= host="[::1]:37112" path=/v1/notifications status=200

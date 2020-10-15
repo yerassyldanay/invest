@@ -2,8 +2,8 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
-	"gopkg.in/validator.v2"
 	"invest/utils"
 	"time"
 )
@@ -18,8 +18,6 @@ type Email struct {
 	Verified				bool				`json:"verified"  gorm:"default:false"`
 
 	SentCode				string				`json:"sent_code" gorm:"size: 10"`
-	SentHash				string				`json:"sent_hash"`
-
 	Deadline				time.Time			`json:"deadline" gorm:"default:null"`
 }
 
@@ -46,8 +44,8 @@ func (e *Email) OnlyCreate(trans *gorm.DB) error {
 	create new email with hash & code
 */
 func (e *Email) CreateEmailWithHashAfterValidation(trans *gorm.DB) error {
-	if e.SentCode == "" || e.SentHash == "" {
-		return errors.New("code or hash is empty")
+	if e.SentCode == "" {
+		return errors.New("code is empty")
 	}
 	return trans.Create(e).Error
 }
@@ -64,6 +62,32 @@ func (e *Email) OnlyGetById(trans *gorm.DB) (err error) {
 func (e *Email) OnlyGetByAddress(tx *gorm.DB) (err error) {
 	err = tx.First(e, "address = ?", e.Address).Error
 	return err
+}
+
+// get the one, which is not confirmed yet
+func (e *Email) OnlyGetNotConfirmedOne(tx *gorm.DB) (error) {
+	err := tx.Raw("select * from emails where sent_code != '' and verified = false limit 1;").Scan(e).Error
+	return err
+}
+
+// free search
+func (e *Email) OnlyGetByCode(value string, tx *gorm.DB) (error) {
+	err := tx.First(e, "sent_code = ?", value).Error
+	return err
+}
+
+// free
+func (e *Email) OnlyFreeUpAfterConfirmation() {
+	e.SentCode = ""
+	e.Deadline = time.Time{}
+	e.Verified = true
+}
+
+// update
+func (e *Email) OnlyUpdateAfterConfirmation(tx *gorm.DB) (bool) {
+	count := tx.Exec("update emails set sent_code = '', verified = true where address = ?;", e.Address).RowsAffected
+	fmt.Println("confirm email, rows affected ", count)
+	return true
 }
 
 func (e *Email) OnlySave (tx *gorm.DB) (error) {
@@ -84,25 +108,46 @@ func (e *Email) IsVerified() (map[string]interface{}, error) {
 	return utils.ErrorEmailIsNotVerified, err
 }
 
-/*
-	* it validates an email address
-	* sends a code & link
-	* stores on db
- */
-func (e *Email) Create_email() (map[string]interface{}, error) {
-	trans := GetDB().Begin()
+// get list of emails of users, who has connection to the project, by project id
+func (e *Email) OnlyGetEmailsHasConnectionToProject(project_id uint64, tx *gorm.DB) ([]Email, error) {
+	// get emails of admins & investors
+	var emails = []Email{}
+	err := tx.Raw(`select distinct e.address from users u join emails e on e.id = u.email_id
+		join roles r on r.id = u.role_id left join projects p on u.id = p.offered_by_id 
+		where r.name = 'admin' or p.id = ?; `, project_id).Scan(&emails).Error
 
-	if err := validator.Validate(e); err != nil {
-		trans.Rollback()
-		return utils.ErrorInvalidParameters, err
+	if err != nil {
+		return emails, err
 	}
 
-	if err := trans.Create(e).Error; err != nil {
-		trans.Rollback()
-		return utils.ErrorInternalDbError, err
+	// get emails of assigned users
+	var spkEmails = []Email{}
+	err = tx.Raw(`select distinct e.address from users u join emails e on e.id = u.email_id 
+		join projects_users pu on u.id = pu.user_id where project_id = ?; `, project_id).Scan(&spkEmails).Error
+
+	for _, email := range spkEmails {
+		emails = append(emails, email)
 	}
 
-	return utils.NoErrorFineEverthingOk, trans.Commit().Error
+	return emails, err
+}
+
+func (e *Email) OnlyGetEmailsOfSpkUsersAndAdmins(project_id uint64, tx *gorm.DB) ([]Email, error) {
+	// get emails of assigned users
+	var spkEmails = []Email{}
+	err := tx.Raw(`select distinct e.address from users u join emails e on e.id = u.email_id 
+		join projects_users pu on u.id = pu.user_id where project_id = ?; `, project_id).Scan(&spkEmails).Error
+
+	// get emails of admins & investors
+	var emails = []Email{}
+	err = tx.Raw(`select e.* from users u join roles r on r.id = u.role_id ` +
+		` join emails e on u.email_id = e.id where r.name = 'admin'; `).Scan(&emails).Error
+
+	for _, email := range spkEmails {
+		emails = append(emails, email)
+	}
+
+	return emails, err
 }
 
 
