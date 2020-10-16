@@ -1,6 +1,9 @@
 package utils
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 const (
 	Error_msg_invalid_parameters_passed = "invalid parameters have been passed"
@@ -16,3 +19,7 @@ var (
 		NoErrorFineEverthingOk, http.StatusCreated, "", "",
 	}
 )
+
+func OnlyPrintQueueIsFull(where string) {
+	fmt.Println("somehow the queue is full. where: ", where)
+}

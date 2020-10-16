@@ -5,7 +5,7 @@ import (
 	"invest/utils"
 )
 
-func (is *InvestService) Notification_get_by_email_and_project_id(project_id uint64) (utils.Msg) {
+func (is *InvestService) Notification_get_by_project_id(project_id uint64) (utils.Msg) {
 	// get user email address
 	var user = model.User{Id: is.UserId}
 	if err := user.OnlyGetByIdPreloaded(model.GetDB()); err != nil {
@@ -15,7 +15,7 @@ func (is *InvestService) Notification_get_by_email_and_project_id(project_id uin
 	ni := model.NotificationInstance{
 		ToAddress:      user.Email.Address,
 	}
-
+	
 	// get notifications
 	notifications, err := ni.OnlyGetNotificationsByEmailAndProjectId(ni.ToAddress, project_id, model.GetDB())
 	if err != nil {

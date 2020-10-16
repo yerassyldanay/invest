@@ -87,3 +87,40 @@ func (p *Project) Update() (utils.Msg) {
 	return ReturnNoError()
 }
 
+func (p *Project) Get_this_project_by_project_id() (error) {
+	// update & get status
+	err := p.GetAndUpdateStatusOfProject(GetDB())
+	if err != nil {
+		return err
+	}
+
+	// preload all other info
+	err = p.OnlyGetByIdPreloaded(GetDB())
+	if err != nil {
+		return err
+	}
+
+	// categories
+	err = p.OnlyGetCategorsByProjectId(GetDB())
+	if err != nil {
+		return err
+	}
+
+	// get info
+	err = p.OnlyUnmarshalInfo()
+	if err != nil {
+		return err
+	}
+
+	// get assigned users
+	if err := p.OnlyGetAssignedUsersByProjectId(GetDB()); err != nil {
+		return err
+	}
+
+	// get rid of password
+	for i, _ := range p.Users {
+		p.Users[i].Password = ""
+	}
+
+	return err
+}

@@ -167,4 +167,5 @@ var DefaultGantaFinalStep = Ganta{
 	Responsible:    utils.RoleNobody,
 
 	GantaChildren:  []Ganta{},
+	NotToShow: true,
 }

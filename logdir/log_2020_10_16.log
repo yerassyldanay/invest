@@ -1,0 +1,20 @@
+time="2020-10-16T00:12:18+06:00" level=info msg=main port=7000
+time="2020-10-16T12:24:48+06:00" level=info msg=main port=7000
+time="2020-10-16T12:25:02+06:00" level=info msg="Create_project service" error= host="[::1]:33008" path=/v1/project status=200
+time="2020-10-16T12:28:44+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-16T12:28:44+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-16T12:28:48+06:00" level=info msg=main port=7000
+time="2020-10-16T12:30:16+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-16T12:30:16+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-16T12:30:20+06:00" level=info msg=main port=7000
+time="2020-10-16T12:30:21+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-16T12:30:21+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-16T16:24:47+06:00" level=info msg=main port=7000
+time="2020-10-16T16:24:51+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-16T16:24:51+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-16T16:25:47+06:00" level=info msg=main port=7000
+time="2020-10-16T16:25:51+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-16T16:25:51+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-16T16:26:29+06:00" level=info msg=main port=7000
+time="2020-10-16T16:26:30+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-16T16:26:30+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

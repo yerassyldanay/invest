@@ -21,7 +21,7 @@ func (Categor) TableName() string {
 
 func (c *Categor) BeforeDelete(tx *gorm.DB) error {
 	var count int
-	GetDB().Table("projects_categories").Where("categor_id = ?", c.Id).Count(&count)
+	tx.Table("projects_categories").Where("categor_id = ?", c.Id).Count(&count)
 
 	if count != 0 {
 		return errors.New("categor is being used")

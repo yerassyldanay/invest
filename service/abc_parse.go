@@ -14,3 +14,4 @@ func (is *InvestService) OnlyParseRequest(r *http.Request) {
 	is.BasicInfo.RoleName = Get_header_parameter(r, utils.KeyRoleName, "").(string)
 	is.BasicInfo.Lang = Get_header_parameter(r, utils.HeaderContentLanguage, "").(string)
 }
+

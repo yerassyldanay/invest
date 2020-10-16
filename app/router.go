@@ -94,7 +94,6 @@ func Create_new_invest_router() (*mux.Router) {
 	v1.HandleFunc("/project/docs/file", control.Document_upload_document).Methods("POST")
 	v1.HandleFunc("/project/docs/file/delete", control.Document_remove_file).Methods("GET")
 	v1.HandleFunc("/project/docs", control.Document_get).Methods("GET")
-	//v1.HandleFunc("/project/docs", control.Document_get).Methods("GET")
 
 	/*
 		Project
@@ -161,7 +160,7 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		Notifications
 	 */
-	//v1.HandleFunc("/notifications", control.).Methods("GET")
+	v1.HandleFunc("/notifications", control.Notification_get).Methods("GET")
 
 	/*
 		Test API

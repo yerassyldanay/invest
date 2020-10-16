@@ -15,13 +15,6 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 		return model.ReturnNoError()
 	}()
 
-	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "finances")
-	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "costs")
-	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "projects")
-	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "users")
-	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "organizations")
-	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error( model.GetDB(), "documents")
-
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil {trans.Rollback()} }()
 
@@ -79,19 +72,7 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 
 	// update the status of the project
 	if err := projectWithFinTable.Project.GetAndUpdateStatusOfProject(model.GetDB()); err != nil {
-		return model.ReturnInternalDbError(err.Error())
-	}
-
-	// send notification
-	nps := model.NotifyProjectCreation{
-		ProjectId: projectWithFinTable.Project.Id,
-		UserId:    is.UserId,
-	}
-
-	//
-	select {
-	case model.GetMailerQueue().NotificationChannel <- &nps:
-	default:
+		fmt.Println(err.Error())
 	}
 
 	// assign all experts to the project
@@ -100,5 +81,31 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 		fmt.Println("could not assign experts to project: ", err)
 	}
 
+	// send notification
+	nps := model.NotifyProjectCreation{
+		ProjectId: projectWithFinTable.Project.Id,
+		UserId:    is.UserId,
+	}
+
+	// in case
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &nps:
+	default:
+		utils.OnlyPrintQueueIsFull("createProject")
+	}
+
 	return model.ReturnNoError()
+}
+
+// get all project info
+func (is *InvestService) Project_get_by_id(project_id uint64) (utils.Msg) {
+	var project = model.Project{Id: project_id}
+	if err := project.Get_this_project_by_project_id(); err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	var resp = utils.NoErrorFineEverthingOk
+	resp["info"] = model.Struct_to_map(project)
+
+	return model.ReturnNoErrorWithResponseMessage(resp)
 }

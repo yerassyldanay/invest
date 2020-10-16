@@ -26,16 +26,16 @@ func TestMailerQueue(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 2)
 	mq.Handle(ctx)
 
-	time.Sleep(time.Second * 4)
+	time.Sleep(time.Second * 5)
 
 	defer cancel()
 }
 
 func TestModelGetNotification(t *testing.T) {
 	ni := model.NotificationInstance{
-		ToAddress:      "manager.spk@inbox.ru",
+		ToAddress:      "invest.dept.spk@inbox.ru",
 		Notification:   model.Notification{
-			ProjectId: 0,
+			ProjectId: 1,
 		},
 	}
 
@@ -55,7 +55,7 @@ func TestServiceGetNotifications(t *testing.T) {
 	is := service.InvestService{BasicInfo:service.BasicInfo{UserId: 2}}
 
 	// test
-	msg := is.Notification_get_by_email_and_project_id(0)
+	msg := is.Notification_get_by_project_id(0)
 	if msg.IsThereAnError() {
 		t.Error("expected no error, but got ", msg.ErrMsg)
 	}

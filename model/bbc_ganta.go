@@ -47,6 +47,8 @@ type Ganta struct {
 	IsDone							bool					`json:"is_done" gorm:"default:false"`
 	Responsible						string					`json:"responsible" gorm:"default:'spk'"`
 	IsDocCheck						bool					`json:"-" gorm:"default:false"`
+
+	NotToShow							bool					`json:"-" gorm:"default:false"`
 }
 
 func (Ganta) TableName() string {
@@ -115,16 +117,16 @@ func (g *Ganta) OnlyGetGantaById(tx *gorm.DB) (error) {
 }
 
 func (g *Ganta) OnlyGetParentsByProjectId(stage interface{}, tx *gorm.DB) (gantas []Ganta, err error) {
-	err = tx.Raw("select * from gantas where project_id = ? and ganta_parent_id = 0 and step = ?  order by is_done desc, start_date asc ; ", g.ProjectId, stage).Scan(&gantas).Error
+	err = tx.Raw("select * from gantas where not_to_show = false and project_id = ? and ganta_parent_id = 0 and step = ?  order by is_done desc, start_date asc ; ", g.ProjectId, stage).Scan(&gantas).Error
 	return gantas, err
 }
 
 func (g *Ganta) OnlyGetChildrenByIdAndProjectId(tx *gorm.DB) (error) {
-	return tx.Find(g.GantaChildren, "ganta_parent_id = ? and project_id = ?", g.Id, g.ProjectId).Error
+	return tx.Find(g.GantaChildren, "not_to_show = false and ganta_parent_id = ? and project_id = ?", g.Id, g.ProjectId).Error
 }
 
 func (g *Ganta) OnlyGetChildrenByIdAndProjectIdStep(project_step interface{}, tx *gorm.DB) (error) {
-	return tx.Find(g.GantaChildren, "ganta_parent_id = ? and project_id = ? and step = ?", g.Id, g.ProjectId, project_step).Error
+	return tx.Find(g.GantaChildren, "not_to_show = false and ganta_parent_id = ? and project_id = ? and step = ?", g.Id, g.ProjectId, project_step).Error
 }
 
 func (g *Ganta) OnlyUpdateStartDatesOfAllUndoneGantaStepsByProjectId(shiftInHours int, tx *gorm.DB) (err error) {
@@ -174,7 +176,7 @@ func (g *Ganta) OnlyChangeStatusToDoneAndUpdateDeadlineById(tx *gorm.DB) (err er
 	switch {
 	case days == 0:
 		days = 1
-		g.StartDate = utils.GetCurrentTime()
+		g.StartDate = utils.GetCurrentTime().Add(time.Hour * (-24))
 	case days < 0:
 		days = 1
 		g.StartDate = utils.GetCurrentTime().Add(time.Hour * time.Duration(days))

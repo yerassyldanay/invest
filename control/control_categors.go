@@ -48,5 +48,6 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 		msg =  utils.Msg{}
 	}
 
+	msg.SetFname(fname, "r")
 	utils.Respond(w, r, msg)
 }

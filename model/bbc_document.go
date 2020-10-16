@@ -56,12 +56,15 @@ func (d *Document) PrettifyName() (err error) {
 		return errorDocumentInvalidName
 	}
 
-	switch {
-	case d.Kaz == "":
+	if d.Kaz == "" {
 		d.Kaz = temp
-	case d.Rus == "":
+	}
+
+	if d.Rus == "" {
 		d.Rus = temp
-	case d.Eng == "":
+	}
+
+	if d.Eng == "" {
 		d.Eng = temp
 	}
 
@@ -129,14 +132,14 @@ func (d *Document) OnlyGetDocumentById(tx *gorm.DB) (err error) {
 // get documents
 func (d *Document) OnlyGetDocumentsByProjectId(project_id uint64, tx *gorm.DB) ([]Document, error) {
 	var documents = []Document{}
-	err := tx.Find(&documents, "project_id = ?", project_id).Order("created").Error
+	err := tx.Order("created desc").Find(&documents, "project_id = ?", project_id).Error
 	return documents, err
 }
 
 // get documents based on steps
 func (d *Document) OnlyGetDocumentsByStepsAndProjectId(project_id uint64, steps []interface{}, tx *gorm.DB) ([]Document, error) {
 	var documents = []Document{}
-	err := tx.Order("created").Find(&documents, "step in (?) and project_id = ?", steps, project_id).Error
+	err := tx.Order("created desc").Find(&documents, "step in (?) and project_id = ?", steps, project_id).Error
 	return documents, err
 }
 

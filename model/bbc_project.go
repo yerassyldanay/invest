@@ -134,6 +134,11 @@ func (p *Project) OnlyGetById(trans *gorm.DB) error {
 	return trans.First(p, "id=?", p.Id).Error
 }
 
+func (p *Project) OnlyGetAny(tx *gorm.DB) error {
+	err := tx.First(p).Error
+	return err
+}
+
 // get by id (+ add info about organization)
 func (p *Project) OnlyGetByIdPreloaded(tx *gorm.DB) (err error) {
 	err = tx.Preload("Organization").First(p, "id = ?", p.Id).Error

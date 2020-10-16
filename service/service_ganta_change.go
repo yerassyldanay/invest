@@ -101,7 +101,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				DurationInDays: 3,
 				Step:           currentGanta.Step,
 				Status:         utils.ProjectStatusReject,
-				StartDate: 		utils.GetCurrentTime(),
+				StartDate: 		utils.GetCurrentTruncatedDate(),
 				Deadline: 		time.Time{}, // to avoid sending notifications
 				IsDone:         false,
 				Responsible:    utils.RoleNobody,
@@ -139,7 +139,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			}
 
 			// difference in hour between the current
-			var difference = int(utils.GetCurrentTime().Sub(currentGanta.StartDate).Hours())
+			var difference = int(utils.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
 
 			// shift all gantt step to the current date (to left or to right)
 			// they must start from this date
@@ -161,8 +161,8 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				DurationInDays: daysGivenToInvestor,
 				Step:           currentGanta.Step,
 				Status:         utils.ProjectStatusPendingInvestor,
-				StartDate: 		utils.GetCurrentTime(),
-				Deadline: 		utils.GetCurrentTime().Add(time.Hour * 24 * 3),
+				StartDate: 		utils.GetCurrentTruncatedDate(),
+				Deadline: 		utils.GetCurrentTruncatedDate().Add(time.Hour * 24 * 3),
 				IsDone:         false,
 				Responsible:    utils.RoleInvestor,
 			}
@@ -173,7 +173,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			}
 
 			// put the current gantt step after the new gantt step
-			currentGanta.StartDate = utils.GetCurrentTime().Add(daysGivenToInvestor)
+			currentGanta.StartDate = utils.GetCurrentTruncatedDate().Add(daysGivenToInvestor)
 			//currentGanta.Deadline = currentGanta.StartDate.Add(currentGanta.DurationInDays * time.Hour * 24)
 
 			// update the start date
