@@ -14,7 +14,7 @@ import (
 var User_email_confirm = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "User_email_confirm"
 
-	// headers
+	// headersOnlyGetByAddress
 	is := service.InvestService{}
 	is.OnlyParseRequest(r)
 

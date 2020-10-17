@@ -18,3 +18,12 @@ time="2020-10-16T16:25:51+06:00" level=info msg=fn_rotate_log_files message="fin
 time="2020-10-16T16:26:29+06:00" level=info msg=main port=7000
 time="2020-10-16T16:26:30+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
 time="2020-10-16T16:26:30+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-17T00:21:50+06:00" level=info msg=MAIN error= host="[::1]:39870" path=/v1/home status=400
+time="2020-10-17T00:22:34+06:00" level=info msg=MAIN error= host="[::1]:39870" path=/v1/home status=400
+time="2020-10-17T00:22:39+06:00" level=info msg=MAIN error= host="[::1]:39870" path=/v1/home status=400
+time="2020-10-17T00:22:39+06:00" level=info msg=MAIN error= host="[::1]:39870" path=/v1/home status=400
+time="2020-10-17T00:23:12+06:00" level=info msg=MAIN error= host="[::1]:39870" path=/v1/home status=400
+time="2020-10-17T00:23:12+06:00" level=info msg=MAIN error= host="[::1]:39870" path=/v1/home status=400
+time="2020-10-17T00:23:22+06:00" level=info msg=MAIN error= host="[::1]:39870" path=/v1/home status=400
+time="2020-10-17T00:23:31+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-17T00:23:31+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

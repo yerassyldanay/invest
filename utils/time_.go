@@ -10,7 +10,8 @@ func GetCurrentTime() time.Time {
 }
 
 func GetCurrentTruncatedDate() time.Time {
-	return time.Now().Truncate(time.Hour).Add(time.Minute)
+	minute := time.Duration(GetCurrentTime().Hour()) * 10 + time.Duration(GetCurrentTime().Minute())
+	return time.Now().Truncate(time.Hour).Add(minute)
 }
 
 // prettify time

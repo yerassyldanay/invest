@@ -65,14 +65,15 @@ func (User) TableName() string {
 //	return nil
 //}
 
-var errorDafultUsersAreBeingAltered = errors.New("cannot delete default users")
+var errorDefultUsersAreBeingAltered = errors.New("cannot delete default users")
+var errorDefaultUsersAreBeingUpdated = errors.New("cannot update basic user info")
 
 /*
 	cannot delete default users
  */
 func (c *User) BeforeDelete(tx *gorm.DB) error {
 	if c.Id <= utils.ConstantDefaultNumberOfUsers {
-		return errorDafultUsersAreBeingAltered
+		return errorDefultUsersAreBeingAltered
 	}
 
 	return nil
@@ -81,13 +82,13 @@ func (c *User) BeforeDelete(tx *gorm.DB) error {
 /*
 	cannot update default user
  */
-func (c *User) BeforeUpdate(tx *gorm.DB) error {
-	if c.Id <= utils.ConstantDefaultNumberOfUsers {
-		return errorDafultUsersAreBeingAltered
-	}
-
-	return nil
-}
+//func (c *User) BeforeUpdate(tx *gorm.DB) error {
+//	if c.Id <= utils.ConstantDefaultNumberOfUsers {
+//		return errorDefaultUsersAreBeingUpdated
+//	}
+//
+//	return nil
+//}
 
 // errors
 var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 30 characters")

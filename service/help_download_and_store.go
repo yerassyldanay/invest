@@ -2,25 +2,23 @@ package service
 
 import (
 	"invest/utils"
-	"mime/multipart"
 	"net/http"
 )
 
 func (ds *DocStore) Download_and_store_file(r *http.Request) (map[string]interface{}, error) {
-	/*
-		Parsing a file to get meta-data on a file (name, format, etc.), file in bytes, generated string (filename), err
-	*/
+	//	parsing a file to get meta-data on a file (name, format, etc.),
+	//	file in bytes, generated string (filename), err
 
-	var err error
-	var handler *multipart.FileHeader
-
-	handler, err = ds.Parse_file(r)
+	_, err := ds.Parse_file(r)
 	if err != nil {
 		return utils.ErrorInternalServerError, err
 	}
 
-	ds.Format, err = Parse_the_format_of_the_file(handler)
-	if err != nil {
+	/*
+		get format of the file
+			* "image/png" -> .png
+	 */
+	if err = ds.OnlyParseFormatOfTheFile(); err != nil {
 		return utils.ErrorInternalServerError, err
 	}
 

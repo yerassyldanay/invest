@@ -21,7 +21,7 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (u
 	}
 
 	// create a hash that will be sent to email address
-	var hashCodeToSend = utils.Generate_Random_String(utils.MaxNumberOfCharactersSentByEmail)
+	var hashCodeToSend = utils.Generate_Random_Number(4)
 
 	// check whether once message was sent
 	err := fp.OnlyGet(model.GetDB())
@@ -76,25 +76,25 @@ func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword)
 	defer func() { if trans != nil {trans.Rollback()} }()
 
 	// get email from forget password
-	if err := fp.OnlyGetByCode(trans); err != nil {
-		return model.ReturnInternalDbError(err.Error())
+	if err := fp.OnlyGetByAddressAndCode(trans); err != nil {
+		return model.ReturnInternalDbError("code " + err.Error())
 	}
 
 	// get user by email
 	var user = model.User{Email: model.Email{Address: fp.EmailAddress}}
 	if err := user.OnlyGetByEmailAddress(trans); err != nil {
-		return model.ReturnInternalDbError(err.Error())
+		return model.ReturnInternalDbError("get" + err.Error())
 	}
 
 	// validate password
 	if err := model.OnlyValidatePassword(fp.NewPassword); err != nil {
-		return model.ReturnInternalDbError(err.Error())
+		return model.ReturnInternalDbError("val" + err.Error())
 	}
 
 	// convert password to hash
 	hashedPassword, err := utils.Convert_string_to_hash(fp.NewPassword)
 	if err != nil {
-		return model.ReturnInternalDbError(err.Error())
+		return model.ReturnInternalDbError("hash" + err.Error())
 	}
 
 	// update password
@@ -104,7 +104,7 @@ func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword)
 
 	// delete - otherwise it can be used to reset password
 	if err = fp.OnlyDelete(trans); err != nil {
-		return model.ReturnInternalDbError(err.Error())
+		return model.ReturnInternalDbError("delete " + err.Error())
 	}
 
 	// commit changes

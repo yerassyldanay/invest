@@ -53,6 +53,14 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 	there are several cases that might happen after any of the users changes the status of the project
  */
 func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, status string) (utils.Msg) {
+	// validate status
+	switch {
+	case status == utils.ProjectStatusAccept:
+	case status == utils.ProjectStatusReject:
+	case status == utils.ProjectStatusReconsider:
+	default:
+		return model.ReturnInvalidParameters("invalid status, status is " + status)
+	}
 
 	// get the current gantt step
 	var currentGanta = model.Ganta{ProjectId: project_id}
@@ -98,13 +106,14 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				Kaz:            "Проект отклонен",
 				Rus:            "Проект отклонен",
 				Eng:            "Проект отклонен",
+				StartDate:      utils.GetCurrentTruncatedDate(),
 				DurationInDays: 3,
+				Deadline:       time.Time{}, // to avoid sending notifications
 				Step:           currentGanta.Step,
 				Status:         utils.ProjectStatusReject,
-				StartDate: 		utils.GetCurrentTruncatedDate(),
-				Deadline: 		time.Time{}, // to avoid sending notifications
 				IsDone:         false,
 				Responsible:    utils.RoleNobody,
+				NotToShow:      true,
 			}
 
 			// creates this gantt step
@@ -162,22 +171,23 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				Step:           currentGanta.Step,
 				Status:         utils.ProjectStatusPendingInvestor,
 				StartDate: 		utils.GetCurrentTruncatedDate(),
-				Deadline: 		utils.GetCurrentTruncatedDate().Add(time.Hour * 24 * 3),
+				Deadline: 		utils.GetCurrentTruncatedDate().Add(time.Hour * 24 * daysGivenToInvestor),
 				IsDone:         false,
 				Responsible:    utils.RoleInvestor,
 			}
 
-			// create a new gantt step
-			if err = newGanta.OnlyCreate(trans); err != nil {
+			// shift all gantt steps to right
+			// calculate shift hour
+			hoursToShift := int(utils.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
+			hoursToShift = hoursToShift + int(daysGivenToInvestor * 24)
+
+			// shift all gantt steps
+			if err = currentGanta.OnlyUpdateStartDatesOfAllUndoneGantaStepsByProjectId(hoursToShift, trans); err != nil {
 				return model.ReturnInternalDbError(err.Error())
 			}
 
-			// put the current gantt step after the new gantt step
-			currentGanta.StartDate = utils.GetCurrentTruncatedDate().Add(daysGivenToInvestor)
-			//currentGanta.Deadline = currentGanta.StartDate.Add(currentGanta.DurationInDays * time.Hour * 24)
-
-			// update the start date
-			if err = currentGanta.OnlyUpdateStartDateById(trans); err != nil {
+			// create a new gantt step
+			if err = newGanta.OnlyCreate(trans); err != nil {
 				return model.ReturnInternalDbError(err.Error())
 			}
 		}

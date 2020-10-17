@@ -18,26 +18,14 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil { trans.Rollback() }} ()
 
-	// get document & change uri & save it
-	var tempDoc = model.Document{Id: document.Id}
-	err := tempDoc.OnlyGetDocumentById(trans)
-	if err != nil {
-		return model.ReturnInternalDbError(err.Error())
-	}
-
-	// check if the document is already uploaded
-	if tempDoc.Uri != "" {
-		return model.ReturnMethodNotAllowed("document is already uploaded. first delete")
-	}
-
 	// set new fields
-	tempDoc.Modified = utils.GetCurrentTime()
-	tempDoc.Uri = document.Uri
-	tempDoc.Deadline = utils.GetCurrentTime()
+	document.Modified = utils.GetCurrentTruncatedDate()
+	document.Uri = document.Uri
+	document.Deadline = utils.GetCurrentTruncatedDate()
 
 	// update fields: uri, modified & deadline
 	// changes saved
-	if err = tempDoc.OnlyUpdateUriAndDeadlineById(trans); err != nil {
+	if err := document.OnlyUpdateUriAndDeadlineByIdAndEmptyUri(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
@@ -60,24 +48,35 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 			* when an investor uploaded all documents
 			* when an investor reconsidered (removed & uploaded) documents with an undesirable status
 	 */
-	var countNumberOfEmptyDocuments, countNumberOfDocumentsWithUndesirableStatus int
+	var countNumberOfEmptyDocuments int
 	if currentGanta.Responsible == is.RoleName && is.RoleName == utils.RoleInvestor {
 		// number of documents with empty uri
 		// which does not allow to move to the next step
 		countNumberOfEmptyDocuments = document.OnlyCountNumberOfEmptyDocuments(is.RoleName, currentGanta.Step, trans)
 
 		// if there is any document with undesirable status then do not move to the next gantt step
-		countNumberOfDocumentsWithUndesirableStatus, err = document.OnlyCountNumberOfDocumentsWithUndesirableStatus(is.RoleName, currentGanta.ProjectId, currentGanta.Step, trans)
+		countNumberOfDocumentsWithUndesirableStatus, err := document.OnlyCountNumberOfDocumentsWithUndesirableStatus(is.RoleName, currentGanta.ProjectId, currentGanta.Step, trans)
 		if err != nil {
 			return model.ReturnInternalDbError(err.Error())
 		}
 
 		// count the number of documents, which are to be reconsidered or uploaded
-		if countNumberOfEmptyDocuments + countNumberOfDocumentsWithUndesirableStatus != 0 {
-			// there are still documents
-		} else if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
-			// if there is no document to change or upload -> shift gantt step
-			return model.ReturnInternalDbError(err.Error())
+		if countNumberOfEmptyDocuments + countNumberOfDocumentsWithUndesirableStatus == 0 {
+			if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
+				// if there is no document to change or upload -> shift gantt step
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+			if err = currentGanta.OnlyGetCurrentStepByProjectId(trans); err != nil {
+				// update current step
+				return model.ReturnInternalDbError(err.Error())
+			}
+
+			hours := int(utils.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
+			if err := currentGanta.OnlyUpdateStartDatesOfAllUndoneGantaStepsByProjectId(hours, trans); err != nil {
+				// could not shift all gantt steps
+				return model.ReturnInternalDbError(err.Error())
+			}
 		}
 
 	} else if utils.Does_a_slice_contain_element([]string{utils.RoleSpk, utils.RoleManager, utils.RoleExpert}, currentGanta.Responsible) &&
@@ -85,13 +84,16 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 		fmt.Println(is.RoleName + " | " + currentGanta.Responsible)
 	}
 
-	if err = trans.Commit().Error; err != nil {
+	if err := trans.Commit().Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	// update the status of the project
 	var project = model.Project{Id: document.ProjectId}
-	_ = project.GetAndUpdateStatusOfProject(model.GetDB())
+	err := project.GetAndUpdateStatusOfProject(model.GetDB())
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	return model.ReturnNoError()
 }
@@ -106,7 +108,7 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (ut
 
 	document.IsAdditional = true
 	document.Uri = ""
-	document.Modified = utils.GetCurrentTime()
+	document.Modified = utils.GetCurrentTruncatedDate()
 
 	// get current gantt step to set project step
 	var project = model.Project{Id: document.ProjectId}

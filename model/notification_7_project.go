@@ -62,9 +62,18 @@ func (n *NotifyProjectCreation) GetHtml() string {
 		return ""
 	}
 
+	// get project
+	if n.Project.Id < 1 {
+		n.Project.Id = n.ProjectId
+		if err := n.Project.OnlyGetById(GetDB()); err != nil {
+			return ""
+		}
+	}
+
 	// prepare template
+	// A new project has been added. The name of the project: %s. The name of an initiator: %s
 	body := n.GetMap()[utils.KeyEmailHtml]
-	body = fmt.Sprintf(body, )
+	body = fmt.Sprintf(body, n.Project.Name, user.Fio)
 
 	return body
 }

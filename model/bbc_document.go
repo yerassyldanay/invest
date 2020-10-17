@@ -113,8 +113,8 @@ func (d *Document) OnlySave(tx *gorm.DB) (err error) {
 }
 
 // only update uri
-func (d *Document) OnlyUpdateUriAndDeadlineById(tx *gorm.DB) (err error) {
-	err = tx.Model(&Document{Id: d.Id}).Updates(map[string]interface{}{
+func (d *Document) OnlyUpdateUriAndDeadlineByIdAndEmptyUri(tx *gorm.DB) (err error) {
+	err = tx.Model(&Document{}).Where("id = ? and uri = ''", d.Id).Updates(map[string]interface{}{
 		"uri": d.Uri,
 		"status": utils.ProjectStatusNewOne,
 		"modified": utils.GetCurrentTime(),

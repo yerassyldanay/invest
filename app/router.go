@@ -5,7 +5,6 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
-	"invest/model"
 	"invest/utils"
 	"net/http"
 )
@@ -19,26 +18,30 @@ func Create_new_invest_router() (*mux.Router) {
 
 	var v1 = generalRouter.PathPrefix("/v1").Subrouter()
 	var docRouter = generalRouter.PathPrefix("/documents").Subrouter()
+	var download = generalRouter.PathPrefix("/download").Subrouter()
 
-	v1.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
-		//fmt.Println("id: ", utils.GetContext(r, utils.KeyId))
+	download.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("id: ", utils.GetContext(r, utils.KeyId))
 		//fmt.Println("role: ", utils.GetContext(r, utils.KeyRole))
 		utils.Respond(w, r, utils.Msg{
 			Message: 	map[string]interface{}{
 				"eng": 		"Welcome Home",
-				"rus":		"",
-				"kaz":		"",
+				"rus":		"Welcome Home",
+				"kaz":		"Welcome Home",
 			},
 			Status:  	http.StatusBadRequest,
 			Fname:   	"MAIN",
 		})
 	}).Methods("GET", "POST")
 
-	var STATIC_DIR = "/documents/docs"
-	docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("." + STATIC_DIR))))
+	//var STATIC_DIR = "/documents/docs"
+	//docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("." + STATIC_DIR))))
 
 	var STATIC_DIR_ANALYSIS = "/documents/analysis"
 	docRouter.Handle("/analysis/{file}", http.StripPrefix(STATIC_DIR_ANALYSIS, http.FileServer(http.Dir("." + STATIC_DIR_ANALYSIS))))
+
+	// download a binary file
+	docRouter.HandleFunc("/docs/{file}", control.Document_download).Methods("GET")
 
 	/*
 		Registration
@@ -166,14 +169,7 @@ func Create_new_invest_router() (*mux.Router) {
 		Test API
 	 */
 	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
-		var doc = model.Document{ProjectId: 1}
-		docs, err := doc.OnlyGetDocumentsByProjectId(doc.ProjectId, model.GetDB())
-		if err != nil {
-			fmt.Println("test: ", err)
-			return
-		}
 
-		fmt.Println(docs)
 	})
 
 	v1.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {

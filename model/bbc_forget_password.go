@@ -48,7 +48,7 @@ func (fp *ForgetPassword) OnlyUpdateByEmailAddress(tx *gorm.DB, fields... string
 
 // delete
 func (fp *ForgetPassword) OnlyDelete(tx *gorm.DB) (err error) {
-	err = tx.Delete(fp, "email_address = ?", fp.EmailAddress).Error
+	err = tx.Exec("delete from forget_passwords where email_address = ?;", fp.EmailAddress).Error
 	return err
 }
 
@@ -57,8 +57,8 @@ func (fp *ForgetPassword) OnlyGet(tx *gorm.DB) (err error) {
 	return err
 }
 
-func (fp *ForgetPassword) OnlyGetByCode(tx *gorm.DB) (err error) {
-	err = tx.First(fp, "code = ?", fp.Code).Error
+func (fp *ForgetPassword) OnlyGetByAddressAndCode(tx *gorm.DB) (err error) {
+	err = tx.First(fp, "email_address = ? and code = ?", fp.EmailAddress, fp.Code).Error
 	return err
 }
 

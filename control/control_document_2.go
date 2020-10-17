@@ -27,7 +27,8 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 	is.OnlyParseRequest(r)
 
 	// parse form-data
-	if err := r.ParseMultipartForm(0); err != nil {
+	// creating a buffer of size 10 * 2^20 ~= 50 megabyte
+	if err := r.ParseMultipartForm(50 << 20); err != nil {
 		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.0", err.Error()})
 		return
 	}
