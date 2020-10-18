@@ -67,7 +67,7 @@ func (c *Comment) OnlyCreate(trans *gorm.DB) error {
 }
 
 func (c *Comment) OnlyGetCommentsByProjectId(offset interface{}, tx *gorm.DB) (comments []Comment, err error) {
-	err = tx.Offset(offset).Find(&comments, "project_id = ?", c.ProjectId).Error
+	err = tx.Offset(offset).Order("created desc").Find(&comments, "project_id = ?", c.ProjectId).Error
 	return comments, err
 }
 

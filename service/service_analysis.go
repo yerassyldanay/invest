@@ -4,9 +4,20 @@ import (
 	"invest/model"
 	"invest/utils"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
+
+// copy map
+func OnlyCopySpecificMap(m map[string]int64) (map[string]int64) {
+	newMap := map[string]int64{}
+	for key, value := range m {
+		newMap[key] = value
+	}
+
+	return newMap
+}
 
 // analysis
 func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (utils.Msg) {
@@ -94,14 +105,50 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (util
 		resp["info"] = "/documents/analysis/" + fileName + ".xlsx"
 
 	} else {
+		// get categories
+		c := model.Categor{}
+		categories, err := c.OnlyGetAll(model.GetDB())
+		if err != nil {
+			return model.ReturnInternalDbError(err.Error())
+		}
+
+		// create map
+		categoriesMap := map[string]int64{}
+		for _, c = range categories {
+			key := strings.ToLower(c.Eng)
+			categoriesMap[key] = 0
+		}
+
+		// pie-chart data
+		pie_chart := map[string]map[string]int64{
+			"employee_count": OnlyCopySpecificMap(categoriesMap),
+			"tax": OnlyCopySpecificMap(categoriesMap),
+			"investment": OnlyCopySpecificMap(categoriesMap),
+			"count": OnlyCopySpecificMap(categoriesMap),
+		}
+
 		// convert it to map
 		var projectsMapList = []map[string]interface{}{}
 		for _, proj := range analysis.ProjectExtendedList {
+			// convert to map
 			projectsMapList = append(projectsMapList, model.Struct_to_map(proj))
+
+			// prepare three pie charts
+			for i, _ := range proj.Categors {
+				category := strings.ToLower(proj.Categors[i].Eng)
+
+				pie_chart["employee_count"][category] += int64(proj.EmployeeCount)
+				pie_chart["tax"][category] += int64(proj.Finance.Taxes)
+				pie_chart["investment"][category] += int64(proj.Cost.WorkingCapitalInvolved + proj.Cost.WorkingCapitalInvestor)
+				pie_chart["count"][category] += 1
+			}
+
+			//fmt.Println(proj.Finance.Taxes, proj.Cost.WorkingCapitalInvolved + proj.Cost.WorkingCapitalInvestor, proj.EmployeeCount)
 		}
 
 		// enter to the response map
 		resp["info"] = projectsMapList
+		resp["pie_chart"] = pie_chart
 	}
 
 	return model.ReturnNoErrorWithResponseMessage(resp)

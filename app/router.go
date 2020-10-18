@@ -140,8 +140,8 @@ func Create_new_invest_router() (*mux.Router) {
 		/ad../stat/project?status=? - provides all projects by status
 		/ad../stat/project?user_id=?&&status=? - provides projects by user_id & status
 	*/
-	v1.HandleFunc("/stats/projects/grouped_by_status", nil).Methods("GET")
-	v1.HandleFunc("/stats/docs/by_project", nil).Methods("GET")
+	//v1.HandleFunc("/stats/projects/grouped_by_status", nil).Methods("GET")
+	//v1.HandleFunc("/stats/docs/by_project", nil).Methods("GET")
 
 	/*
 		Leave a COMMENT on the project

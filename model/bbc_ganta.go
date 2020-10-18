@@ -117,7 +117,7 @@ func (g *Ganta) OnlyGetGantaById(tx *gorm.DB) (error) {
 }
 
 func (g *Ganta) OnlyGetParentsByProjectId(stage interface{}, tx *gorm.DB) (gantas []Ganta, err error) {
-	err = tx.Raw("select * from gantas where not_to_show = false and project_id = ? and ganta_parent_id = 0 and step = ?  order by is_done desc, start_date asc ; ", g.ProjectId, stage).Scan(&gantas).Error
+	err = tx.Raw("select * from gantas where not_to_show = false and project_id = ? and ganta_parent_id = 0 and step = ? order by is_done desc, start_date asc ; ", g.ProjectId, stage).Scan(&gantas).Error
 	return gantas, err
 }
 

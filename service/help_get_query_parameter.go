@@ -1,9 +1,32 @@
 package service
 
 import (
+	"invest/model"
 	"net/http"
 	"strconv"
 )
+
+func OnlyPrepareStatusAndStep(r *http.Request) ([]string, []int) {
+	// get query parameters
+	var statuses = []string{}
+	status := OnlyGetQueryParameter(r, "status", "").(string)
+	if status == "" {
+		statuses = model.Prepare_project_statuses("")
+	} else {
+		statuses = []string{status}
+	}
+
+	// prepare step
+	var steps = []int{}
+	step := OnlyGetQueryParameter(r, "step", 0).(int)
+	if step == 0 {
+		steps = []int{1, 2}
+	} else {
+		steps = []int{step}
+	}
+
+	return statuses, steps
+}
 
 func Get_query_parameter_str(r *http.Request, key string, base string) (string) {
 	t := r.URL.Query()[key]

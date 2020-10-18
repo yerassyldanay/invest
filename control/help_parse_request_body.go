@@ -15,3 +15,4 @@ func OnlyParseRequestBody(r *http.Request, to interface{}) (interface{}, utils.M
 
 	return to, model.ReturnNoError()
 }
+

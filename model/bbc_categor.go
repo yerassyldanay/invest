@@ -30,6 +30,25 @@ func (c *Categor) BeforeDelete(tx *gorm.DB) error {
 	return nil
 }
 
+// create
+func (c *Categor) OnlyCreate(tx *gorm.DB) error {
+	err := tx.Create(c).Error
+	return err
+}
+
+// get one
+func (c *Categor) OnlyGetById(tx *gorm.DB) error {
+	err := tx.First(c, "id = ?", c.Id).Error
+	return err
+}
+
+// get all
+func (c *Categor) OnlyGetAll(tx *gorm.DB) ([]Categor, error) {
+	categors := []Categor{}
+	err := tx.Find(&categors).Error
+	return categors, err
+}
+
 /*
 	create a category
 */

@@ -5,7 +5,7 @@
 
 insert into invest.public.categors (id, kaz, rus, eng) values
             (1, 'құрылыс', 'строительство', 'construction'),
-            (2, 'құрылыс ЖТҮ', 'строительство МЖК', 'construction YRH'),
+            (2, 'құрылыс ЖТҮ', 'строительство МЖК', 'YRH'),
             (3, 'өндіріс', 'производство', 'production'),
             (4, 'ауыл шаруашылығы', 'сельское хозяйство', 'agriculture'),
             (5, 'қызметтер', 'услуги', 'services');

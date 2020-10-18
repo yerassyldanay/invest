@@ -17,7 +17,7 @@ func (is *InvestService) Notification_get_by_project_id(project_id uint64) (util
 	}
 	
 	// get notifications
-	notifications, err := ni.OnlyGetNotificationsByEmailAndProjectId(ni.ToAddress, project_id, model.GetDB())
+	notifications, err := ni.OnlyGetNotificationsByEmailAndProjectId(ni.ToAddress, project_id, is.Offset, model.GetDB())
 	if err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}

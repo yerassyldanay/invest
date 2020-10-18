@@ -39,7 +39,7 @@ func TestModelGetNotification(t *testing.T) {
 		},
 	}
 
-	notis, err := ni.OnlyGetNotificationsByEmailAndProjectId(ni.ToAddress, ni.Notification.ProjectId, model.GetDB())
+	notis, err := ni.OnlyGetNotificationsByEmailAndProjectId(ni.ToAddress, ni.Notification.ProjectId, "0", model.GetDB())
 
 	switch {
 	case err != nil:

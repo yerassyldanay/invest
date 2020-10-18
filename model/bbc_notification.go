@@ -60,10 +60,11 @@ func (n *Notification) OnlyCreate(tx *gorm.DB) error {
 }
 
 // get n-s
-func (ni *NotificationInstance) OnlyGetNotificationsByEmailAndProjectId(address string, project_id uint64, tx *gorm.DB) ([]Notification, error) {
+func (ni *NotificationInstance) OnlyGetNotificationsByEmailAndProjectId(address string, project_id uint64, offset interface{}, tx *gorm.DB) ([]Notification, error) {
 	notifications := []Notification{}
 	err := tx.Raw("select n.* from notification_instances ni join notifications n on ni.notification_id = n.id " +
-		" where ni.to_address = ? and n.project_id = ?; ", address, project_id).
+		" where ni.to_address = ? and n.project_id = ? order by n.created desc; ", address, project_id).
+		Limit(30).Offset(offset).
 		Scan(&notifications).Error
 	return notifications, err
 }

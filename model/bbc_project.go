@@ -21,8 +21,8 @@ import (
 type Project struct {
 	Id					uint64					`json:"id" gorm:"primary key"`
 
-	Name				string						`json:"name" gorm:"index:unique_project" validate:"required"`
-	Description			string						`json:"description" gorm:"default:''; index:unique_project" validate:"required"`
+	Name				string						`json:"name" validate:"required"`
+	Description			string						`json:"description" gorm:"default:''" validate:"required"`
 
 	Info				string						`json:"-" default:"''"`
 	InfoSent			map[string]interface{}		`json:"info_sent" gorm:"-"`
@@ -164,24 +164,25 @@ func (p *Project) OnlyPreloadOrganizationByOrganizationId(tx *gorm.DB) (err erro
 
 // get projects of manager, lawyer and financier (and other spk user if there is any)
 // except for an admin, who has access to all projects
-func (p *Project) OnlyGetProjectsOfSpkUsers(user_id uint64, statuses []string, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
+func (p *Project) OnlyGetProjectsOfSpkUsers(user_id uint64, statuses []string, steps []int, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
 	err = tx.Preload("Organization").Table("projects as p").
 		Joins("join projects_users pu on p.id = pu.project_id").Select("p.*").
-		Find(&projects, "pu.user_id = ? and p.status in (?)", user_id, statuses).
-		Order("p.created").Offset(offset).Limit(GetLimit).Error
+		Order("p.created").Offset(offset).Limit(GetLimit).
+		Find(&projects, "pu.user_id = ? and p.status in (?) and step in (?)", user_id, statuses, steps).Error
 	return projects, err
 }
 
 // get projects of a particular investor
-func (p *Project) OnlyGetProjectsOfInvestor(user_id uint64, statuses []string, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
-	err = tx.Preload("Organization").Find(&projects, "offered_by_id = ? and status in (?)", user_id, statuses).
-	Order("created").Offset(offset).Limit(GetLimit).Error
+func (p *Project) OnlyGetProjectsOfInvestor(user_id uint64, statuses []string, steps []int, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
+	err = tx.Preload("Organization").Order("created").Offset(offset).Limit(GetLimit).
+		Find(&projects, "offered_by_id = ? and status in (?) and step in (?)", user_id, statuses, steps).Error
 	return projects, err
 }
 
 // get all projects, but based on statuses
-func (p *Project) OnlyGetProjectsByStatuses(offset interface{}, statuses []string, tx *gorm.DB) (projects []Project, err error) {
-	err = tx.Preload("Organization").Find(&projects, "status in (?)", statuses).Order("created").Offset(offset).Limit(GetLimit).Error
+func (p *Project) OnlyGetProjectsByStatusesAndSteps(offset interface{}, statuses []string, steps []int, tx *gorm.DB) (projects []Project, err error) {
+	err = tx.Preload("Organization").Order("created").Offset(offset).Limit(GetLimit).
+		Find(&projects, "status in (?) and step in (?)", statuses, steps).Error
 	return projects, err
 }
 

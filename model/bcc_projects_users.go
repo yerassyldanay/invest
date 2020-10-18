@@ -17,7 +17,7 @@ type ProjectUserStat struct {
 type ProjectsUsers struct {
 	ProjectId				uint64					`json:"project_id" gorm:"foreignkey:projects.id"`
 	UserId					uint64					`json:"user_id" gorm:"foreignkey:users.id"`
-	Created							time.Time			`json:"created" gorm:"default:now()"`
+	Created					time.Time				`json:"created" gorm:"default:now()"`
 }
 
 func (ProjectsUsers) TableName() string {

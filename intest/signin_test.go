@@ -85,3 +85,29 @@ func TestSignIn(t *testing.T) {
 		}
 	}
 }
+
+func TestSignInByPhone(t *testing.T) {
+	sis := model.SignIn{
+		KeyUsername:   "email",
+		Value:         "investor.spk@inbox.ru",
+		Password:      "KeRXaTaq5Ce8ULO",
+	}
+
+	msg := sis.Sign_in()
+	if msg.IsThereAnError() {
+		t.Error(msg.ErrMsg)
+	}
+
+	sis = model.SignIn{
+		KeyUsername:   "email",
+		Value:         "investor.spk@inbox.ru",
+		Password:      "invalidpassword",
+	}
+
+	msg = sis.Sign_in()
+	if !msg.IsThereAnError() {
+		t.Error("expected an error, but got nil")
+	}
+}
+
+

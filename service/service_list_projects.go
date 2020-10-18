@@ -7,16 +7,16 @@ import (
 	"sync"
 )
 
-func (is *InvestService) Get_own_projects(statuses []string) (utils.Msg) {
+func (is *InvestService) Get_own_projects(statuses []string, steps []int) (utils.Msg) {
 	var err error
 	var project = model.Project{}
 	var projects []model.Project
 
 	switch {
 	case is.RoleName == utils.RoleInvestor:
-		projects, err = project.OnlyGetProjectsOfInvestor(is.UserId, statuses, is.Offset, model.GetDB())
+		projects, err = project.OnlyGetProjectsOfInvestor(is.UserId, statuses, steps, is.Offset, model.GetDB())
 	default:
-		projects, err = project.OnlyGetProjectsOfSpkUsers(is.UserId, statuses, is.Offset, model.GetDB())
+		projects, err = project.OnlyGetProjectsOfSpkUsers(is.UserId, statuses, steps, is.Offset, model.GetDB())
 	}
 
 	// if there are no projects then return empty list
@@ -50,7 +50,7 @@ func (is *InvestService) Get_own_projects(statuses []string) (utils.Msg) {
 	return model.ReturnNoErrorWithResponseMessage(resp)
 }
 
-func (is *InvestService) Get_projects_by_user_id_and_status(user_id uint64, statuses []string) (utils.Msg) {
+func (is *InvestService) Get_projects_by_user_id_and_status(user_id uint64, statuses []string, steps []int) (utils.Msg) {
 	var user = model.User{Id: user_id}
 	if err := user.OnlyGetByIdPreloaded(model.GetDB()); err != nil {
 		return model.ReturnInternalDbError(err.Error())
@@ -61,14 +61,14 @@ func (is *InvestService) Get_projects_by_user_id_and_status(user_id uint64, stat
 	is.RoleName = user.Role.Name
 
 	// reuse
-	return is.Get_own_projects(statuses)
+	return is.Get_own_projects(statuses, steps)
 }
 
-func (is *InvestService) Get_all_projects_by_statuses(statuses []string) (utils.Msg) {
+func (is *InvestService) Get_all_projects_by_statuses(statuses []string, steps []int) (utils.Msg) {
 	var project = model.Project{}
 
 	// get projects
-	projects, _ := project.OnlyGetProjectsByStatuses(is.Offset, statuses, model.GetDB())
+	projects, _ := project.OnlyGetProjectsByStatusesAndSteps(is.Offset, statuses, steps, model.GetDB())
 
 	// get categories
 	var wg = sync.WaitGroup{}

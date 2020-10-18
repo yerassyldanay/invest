@@ -18,9 +18,9 @@ type NotifyAddComment struct {
 
 var MapNotifyAddComment = map[string]string{
 	"subject": "Жобаға түсініктеме жасалды. Добавлен комментарий к проекту.  ",
-	"html": "Түсініктемес жасаушы: %s. Түсініктеме: %s. Статус: %s. Жоба атауы: %s \n" +
-		"Комментарий от: %s. Коммертарий: %s. Статус: %s. Название проекта: %s. \n" +
-		"Comment from: %s. Comment body: %s. Status: %s. The name of the project: %s \n",
+	"html": "Түсініктемес жасаушы: %s. Түсініктеме: %s. Статус: %s. Жоба атауы: %s \n\n" +
+		"Комментарий от: %s. Коммертарий: %s. Статус: %s. Название проекта: %s. \n\n" +
+		"Comment from: %s. Comment body: %s. Status: %s. The name of the project: %s \n\n",
 }
 
 // get map
