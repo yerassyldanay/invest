@@ -25,7 +25,14 @@ func (o *Organization) Make_request_to_get_organization() (*Organization, error)
 	var bin = o.Bin
 
 	var url = fmt.Sprintf("https://stat.gov.kz/api/juridicalusr/counter/gov/?bin=%s&lang=%s", o.Bin, o.Lang)
-	resp, err := http.Get(url)
+
+	// create client
+	client := http.Client{
+		Timeout:       time.Second * 5,
+	}
+
+	// make request
+	resp, err := client.Get(url)
 	if err != nil {
 		return o, err
 	}

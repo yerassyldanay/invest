@@ -16,7 +16,7 @@ func TestProjectCreate(t *testing.T) {
 
 	project := model.ProjectWithFinanceTables{
 		Project: model.Project{
-			Name:              "Тестовый проект - спк",
+			Name:              "Тестовый проект - спк - 3",
 			Description:       "Описание проекта пишете сюда",
 			InfoSent:          map[string]interface{}{
 				"add-info": "доп инфо",

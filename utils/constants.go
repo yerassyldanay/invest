@@ -95,7 +95,7 @@ const (
 )
 
 const (
-	DefaultContentLanguage = "kaz"
+	DefaultContentLanguage = "rus"
 	ContentLanguageKk = "kaz"
 	ContentLanguageRu = "rus"
 	ContentLanguageEn = "eng"

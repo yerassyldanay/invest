@@ -32,10 +32,10 @@ func Parse_prefered_language_of_user(w http.ResponseWriter, r *http.Request) (ut
 	switch tag {
 	case language.Kazakh:
 		user_language = utils.ContentLanguageKk
-	case language.Russian:
-		user_language = utils.ContentLanguageRu
-	default:
+	case language.English:
 		user_language = utils.ContentLanguageEn
+	default:
+		user_language = utils.ContentLanguageRu
 	}
 
 	r.Header.Set(utils.HeaderContentLanguage, user_language)

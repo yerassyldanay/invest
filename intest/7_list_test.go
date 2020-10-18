@@ -39,7 +39,7 @@ func TestServiceProjectGetListOfProjects(t *testing.T) {
 	}
 
 	// get projects
-	msg := is.Get_projects_by_user_id_and_status(4, statuses) // expert
+	msg := is.Get_projects_by_user_id_and_status(4, statuses, []int{1, 2}) // expert
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}
@@ -51,7 +51,7 @@ func TestServiceProjectGetOwnProjects(t *testing.T) {
 
 	// get project
 	project := model.Project{}
-	projects, err := project.OnlyGetProjectsOfInvestor(3, statuses, "0", model.GetDB())
+	projects, err := project.OnlyGetProjectsOfInvestor(3, statuses, []int{1, 2}, "0", model.GetDB())
 	if err != nil {
 		t.Error(err)
 	} else if len(projects) < 1 {
@@ -61,7 +61,7 @@ func TestServiceProjectGetOwnProjects(t *testing.T) {
 	}
 
 	// get project of spk user
-	projects, err = project.OnlyGetProjectsOfSpkUsers(4, statuses, "0", model.GetDB())
+	projects, err = project.OnlyGetProjectsOfSpkUsers(4, statuses, []int{1, 2}, "0", model.GetDB())
 	if err != nil {
 		t.Error(err)
 	} else if len(projects) < 1 {

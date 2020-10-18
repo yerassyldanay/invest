@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 
@@ -29,8 +30,9 @@ func (p *Project) Create_project(trans *gorm.DB) (utils.Msg){
 		get org. id by bin or create one
 	*/
 	p.Organization.Lang = p.Lang
-	if msg := p.Organization.Create_or_get_organization_from_db_by_bin(trans); msg.ErrMsg != "" {
-		return msg
+	msg := p.Organization.Create_or_get_organization_from_db_by_bin(trans)
+	if msg.IsThereAnError() {
+		fmt.Println(msg)
 	}
 
 	p.OrganizationId = p.Organization.Id
