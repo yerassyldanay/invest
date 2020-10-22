@@ -34,14 +34,14 @@ func Create_new_invest_router() (*mux.Router) {
 		})
 	}).Methods("GET", "POST")
 
-	//var STATIC_DIR = "/documents/docs"
-	//docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("." + STATIC_DIR))))
+	var STATIC_DIR = "/documents/docs"
+	docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("." + STATIC_DIR))))
 
 	var STATIC_DIR_ANALYSIS = "/documents/analysis"
 	docRouter.Handle("/analysis/{file}", http.StripPrefix(STATIC_DIR_ANALYSIS, http.FileServer(http.Dir("." + STATIC_DIR_ANALYSIS))))
 
 	// download a binary file
-	docRouter.HandleFunc("/docs/{file}", control.Document_download).Methods("GET")
+	download.HandleFunc("/documents/docs/{file}", control.Document_download).Methods("GET")
 
 	/*
 		Registration

@@ -21,6 +21,7 @@ func (ds *DocStore) Download_and_store_file(r *http.Request) (map[string]interfa
 	if err = ds.OnlyParseFormatOfTheFile(); err != nil {
 		return utils.ErrorInternalServerError, err
 	}
+	//return utils.ErrorInternalServerError, errors.New("new one")
 
 	/*
 		Storing a document on the directory

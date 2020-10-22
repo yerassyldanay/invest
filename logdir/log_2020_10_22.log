@@ -1,0 +1,47 @@
+time="2020-10-22T12:32:50+06:00" level=info msg=main port=7000
+time="2020-10-22T12:43:48+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-22T12:43:48+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-22T12:44:01+06:00" level=info msg=main port=7000
+time="2020-10-22T12:44:22+06:00" level=info msg="Add_comment_to_project security" error="record not found" host="[::1]:50312" path=/v1/spk_comment status=405
+time="2020-10-22T12:45:45+06:00" level=info msg=main port=7000
+time="2020-10-22T12:45:51+06:00" level=info msg="Project_get_status_of_project check" error="record not found" host="[::1]:50356" path=/v1/project/status status=417
+time="2020-10-22T12:46:06+06:00" level=info msg="Project_get_status_of_project proj" error= host="[::1]:50356" path=/v1/project/status status=200
+time="2020-10-22T12:50:29+06:00" level=info msg="Add_comment_to_project 2" error= host="[::1]:50356" path=/v1/spk_comment status=200
+time="2020-10-22T14:46:54+06:00" level=info msg=main port=7000
+time="2020-10-22T14:53:37+06:00" level=info msg=main port=7000
+time="2020-10-22T14:54:54+06:00" level=info msg=main port=7000
+time="2020-10-22T14:54:57+06:00" level=info msg="Project_add_document_to_project access project" error="record not found" host="[::1]:52758" path=/v1/project/docs/file status=417
+time="2020-10-22T14:55:24+06:00" level=info msg=main port=7000
+time="2020-10-22T14:59:35+06:00" level=info msg=main port=7000
+time="2020-10-22T15:03:53+06:00" level=info msg=main port=7000
+time="2020-10-22T15:06:12+06:00" level=info msg="Project_add_document_to_project doc" error="len of formats list is 0" host="[::1]:52930" path=/v1/project/docs/file status=400
+time="2020-10-22T15:07:13+06:00" level=info msg=main port=7000
+time="2020-10-22T15:15:45+06:00" level=info msg=main port=7000
+time="2020-10-22T15:23:35+06:00" level=info msg=main port=7000
+time="2020-10-22T15:24:59+06:00" level=info msg=main port=7000
+time="2020-10-22T15:26:10+06:00" level=info msg=main port=7000
+time="2020-10-22T15:26:29+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53428" path=/v1/project/docs/file status=400
+time="2020-10-22T15:27:05+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53428" path=/v1/project/docs/file status=400
+time="2020-10-22T15:27:26+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53428" path=/v1/project/docs/file status=400
+time="2020-10-22T15:28:09+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53428" path=/v1/project/docs/file status=400
+time="2020-10-22T15:28:36+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53428" path=/v1/project/docs/file status=400
+time="2020-10-22T15:30:31+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53428" path=/v1/project/docs/file status=400
+time="2020-10-22T15:31:07+06:00" level=info msg=main port=7000
+time="2020-10-22T15:32:32+06:00" level=info msg=main port=7000
+time="2020-10-22T15:33:12+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53528" path=/v1/project/docs/file status=400
+time="2020-10-22T15:33:33+06:00" level=info msg=main port=7000
+time="2020-10-22T15:37:45+06:00" level=info msg=main port=7000
+time="2020-10-22T15:38:16+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53590" path=/v1/project/docs/file status=400
+time="2020-10-22T15:39:01+06:00" level=info msg=main port=7000
+time="2020-10-22T15:39:41+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:39:55+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:40:09+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:40:34+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:40:49+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:41:11+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:41:35+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:41:46+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:42:03+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:42:35+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:46:47+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
+time="2020-10-22T15:59:04+06:00" level=info msg=main port=7000

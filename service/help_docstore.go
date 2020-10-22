@@ -6,4 +6,5 @@ type DocStore struct {
 	Filename 			string
 	Format 				string
 	ContentBytes 		[]byte
+	RawFileName			string
 }

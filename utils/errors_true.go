@@ -32,7 +32,7 @@ var ErrorAccountNotVerified = map[string]interface{}{
 
 var ErrorMethodNotAllowed = map[string]interface{}{
 	"eng": "this functionality is not allowed for you",
-	"rus": "вы не можете использовать эту функцию",
+	"rus": "вы не можете пользоваться этой функцией",
 	"kaz": "сіз бұл функцияны қолдана алмайсыз",
 }
 

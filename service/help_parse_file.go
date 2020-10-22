@@ -37,6 +37,7 @@ func (ds *DocStore) Parse_file(r *http.Request) (*multipart.FileHeader, error) {
 		return &multipart.FileHeader{}, err
 	}
 
+	ds.RawFileName = handler.Filename
 	ds.Filename = file_name
 	ds.ContentBytes = fileInBytes
 

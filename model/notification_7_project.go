@@ -73,7 +73,7 @@ func (n *NotifyProjectCreation) GetHtml() string {
 	// prepare template
 	// A new project has been added. The name of the project: %s. The name of an initiator: %s
 	body := n.GetMap()[utils.KeyEmailHtml]
-	body = fmt.Sprintf(body, n.Project.Name, user.Fio)
+	body = fmt.Sprintf(body, n.Project.Name, user.Fio, n.Project.Name, user.Fio, n.Project.Name, user.Fio)
 
 	return body
 }

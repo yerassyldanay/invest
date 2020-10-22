@@ -167,21 +167,21 @@ func (p *Project) OnlyPreloadOrganizationByOrganizationId(tx *gorm.DB) (err erro
 func (p *Project) OnlyGetProjectsOfSpkUsers(user_id uint64, statuses []string, steps []int, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
 	err = tx.Preload("Organization").Table("projects as p").
 		Joins("join projects_users pu on p.id = pu.project_id").Select("p.*").
-		Order("p.created").Offset(offset).Limit(GetLimit).
+		Order("p.created desc").Offset(offset).Limit(GetLimit).
 		Find(&projects, "pu.user_id = ? and p.status in (?) and step in (?)", user_id, statuses, steps).Error
 	return projects, err
 }
 
 // get projects of a particular investor
 func (p *Project) OnlyGetProjectsOfInvestor(user_id uint64, statuses []string, steps []int, offset interface{}, tx *gorm.DB) (projects []Project, err error) {
-	err = tx.Preload("Organization").Order("created").Offset(offset).Limit(GetLimit).
+	err = tx.Preload("Organization").Order("created desc").Offset(offset).Limit(GetLimit).
 		Find(&projects, "offered_by_id = ? and status in (?) and step in (?)", user_id, statuses, steps).Error
 	return projects, err
 }
 
 // get all projects, but based on statuses
 func (p *Project) OnlyGetProjectsByStatusesAndSteps(offset interface{}, statuses []string, steps []int, tx *gorm.DB) (projects []Project, err error) {
-	err = tx.Preload("Organization").Order("created").Offset(offset).Limit(GetLimit).
+	err = tx.Preload("Organization").Order("created desc").Offset(offset).Limit(GetLimit).
 		Find(&projects, "status in (?) and step in (?)", statuses, steps).Error
 	return projects, err
 }

@@ -2,22 +2,29 @@ package service
 
 import (
 	"errors"
-	"mime"
-	"net/http"
+	"fmt"
+	"github.com/h2non/filetype"
+	"strings"
 )
 
 func (ds *DocStore) OnlyParseFormatOfTheFile() (error) {
-	detectedType := http.DetectContentType(ds.ContentBytes)
+	//detectedType := http.DetectContentType(ds.ContentBytes)
 
-	// get the extension
-	formatsOfFile, err := mime.ExtensionsByType(detectedType)
+	kind, err := filetype.Match(ds.ContentBytes)
+	fmt.Println(kind)
 	switch {
 	case err != nil:
 		return err
-	case len(formatsOfFile) < 1:
-		return errors.New("len of formats list is 0")
+	case kind.Extension == "unknown" || kind.MIME.Value == "":
+		splits := strings.Split(ds.RawFileName, ".")
+		if len(splits) < 1 {
+			return errors.New("invalid file extension")
+		}
+
+		ds.Format = "." + splits[len(splits) - 1]
+		return nil
 	}
 
-	ds.Format = formatsOfFile[0]
+	ds.Format = "." + kind.Extension
 	return nil
 }

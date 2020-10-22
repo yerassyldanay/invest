@@ -9,6 +9,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gorilla/handlers v1.5.0
 	github.com/gorilla/mux v1.7.4
+	github.com/h2non/filetype v1.1.0
 	github.com/jinzhu/gorm v1.9.15
 	github.com/jinzhu/now v1.1.1 // indirect
 	github.com/joho/godotenv v1.3.0
@@ -25,5 +26,4 @@ require (
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
-	gopkg.in/validator.v2 v2.0.0-20200605151824-2b28d334fa05
 )

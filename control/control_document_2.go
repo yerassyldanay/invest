@@ -45,12 +45,16 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// security #2 - is this user allowed to upload a document - each document has a responsible role
-	msg = is.Check_whether_this_user_is_responsible_for_document(document_id, project_id)
-	if msg.IsThereAnError() {
-		msg.SetFname(fname, "access doc")
-		utils.Respond(w, r, msg)
-		return
+	if is.RoleName == utils.RoleAdmin {
+		// gently pass this part
+	} else {
+		// security #2 - is this user allowed to upload a document - each document has a responsible role
+		msg = is.Check_whether_this_user_is_responsible_for_document(document_id, project_id)
+		if msg.IsThereAnError() {
+			msg.SetFname(fname, "access doc")
+			utils.Respond(w, r, msg)
+			return
+		}
 	}
 
 	// get values of fields of struct 'document'

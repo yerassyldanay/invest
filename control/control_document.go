@@ -57,7 +57,7 @@ var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	if is.RoleName != utils.RoleExpert && is.RoleName != utils.RoleManager {
+	if is.RoleName != utils.RoleExpert && is.RoleName != utils.RoleManager && is.RoleName != utils.RoleAdmin {
 		OnlyReturnMethodNotAllowed(w, r, "only spk is allowed. your role: " + is.RoleName, fname, "role")
 		return
 	}
