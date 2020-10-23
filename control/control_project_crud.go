@@ -82,12 +82,10 @@ var Get_project_by_project_id = func(w http.ResponseWriter, r *http.Request) {
 		Permission
 	*/
 	roleName := service.Get_header_parameter(r, utils.KeyRoleName, "").(string)
-	if roleName == utils.RoleManager || roleName == utils.RoleExpert {
-		err = project.OnlyCheckUserByProjectAndUserId(project_id, is.UserId, model.GetDB())
-	} else if roleName == utils.RoleInvestor {
+	if roleName == utils.RoleInvestor {
 		project.OfferedById = is.UserId
 		err = project.OnlyCheckInvestorByProjectAndInvestorId(model.GetDB())
-	} else if roleName == utils.RoleAdmin {
+	} else if roleName == utils.RoleAdmin || roleName == utils.RoleManager || roleName == utils.RoleExpert{
 		// green light is on for admins
 	} else {
 		err = errors.New("your role is " + roleName)
