@@ -48,7 +48,9 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 		tempuser.PhoneId = tempuser.Phone.Id
 	}
 
-	if len(user.Fio) >= 8 && len(user.Fio) <= 50 {
+	a := len(user.Fio)
+	_ = a
+	if len(user.Fio) >= 8 && len(user.Fio) <= 255 {
 		tempuser.Fio = user.Fio
 	}
 

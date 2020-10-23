@@ -53,7 +53,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Инвестициялық комитет басшысының тексеруі",
+		Kaz:            "Инвестициялық комитет басшысының тексеруінде",
 		Rus:            "Проверка главой инвестиционного комитета",
 		Eng:            "Review by a head of an investment committee",
 		DurationInDays: 2,
@@ -80,7 +80,7 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Инвестициялық комитет басшысының тексеруі",
+		Kaz:            "Инвестициялық комитет басшысының тексеруінде",
 		Rus:            "Проверка главой инвестиционного комитета",
 		Eng:            "Review by a head of an investment committee",
 		DurationInDays: 2,

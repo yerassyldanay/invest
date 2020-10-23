@@ -37,7 +37,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Инвестициялық комитет басшысының тексеруі",
+		Kaz:            "Инвестициялық комитет басшысының тексеруінде",
 		Rus:            "Проверка главой инвестиционного комитета",
 		Eng:            "Review by a head of an investment committee",
 		DurationInDays: 2,
@@ -64,7 +64,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Инвестициялық комитет басшысының тексеруі",
+		Kaz:            "Инвестициялық комитет басшысының тексеруінде",
 		Rus:            "Проверка главой инвестиционного комитета",
 		Eng:            "Review by a head of an investment committee",
 		DurationInDays: 2,
@@ -79,7 +79,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	{
 		IsAdditional:   false,
 		Kaz:            "ӘКК Кеңесінің жобаны қарастыруы",
-		Rus:            "Рассмотрение Проекта на Правлении СПК",
+		Rus:            "Рассмотрение на правлении СПК",
 		Eng:            "Consideration of the project by the Board",
 		StartDate:      utils.GetCurrentTime(),
 		DurationInDays: 21,
@@ -94,7 +94,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	{
 		IsAdditional:   false,
 		Kaz:            "Келісімге отыру",
-		Rus:            "Заключение договора ДСД",
+		Rus:            "Заключение договора",
 		Eng:            "Conclusion of the agreement",
 		StartDate:      utils.GetCurrentTime(),
 		DurationInDays: 15,

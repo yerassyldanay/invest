@@ -60,3 +60,20 @@ func TestServiceGetNotifications(t *testing.T) {
 		t.Error("expected no error, but got ", msg.ErrMsg)
 	}
 }
+
+func TestNotification(t *testing.T) {
+	nq := model.NotifyCreateProfile{
+		UserId:      2,
+		CreatedById: 1,
+		RawPassword: "6z24HXMd7nLeZAE",
+	}
+
+	mq := model.GetMailerQueue()
+	mq.NotificationChannel <- &nq
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 5)
+	mq.Handle(ctx)
+
+	time.Sleep(time.Second * 10)
+	defer cancel()
+}

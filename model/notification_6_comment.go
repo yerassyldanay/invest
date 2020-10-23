@@ -17,8 +17,8 @@ type NotifyAddComment struct {
 }
 
 var MapNotifyAddComment = map[string]string{
-	"subject": "Жобаға түсініктеме жасалды. Добавлен комментарий к проекту.  ",
-	"html": "Түсініктемес жасаушы: %s. Түсініктеме: %s. Статус: %s. Жоба атауы: %s \n\n" +
+	"subject": "Жобаға түсініктеме жасалды. Добавлен комментарий к проекту. The comment is added to the project. ",
+	"html": "Түсініктеме жасаушы: %s. Түсініктеме: %s. Статус: %s. Жоба атауы: %s \n\n" +
 		"Комментарий от: %s. Коммертарий: %s. Статус: %s. Название проекта: %s. \n\n" +
 		"Comment from: %s. Comment body: %s. Status: %s. The name of the project: %s \n\n",
 }
@@ -76,9 +76,9 @@ func (n *NotifyAddComment) GetHtml() string {
 	}
 
 	// Comment from: %s. Comment itself: %s. Status: %s. The name of the project: %s
-	body = fmt.Sprintf(body, n.CommentedBy.Fio, n.CommentBody, n.Status, n.Project.Name,
-		n.CommentedBy.Fio, n.CommentBody, n.Status, n.Project.Name,
-		n.CommentedBy.Fio, n.CommentBody, n.Status, n.Project.Name)
+	body = fmt.Sprintf(body, n.CommentedBy.Fio, n.CommentBody, utils.MapProjectStatusFirstStatusThenLang[n.Status]["kaz"], n.Project.Name,
+		n.CommentedBy.Fio, n.CommentBody, utils.MapProjectStatusFirstStatusThenLang[n.Status]["rus"], n.Project.Name,
+		n.CommentedBy.Fio, n.CommentBody, utils.MapProjectStatusFirstStatusThenLang[n.Status]["eng"], n.Project.Name)
 
 	return body
 }

@@ -15,7 +15,7 @@ type NotifyCreateProfile struct {
 }
 
 var MapNotifyCreateProfile = map[string]string{
-	"subject": "Жаңа аккаунт. Новый аккаунт. ",
+	"subject": "Жаңа аккаунт. Новый аккаунт. A new account. ",
 	"html": "Сіздің электрондық почтаңыз жаңа аккаунтқа тіркелді. Аты-жөні: %s. Рөлі: %s. Логин: %s | %s. Құпия сөз: %s \n\n" +
 		"Ваша электронная почта привязана к аккаунту на платформе. ФИО: %s. Роль: %s. Логин: %s | %s. Пароль: %s \n\n" +
 		"This email address was assigned to a user account on platform. Name: %s. Role: %s. Login: %s | %s. Password: %s \n\n",
