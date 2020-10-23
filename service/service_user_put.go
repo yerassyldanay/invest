@@ -90,10 +90,12 @@ func (is *InvestService) Update_user_password(new_password string) (utils.Msg) {
  */
 func (is *InvestService) Create_user_based_on_role(new_user *model.User) (utils.Msg) {
 
+	// validate
 	if err := new_user.ValidateSpkUser(); err != nil {
 		return model.ReturnInvalidParameters(err.Error())
 	}
 
+	// create
 	msg := new_user.Create_user_without_check()
 
 	// send notification

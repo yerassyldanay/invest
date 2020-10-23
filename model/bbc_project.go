@@ -181,7 +181,7 @@ func (p *Project) OnlyGetProjectsOfInvestor(user_id uint64, statuses []string, s
 
 // get all projects, but based on statuses
 func (p *Project) OnlyGetProjectsByStatusesAndSteps(offset interface{}, statuses []string, steps []int, tx *gorm.DB) (projects []Project, err error) {
-	err = tx.Preload("Organization").Order("created desc").Offset(offset).Limit(GetLimit).
+	err = tx.Preload("Organization").Order("created desc").
 		Find(&projects, "status in (?) and step in (?)", statuses, steps).Error
 	return projects, err
 }

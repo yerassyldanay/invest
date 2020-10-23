@@ -41,8 +41,6 @@ func TestProjectCreate(t *testing.T) {
 			WorkingCapitalInvolved:      8000,
 			OtherCostInvestor:           9000,
 			OtherCostInvolved:           10000,
-			ShareInProjectInvestor:      11000,
-			ShareInProjectInvolved:      5000,
 		},
 		Finance: model.Finance{
 			TotalIncome:           1000,

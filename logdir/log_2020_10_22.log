@@ -45,3 +45,6 @@ time="2020-10-22T15:42:03+06:00" level=info msg="Project_add_document_to_project
 time="2020-10-22T15:42:35+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
 time="2020-10-22T15:46:47+06:00" level=info msg="Project_add_document_to_project doc" error="new one" host="[::1]:53618" path=/v1/project/docs/file status=400
 time="2020-10-22T15:59:04+06:00" level=info msg=main port=7000
+time="2020-10-22T16:10:01+06:00" level=info msg=main port=7000
+time="2020-10-22T16:10:15+06:00" level=info msg=main port=7000
+time="2020-10-22T16:10:39+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:54050" path=/v1/project/docs/file status=200

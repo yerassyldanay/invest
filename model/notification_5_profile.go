@@ -10,13 +10,15 @@ type NotifyCreateProfile struct {
 	User				User
 	CreatedById			uint64
 	CrUser				User
+
+	RawPassword			string
 }
 
 var MapNotifyCreateProfile = map[string]string{
 	"subject": "Жаңа аккаунт. Новый аккаунт. ",
-	"html": "Сіздің электрондық почтаңыз жаңа аккаунтқа тіркелді. Аты-жөні: %s. Рөлі: %s.\n\n" +
-		"Ваша электронная почта привязана к аккаунту на платформе. ФИО: %s. Роль: %s.\n\n" +
-		"This email address was assigned to a user account on platform. Name: %s. Role: %s",
+	"html": "Сіздің электрондық почтаңыз жаңа аккаунтқа тіркелді. Аты-жөні: %s. Рөлі: %s. Логин: %s | %s. Құпия сөз: %s \n\n" +
+		"Ваша электронная почта привязана к аккаунту на платформе. ФИО: %s. Роль: %s. Логин: %s | %s. Пароль: %s \n\n" +
+		"This email address was assigned to a user account on platform. Name: %s. Role: %s. Login: %s | %s. Password: %s \n\n",
 }
 
 // get map
@@ -52,16 +54,21 @@ func (n *NotifyCreateProfile) GetSubject() string {
 // body in html
 func (n *NotifyCreateProfile) GetHtml() string {
 
-	if n.User.Id < 1 {
+	if n.User.Id < 1 || n.User.Email.Id < 1 || n.User.Phone.Id < 1 {
 		n.User.Id = n.UserId
 		_ = n.User.OnlyGetByIdPreloaded(GetDB())
 	}
 
 	body := n.GetMap()[utils.KeyEmailHtml]
-	// This email address was assigned to a user account on platform. Name: %s. Role: %s
-	body = fmt.Sprintf(body, n.User.Fio, utils.MapRole[n.User.Role.Name]["kaz"],
-		n.User.Fio, utils.MapRole[n.User.Role.Name]["rus"],
-		n.User.Fio, utils.MapRole[n.User.Role.Name]["eng"])
+
+	// prepare email address & phone number with country code (+7 for KZ)
+	email := n.User.Email.Address
+	phoneNumber := n.User.Phone.Ccode + n.User.Phone.Number
+
+	// This email address ... Name: %s. Role: %s. Login: %s | %s. Password: %s
+	body = fmt.Sprintf(body, n.User.Fio, utils.MapRole[n.User.Role.Name]["kaz"], email, phoneNumber, n.RawPassword,
+		n.User.Fio, utils.MapRole[n.User.Role.Name]["rus"], email, phoneNumber, n.RawPassword,
+		n.User.Fio, utils.MapRole[n.User.Role.Name]["eng"], email, phoneNumber, n.RawPassword)
 
 	return body
 }

@@ -88,7 +88,7 @@ func Create_new_invest_router() (*mux.Router) {
 
 	v1.HandleFunc("/ganta/change/check_permission", control.Ganta_can_user_change_current_status).Methods("GET")
 	v1.HandleFunc("/ganta/change/status", control.Ganta_confirm_the_ganta_step).Methods("POST")
-	v1.HandleFunc("/ganta/change/time", control.Ganta_change_ganta_time).Methods("POST")
+	//v1.HandleFunc("/ganta/change/time", control.Ganta_change_ganta_time).Methods("POST")
 
 	/*
 		Documents

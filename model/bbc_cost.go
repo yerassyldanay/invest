@@ -26,8 +26,8 @@ type Cost struct {
 	OtherCostInvolved					int								`json:"other_cost_involved"`
 
 	//ShareInProjectId				uint64								`json:"share_in_project_id"`
-	ShareInProjectInvestor				int								`json:"share_in_project_investor"`
-	ShareInProjectInvolved				int								`json:"share_in_project_involved"`
+	//ShareInProjectInvestor				int								`json:"share_in_project_investor"`
+	//ShareInProjectInvolved				int								`json:"share_in_project_involved"`
 }
 
 //type CostCol struct {

@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils"
 
@@ -91,7 +92,7 @@ func (c *User) BeforeDelete(tx *gorm.DB) error {
 //}
 
 // errors
-var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 30 characters")
+var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 50 characters")
 var errorSignUpInvalidPassword = errors.New("invalid password: must contain at least 8 and at most 30 characters (digits & letters)")
 var errorSignUpInvalidFio = errors.New("invalid fio: must contain at least 5 characters")
 
@@ -105,7 +106,8 @@ func (c *User) ValidateSignUpUser() (error) {
 
 func (c *User) ValidateSpkUser() (error) {
 	// username
-	if len(c.Username) < 8 || len(c.Username) > 30 {
+	if len(c.Username) < 8 || len(c.Username) > 50 {
+		fmt.Println("this is fail", c.Username)
 		return errorSignUpInvalidUsername
 	}
 

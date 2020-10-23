@@ -40,6 +40,7 @@ var Create_user = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Create_user_based_on_role"
 	var user = model.User{}
 
+	// headers
 	var is = service.InvestService{}
 	is.OnlyParseRequest(r)
 
@@ -52,7 +53,8 @@ var Create_user = func(w http.ResponseWriter, r *http.Request) {
 
 	// check
 	if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
-		utils.Respond(w, r, msg); return
+		utils.Respond(w, r, msg)
+		return
 	}
 
 	// create
@@ -75,24 +77,27 @@ var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http
 	}
 	defer r.Body.Close()
 
+	//headers
 	var is = service.InvestService{}
 	is.OnlyParseRequest(r)
 
-	// check
-	if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
-		utils.Respond(w, r, msg); return
-	}
-
+	// check & logic
+	var msg utils.Msg
 	switch whose {
 	case "other":
 		// pass
-	default:
+		if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
+			utils.Respond(w, r, msg); return
+		}
+		msg = is.Update_user_profile(&user)
+	case "own":
 		user.Id = is.UserId
+		msg = is.Update_user_profile(&user)
+	default:
+		msg = model.ReturnMethodNotAllowed("this is not supported | which profile are updating")
 	}
 
-	msg := is.Update_user_profile(&user)
-	msg.Fname = fname + " update"
-
+	msg.SetFname(fname, " update")
 	utils.Respond(w, r, msg)
 }
 
@@ -132,10 +137,18 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 		// if this is own then is.UserId will be used
 		msg = is.Update_user_password(user.Password)
 	case whose == "other" && is.RoleName == utils.RoleAdmin:
+
+		// security check
+		if is.RoleName != utils.RoleAdmin {
+			OnlyReturnMethodNotAllowed(w, r, "only admin can access, your role " + is.RoleName, fname, "sec")
+			return
+		}
+
 		// if this is a profile of another user
 		// then set is.UserId to the id of that user
 		is.UserId = user.Id
 		msg = is.Update_user_password(user.Password)
+
 	default:
 		// this is not allowed
 		msg = model.ReturnMethodNotAllowed("requesting " + whose + " | role is " + is.RoleName)

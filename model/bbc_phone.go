@@ -72,6 +72,12 @@ func (p *Phone) OnlySave(tx *gorm.DB) (err error) {
 	return err
 }
 
+// get
+func (p *Phone) OnlyGetByCcodeAndNumber(tx *gorm.DB) (error) {
+	err := tx.First(p, "ccode = ? and number = ?", p.Ccode, p.Number).Error
+	return err
+}
+
 func (p *Phone) IsVerified() (map[string]interface{}, error) {
 	var err error
 	if err = GetDB().Model(&Phone{}).Where("ccode=? and number=?", p.Ccode, p.Number).First(p).Error; err == nil {

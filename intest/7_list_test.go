@@ -61,12 +61,54 @@ func TestServiceProjectGetOwnProjects(t *testing.T) {
 	}
 
 	// get project of spk user
-	projects, err = project.OnlyGetProjectsOfSpkUsers(4, statuses, []int{1, 2}, "0", model.GetDB())
+	projects, err = project.OnlyGetProjectsOfSpkUsers(2, statuses, []int{1, 2}, "0", model.GetDB())
 	if err != nil {
 		t.Error(err)
 	} else if len(projects) < 1 {
 		fmt.Println("[WARN] a number of projects is 0")
 	} else {
 		fmt.Println("found ", len(projects), " projects")
+	}
+}
+
+// spk users can get all projects
+func TestServiceGetAllProjects(t *testing.T) {
+	is := service.InvestService{
+		BasicInfo: service.BasicInfo{
+			UserId: 1,
+		},
+	}
+
+	statuses := model.Prepare_project_statuses("")
+
+	// get all projects by admin
+	msg := is.Get_all_projects_by_statuses(statuses, []int{1, 2})
+	if msg.IsThereAnError() {
+		t.Error(msg.ErrMsg)
+	}
+
+	// get all projects by manager
+	is.BasicInfo.UserId = 2 // manager
+	msg = is.Get_all_projects_by_statuses(statuses, []int{1, 2})
+	if msg.IsThereAnError() {
+		t.Error(msg.ErrMsg)
+	}
+}
+
+func TestModelGetProjects(t *testing.T) {
+	// status
+	statuses := model.Prepare_project_statuses("")
+
+	//
+	var project = model.Project{}
+	projects, err := project.OnlyGetProjectsByStatusesAndSteps("0", statuses, []int{1, 2}, model.GetDB())
+
+	switch {
+	case err != nil:
+		t.Error(err)
+	case len(projects) < 1:
+		fmt.Println("[WARN] a manager could not get any project")
+	default:
+		fmt.Println("A manager got ", len(projects), " project(s)")
 	}
 }

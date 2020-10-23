@@ -22,9 +22,9 @@ var MapRole = map[string]map[string]string {
 		"eng": "nobody",
 	},
 	RoleSpk: {
-		"kaz": "",
-		"rus": "",
-		"eng": "",
+		"kaz": "ӘКК",
+		"rus": "СПК",
+		"eng": "SEC",
 	},
 }
 
@@ -59,68 +59,68 @@ const (
 
 var MapProjectStatusFirstStatusThenLang = map[string]map[string]string{
 	ProjectStatusPendingInvestor: {
-		"kaz": "На рассмотрении инвестора",
+		"kaz": "Инвестордың қарауында",
 		"rus": "На рассмотрении инвестора",
-		"eng": "На рассмотрении инвестора",
+		"eng": "Review by an investor",
 	},
 	ProjectStatusPendingManager: {
-		"kaz": "На рассмотрении менеджера",
+		"kaz": "Менеджердің қарауында",
 		"rus": "На рассмотрении менеджера",
-		"eng": "На рассмотрении менеджера",
+		"eng": "Review by a manager",
 	},
 	ProjectStatusPendingAdmin : {
-		"kaz": "На рассмотрении админа",
+		"kaz": "Админнің қараунда",
 		"rus": "На рассмотрении админа",
-		"eng": "На рассмотрении админа",
+		"eng": "Review by an admin",
 	},
 	ProjectStatusPendingExpert : {
-		"kaz": "На рассмотрении эксперта",
+		"kaz": "Эксперттің қарауында",
 		"rus": "На рассмотрении эксперта",
-		"eng": "На рассмотрении эксперта",
+		"eng": "Review by an expert",
 	},
 	ProjectStatusPendingInvCommittee : {
-		"kaz": "На рассмотрении инвестиционного коммитета",
+		"kaz": "Инвест коммитеттің қарауында",
 		"rus": "На рассмотрении инвестиционного коммитета",
-		"eng": "На рассмотрении инвестиционного коммитета",
+		"eng": "Review by an Invest Committee",
 	},
 	ProjectStatusRegistrationOfLandPlot : {
-		"kaz": "На оформлении земельного участка",
+		"kaz": "Жер учаскесін тіркеу",
 		"rus": "На оформлении земельного участка",
-		"eng": "На оформлении земельного участка",
+		"eng": "Registration of land plot",
 	},
 	ProjectStatusPendingBoard : {
-		"kaz": "На рассмотрении правления СПК",
+		"kaz": "ӘКК кеңесінің қарауында",
 		"rus": "На рассмотрении правления СПК",
-		"eng": "На рассмотрении правления СПК",
+		"eng": "Review by the Board of SEC",
 	},
 	ProjectStatusAgreement : {
-		"kaz": "Проек прошел все этапы",
+		"kaz": "Жоба барлық кезеңдерден өтті",
 		"rus": "Проек прошел все этапы",
-		"eng": "Проек прошел все этапыа",
+		"eng": "The project has passed all stages",
 	},
 	ProjectStatusDelay : {
-		"kaz": "Задержка",
+		"kaz": "Процесс кідірісте",
 		"rus": "Задержка",
-		"eng": "Задержка",
+		"eng": "Delay",
 	},
 	ProjectStatusReject : {
-		"kaz": "Отклонен",
+		"kaz": "Қабылданбады",
 		"rus": "Отклонен",
-		"eng": "Отклонен",
+		"eng": "Rejected",
 	},
 	ProjectStatusReconsider : {
-		"kaz": "На доработке",
+		"kaz": "Қайта қарау",
 		"rus": "На доработке",
-		"eng": "На доработке",
+		"eng": "Reconsideration",
 	},
 	ProjectStatusAccept : {
-		"kaz": "Принято",
+		"kaz": "Қабылданды",
 		"rus": "Принято",
-		"eng": "Принято",
+		"eng": "Accepted",
 	},
 	ProjectStatusNewOne : {
-		"kaz": "Новый",
+		"kaz": "Жаңа",
 		"rus": "Новый",
-		"eng": "Новый",
+		"eng": "New",
 	},
 }
