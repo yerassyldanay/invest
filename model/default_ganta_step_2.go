@@ -8,9 +8,9 @@ import (
 var DefaultGantaParentsOfStep2 = []Ganta{
 	{
 		IsAdditional:   false,
-		Kaz:            "Құжаттарды жүктеу [2]",
-		Rus:            "Загрузка документов инвестором [2]",
-		Eng:            "Uploading files by an investor [2]",
+		Kaz:            "Құжаттарды жүктеу",
+		Rus:            "Загрузка документов инвестором",
+		Eng:            "Uploading files by an investor",
 		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
@@ -22,9 +22,9 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Құжаттарды тексеру [2]",
-		Rus:            "Проверка документов [2]",
-		Eng:            "Review of documents [2]",
+		Kaz:            "Құжаттарды тексеру",
+		Rus:            "Проверка документов",
+		Eng:            "Review of documents",
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
@@ -37,9 +37,9 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Инвестициялық комитет басшысының тексеруі [2]",
-		Rus:            "Проверка главой инвестиционного комитета [2]",
-		Eng:            "Review by a head of an investment committee [2]",
+		Kaz:            "Инвестициялық комитет басшысының тексеруі",
+		Rus:            "Проверка главой инвестиционного комитета",
+		Eng:            "Review by a head of an investment committee",
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
@@ -51,9 +51,9 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "Қаржы-қ / құқық-қ сараптама [2]",
-		Rus:            "Фин / юр эспертиза [2]",
-		Eng:            "A finance / jurisdiction expertise [2]",
+		Kaz:            "Қаржы-қ / құқық-қ сараптама",
+		Rus:            "Фин / юр эспертиза",
+		Eng:            "A finance / jurisdiction expertise",
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 

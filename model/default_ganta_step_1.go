@@ -106,21 +106,9 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 	},
 	{
 		IsAdditional:   false,
-		Kaz:            "ХҚО-на сұраным жолдау",
-		Rus:            "Заявки в ЦОН",
-		Eng:            "Application to People Service Center",
-		DurationInDays: 30 * 6,
-		GantaChildren:  []Ganta{},
-
-		Step:           1,
-		Status: 		utils.ProjectStatusRegistrationOfLandPlot,
-		Responsible:    utils.RoleManager,
-	},
-	{
-		IsAdditional:   false,
-		Kaz:            "Смета (жоба) құжаттары",
-		Rus:            "Предоставление в СПК ПСД с экспертизой, ТЭО",
-		Eng:            "Provision of a design & estimate doc.",
+		Kaz:            "Жерді пайдалану құқығына құжаттарды тіркеу",
+		Rus:            "Оформление документов на право землепользования",
+		Eng:            "Registration of documents for the right to land use",
 		DurationInDays: 9 * 30,
 		GantaChildren:  []Ganta{},
 
