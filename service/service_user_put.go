@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/model"
 	"invest/utils"
@@ -23,7 +24,14 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 	}
 
 	// if this is a new phone number
-	if tempuser.Phone.Ccode + tempuser.Phone.Number != user.Phone.Ccode + user.Phone.Number {
+	fmt.Println(tempuser.Phone.Ccode + tempuser.Phone.Number, user.Phone.Ccode + user.Phone.Number)
+	if tempuser.Phone.Ccode + tempuser.Phone.Number != user.Phone.Ccode + user.Phone.Number &&
+		user.Phone.Number != "" {
+		// validate
+		if err := user.Phone.Validate(); err != nil {
+			return model.ReturnInternalDbError(err.Error())
+		}
+
 		// delete phone number
 		if err := tempuser.Phone.OnlyDeleteById(trans); err != nil {
 			return model.ReturnInternalDbError(err.Error())
@@ -31,11 +39,6 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 
 		tempuser.Phone.Ccode = user.Phone.Ccode
 		tempuser.Phone.Number = user.Phone.Number
-
-		// validate
-		if err := user.Phone.Validate(); err != nil {
-			return model.ReturnInternalDbError(err.Error())
-		}
 
 		// create a new phone number
 		if err := tempuser.Phone.OnlyCreate(trans); err != nil {
@@ -45,7 +48,9 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 		tempuser.PhoneId = tempuser.Phone.Id
 	}
 
-	tempuser.Fio = user.Fio
+	if len(user.Fio) >= 8 && len(user.Fio) <= 50 {
+		tempuser.Fio = user.Fio
+	}
 
 	// save changes
 	if err := tempuser.OnlySave(trans); err != nil {
@@ -56,6 +61,9 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 	if err := trans.Commit().Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
+
+	// update key
+	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error(model.GetDB(), "phones")
 
 	trans = nil
 	return model.ReturnNoError()

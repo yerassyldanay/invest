@@ -2,3 +2,23 @@ time="2020-10-23T12:23:49+06:00" level=info msg=main port=7000
 time="2020-10-23T13:03:30+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
 time="2020-10-23T13:03:30+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
 time="2020-10-23T13:03:34+06:00" level=info msg=main port=7000
+time="2020-10-23T14:21:14+06:00" level=info msg=main port=7000
+time="2020-10-23T14:22:01+06:00" level=info msg="Update_user_profile  update" error= host="[::1]:59278" path=/v1/profile/own status=200
+time="2020-10-23T14:30:23+06:00" level=info msg=main port=7000
+time="2020-10-23T14:34:29+06:00" level=info msg="Update_user_profile  update" error="invalid phone number" host="[::1]:59462" path=/v1/profile/own status=417
+time="2020-10-23T14:34:41+06:00" level=info msg=main port=7000
+time="2020-10-23T14:35:31+06:00" level=info msg=main port=7000
+time="2020-10-23T14:35:47+06:00" level=info msg=main port=7000
+time="2020-10-23T14:36:08+06:00" level=info msg=main port=7000
+time="2020-10-23T14:36:37+06:00" level=info msg=main port=7000
+time="2020-10-23T14:37:54+06:00" level=info msg=main port=7000
+time="2020-10-23T14:38:08+06:00" level=info msg="Update_user_profile  update" error= host="[::1]:59688" path=/v1/profile/own status=200
+time="2020-10-23T14:38:46+06:00" level=info msg="Update_user_profile  update" error= host="[::1]:59688" path=/v1/profile/own status=200
+time="2020-10-23T14:40:06+06:00" level=info msg=main port=7000
+time="2020-10-23T14:40:09+06:00" level=info msg="Update_user_profile  update" error= host="[::1]:59740" path=/v1/profile/own status=200
+time="2020-10-23T14:41:48+06:00" level=info msg="Update_user_profile  update" error= host="[::1]:59740" path=/v1/profile/own status=200
+time="2020-10-23T14:41:54+06:00" level=info msg="Update_user_profile  update" error= host="[::1]:59740" path=/v1/profile/own status=200
+time="2020-10-23T14:43:10+06:00" level=info msg="Update_user_profile  update" error= host="[::1]:59740" path=/v1/profile/own status=200
+time="2020-10-23T14:44:39+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-23T14:44:39+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-23T14:44:42+06:00" level=info msg=main port=7000
