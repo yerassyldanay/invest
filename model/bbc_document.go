@@ -199,6 +199,6 @@ func (d *Document) OnlyGetEmptyDocumentsWithComingDeadline() ([]Document, error)
 	currTime := utils.GetCurrentTime()
 	err := GetDB().Raw("select min(id) as id, project_id from documents where deadline between ? and ? and " +
 		" (uri = '' or status = 'reject' or status = 'reconsider') group by project_id;",
-		currTime.Add(time.Hour * 24 * 0), currTime.Add(time.Hour * 24 * 40)).Scan(&documents).Error
+		currTime.Add(time.Hour * 24 * 3), currTime.Add(time.Hour * 24 * 4)).Scan(&documents).Error
 	return documents, err
 }
