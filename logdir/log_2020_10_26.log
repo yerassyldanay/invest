@@ -1,0 +1,4 @@
+time="2020-10-26T11:10:44+06:00" level=info msg=main port=7000
+time="2020-10-26T11:10:52+06:00" level=info msg="User_project_get_all own" error= host="[::1]:58838" path=/v1/list/projects/own status=200
+time="2020-10-26T11:13:10+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-26T11:13:10+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

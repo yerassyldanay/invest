@@ -32,6 +32,7 @@ func (is *InvestService) Get_own_projects(statuses []string, steps []int) (utils
 		go func(proj *model.Project, wg *sync.WaitGroup) {
 			defer wg.Done()
 			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
+			_ = proj.GetAndUpdateStatusOfProject(model.GetDB())
 		}(&projects[i], &wg)
 	}
 	wg.Wait()
@@ -78,6 +79,7 @@ func (is *InvestService) Get_all_projects_by_statuses(statuses []string, steps [
 		go func(proj *model.Project, gwg *sync.WaitGroup) {
 			defer gwg.Done()
 			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
+			_ = proj.GetAndUpdateStatusOfProject(model.GetDB())
 		}(&projects[i], &wg)
 	}
 	wg.Wait()

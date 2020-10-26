@@ -79,7 +79,7 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 	{
 		IsAdditional:   false,
 		Kaz:            "ӘКК Кеңесінің жобаны қарастыруы",
-		Rus:            "Рассмотрение на правлении СПК",
+		Rus:            "На рассмотрение правления СПК",
 		Eng:            "Consideration of the project by the Board",
 		StartDate:      utils.GetCurrentTime(),
 		DurationInDays: 21,

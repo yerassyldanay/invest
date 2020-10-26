@@ -61,7 +61,7 @@ func TestServiceGetNotifications(t *testing.T) {
 	}
 }
 
-func TestNotification(t *testing.T) {
+func TestNotifyCreateProfile(t *testing.T) {
 	nq := model.NotifyCreateProfile{
 		UserId:      2,
 		CreatedById: 1,
@@ -70,6 +70,22 @@ func TestNotification(t *testing.T) {
 
 	mq := model.GetMailerQueue()
 	mq.NotificationChannel <- &nq
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 5)
+	mq.Handle(ctx)
+
+	time.Sleep(time.Second * 10)
+	defer cancel()
+}
+
+func TestNotifyNewPassword(t *testing.T) {
+	nnp := model.NotifyNewPassword{
+		UserId:         2,
+		RawNewPassword: "6z24HXMd7nLeZAE",
+	}
+
+	mq := model.GetMailerQueue()
+	mq.NotificationChannel <- &nnp
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 5)
 	mq.Handle(ctx)

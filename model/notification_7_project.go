@@ -17,8 +17,8 @@ var MapNotifyProjectCreation = map[string]string{
 	"subject": "Жоба қосылды." +
 		"  Проект добавлен." +
 		" A project has been added",
-	"html": "Жаңа жоба қосылды. Жоба атауы: %s. Жоба ұсынушы: %s. \n\n" +
-		"Проект был добавлен. Название проекта: %s. ФИО инициатора проекта: %s. \n\n" +
+	"html": "Жаңа жоба қосылды. Жоба атауы: %s. Жоба ұсынушы: %s. \n\n\n" +
+		"Проект был добавлен. Название проекта: %s. ФИО инициатора проекта: %s. \n\n\n" +
 		"A new project has been added. The name of the project: %s. The name of an initiator: %s\n",
 }
 

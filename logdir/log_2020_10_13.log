@@ -1,8 +1,0 @@
-time="2020-10-13T12:06:35+06:00" level=info msg=main port=7000
-time="2020-10-13T12:31:31+06:00" level=info msg=main port=7000
-time="2020-10-13T23:48:37+06:00" level=info msg=main port=7000
-time="2020-10-13T23:52:05+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
-time="2020-10-13T23:52:05+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
-time="2020-10-13T23:52:08+06:00" level=info msg=main port=7000
-time="2020-10-13T23:52:46+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
-time="2020-10-13T23:52:46+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

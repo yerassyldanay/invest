@@ -19,7 +19,7 @@ var MapNotifyCode = map[string]string{
 	"subject": "Операцияны растауға арналған құпия сөз." +
 		"  Код для валидации." +
 		" Confirmation code.",
-	"html": "Сіздің растауға арналған құпия сөзіңіз: %s. Ваш код для валидации: %s. Confirmation code: %s.",
+	"html": "Сіздің растауға арналған құпия сөзіңіз: %s. \n\n\n Ваш код для валидации: %s. \n\n\n Confirmation code: %s. \n\n\n",
 }
 
 // get map

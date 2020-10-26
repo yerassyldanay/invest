@@ -32,8 +32,8 @@ var MapNotifyProjectStatus = map[string]string{
 	"subject": "Жобаға өзгерістер енгізілді." +
 		" Внесены изменения в проект. " +
 		" Changes has been made to the project",
-	"html": "Жоба '%s' мәртебесінен '%s' мәртебесіне өзгертілді. Өзгерткен %s \n\n " +
-		"Статус проекта изменен с '%s' на '%s'. Внес изменения: %s \n\n " +
+	"html": "Жоба '%s' мәртебесінен '%s' мәртебесіне өзгертілді. Өзгерткен %s \n\n\n " +
+		"Статус проекта изменен с '%s' на '%s'. Внес изменения: %s \n\n\n " +
 		"The project status has been changed from '%s' to '%s'. Changes were made by %s",
 }
 

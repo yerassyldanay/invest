@@ -208,9 +208,25 @@ func (c *User) OnlyGetSpkUsersByProjectId(project_id uint64, tx *gorm.DB) ([]Use
 	return users, err
 }
 
+// get spk users by project id & role name
+func (c *User) OnlyGetSpkUsersByProjectIdAndRoleName(project_id uint64, roleName string, tx *gorm.DB) ([]User, error) {
+	var users = []User{}
+	err := tx.Raw("select distinct u.* from users u join projects_users pu on u.id = pu.user_id " +
+		"join roles r on u.role_id = r.id where project_id = ? and r.name = ?;", project_id, roleName).Scan(&users).Error
+	return users, err
+}
+
+// get spk users by project & role names
+func (c *User) OnlyGetSpkUsersByProjectIdAndRoles(project_id uint64, roles []string, tx *gorm.DB) ([]User, error) {
+	var users = []User{}
+	err := tx.Raw("select distinct u.* from users u join projects_users pu on u.id = pu.user_id " +
+		"join roles r on u.role_id = r.id where project_id = ? and r.name in (?);", project_id, roles).Scan(&users).Error
+	return users, err
+}
+
 // get investor
 func (c *User) OnlyGetInvestorByProjectId(project_id uint64, tx *gorm.DB) (error) {
-	err := tx.Raw("select u.* from projects p join users u on p.offered_by_id = u.id where p.id = ? limit 1", project_id).Error
+	err := tx.Raw("select u.* from projects p join users u on p.offered_by_id = u.id where p.id = ? limit 1", project_id).Scan(c).Error
 	return err
 }
 

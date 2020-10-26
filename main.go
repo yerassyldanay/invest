@@ -67,9 +67,15 @@ func main() {
 	defer model.GetDB().Close()
 
 	/*
-		prepare permissions table
+		Run notification sender at background
 	 */
-	//app.Prepare_permissions()
+	cnx, cancelNotifier := context.WithCancel(context.Background())
+	go model.OnlyNotifyAboutGantaDeadline(cnx)
+	defer cancelNotifier()
+
+	cnx2, cancelDocumentDeadlineNotifier := context.WithCancel(context.Background())
+	go model.OnlyNotifyAboutDocumentDeadline(cnx2)
+	defer cancelDocumentDeadlineNotifier()
 
 	/*
 		creating a router instance

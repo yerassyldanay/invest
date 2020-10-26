@@ -92,6 +92,15 @@ func (is *InvestService) Update_user_password(new_password string) (utils.Msg) {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	// notify user
+	nnp := model.NotifyNewPassword{
+		UserId:         is.UserId,
+		RawNewPassword: new_password,
+	}
+
+	// this handles all other work
+	model.GetMailerQueue().NotificationChannel <- &nnp
+
 	return model.ReturnNoError()
 }
 

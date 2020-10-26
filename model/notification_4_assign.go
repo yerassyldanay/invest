@@ -14,8 +14,8 @@ type NotifyAssign struct {
 
 var MapNotifyAssign = map[string]string{
 	"subject": "Сіз жобаға қосылдыңыз. Вас добавили в проект. You have been added to the project",
-	"html": "Жоба тақырыбы: %s. Жоба сипаттамасы: %s. Ұйым атауы: %s. \n\n" +
-		"Название проекта: %s. Описание проекта: %s. Название организации: %s. \n\n" +
+	"html": "Жоба тақырыбы: %s. Жоба сипаттамасы: %s. Ұйым атауы: %s. \n\n\n" +
+		"Название проекта: %s. Описание проекта: %s. Название организации: %s. \n\n\n" +
 		"The project: %s. The description: %s. The name of the organization: %s\n",
 }
 

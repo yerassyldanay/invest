@@ -44,7 +44,11 @@ func (mqi *MailerQueue) Handle(ctx context.Context) {
 			return
 		case notifyMessage := <- mqi.NotificationChannel:
 
-			fmt.Println("Sending one more message: ", notifyMessage.GetSubject())
+			//fmt.Println("Sending one more message: ", notifyMessage.GetSubject())
+
+			if len(notifyMessage.GetToList()) < 1 {
+				continue
+			}
 
 			// prepare notification message
 			// store notification body on db
@@ -65,7 +69,7 @@ func (mqi *MailerQueue) Handle(ctx context.Context) {
 			// this function gets smtp server credentials from db
 			// sets connection & sends message
 			if err = MessageDialAndSend(message); err != nil {
-				fmt.Println("Could not send")
+				mqi.printCouldNotSendNotification(err)
 			}
 		}
 	}
