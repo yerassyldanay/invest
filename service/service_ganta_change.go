@@ -103,9 +103,9 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			newGanta := model.Ganta{
 				IsAdditional:   false,
 				ProjectId:      project_id,
-				Kaz:            "Проект отклонен",
+				Kaz:            "Жоба қабылданбады",
 				Rus:            "Проект отклонен",
-				Eng:            "Проект отклонен",
+				Eng:            "Project has been rejected",
 				StartDate:      utils.GetCurrentTruncatedDate(),
 				DurationInDays: 3,
 				Deadline:       time.Time{}, // to avoid sending notifications
@@ -158,15 +158,15 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			}
 
 		case status == utils.ProjectStatusReconsider:
-			daysGivenToInvestor := time.Duration(3)
+			daysGivenToInvestor := time.Duration(15)
 
 			// prepare gantt step
 			newGanta := model.Ganta{
 				IsAdditional:   true,
 				ProjectId:      project_id,
-				Kaz:            "Доработка инициатором проекта",
+				Kaz:            "Жоба ұсынушының қарауында",
 				Rus:            "Доработка инициатором проекта",
-				Eng:            "Доработка инициатором проекта",
+				Eng:            "Review by a project initiator",
 				DurationInDays: daysGivenToInvestor,
 				Step:           currentGanta.Step,
 				Status:         utils.ProjectStatusPendingInvestor,
@@ -200,15 +200,19 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	var project = model.Project{Id: project_id}
+	project.Id = project_id
+	_ = project.GetAndUpdateStatusOfProject(model.GetDB())
+
 	// send notification
 	notifyStatusChangeMessage := &model.NotifyProjectStatus{
 		UserId:			is.UserId,
-		ChangedByFio: is.RoleName,
-		StatusBefore: statusBefore,
-		StatusAfter:  currentGanta.Status,
-		ProjectId:    project_id,
-		Step:         currentGanta.Step,
-		Lang:         is.Lang,
+		ChangedByFio: 	is.RoleName,
+		StatusBefore: 	statusBefore,
+		StatusAfter:  	project.CurrentStep.Status,
+		ProjectId:    	project_id,
+		Step:         	project.Step,
+		Lang:         	is.Lang,
 	}
 
 	// send message (handles everything: stores on db, prepares smtp message,
@@ -217,10 +221,6 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 	case model.GetMailerQueue().NotificationChannel <- notifyStatusChangeMessage:
 	default:
 	}
-
-	var project = model.Project{Id: project_id}
-	project.Id = project_id
-	_ = project.GetAndUpdateStatusOfProject(model.GetDB())
 
 	return model.ReturnNoError()
 }

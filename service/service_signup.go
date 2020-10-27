@@ -101,6 +101,7 @@ func (is *InvestService) SignUp(c model.User) (utils.Msg) {
 	// send notification
 	nc := model.NotifyCode{
 		Code:    scode,
+		Address: c.Email.Address,
 	}
 
 	select {

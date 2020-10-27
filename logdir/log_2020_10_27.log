@@ -1,0 +1,13 @@
+time="2020-10-27T10:51:20+06:00" level=info msg=main port=7000
+time="2020-10-27T12:02:28+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-27T12:02:28+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-27T12:02:39+06:00" level=info msg=main port=7000
+time="2020-10-27T12:08:18+06:00" level=info msg="Project_add_document_to_project add" error= host="[::1]:48124" path=/v1/project/docs/file status=200
+time="2020-10-27T12:17:15+06:00" level=info msg=main port=7000
+time="2020-10-27T12:19:58+06:00" level=info msg=main port=7000
+time="2020-10-27T12:21:33+06:00" level=info msg="Sign_up up" error= host="[::1]:50202" path=/v1/signup status=200
+time="2020-10-27T12:23:19+06:00" level=info msg="User_email_confirm c" error="record not found" host="[::1]:50202" path=/v1/confirmation/email status=417
+time="2020-10-27T12:23:43+06:00" level=info msg="User_email_confirm c" error="record not found" host="[::1]:50202" path=/v1/confirmation/email status=417
+time="2020-10-27T12:24:27+06:00" level=info msg=main port=7000
+time="2020-10-27T12:25:13+06:00" level=info msg="User_email_confirm c" error="record not found" host="[::1]:50316" path=/v1/confirmation/email status=417
+time="2020-10-27T12:25:28+06:00" level=info msg="User_email_confirm c" error= host="[::1]:50316" path=/v1/confirmation/email status=200

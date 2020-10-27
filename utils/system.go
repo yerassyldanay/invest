@@ -69,7 +69,7 @@ var MapProjectStatusFirstStatusThenLang = map[string]map[string]string{
 		"eng": "Review by a manager",
 	},
 	ProjectStatusPendingAdmin : {
-		"kaz": "Админнің қараунда",
+		"kaz": "Админнің қарауында",
 		"rus": "На рассмотрении админа",
 		"eng": "Review by an admin",
 	},

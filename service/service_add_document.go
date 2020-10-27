@@ -133,7 +133,7 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (ut
 	na := model.NotifyAddDoc{
 		Name:        document.Kaz,
 		Deadline:    document.Deadline,
-		Responsible: utils.MapRole[document.Responsible][is.Lang],
+		Responsible: document.Responsible,
 		UserId:      is.UserId,
 		ProjectId:   document.ProjectId,
 	}
