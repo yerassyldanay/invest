@@ -109,7 +109,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				StartDate:      utils.GetCurrentTruncatedDate(),
 				DurationInDays: 3,
 				Deadline:       time.Time{}, // to avoid sending notifications
-				Step:           currentGanta.Step,
+				Step:           4,
 				Status:         utils.ProjectStatusReject,
 				IsDone:         false,
 				Responsible:    utils.RoleNobody,

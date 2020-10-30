@@ -65,6 +65,7 @@ func Create_new_invest_router() (*mux.Router) {
 	v1.HandleFunc("/profile/own", control.Update_own_profile).Methods("PUT")
 	v1.HandleFunc("/profile/other", control.Update_other_profile).Methods("PUT")
 
+	// 6z24HXMd7nLeZAE
 	v1.HandleFunc("/profile/password/own", control.Update_own_password).Methods("PUT")
 	v1.HandleFunc("/profile/password/other", control.Update_other_password).Methods("PUT")
 

@@ -66,6 +66,12 @@ var ErrorInternalIssueOrInvalidPassword = map[string]interface{}{
 	"kaz": "сервисте қателік орын алды немесе құпия сөз жарамсыз",
 }
 
+var ErrorWrongPassword = map[string]interface{}{
+	"eng": "a password is wrong",
+	"rus": "неверный пароль",
+	"kaz": "құпия сөз дұрыс емес",
+}
+
 var ErrorEmailIsAreadyInUse = map[string]interface{}{
 	"eng": "email is already in use",
 	"rus": "электронная почта уже используется",

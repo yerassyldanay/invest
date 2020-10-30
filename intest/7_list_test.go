@@ -39,7 +39,7 @@ func TestServiceProjectGetListOfProjects(t *testing.T) {
 	}
 
 	// get projects
-	msg := is.Get_projects_by_user_id_and_status(4, statuses, []int{1, 2}) // expert
+	msg := is.Get_projects_by_user_id_and_status(4, statuses, []int{1, 2, 3, 4}) // expert
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}
@@ -51,7 +51,7 @@ func TestServiceProjectGetOwnProjects(t *testing.T) {
 
 	// get project
 	project := model.Project{}
-	projects, err := project.OnlyGetProjectsOfInvestor(3, statuses, []int{1, 2}, "0", model.GetDB())
+	projects, err := project.OnlyGetProjectsOfInvestor(3, statuses, []int{1, 2, 3, 4}, "0", model.GetDB())
 	if err != nil {
 		t.Error(err)
 	} else if len(projects) < 1 {
@@ -61,7 +61,7 @@ func TestServiceProjectGetOwnProjects(t *testing.T) {
 	}
 
 	// get project of spk user
-	projects, err = project.OnlyGetProjectsOfSpkUsers(2, statuses, []int{1, 2}, "0", model.GetDB())
+	projects, err = project.OnlyGetProjectsOfSpkUsers(2, statuses, []int{1, 2, 3, 4}, "0", model.GetDB())
 	if err != nil {
 		t.Error(err)
 	} else if len(projects) < 1 {
@@ -82,14 +82,14 @@ func TestServiceGetAllProjects(t *testing.T) {
 	statuses := model.Prepare_project_statuses("")
 
 	// get all projects by admin
-	msg := is.Get_all_projects_by_statuses(statuses, []int{1, 2})
+	msg := is.Get_all_projects_by_statuses(statuses, []int{1, 2, 3, 4})
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}
 
 	// get all projects by manager
 	is.BasicInfo.UserId = 2 // manager
-	msg = is.Get_all_projects_by_statuses(statuses, []int{1, 2})
+	msg = is.Get_all_projects_by_statuses(statuses, []int{1, 2, 3, 4})
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}
@@ -101,7 +101,7 @@ func TestModelGetProjects(t *testing.T) {
 
 	//
 	var project = model.Project{}
-	projects, err := project.OnlyGetProjectsByStatusesAndSteps("0", statuses, []int{1, 2}, model.GetDB())
+	projects, err := project.OnlyGetProjectsByStatusesAndSteps("0", statuses, []int{1, 2, 3, 4}, model.GetDB())
 
 	switch {
 	case err != nil:

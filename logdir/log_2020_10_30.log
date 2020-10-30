@@ -1,0 +1,66 @@
+time="2020-10-30T16:08:28+06:00" level=info msg=main port=7000
+time="2020-10-30T16:08:32+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T16:08:32+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T16:13:23+06:00" level=info msg=main port=7000
+time="2020-10-30T16:31:48+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T16:31:48+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T16:31:51+06:00" level=info msg=main port=7000
+time="2020-10-30T16:34:12+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T16:34:12+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T16:34:43+06:00" level=info msg=main port=7000
+time="2020-10-30T16:35:57+06:00" level=info msg="Get_project_by_project_id msg" error= host="[::1]:41864" path=/v1/project status=200
+time="2020-10-30T16:39:01+06:00" level=info msg="Get_project_by_project_id msg" error= host="[::1]:41864" path=/v1/project status=200
+time="2020-10-30T16:45:52+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T16:45:52+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T16:45:55+06:00" level=info msg=main port=7000
+time="2020-10-30T16:47:28+06:00" level=info msg="Sign_in 3" error= host="[::1]:42020" path=/v1/signin status=200
+time="2020-10-30T16:47:39+06:00" level=info msg="Update_password_help update" error="record not found" host="[::1]:42020" path=/v1/profile/password/other status=417
+time="2020-10-30T16:47:59+06:00" level=info msg="Update_password_help update" error= host="[::1]:42020" path=/v1/profile/password/own status=200
+time="2020-10-30T16:49:00+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T16:49:00+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T16:49:08+06:00" level=info msg=main port=7000
+time="2020-10-30T16:49:35+06:00" level=info msg="Update_password_help update" error="password either does not match or invalid" host="[::1]:42068" path=/v1/profile/password/own status=400
+time="2020-10-30T16:49:39+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:42068" path=/v1/signin status=400
+time="2020-10-30T16:53:24+06:00" level=info msg="Update_password_help update" error="password either does not match or invalid" host="[::1]:42068" path=/v1/profile/password/own status=400
+time="2020-10-30T16:56:37+06:00" level=info msg=main port=7000
+time="2020-10-30T16:56:56+06:00" level=info msg=main port=7000
+time="2020-10-30T16:57:20+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:42206" path=/v1/signin status=400
+time="2020-10-30T16:59:01+06:00" level=info msg=main port=7000
+time="2020-10-30T16:59:03+06:00" level=info msg="Sign_in 3" error= host="[::1]:42252" path=/v1/signin status=200
+time="2020-10-30T16:59:26+06:00" level=info msg="Update_password_help update" error= host="[::1]:42252" path=/v1/profile/password/own status=200
+time="2020-10-30T17:01:25+06:00" level=info msg="Sign_in 3" error= host="[::1]:42252" path=/v1/signin status=200
+time="2020-10-30T17:01:39+06:00" level=info msg="Update_password_help update" error= host="[::1]:42252" path=/v1/profile/password/own status=200
+time="2020-10-30T17:02:01+06:00" level=info msg=main port=7000
+time="2020-10-30T17:02:28+06:00" level=info msg="Sign_in 3" error="password either does not match or invalid" host="[::1]:42316" path=/v1/signin status=400
+time="2020-10-30T17:04:21+06:00" level=info msg="Update_password_help update" error="password either does not match or invalid" host="[::1]:42316" path=/v1/profile/password/other status=400
+time="2020-10-30T19:40:20+06:00" level=info msg=main port=7000
+time="2020-10-30T19:41:43+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T19:41:43+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T19:41:46+06:00" level=info msg=main port=7000
+time="2020-10-30T19:42:52+06:00" level=info msg="Admin_assign_user_to_project asg" error= host="[::1]:43770" path=/v1/assign status=200
+time="2020-10-30T19:43:32+06:00" level=info error= host="[::1]:43770" path=/v1/assign status=200
+time="2020-10-30T19:44:53+06:00" level=info msg="Admin_assign_user_to_project asg" error= host="[::1]:43770" path=/v1/assign status=200
+time="2020-10-30T19:45:02+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T19:45:02+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T19:45:07+06:00" level=info msg=main port=7000
+time="2020-10-30T19:45:52+06:00" level=info msg=main port=7000
+time="2020-10-30T19:47:18+06:00" level=info msg=main port=7000
+time="2020-10-30T19:49:15+06:00" level=info msg=main port=7000
+time="2020-10-30T19:49:36+06:00" level=info error="unsupported destination, should be slice or struct" host="[::1]:43908" path=/v1/assign status=417
+time="2020-10-30T19:49:56+06:00" level=info msg=main port=7000
+time="2020-10-30T19:50:47+06:00" level=info msg=main port=7000
+time="2020-10-30T19:50:48+06:00" level=info msg="Admin_assign_user_to_project asg" error="pq: duplicate key value violates unique constraint \"projects_users_pkey\"" host="[::1]:43968" path=/v1/assign status=417
+time="2020-10-30T19:50:50+06:00" level=info msg="Admin_assign_user_to_project asg" error="pq: duplicate key value violates unique constraint \"projects_users_pkey\"" host="[::1]:43968" path=/v1/assign status=417
+time="2020-10-30T19:51:16+06:00" level=info error= host="[::1]:43968" path=/v1/assign status=200
+time="2020-10-30T19:53:28+06:00" level=info msg=main port=7000
+time="2020-10-30T19:54:01+06:00" level=info msg="Admin_assign_user_to_project asg" error= host="[::1]:44030" path=/v1/assign status=200
+time="2020-10-30T19:55:15+06:00" level=info error= host="[::1]:44030" path=/v1/assign status=200
+time="2020-10-30T19:55:33+06:00" level=info msg="Admin_assign_user_to_project asg" error= host="[::1]:44030" path=/v1/assign status=200
+time="2020-10-30T20:05:45+06:00" level=info msg=main port=7000
+time="2020-10-30T20:13:05+06:00" level=info msg=main port=7000
+time="2020-10-30T20:13:28+06:00" level=info msg="Document_add_box  add_box" error= host="[::1]:44348" path=/v1/project/docs/box status=200
+time="2020-10-30T20:22:01+06:00" level=info msg=main port=7000
+time="2020-10-30T20:22:04+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-10-30T20:22:04+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-10-30T20:22:48+06:00" level=info msg=main port=7000
+time="2020-10-30T20:41:09+06:00" level=info msg=main port=7000

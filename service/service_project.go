@@ -99,13 +99,41 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 
 // get all project info
 func (is *InvestService) Project_get_by_id(project_id uint64) (utils.Msg) {
-	var project = model.Project{Id: project_id}
-	if err := project.Get_this_project_by_project_id(); err != nil {
+
+	var projectWithFinTables = struct {
+		model.Project
+		model.Finance
+		model.Cost
+	}{
+		Project: model.Project{
+			Id: project_id,
+		},
+		Finance: model.Finance{
+			ProjectId: project_id,
+		},
+		Cost: model.Cost{
+			ProjectId: project_id,
+		},
+	}
+
+	// get project
+	if err := projectWithFinTables.Project.Get_this_project_by_project_id(); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	// get finance table
+	if err := projectWithFinTables.Finance.OnlyGetByProjectId(model.GetDB()); err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// get costs table
+	if err := projectWithFinTables.Cost.OnlyGetByProjectId(model.GetDB()); err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// convert to map
 	var resp = utils.NoErrorFineEverthingOk
-	resp["info"] = model.Struct_to_map(project)
+	resp["info"] = model.Struct_to_map(projectWithFinTables)
 
 	return model.ReturnNoErrorWithResponseMessage(resp)
 }

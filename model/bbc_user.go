@@ -92,8 +92,8 @@ func (c *User) BeforeDelete(tx *gorm.DB) error {
 //}
 
 // errors
-var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 50 characters")
-var errorSignUpInvalidPassword = errors.New("invalid password: must contain at least 8 and at most 30 characters (digits & letters)")
+var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 255 characters")
+var errorSignUpInvalidPassword = errors.New("invalid password: must contain at least 8 and at most 50 characters (digits & letters)")
 var errorSignUpInvalidFio = errors.New("invalid fio: must contain at least 5 characters")
 
 func (c *User) ValidateSignUpUser() (error) {
@@ -106,13 +106,13 @@ func (c *User) ValidateSignUpUser() (error) {
 
 func (c *User) ValidateSpkUser() (error) {
 	// username
-	if len(c.Username) < 8 || len(c.Username) > 50 {
+	if len(c.Username) < 8 || len(c.Username) > 255 {
 		fmt.Println("this is fail", c.Username)
 		return errorSignUpInvalidUsername
 	}
 
 	// password
-	if len(c.Password) < 8 || len(c.Password) > 30 {
+	if len(c.Password) < 8 || len(c.Password) > 50 {
 		return errorSignUpInvalidPassword
 	}
 

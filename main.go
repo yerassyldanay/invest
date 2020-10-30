@@ -73,10 +73,6 @@ func main() {
 	go model.OnlyNotifyAboutGantaDeadline(cnx)
 	defer cancelNotifier()
 
-	cnx2, cancelDocumentDeadlineNotifier := context.WithCancel(context.Background())
-	go model.OnlyNotifyAboutDocumentDeadline(cnx2)
-	defer cancelDocumentDeadlineNotifier()
-
 	/*
 		creating a router instance
 	 */

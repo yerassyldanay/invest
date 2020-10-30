@@ -10,14 +10,8 @@ func (d *Document) Set_default_parameters(project_id uint64, step int, investorH
 	d.ProjectId = project_id
 	d.Modified = utils.GetCurrentTime()
 
-	// this is the time, when the user was last notified
-	d.Notified = utils.GetCurrentTime()
-
 	// either 1 or 2
 	d.Step = step
-
-	// this will be used to send notifications
-	d.Deadline = utils.GetCurrentTime().Add(time.Hour * 24 * investorHasDays)
 }
 
 // create documents

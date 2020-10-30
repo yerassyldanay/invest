@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"invest/model"
 	"invest/utils"
-	"time"
 )
 
 /*
@@ -21,11 +20,10 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 	// set new fields
 	document.Modified = utils.GetCurrentTruncatedDate()
 	document.Uri = document.Uri
-	document.Deadline = utils.GetCurrentTruncatedDate()
 
 	// update fields: uri, modified & deadline
 	// changes saved
-	if err := document.OnlyUpdateUriAndDeadlineByIdAndEmptyUri(trans); err != nil {
+	if err := document.OnlyUpdateUriByIdAndEmptyUri(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
@@ -101,11 +99,6 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 // add box to upload a document
 func (is *InvestService) Add_box_to_upload_document(document model.Document) (utils.Msg) {
 
-	// set a due date
-	if document.SetDeadline > 0 {
-		document.Deadline = time.Unix(document.SetDeadline, 0)
-	}
-
 	document.IsAdditional = true
 	document.Uri = ""
 	document.Modified = utils.GetCurrentTruncatedDate()
@@ -132,7 +125,6 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (ut
 	// send notification
 	na := model.NotifyAddDoc{
 		Name:        document.Kaz,
-		Deadline:    document.Deadline,
 		Responsible: document.Responsible,
 		UserId:      is.UserId,
 		ProjectId:   document.ProjectId,

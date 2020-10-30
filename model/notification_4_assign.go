@@ -31,7 +31,7 @@ func (n *NotifyAssign) GetFrom() (string) {
 
 // get the list of users, who has connection to project
 func (n *NotifyAssign) GetToList() []string {
-	if n.User.Email.Id < 0 {
+	if n.User.Email.Id < 1 {
 		// one request is enough
 		n.User.Id = n.UserId
 		if err := n.User.OnlyGetByIdPreloaded(GetDB()); err != nil {

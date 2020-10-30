@@ -54,8 +54,8 @@ func (is *InvestService) SignUp(c model.User) (utils.Msg) {
 	}
 
 	// get role id by name (of the role)
-	var role = model.Role{Name: utils.RoleInvestor}
-	if err := role.OnlyGetByName(trans); err != nil {
+	c.Role.Name = utils.RoleInvestor
+	if err := c.Role.OnlyGetByName(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 

@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
 	"invest/model"
 	"invest/utils"
 )
@@ -71,8 +72,22 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Update_user_password(new_password string) (utils.Msg) {
+func (is *InvestService) Update_user_password(old_password, new_password string) (utils.Msg) {
 	var user = model.User{Id: is.UserId}
+
+	// get user info
+	if err := user.OnlyGetUserById(model.GetDB()); err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// here we check whether two passwords
+	// (a provided password and password on db_create_fake_data) MATCH
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(old_password));
+	if err == bcrypt.ErrMismatchedHashAndPassword {
+		return model.ReturnWrongPassword("password is wrong")
+	} else if err != nil {
+		return model.ReturnInvalidPassword("password either does not match or invalid")
+	}
 
 	// check validity of the password
 	// for more info refer to the description of the function below

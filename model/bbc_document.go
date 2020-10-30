@@ -15,10 +15,6 @@ type Document struct {
 	Eng							string				`json:"eng" gorm:"not null"`
 	
 	Uri							string				`json:"uri" gorm:"default:''"`
-	
-	SetDeadline					int64				`json:"set_deadline" gorm:"-"`
-	Deadline					time.Time			`json:"deadline" gorm:"default:null"`
-	Notified					time.Time			`json:"notified" gorm:"default:now()"`
 
 	Modified					time.Time			`json:"modified" gorm:"default:now()"`
 	Created						time.Time			`json:"created" gorm:"default:now()"`
@@ -40,7 +36,6 @@ func (Document) TableName() string {
 // errors for doc validation
 var errorDocumentInvalidUri = errors.New("invalid / empty uri")
 var errorDocumentInvalidName = errors.New("invalid document name")
-var errorDocumentInvalidDeadline = errors.New("invalid year. it is too large")
 
 // prettify name of the document
 func (d *Document) PrettifyName() (err error) {
@@ -78,11 +73,6 @@ func (d *Document) Validate() error {
 		return errorDocumentInvalidName
 	case d.ProjectId < 1:
 		return errorInvalidProjectId
-	case d.Deadline.After(utils.GetCurrentTime().Add(time.Hour * 24 * 365 * 5)):
-		// the time difference 5 years
-		return errorDocumentInvalidDeadline
-	//case d.Uri == "":
-	//	return errorDocumentInvalidUri
 	}
 
 	switch {
@@ -113,12 +103,11 @@ func (d *Document) OnlySave(tx *gorm.DB) (err error) {
 }
 
 // only update uri
-func (d *Document) OnlyUpdateUriAndDeadlineByIdAndEmptyUri(tx *gorm.DB) (err error) {
+func (d *Document) OnlyUpdateUriByIdAndEmptyUri(tx *gorm.DB) (err error) {
 	err = tx.Model(&Document{}).Where("id = ? and uri = ''", d.Id).Updates(map[string]interface{}{
 		"uri": d.Uri,
 		"status": utils.ProjectStatusNewOne,
 		"modified": utils.GetCurrentTime(),
-		"deadline": utils.GetCurrentTime(),
 	}).Error
 	return err
 }
@@ -193,12 +182,3 @@ func (d *Document) AreAllValidDocumentIds(ids []uint64, project_id uint64, tx *g
 	return ok
 }
 
-// get users responsible for document
-func (d *Document) OnlyGetEmptyDocumentsWithComingDeadline() ([]Document, error) {
-	documents := []Document{}
-	currTime := utils.GetCurrentTime()
-	err := GetDB().Raw("select min(id) as id, project_id from documents where deadline between ? and ? and " +
-		" (uri = '' or status = 'reject' or status = 'reconsider') group by project_id;",
-		currTime.Add(time.Hour * 24 * 3), currTime.Add(time.Hour * 24 * 4)).Scan(&documents).Error
-	return documents, err
-}

@@ -114,12 +114,16 @@ var Update_other_profile = func(w http.ResponseWriter, r *http.Request) {
  */
 var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Request) {
 	var fname = "Update_password_help"
-	var user = model.User{}
+	var requestBody = struct {
+		Id						uint64			`json:"id"`
+		Password				string			`json:"password"`
+		OldPassword				string			`json:"old_password"`
+	}{}
 
 	var msg utils.Msg
 
 	// get request body
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
 		msg = model.ReturnInvalidParameters(err.Error())
 		msg.Fname = fname + " json"
 		utils.Respond(w, r, msg)
@@ -135,7 +139,7 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 	switch {
 	case whose == "own":
 		// if this is own then is.UserId will be used
-		msg = is.Update_user_password(user.Password)
+		msg = is.Update_user_password(requestBody.OldPassword, requestBody.Password)
 	case whose == "other" && is.RoleName == utils.RoleAdmin:
 
 		// security check
@@ -146,8 +150,8 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 
 		// if this is a profile of another user
 		// then set is.UserId to the id of that user
-		is.UserId = user.Id
-		msg = is.Update_user_password(user.Password)
+		is.UserId = requestBody.Id
+		msg = is.Update_user_password(requestBody.OldPassword, requestBody.Password)
 
 	default:
 		// this is not allowed

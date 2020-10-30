@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"invest/utils"
@@ -54,9 +53,11 @@ func (sis *SignIn) Sign_in() (utils.Msg) {
 	/*
 		here we check whether two passwords (a provided password and password on db_create_fake_data) MATCH
 	*/
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(sis.Password)); err == bcrypt.ErrMismatchedHashAndPassword || err != nil {
-		fmt.Println(err)
-		return utils.Msg{utils.ErrorInvalidPassword, http.StatusBadRequest, "", "password either does not match or invalid"}
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(sis.Password))
+	if err == bcrypt.ErrMismatchedHashAndPassword {
+		return ReturnWrongPassword("password is wrong")
+	} else if err != nil {
+		return ReturnInvalidPassword("password either does not match or invalid")
 	}
 	
 	/*

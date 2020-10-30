@@ -9,6 +9,14 @@ func ReturnInternalDbError(errmsg string) utils.Msg {
 	return utils.Msg{utils.ErrorInternalDbError, 417, "", errmsg}
 }
 
+func ReturnWrongPassword(errmsg string) utils.Msg {
+	return utils.Msg{utils.ErrorWrongPassword, 417, "", errmsg}
+}
+
+func ReturnInvalidPassword(errmsg string) utils.Msg {
+	return utils.Msg{utils.ErrorInvalidPassword, 417, "", errmsg}
+}
+
 func ReturnNoError() (utils.Msg) {
 	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
 }

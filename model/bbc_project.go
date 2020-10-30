@@ -46,9 +46,10 @@ type Project struct {
 	Step						int						`json:"step"`
 	
 	LandPlotFrom				string					`json:"land_plot_from" gorm:"default:'investor'"`
-	LandArea 						int						`json:"land_area"`
+	LandArea 					int						`json:"land_area"`
 	LandAddress					string					`json:"land_address"`
 	
+	IsManagerAssigned			bool					`json:"is_manager_assigned" gorm:"default:false"`
 	CurrentStep						Ganta					`json:"current_ganta_step" gorm:"-"`
 	
 	AddInfo
@@ -115,6 +116,12 @@ func (p *Project) OnlyCheckUserByProjectAndUserId(project_id uint64, user_id uin
 // create only
 func (p *Project) OnlyCreate(tx *gorm.DB) error {
 	return tx.Create(p).Error
+}
+
+// update fields
+func (p *Project) OnlyUpdateById(tx *gorm.DB, fields ... interface{}) error {
+	err := tx.Model(Project{Id: p.Id}).Select(fields).Updates(p).Error
+	return err
 }
 
 // save

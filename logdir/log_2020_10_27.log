@@ -11,3 +11,7 @@ time="2020-10-27T12:23:43+06:00" level=info msg="User_email_confirm c" error="re
 time="2020-10-27T12:24:27+06:00" level=info msg=main port=7000
 time="2020-10-27T12:25:13+06:00" level=info msg="User_email_confirm c" error="record not found" host="[::1]:50316" path=/v1/confirmation/email status=417
 time="2020-10-27T12:25:28+06:00" level=info msg="User_email_confirm c" error= host="[::1]:50316" path=/v1/confirmation/email status=200
+time="2020-10-27T13:18:56+06:00" level=info msg=main port=7000
+time="2020-10-27T13:22:22+06:00" level=info msg=main port=7000
+time="2020-10-27T13:22:43+06:00" level=info msg=main port=7000
+time="2020-10-27T13:23:05+06:00" level=info msg="Forget_password_send_message  2" error= host="[::1]:56868" path=/v1/reset_password status=200

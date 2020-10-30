@@ -3,12 +3,10 @@ package model
 import (
 	"fmt"
 	"invest/utils"
-	"time"
 )
 
 type NotifyAddDoc struct {
 	Name				string					`json:"name"`
-	Deadline			time.Time				`json:"deadline"`
 	Responsible			string					`json:"responsible"`
 	UserId				uint64					`json:"user_id"`
 	ProjectId			uint64					`json:"project_id"`
@@ -18,9 +16,9 @@ var MapNotifyAddDoc = map[string]string{
 	"subject": "Құжат қосылды." +
 		"  Документ добавлен." +
 		" A document has been added",
-	"html": "Құжат: %s. Жауапты: %s. Өткізілуі тиіс уақыт: %s. Құжатты қосқан тұлға: %s.\n\n\n" +
-		"Документ: %s. Ответственный за документ: %s. Крайний срок для загрузки документа: %s. Кто добавил: %s\n\n\n" +
-		"Document: %s. Responsible: %s. Deadline: %s. Added by: %s",
+	"html": "Құжат: %s. Жауапты: %s. Құжатты қосқан тұлға: %s.\n\n\n" +
+		"Документ: %s. Ответственный за документ: %s. Кто добавил: %s\n\n\n" +
+		"Document: %s. Responsible: %s. Added by: %s",
 }
 
 // get map
@@ -64,11 +62,11 @@ func (n *NotifyAddDoc) GetHtml() string {
 
 	// prepare template
 	body := n.GetMap()[utils.KeyEmailHtml]
-	// Document: %s. Responsible: %s. Deadline: %s. Added by: %s
-	deadline := fmt.Sprintf("%d.%d.%d", n.Deadline.Day(), n.Deadline.Month(), n.Deadline.Year())
-	resp := fmt.Sprintf(body, n.Name, utils.MapRole[n.Responsible]["kaz"], deadline, user.Fio,
-		n.Name, utils.MapRole[n.Responsible]["rus"], deadline, user.Fio,
-		n.Name, utils.MapRole[n.Responsible]["eng"], deadline, user.Fio,)
+
+	// Document: %s. Responsible: %s. Added by: %s
+	resp := fmt.Sprintf(body, n.Name, utils.MapRole[n.Responsible]["kaz"], user.Fio,
+		n.Name, utils.MapRole[n.Responsible]["rus"], user.Fio,
+		n.Name, utils.MapRole[n.Responsible]["eng"], user.Fio,)
 
 	return resp
 }

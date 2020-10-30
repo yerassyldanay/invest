@@ -20,7 +20,7 @@ func OnlyPrepareStatusAndStep(r *http.Request) ([]string, []int) {
 	var steps = []int{}
 	step := OnlyGetQueryParameter(r, "step", 0).(int)
 	if step == 0 {
-		steps = []int{1, 2}
+		steps = []int{1, 2, 3, 4}
 	} else {
 		steps = []int{step}
 	}

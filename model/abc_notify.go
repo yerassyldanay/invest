@@ -45,28 +45,28 @@ func onlyNotifyAboutGanttDeadlineHelper() {
 	}
 }
 
-func onlyNotifyAboutDocumentDeadline() {
-	// get list of documents (only ids & project id)
-	document := Document{}
-	documents, err := document.OnlyGetEmptyDocumentsWithComingDeadline()
-
-	switch {
-	case err != nil:
-		fmt.Println("[ERROR] notify document deadline. err: ", err)
-		return
-	case len(documents) < 1:
-		fmt.Println("[WARN] there is no any deadline in documents")
-		return
-	}
-
-	for _, document = range documents {
-		ndd := NotifyDocDeadline{
-			DocumentId: document.Id,
-		}
-
-		GetMailerQueue().NotificationChannel <- &ndd
-	}
-}
+//func onlyNotifyAboutDocumentDeadline() {
+//	// get list of documents (only ids & project id)
+//	document := Document{}
+//	documents, err := document.OnlyGetEmptyDocumentsWithComingDeadline()
+//
+//	switch {
+//	case err != nil:
+//		fmt.Println("[ERROR] notify document deadline. err: ", err)
+//		return
+//	case len(documents) < 1:
+//		fmt.Println("[WARN] there is no any deadline in documents")
+//		return
+//	}
+//
+//	for _, document = range documents {
+//		ndd := NotifyDocDeadline{
+//			DocumentId: document.Id,
+//		}
+//
+//		GetMailerQueue().NotificationChannel <- &ndd
+//	}
+//}
 
 // this will be used as a scheduler
 func OnlyNotifyAboutGantaDeadline(cnt context.Context) {
@@ -83,16 +83,16 @@ func OnlyNotifyAboutGantaDeadline(cnt context.Context) {
 	}
 }
 
-func OnlyNotifyAboutDocumentDeadline(cnt context.Context) {
-	for {
-		select {
-		case <- cnt.Done():
-			// quit the function
-			return
-		case <- time.Tick(time.Hour * 24):
-			// once in 24 hours
-			onlyNotifyAboutDocumentDeadline()
-		}
-	}
-}
+//func OnlyNotifyAboutDocumentDeadline(cnt context.Context) {
+//	for {
+//		select {
+//		case <- cnt.Done():
+//			// quit the function
+//			return
+//		case <- time.Tick(time.Hour * 24):
+//			// once in 24 hours
+//			onlyNotifyAboutDocumentDeadline()
+//		}
+//	}
+//}
 

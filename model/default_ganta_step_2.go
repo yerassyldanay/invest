@@ -142,7 +142,7 @@ var DefaultGantaFinalStep = Ganta{
 	StartDate:      utils.GetCurrentTime(),
 	DurationInDays: 0,
 
-	Step:           2,
+	Step:           3,
 	Status: 		utils.ProjectStatusAgreement,
 	Responsible:    utils.RoleNobody,
 

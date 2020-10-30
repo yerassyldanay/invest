@@ -16,7 +16,7 @@ func TestProjectCreate(t *testing.T) {
 
 	project := model.ProjectWithFinanceTables{
 		Project: model.Project{
-			Name:              "Тестовый проект - спк - 3",
+			Name:              "Тестовый проект - спк (тест)",
 			Description:       "Описание проекта пишете сюда",
 			InfoSent:          map[string]interface{}{
 				"add-info": "доп инфо",
@@ -26,6 +26,11 @@ func TestProjectCreate(t *testing.T) {
 			PhoneNumber:       "+77781254856",
 			Organization:      model.Organization{
 				Bin:     "190940011748",
+			},
+			Categors: []model.Categor{
+				{
+					Id: 1,
+				},
 			},
 			OfferedByPosition: "инициатор проекта",
 			LandPlotFrom:      "что то нужно здесь написать",

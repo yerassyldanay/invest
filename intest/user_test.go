@@ -126,7 +126,7 @@ func TestServiceUpdatePassword(t *testing.T) {
 
 	// logic
 	newPassword := "newUserPassword6sqw"
-	msg := is.Update_user_password(newPassword)
+	msg := is.Update_user_password(user.Password, newPassword)
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}
@@ -146,7 +146,7 @@ func TestServiceUpdatePassword(t *testing.T) {
 	fmt.Println("msg: ", msg)
 
 	// set old password
-	newPassword = user.Password
+	//newPassword = user.Password
 	
 	// change own password
 	is = service.InvestService{
@@ -156,7 +156,7 @@ func TestServiceUpdatePassword(t *testing.T) {
 	}
 
 	// logic
-	msg = is.Update_user_password(newPassword)
+	msg = is.Update_user_password(newPassword, user.Password)
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}

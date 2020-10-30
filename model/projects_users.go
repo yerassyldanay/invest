@@ -36,6 +36,20 @@ func (pu *ProjectsUsers) OnlyDeleteRelation (tx *gorm.DB) (err error) {
 	return err
 }
 
+// count number of users assigned to the project
+func (pu *ProjectsUsers) OnlyCountByRoleAndProjectId(role string, tx *gorm.DB) (int, error) {
+	main_query := `select count(*) as number from projects_users pu ` +
+		` join users u on pu.user_id = u.id join roles r on u.role_id = r.id ` +
+		` where project_id = ? and r.name = ?; `
+
+	counter := Counter{}
+	if err := tx.Raw(main_query, pu.ProjectId, role).Scan(&counter).Error; err != nil {
+		return 0, err
+	}
+
+	return counter.Number, nil
+}
+
 //
 func (pu *ProjectsUsers) OnlyAssignExpertsToProject(project_id uint64, tx *gorm.DB) (error) {
 	main_query := `insert into projects_users select ? as project_id, u.id as id from users u ` +

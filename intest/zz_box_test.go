@@ -5,13 +5,11 @@ import (
 	"invest/service"
 	"invest/utils"
 	"testing"
-	"time"
 )
 
 var document = model.Document{
 	Eng:          "Тестовый документ",
 	Uri:          "",
-	SetDeadline:  utils.GetCurrentTime().Add(time.Hour * 24 * 3).Unix(),
 	Step:         0,
 	ProjectId:    0,
 	Responsible:  utils.RoleSpk,
@@ -48,7 +46,6 @@ func TestModelGanttDocumentBox(t *testing.T) {
 	document.ProjectId = project.Id
 	document.Step = project.Step
 	document.IsAdditional = true
-	document.Deadline = utils.GetCurrentTime().Add(time.Hour * 24 * 3)
 
 	// validate document info
 	if err := document.Validate(); err != nil {
