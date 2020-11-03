@@ -2,7 +2,8 @@ package model
 
 import (
 	"bitbucket.org/liamstask/goose/lib/goose"
-
+	"invest/utils/constants"
+	"invest/utils/logist"
 
 	//"github.com/pressly/goose"
 	"errors"
@@ -10,7 +11,6 @@ import (
 	"github.com/jinzhu/gorm"
 	//_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/lib/pq"
-	"invest/utils"
 	"os"
 	"path/filepath"
 	"time"
@@ -115,11 +115,11 @@ func Set_up_db() {
 	//fmt.Println(dbUri + "...")
 
 	if err != nil {
-		utils.SysMessage{
+		logist.SysMessage{
 			FuncName: fname,
 			Message:  err.Error(),
 			Ok:       false,
-			Lev:      utils.WarnLevel,
+			Lev:      constants.WarnLevel,
 		}.Log_system_message()
 		return
 	}
@@ -132,29 +132,29 @@ func Set_up_db() {
 	for {
 		db, err = gorm.Open("postgres", dbUri)
 		if err == nil {
-			utils.SysMessage{
+			logist.SysMessage{
 				FuncName: fname,
 				Message:  "connected to Postgres...",
 				Ok:       true,
-				Lev:      utils.InfoLevel,
+				Lev:      constants.InfoLevel,
 			}.Log_system_message()
 			break
 		}
 
-		utils.SysMessage{
+		logist.SysMessage{
 			FuncName: fname,
 			Message:  err.Error() + " sleeping for a while...",
 			Ok:       false,
-			Lev:      utils.WarnLevel,
+			Lev:      constants.WarnLevel,
 		}.Log_system_message()
-		time.Sleep(time.Second * utils.TimeSecToSleepBetweenDbConn)
+		time.Sleep(time.Second * constants.TimeSecToSleepBetweenDbConn)
 
-		if i == utils.AttemptToConnectToDb {
-			utils.SysMessage{
+		if i == constants.AttemptToConnectToDb {
+			logist.SysMessage{
 				FuncName: fname,
 				Message:  "could not connect to db...",
 				Ok:       false,
-				Lev:      utils.WarnLevel,
+				Lev:      constants.WarnLevel,
 			}.Log_system_message()
 			return
 		}
@@ -171,7 +171,7 @@ func Set_up_db() {
 
 	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{},
 		&Email{}, &Finance{}, &ForgetPassword{}, &Ganta{}, &Organization{},
-		&Permission{}, &Phone{}, &Project{}, &Role{}, &SmtpServer{},
+		&Permission{}, &Phone{}, &Project{}, &Role{}, &SmtpServer{}, &SmtpHeaders{},
 		&User{})
 
 	db.Debug().AutoMigrate(&Notification{}, &NotificationInstance{}, &ProjectsUsers{})
@@ -179,7 +179,7 @@ func Set_up_db() {
 	/*
 		parameters of db
 	 */
-	db.DB().SetMaxOpenConns(utils.MaxNumberOpenConnToDb)
+	db.DB().SetMaxOpenConns(constants.MaxNumberOpenConnToDb)
 
 	err = PrepareSequenceId()
 	if err != nil {

@@ -5,7 +5,9 @@ import (
 	"github.com/gorilla/mux"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"net/http"
 	"strconv"
@@ -16,7 +18,7 @@ import (
  */
 var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_create_update_add_and_delete_permissions_remove"
-	var msg utils.Msg
+	var msg message.Msg
 	var role = model.Role{}
 
 	/*
@@ -24,15 +26,15 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 	 */
 	switch r.Method {
 	case http.MethodGet:
-		offset := service.Get_query_parameter_str(r, utils.KeyOffset, "0")
+		offset := service.Get_query_parameter_str(r, constants.KeyOffset, "0")
 		msg = role.Get_roles(offset)
 	default:
 		if err := json.NewDecoder(r.Body).Decode(&role); err != nil {
-			utils.Respond(w, r, utils.Msg{
-				Message: 	utils.ErrorInvalidParameters,
-				Status: 	http.StatusBadRequest,
-				Fname:   	fname + " 1",
-				ErrMsg:  	err.Error(),
+			message.Respond(w, r, message.Msg{
+				Message: errormsg.ErrorInvalidParameters,
+				Status:  http.StatusBadRequest,
+				Fname:   fname + " 1",
+				ErrMsg:  err.Error(),
 			})
 			return
 		}
@@ -49,16 +51,16 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 			/*
 				if none of these methods, then
 			 */
-			msg = utils.Msg{
-				Message: utils.ErrorMethodNotAllowed,
-				Status: 	http.StatusMethodNotAllowed,
-				Fname:   	fname + " 2",
-				ErrMsg:  	"this method is not supported",
+			msg = message.Msg{
+				Message: errormsg.ErrorMethodNotAllowed,
+				Status:  http.StatusMethodNotAllowed,
+				Fname:   fname + " 2",
+				ErrMsg:  "this method is not supported",
 			}
 		}
 	}
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 /*
@@ -66,7 +68,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
  */
 var Role_delete_or_get_with_role_id = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_delete_or_get_with_role_id"
-	var msg utils.Msg
+	var msg message.Msg
 	var role = model.Role{}
 
 	var vars = mux.Vars(r)
@@ -78,25 +80,25 @@ var Role_delete_or_get_with_role_id = func(w http.ResponseWriter, r *http.Reques
 	case http.MethodGet:
 		msg = role.Get_role_info()
 	default:
-		msg = utils.Msg{
-			Message: utils.ErrorMethodNotAllowed,
-			Status: 	http.StatusMethodNotAllowed,
-			Fname:   	fname + " 2",
-			ErrMsg:  	"this method is not supported",
+		msg = message.Msg{
+			Message: errormsg.ErrorMethodNotAllowed,
+			Status:  http.StatusMethodNotAllowed,
+			Fname:   fname + " 2",
+			ErrMsg:  "this method is not supported",
 		}
 	}
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Role_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_add_and_remove_permissions"
-	var msg = utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", ""}
+	var msg = message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 1", ""}
 	var role = model.Role{}
 
 	if err := json.NewDecoder(r.Body).Decode(&role); err != nil {
 		msg.ErrMsg = err.Error()
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 	defer r.Body.Close()
@@ -118,9 +120,9 @@ var Role_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Reques
 		/*
 			not supported
 		 */
-		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "method is not allowed. role/permissions"}
+		msg = message.Msg{errormsg.ErrorMethodNotAllowed, 405, "", "method is not allowed. role/permissions"}
 
 	}
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

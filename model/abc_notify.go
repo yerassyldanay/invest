@@ -3,7 +3,8 @@ package model
 import (
 	"context"
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
 	"time"
 )
 
@@ -15,7 +16,7 @@ func onlyNotifyAboutGanttDeadlineHelper() {
 
 	var projectIds = []newStruct{}
 
-	currTime := utils.GetCurrentTime()
+	currTime := helper.GetCurrentTime()
 	day := time.Hour * 24
 
 	// get projects which has a deadline coming with 3-4 days
@@ -23,7 +24,7 @@ func onlyNotifyAboutGanttDeadlineHelper() {
 		"where is_done = false and ((deadline between ? and ?) or (deadline between ? and ?)) " +
 		" and status not in (?);", currTime.Add(day * 3), currTime.Add(day * 4),
 		currTime.Add(day * 7), currTime.Add(day * 8), []string{
-			utils.ProjectStatusAgreement, utils.ProjectStatusReject,
+			constants.ProjectStatusAgreement, constants.ProjectStatusReject,
 	}).Scan(&projectIds).Error; err != nil {
 		fmt.Println("could not send notifications")
 		return

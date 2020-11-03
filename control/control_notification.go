@@ -2,7 +2,7 @@ package control
 
 import (
 	"invest/service"
-	"invest/utils"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -20,5 +20,5 @@ var Notification_get = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.Notification_get_by_project_id(project_id)
 	msg.SetFname(fname, "n")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

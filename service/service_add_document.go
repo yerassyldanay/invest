@@ -3,7 +3,9 @@ package service
 import (
 	"fmt"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
+	"invest/utils/message"
 )
 
 /*
@@ -12,13 +14,13 @@ import (
 		* investor - uploading documents rejected or reconsider
 		* spk - uploading documents through the process
  */
-func (is *InvestService) Upload_documents_to_project(document *model.Document) (utils.Msg) {
+func (is *InvestService) Upload_documents_to_project(document *model.Document) (message.Msg) {
 
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil { trans.Rollback() }} ()
 
 	// set new fields
-	document.Modified = utils.GetCurrentTruncatedDate()
+	document.Modified = helper.GetCurrentTruncatedDate()
 	document.Uri = document.Uri
 
 	// update fields: uri, modified & deadline
@@ -47,7 +49,7 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 			* when an investor reconsidered (removed & uploaded) documents with an undesirable status
 	 */
 	var countNumberOfEmptyDocuments int
-	if currentGanta.Responsible == is.RoleName && is.RoleName == utils.RoleInvestor {
+	if currentGanta.Responsible == is.RoleName && is.RoleName == constants.RoleInvestor {
 		// number of documents with empty uri
 		// which does not allow to move to the next step
 		countNumberOfEmptyDocuments = document.OnlyCountNumberOfEmptyDocuments(is.RoleName, currentGanta.Step, trans)
@@ -70,15 +72,15 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 				return model.ReturnInternalDbError(err.Error())
 			}
 
-			hours := int(utils.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
+			hours := int(helper.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
 			if err := currentGanta.OnlyUpdateStartDatesOfAllUndoneGantaStepsByProjectId(hours, trans); err != nil {
 				// could not shift all gantt steps
 				return model.ReturnInternalDbError(err.Error())
 			}
 		}
 
-	} else if utils.Does_a_slice_contain_element([]string{utils.RoleSpk, utils.RoleManager, utils.RoleExpert}, currentGanta.Responsible) &&
-		utils.Does_a_slice_contain_element([]string{utils.RoleSpk, utils.RoleManager, utils.RoleExpert}, is.RoleName) {
+	} else if helper.Does_a_slice_contain_element([]string{constants.RoleSpk, constants.RoleManager, constants.RoleExpert}, currentGanta.Responsible) &&
+		helper.Does_a_slice_contain_element([]string{constants.RoleSpk, constants.RoleManager, constants.RoleExpert}, is.RoleName) {
 		fmt.Println(is.RoleName + " | " + currentGanta.Responsible)
 	}
 
@@ -97,11 +99,11 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 }
 
 // add box to upload a document
-func (is *InvestService) Add_box_to_upload_document(document model.Document) (utils.Msg) {
+func (is *InvestService) Add_box_to_upload_document(document model.Document) (message.Msg) {
 
 	document.IsAdditional = true
 	document.Uri = ""
-	document.Modified = utils.GetCurrentTruncatedDate()
+	document.Modified = helper.GetCurrentTruncatedDate()
 
 	// get current gantt step to set project step
 	var project = model.Project{Id: document.ProjectId}

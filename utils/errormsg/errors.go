@@ -1,4 +1,10 @@
-package utils
+package errormsg
+
+var NoErrorFineEverthingOk = map[string]interface{}{
+	"eng": "ok",
+	"rus": "ok",
+	"kaz": "ok",
+}
 
 var ErrorInvalidPassword = map[string]interface{}{
 	"eng": "invalid password: password must contain 8 to 20 characters (upper, lower letters & digits)",

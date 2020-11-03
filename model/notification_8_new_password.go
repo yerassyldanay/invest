@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyNewPassword struct {
@@ -23,7 +23,7 @@ func (n *NotifyNewPassword) GetMap() map[string]string {
 
 // sender
 func (n *NotifyNewPassword) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -40,7 +40,7 @@ func (n *NotifyNewPassword) GetToList() []string {
 
 // get subject
 func (n *NotifyNewPassword) GetSubject() string {
-	return MapNotifyNewPassword[utils.KeyEmailSubject]
+	return MapNotifyNewPassword[constants.KeyEmailSubject]
 }
 
 // body in html
@@ -54,7 +54,7 @@ func (n *NotifyNewPassword) GetHtml() string {
 
 	// prepare template
 	// A new password: %s
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 	body = fmt.Sprintf(body, n.RawNewPassword, n.RawNewPassword, n.RawNewPassword)
 
 	return body

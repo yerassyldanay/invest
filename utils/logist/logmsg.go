@@ -1,8 +1,8 @@
-package utils
+package logist
 
 import (
 	logr "github.com/sirupsen/logrus"
-
+	"invest/utils/constants"
 )
 
 /*
@@ -25,13 +25,13 @@ func (messageToSend SysMessage) Log_system_message() {
 	})
 
 	switch messageToSend.Lev {
-	case InfoLevel:
+	case constants.InfoLevel:
 		f.Info(messageToSend.FuncName)
-	case WarnLevel:
+	case constants.WarnLevel:
 		f.Warn(messageToSend.FuncName)
-	case FatalLevel:
+	case constants.FatalLevel:
 		f.Fatal(messageToSend.FuncName)
-	case DebugLevel:
+	case constants.DebugLevel:
 		f.Debug(messageToSend.FuncName)
 	default:
 		f.Log(logr.Level(messageToSend.Lev), messageToSend)

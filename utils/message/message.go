@@ -1,8 +1,10 @@
-package utils
+package message
 
 import (
 	"encoding/json"
 	logr "github.com/sirupsen/logrus"
+	"invest/utils/constants"
+	"invest/utils/logist"
 
 	"net/http"
 	"strconv"
@@ -62,12 +64,12 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 		msg.Status = 200
 	}
 
-	w.Header().Set(HeaderCustomStatus, strconv.Itoa(msg.Status))
+	w.Header().Set(constants.HeaderCustomStatus, strconv.Itoa(msg.Status))
 
 	/*HEAD
 		this header will bear a auth token
 	 */
-	w.Header().Add(HeaderAuthorization, r.Header.Get(HeaderAuthorization))
+	w.Header().Add(constants.HeaderAuthorization, r.Header.Get(constants.HeaderAuthorization))
 
 	w.WriteHeader(msg.Status)
 
@@ -76,11 +78,11 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 	msg.Message["error"] = msg.ErrMsg
 
 	if err := json.NewEncoder(w).Encode(msg.Message); err != nil {
-		SysMessage {
+		logist.SysMessage{
 			FuncName: fname,
 			Message:  err.Error(),
 			Ok:       false,
-			Lev:      WarnLevel,
+			Lev:      constants.WarnLevel,
 		}.Log_system_message()
 		return
 	}

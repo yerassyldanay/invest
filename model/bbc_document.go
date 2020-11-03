@@ -3,7 +3,8 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
 	"time"
 )
 
@@ -82,8 +83,8 @@ func (d *Document) Validate() error {
 		d.Step = 1
 	}
 
-	if d.Responsible != utils.RoleSpk && d.Responsible != utils.RoleInvestor {
-		d.Responsible = utils.RoleSpk
+	if d.Responsible != constants.RoleSpk && d.Responsible != constants.RoleInvestor {
+		d.Responsible = constants.RoleSpk
 	}
 
 	return nil
@@ -91,7 +92,7 @@ func (d *Document) Validate() error {
 
 // create a document
 func (d *Document) OnlyCreate(trans *gorm.DB) (err error) {
-	d.Created = utils.GetCurrentTime()
+	d.Created = helper.GetCurrentTime()
 	err = trans.Create(d).Error
 	return err
 }
@@ -105,9 +106,9 @@ func (d *Document) OnlySave(tx *gorm.DB) (err error) {
 // only update uri
 func (d *Document) OnlyUpdateUriByIdAndEmptyUri(tx *gorm.DB) (err error) {
 	err = tx.Model(&Document{}).Where("id = ? and uri = ''", d.Id).Updates(map[string]interface{}{
-		"uri": d.Uri,
-		"status": utils.ProjectStatusNewOne,
-		"modified": utils.GetCurrentTime(),
+		"uri":      d.Uri,
+		"status":   constants.ProjectStatusNewOne,
+		"modified": helper.GetCurrentTime(),
 	}).Error
 	return err
 }
@@ -141,8 +142,8 @@ func (d *Document) OnlyDeleteById(tx *gorm.DB) (err error) {
 // set uri to ''
 func (d *Document) OnlyEmptyUriById(tx *gorm.DB) (err error) {
 	err = tx.Model(&Document{Id: d.Id}).Updates(map[string]interface{}{
-		"uri": "",
-		"modified": utils.GetCurrentTime(),
+		"uri":      "",
+		"modified": helper.GetCurrentTime(),
 	}).Error
 	return err
 }
@@ -160,14 +161,14 @@ func (d *Document) OnlyCountNumberOfEmptyDocuments(roleName string, step int, tx
 func (d *Document) OnlyCountNumberOfDocumentsWithUndesirableStatus(roleName string, project_id uint64, step int, tx *gorm.DB) (int, error) {
 	var count int
 	err := tx.Table(d.TableName()).Where("project_id = ? and step = ? and status not in (?) and responsible = ?",
-		project_id, step, []string{utils.ProjectStatusNewOne, utils.ProjectStatusAccept}, roleName).Count(&count).Error
+		project_id, step, []string{constants.ProjectStatusNewOne, constants.ProjectStatusAccept}, roleName).Count(&count).Error
 	return count, err
 }
 
 func (d *Document) OnlyUpdateStatusById(tx *gorm.DB) (err error) {
 	err = tx.Model(&Document{Id: d.Id}).Updates(map[string]interface{}{
-		"status": d.Status,
-		"modified": utils.GetCurrentTime(),
+		"status":   d.Status,
+		"modified": helper.GetCurrentTime(),
 	}).Error
 	return err
 }

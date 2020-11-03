@@ -1,13 +1,13 @@
 package model
 
 import (
-	"invest/utils"
+	"invest/utils/message"
 )
 
 /*
 	delete users except for default ones
  */
-func (c *User) Delete_user() (utils.Msg) {
+func (c *User) Delete_user() (message.Msg) {
 
 	var trans = GetDB().Begin()
 	defer func() {if trans != nil {trans.Rollback()}}()
@@ -59,7 +59,7 @@ func (c *User) Delete_user() (utils.Msg) {
 	blocks or gets rid of a block on user
 		note: default users will not be blocked at all
  */
-func (c *User) Block_unblock_user() (utils.Msg) {
+func (c *User) Block_unblock_user() (message.Msg) {
 	//if c.Id <= utils.DefaultNotAllowedUserToDelete {
 	//	return utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "trying to delete default users"}
 	//}

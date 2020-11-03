@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
 	"testing"
 	"time"
 )
@@ -66,8 +66,8 @@ func TestProjectCreate(t *testing.T) {
 		Offset:    "0",
 		BasicInfo: service.BasicInfo{
 			UserId:   3,
-			RoleName: utils.RoleInvestor,
-			Lang:     utils.DefaultContentLanguage,
+			RoleName: constants.RoleInvestor,
+			Lang:     constants.DefaultContentLanguage,
 		},
 	}
 

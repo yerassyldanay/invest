@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"net/http"
 )
@@ -93,7 +95,7 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 
 	// parse request body
 	if err := json.NewDecoder(r.Body).Decode(&spkComment); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 1", err.Error()})
 		return
 	}
 	defer r.Body.Close()
@@ -110,10 +112,10 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 		Id: spkComment.Comment.ProjectId,
 	}
 
-	if is.RoleName == utils.RoleAdmin {
+	if is.RoleName == constants.RoleAdmin {
 		// if this is an admin then pass this point
 	} else if err := project.OnlyCheckUserByProjectAndUserId(spkComment.Comment.ProjectId, is.UserId, model.GetDB()); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " security", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorMethodNotAllowed, 405, fname + " security", err.Error()})
 		return
 	}
 
@@ -127,7 +129,7 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if project.CurrentStep.Responsible != is.RoleName {
-		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " step", "this user is not responsible for the current step"})
+		message.Respond(w, r, message.Msg{errormsg.ErrorMethodNotAllowed, 405, fname + " step", "this user is not responsible for the current step"})
 		return
 	}
 
@@ -135,7 +137,7 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 	msg := is.Comment_on_project_documents(spkComment)
 	msg.SetFname(fname, "2")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 /*
@@ -156,7 +158,7 @@ var Project_get_comments = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
 	if msg.ErrMsg != "" {
 		msg.SetFname(fname, "acc")
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -164,5 +166,5 @@ var Project_get_comments = func(w http.ResponseWriter, r *http.Request) {
 	msg = is.Get_comments_of_project(project_id)
 	msg.SetFname(fname, "get")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

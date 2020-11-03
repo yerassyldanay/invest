@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyProjectStatus struct {
@@ -44,7 +44,7 @@ func (n *NotifyProjectStatus) GetMap() map[string]string {
 
 // sender
 func (n *NotifyProjectStatus) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -62,7 +62,7 @@ func (n *NotifyProjectStatus) GetToList() []string {
 
 // get subject
 func (n *NotifyProjectStatus) GetSubject() string {
-	return MapNotifyProjectStatus[utils.KeyEmailSubject]
+	return MapNotifyProjectStatus[constants.KeyEmailSubject]
 }
 
 // body in html
@@ -72,12 +72,12 @@ func (n *NotifyProjectStatus) GetHtml() string {
 		return ""
 	}
 
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 
 	// The project status has been changed from '%s' to '%s'. Changes were made by %s
-	resp := fmt.Sprintf(body, utils.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["kaz"], utils.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["kaz"], user.Fio,
-		utils.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["rus"], utils.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["rus"], user.Fio,
-		utils.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["eng"], utils.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["eng"], user.Fio)
+	resp := fmt.Sprintf(body, constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["kaz"], constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["kaz"], user.Fio,
+		constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["rus"], constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["rus"], user.Fio,
+		constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["eng"], constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["eng"], user.Fio)
 
 	return resp
 }

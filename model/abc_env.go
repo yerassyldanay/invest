@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/joho/godotenv"
-	"invest/utils"
+	"invest/utils/helper"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -28,7 +28,7 @@ func Load_env_values() error {
 	path_sendgrid, err2 := filepath.Abs(env2_sendgrid)
 
 	if err1 != nil || err2 != nil {
-		err := utils.If_condition_then(err1 != nil, err1, err2).(error)
+		err := helper.If_condition_then(err1 != nil, err1, err2).(error)
 		return err
 	}
 

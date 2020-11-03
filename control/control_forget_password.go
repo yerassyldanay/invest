@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"net/http"
 )
@@ -28,7 +29,7 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 	is := service.InvestService{}
 	is.OnlyParseRequest(r)
 
-	var msg utils.Msg
+	var msg message.Msg
 	var fp = model.ForgetPassword{}
 
 	// request methods
@@ -39,7 +40,7 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 
 	case http.MethodPost:
 		if err := json.NewDecoder(r.Body).Decode(&fp); err != nil {
-			utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
+			message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
 			return
 		}
 
@@ -52,5 +53,5 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 	}
 
 	msg.SetFname(fname, " 2")
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

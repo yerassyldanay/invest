@@ -3,7 +3,10 @@ package auth
 import (
 	"github.com/dgrijalva/jwt-go"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/helper"
+	"invest/utils/message"
 
 	"net/http"
 	"os"
@@ -20,7 +23,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			there are some urls that do not require authentication.
 				E.g. getting static files or sign in/up urls
 		 */
-		for _, url := range utils.NoNeedToAuth {
+		for _, url := range constants.NoNeedToAuth {
 			//fmt.Println(url, r.URL.Path)
 			if url == r.URL.Path {
 				//fmt.Println(url, r.URL.Path)
@@ -36,8 +39,8 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		var splits = strings.Split(tokenHeader, " ")
 		if len(splits) != 2 {
-			utils.Respond(w, r, utils.Msg{
-				Message: utils.ErrorMethodNotAllowed,
+			message.Respond(w, r, message.Msg{
+				Message: errormsg.ErrorMethodNotAllowed,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 1",
 				ErrMsg:  "could not be split correctly | len: " + strconv.Itoa(len(splits)) + " | token: " +tokenHeader,
@@ -58,8 +61,8 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		})
 
 		if err != nil {
-			utils.Respond(w, r, utils.Msg{
-				Message: utils.ErrorTokenInvalidOrExpired,
+			message.Respond(w, r, message.Msg{
+				Message: errormsg.ErrorTokenInvalidOrExpired,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 2",
 				ErrMsg:  err.Error(),
@@ -84,9 +87,9 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		/*
 			context is not working properly
 		 */
-		r = utils.SetHeader(r, utils.KeyId, strconv.FormatUint(tokenStruct.UserId, 10))
-		r = utils.SetHeader(r, utils.KeyRoleId, strconv.FormatUint(tokenStruct.RoleId, 10))
-		r = utils.SetHeader(r, utils.KeyRoleName, tokenStruct.RoleName)
+		r = helper.SetHeader(r, constants.KeyId, strconv.FormatUint(tokenStruct.UserId, 10))
+		r = helper.SetHeader(r, constants.KeyRoleId, strconv.FormatUint(tokenStruct.RoleId, 10))
+		r = helper.SetHeader(r, constants.KeyRoleName, tokenStruct.RoleName)
 
 		//var redis_key = fmt.Sprintf("%v_%v", tokenStruct.Role, tokenStruct.UserID)
 		//redis_result, err := iredis.GetRedis().Get(redis_key).Result()
@@ -114,7 +117,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		msg := EmailVerifiedWrapper(w, r)
 
 		if msg.ErrMsg != "" {
-			utils.Respond(w, r, msg)
+			message.Respond(w, r, msg)
 			return
 		}
 

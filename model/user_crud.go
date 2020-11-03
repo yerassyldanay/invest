@@ -2,7 +2,9 @@ package model
 
 import "C"
 import (
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"time"
 
 	//"gorm.io/gorm/clause"
@@ -17,9 +19,9 @@ func (c *User) Remove_all_users_with_not_confirmed_email() (map[string]interface
 /*
 	create
 */
-func (c *User) Create_user_without_check() (utils.Msg) {
+func (c *User) Create_user_without_check() (message.Msg) {
 	if c.Lang == "" {
-		c.Lang = utils.DefaultContentLanguage
+		c.Lang = constants.DefaultContentLanguage
 	}
 
 	/*
@@ -46,7 +48,7 @@ func (c *User) Create_user_without_check() (utils.Msg) {
 	}
 
 	// hash the password
-	hashed, err := utils.Convert_string_to_hash(c.Password)
+	hashed, err := helper.Convert_string_to_hash(c.Password)
 	if err != nil {
 		return ReturnInvalidParameters("could not hash password. user. hash")
 	}

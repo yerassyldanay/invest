@@ -3,7 +3,9 @@ package model
 import (
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"net/http"
 	"os"
 	"regexp"
@@ -20,18 +22,18 @@ import (
 		404 - info not found on database
 		500 - internal server error (code error)
  */
-func (sis *SignIn) Sign_in() (utils.Msg) {
+func (sis *SignIn) Sign_in() (message.Msg) {
 	var user = User{}
 	regexpOnlyLetters, err := regexp.Compile("[a-z]+")
 	if err != nil {
-		return utils.Msg{
-			Message: utils.ErrorInternalServerError, Status:  http.StatusInternalServerError, ErrMsg:  err.Error(),
+		return message.Msg{
+			Message: errormsg.ErrorInternalServerError, Status:  http.StatusInternalServerError, ErrMsg:  err.Error(),
 		}
 	}
 
 	//fmt.Println(strings.ToLower(sis.KeyUsername))
 	if ok := regexpOnlyLetters.Match([]byte(strings.ToLower(sis.KeyUsername))); !ok {
-			return utils.Msg{utils.ErrorInvalidParameters, http.StatusBadRequest, "", "regexp does not match with key"}
+			return message.Msg{errormsg.ErrorInvalidParameters, http.StatusBadRequest, "", "regexp does not match with key"}
 	}
 
 	switch sis.KeyUsername {
@@ -74,25 +76,25 @@ func (sis *SignIn) Sign_in() (utils.Msg) {
 	token_string, err := token_hashed.SignedString([]byte(os.Getenv("TOKEN_PASSWORD")))
 
 	if err != nil {
-		return utils.Msg{utils.ErrorInternalIssueOrInvalidPassword, http.StatusInternalServerError, "", err.Error()}
+		return message.Msg{errormsg.ErrorInternalIssueOrInvalidPassword, http.StatusInternalServerError, "", err.Error()}
 	}
 
 	sis.TokenCompound = "Bearer " + token_string
 	user.Password = ""
 
-	resp := utils.NoErrorFineEverthingOk
+	resp := errormsg.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(user)
 	resp["token"] = token_string
 	resp["role"] = user.Role.Name
 
-	return utils.Msg{
+	return message.Msg{
 		resp, http.StatusOK,"", "",
 	}
 }
 
 
 func (si *SignIn) Is_on_db() bool {
-	if ok := utils.Is_it_free_from_sql_injection(si.KeyUsername); !ok {
+	if ok := helper.Is_it_free_from_sql_injection(si.KeyUsername); !ok {
 		return false
 	}
 

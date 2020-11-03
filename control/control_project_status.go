@@ -3,7 +3,7 @@ package control
 import (
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -20,7 +20,7 @@ var Project_get_status_of_project = func(w http.ResponseWriter, r *http.Request)
 	msg.Fname = fname + " check"
 
 	if msg.ErrMsg != "" {
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -29,5 +29,5 @@ var Project_get_status_of_project = func(w http.ResponseWriter, r *http.Request)
 	msg = project.Get_project_with_current_status()
 	msg.SetFname(fname, "proj")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

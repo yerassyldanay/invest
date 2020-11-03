@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/jinzhu/gorm"
 	"github.com/tealeg/xlsx"
-	"invest/utils"
+	"invest/utils/constants"
 	"os"
 	"strconv"
 	"time"
@@ -113,7 +113,7 @@ func (a *Analysis) OnlyWriteDataToFile(absFilepath string, lang string) (error) 
 }
 
 func (a Analysis) ConvertStatus(status string, lang string) (string) {
-	vmap, ok := utils.MapProjectStatusFirstStatusThenLang[status]
+	vmap, ok := constants.MapProjectStatusFirstStatusThenLang[status]
 	if !ok {
 		return ""
 	}

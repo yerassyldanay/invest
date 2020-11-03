@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
 	"testing"
 )
 
@@ -54,13 +54,13 @@ func TestServiceUploadDocumentByInvestor(t *testing.T) {
 		switch {
 		case doc.Step == 2:
 			// pass
-		case !first && doc.Responsible == utils.RoleInvestor:
+		case !first && doc.Responsible == constants.RoleInvestor:
 			// pass
 			doc.Uri = TestDefaultDocumentUri
 			if err := doc.OnlySave(model.GetDB()); err != nil {
 				t.Error(err)
 			}
-		case doc.Responsible == utils.RoleInvestor:
+		case doc.Responsible == constants.RoleInvestor:
 			first = false
 			skippedDocId = doc.Id
 			fmt.Println(skippedDocId)
@@ -96,7 +96,7 @@ func TestModelProjectStatusThatPendingAdmin(t *testing.T) {
 	}
 
 	// check status
-	if project.Status != utils.ProjectStatusPendingAdmin {
+	if project.Status != constants.ProjectStatusPendingAdmin {
 		t.Error("expected status to be pending admin, but got ", project.Status)
 	}
 
@@ -144,8 +144,8 @@ func TestServiceChangeProjectStatus(t *testing.T) {
 	}
 
 	_ = project.OnlyGetById(model.GetDB())
-	if project.Status != utils.ProjectStatusPendingManager {
-		t.Error("expected " + utils.ProjectStatusPendingManager + " but got " + project.Status)
+	if project.Status != constants.ProjectStatusPendingManager {
+		t.Error("expected " + constants.ProjectStatusPendingManager + " but got " + project.Status)
 	}
 }
 
@@ -165,7 +165,7 @@ func TestServiceCommentOnProject(t *testing.T) {
 	}
 
 	// prepare documents
-	documents[0].Status = utils.ProjectStatusReconsider
+	documents[0].Status = constants.ProjectStatusReconsider
 
 	// comment
 	spkComment := model.SpkComment{
@@ -173,7 +173,7 @@ func TestServiceCommentOnProject(t *testing.T) {
 			Body:      "test comment",
 			UserId:    2, //manager
 			ProjectId: project.Id,
-			Status:    utils.ProjectStatusReconsider,
+			Status:    constants.ProjectStatusReconsider,
 		},
 		Documents: documents,
 	}
@@ -191,13 +191,13 @@ func TestServiceCommentOnProject(t *testing.T) {
 
 	if err != nil {
 		t.Error(err)
-	} else if document.Status != utils.ProjectStatusReconsider {
+	} else if document.Status != constants.ProjectStatusReconsider {
 		t.Error("expected status to be reconsider, but it is " + document.Status)
 	}
 
 	// the status of the project also must chnage
 	_ = project.OnlyGetById(model.GetDB())
-	if project.Status != utils.ProjectStatusPendingInvestor {
+	if project.Status != constants.ProjectStatusPendingInvestor {
 		t.Error("expected status to be pending investor, but got " + project.Status)
 	}
 }

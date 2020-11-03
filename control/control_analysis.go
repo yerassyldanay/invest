@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -22,7 +23,7 @@ var Analysis_get_help = func(which string, w http.ResponseWriter, r *http.Reques
 	is.OnlyParseRequest(r)
 
 	// security check
-	if is.RoleName == utils.RoleInvestor {
+	if is.RoleName == constants.RoleInvestor {
 		OnlyReturnMethodNotAllowed(w, r,"your role is investor", fname, "role")
 		return
 	}
@@ -37,7 +38,7 @@ var Analysis_get_help = func(which string, w http.ResponseWriter, r *http.Reques
 	msg := is.Analysis_get_on_projects(analysis)
 	msg.SetFname(fname, "analysis")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 // get xls file

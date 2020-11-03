@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 /*
@@ -29,7 +29,7 @@ func (n *NotifyCode) GetMap() map[string]string {
 
 // sender
 func (n *NotifyCode) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -39,12 +39,12 @@ func (n *NotifyCode) GetToList() []string {
 
 // get subject
 func (n *NotifyCode) GetSubject() string {
-	return MapNotifyCode[utils.KeyEmailSubject]
+	return MapNotifyCode[constants.KeyEmailSubject]
 }
 
 // body in html
 func (n *NotifyCode) GetHtml() string {
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 
 	resp := fmt.Sprintf(body, n.Code, n.Code, n.Code)
 

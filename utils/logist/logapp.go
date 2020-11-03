@@ -1,8 +1,9 @@
-package utils
+package logist
 
 import (
 	"fmt"
 	logr "github.com/sirupsen/logrus"
+	"invest/utils/constants"
 
 	"io"
 	"log"
@@ -68,10 +69,10 @@ func Rotate_log_file_periodically(fr *FileRotator) {
 		fr.FileName = temp
 		fr.Set_log_file()
 	case <- fr.Cancel:
-		SysMessage {
+		SysMessage{
 			FuncName: fname,
 			Message:  "finishing the rotate fr goroutine",
-			Lev:      InfoLevel,
+			Lev:      constants.InfoLevel,
 			Ok:       true,
 		}.Log_system_message()
 		return
@@ -99,12 +100,12 @@ func (fr *FileRotator) Set_log_file() {
 	 */
 	current_path, _ := os.Getwd()
 	if strings.Contains(current_path, "/invest/intest") {
-		file_path, err = filepath.Abs("../" + FolderLogFiles + "/")
+		file_path, err = filepath.Abs("../" + constants.FolderLogFiles + "/")
 		if err != nil {
 			log.Println(err)
 		}
 	} else {
-		file_path, err = filepath.Abs("./" + FolderLogFiles + "/")
+		file_path, err = filepath.Abs("./" + constants.FolderLogFiles + "/")
 		if err != nil {
 			log.Println(err)
 		}
@@ -172,10 +173,10 @@ func Get_file_rotator () (*FileRotator) {
  */
 func Get_file() *os.File {
 	var fname = "GET_FILE"
-	SysMessage {
+	SysMessage{
 		FuncName: fname,
 		Message:  "closing the file...",
-		Lev:      InfoLevel,
+		Lev:      constants.InfoLevel,
 		Ok:       true,
 	}.Log_system_message()
 	return file

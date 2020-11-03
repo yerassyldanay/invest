@@ -2,10 +2,11 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Assign_user_to_project(pu model.ProjectsUsers) (utils.Msg) {
+func (is *InvestService) Assign_user_to_project(pu model.ProjectsUsers) (message.Msg) {
 
 	tx := model.GetDB().Begin()
 	defer func() { if tx != nil { tx.Rollback() } }()
@@ -22,7 +23,7 @@ func (is *InvestService) Assign_user_to_project(pu model.ProjectsUsers) (utils.M
 	}
 
 	// if this is a manager
-	if user.Role.Name == utils.RoleManager {
+	if user.Role.Name == constants.RoleManager {
 		project := model.Project{
 			Id: pu.ProjectId,
 			IsManagerAssigned: true,
@@ -53,7 +54,7 @@ func (is *InvestService) Assign_user_to_project(pu model.ProjectsUsers) (utils.M
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Assign_remove_relation(pu model.ProjectsUsers) (utils.Msg) {
+func (is *InvestService) Assign_remove_relation(pu model.ProjectsUsers) (message.Msg) {
 
 	// transaction cannot be used
 	// as we will count until the result is committed
@@ -62,7 +63,7 @@ func (is *InvestService) Assign_remove_relation(pu model.ProjectsUsers) (utils.M
 	}
 
 	// count number of managers assigned to the project
-	number, err := pu.OnlyCountByRoleAndProjectId(utils.RoleManager, model.GetDB())
+	number, err := pu.OnlyCountByRoleAndProjectId(constants.RoleManager, model.GetDB())
 	switch {
 	case err != nil:
 		return model.ReturnInternalDbError(err.Error())

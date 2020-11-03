@@ -2,12 +2,14 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"strings"
 	"time"
 )
 
-func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64) (ganta model.Ganta, msg utils.Msg) {
+func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64) (ganta model.Ganta, msg message.Msg) {
 
 	var project = model.Project{Id: project_id}
 
@@ -27,11 +29,11 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 			* admin
 	*/
 	switch {
-	case ganta.Responsible == utils.RoleInvestor:
+	case ganta.Responsible == constants.RoleInvestor:
 		return ganta, model.ReturnMethodNotAllowed("this step cannot be passed manually")
-	case is.RoleName == utils.RoleAdmin:
+	case is.RoleName == constants.RoleAdmin:
 		// pass
-	case ganta.Responsible == utils.RoleSpk:
+	case ganta.Responsible == constants.RoleSpk:
 		// this must not happen
 	case ganta.Responsible == is.RoleName:
 		// pass
@@ -41,7 +43,7 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 
 	// a manager or expert is trying to change the status
 	// while he/she has not yet checked documents (IsDocCheck == true means there are documents to check)
-	if (is.RoleName == utils.RoleManager || is.RoleName == utils.RoleExpert) && ganta.IsDocCheck {
+	if (is.RoleName == constants.RoleManager || is.RoleName == constants.RoleExpert) && ganta.IsDocCheck {
 		return ganta, model.ReturnMethodNotAllowed("a manager or expert is trying to change the status, while not having documents checked")
 	}
 
@@ -52,12 +54,12 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 /*
 	there are several cases that might happen after any of the users changes the status of the project
  */
-func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, status string) (utils.Msg) {
+func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, status string) (message.Msg) {
 	// validate status
 	switch {
-	case status == utils.ProjectStatusAccept:
-	case status == utils.ProjectStatusReject:
-	case status == utils.ProjectStatusReconsider:
+	case status == constants.ProjectStatusAccept:
+	case status == constants.ProjectStatusReject:
+	case status == constants.ProjectStatusReconsider:
 	default:
 		return model.ReturnInvalidParameters("invalid status, status is " + status)
 	}
@@ -71,7 +73,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 	var statusBefore = currentGanta.Status
 
 	// there two cases when nobody is responsible
-	if currentGanta.Responsible == utils.RoleNobody {
+	if currentGanta.Responsible == constants.RoleNobody {
 		return model.ReturnMethodNotAllowed("the project is either rejected or there is no more gantt step")
 	}
 
@@ -84,10 +86,10 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 
 	// whose is changing the status
 	switch {
-	case is.RoleName == utils.RoleInvestor:
+	case is.RoleName == constants.RoleInvestor:
 		// investor never can change status manually
 		return model.ReturnMethodNotAllowed("investor cannot change status")
-	case is.RoleName == utils.RoleAdmin || is.RoleName == utils.RoleManager || is.RoleName == utils.RoleExpert:
+	case is.RoleName == constants.RoleAdmin || is.RoleName == constants.RoleManager || is.RoleName == constants.RoleExpert:
 		/*
 			choices:
 				* reject: a new gantt step will be created and put in front of all (with status of 'reject')
@@ -97,7 +99,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				* accept: move to the next step
 		 */
 		switch {
-		case status == utils.ProjectStatusReject:
+		case status == constants.ProjectStatusReject:
 			// create a new gantt step, which indicates that the project has been rejected
 			// it helps when dealing with notifications
 			newGanta := model.Ganta{
@@ -106,13 +108,13 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				Kaz:            "Жоба қабылданбады",
 				Rus:            "Проект отклонен",
 				Eng:            "Project has been rejected",
-				StartDate:      utils.GetCurrentTruncatedDate(),
+				StartDate:      helper.GetCurrentTruncatedDate(),
 				DurationInDays: 3,
 				Deadline:       time.Time{}, // to avoid sending notifications
 				Step:           4,
-				Status:         utils.ProjectStatusReject,
+				Status:         constants.ProjectStatusReject,
 				IsDone:         false,
-				Responsible:    utils.RoleNobody,
+				Responsible:    constants.RoleNobody,
 				NotToShow:      true,
 			}
 
@@ -129,7 +131,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				return model.ReturnInternalDbError(err.Error())
 			}
 
-		case status == utils.ProjectStatusAccept:
+		case status == constants.ProjectStatusAccept:
 			// set that the current step is done
 			if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
 				return model.ReturnInternalDbError(err.Error())
@@ -148,7 +150,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			}
 
 			// difference in hour between the current
-			var difference = int(utils.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
+			var difference = int(helper.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
 
 			// shift all gantt step to the current date (to left or to right)
 			// they must start from this date
@@ -157,7 +159,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				return model.ReturnInternalDbError(err.Error())
 			}
 
-		case status == utils.ProjectStatusReconsider:
+		case status == constants.ProjectStatusReconsider:
 			daysGivenToInvestor := time.Duration(15)
 
 			// prepare gantt step
@@ -169,16 +171,16 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				Eng:            "Review by a project initiator",
 				DurationInDays: daysGivenToInvestor,
 				Step:           currentGanta.Step,
-				Status:         utils.ProjectStatusPendingInvestor,
-				StartDate: 		utils.GetCurrentTruncatedDate(),
-				Deadline: 		utils.GetCurrentTruncatedDate().Add(time.Hour * 24 * daysGivenToInvestor),
+				Status:         constants.ProjectStatusPendingInvestor,
+				StartDate:      helper.GetCurrentTruncatedDate(),
+				Deadline:       helper.GetCurrentTruncatedDate().Add(time.Hour * 24 * daysGivenToInvestor),
 				IsDone:         false,
-				Responsible:    utils.RoleInvestor,
+				Responsible:    constants.RoleInvestor,
 			}
 
 			// shift all gantt steps to right
 			// calculate shift hour
-			hoursToShift := int(utils.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
+			hoursToShift := int(helper.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
 			hoursToShift = hoursToShift + int(daysGivenToInvestor * 24)
 
 			// shift all gantt steps
@@ -225,7 +227,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Ganta_change_time(ganta model.Ganta) (utils.Msg) {
+func (is *InvestService) Ganta_change_time(ganta model.Ganta) (message.Msg) {
 
 	// validate
 	if ganta.Start < 1 {

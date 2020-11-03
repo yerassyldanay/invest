@@ -3,7 +3,9 @@ package auth
 import (
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"net/http"
 	"strings"
@@ -20,19 +22,19 @@ import (
 			if yes: a request will be forwarded
 			else: 'the method is not allowed' message will be sent
  */
-var HasPermissionWrapper = func(w http.ResponseWriter, r *http.Request)  (utils.Msg) {
+var HasPermissionWrapper = func(w http.ResponseWriter, r *http.Request)  (message.Msg) {
 		var fname = "check_whether_user_has_such_permission"
 		var up = model.UserPermission{}
 
-		up.UserId = service.Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
+		up.UserId = service.Get_header_parameter(r, constants.KeyId, uint64(0)).(uint64)
 
 		/*
 			/v1/permission/1/2 -> [v1, permission, 1, 2]
 		*/
 		paths := strings.Split(r.URL.Path, "/")
 		if len(paths) < 2 {
-			return utils.Msg{
-				Message: utils.ErrorInternalServerError,
+			return message.Msg{
+				Message: errormsg.ErrorInternalServerError,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 1",
 				ErrMsg:  "the path is invalid",

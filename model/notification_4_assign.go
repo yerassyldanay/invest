@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyAssign struct {
@@ -26,7 +26,7 @@ func (n *NotifyAssign) GetMap() map[string]string {
 
 // sender
 func (n *NotifyAssign) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -44,12 +44,12 @@ func (n *NotifyAssign) GetToList() []string {
 
 // get subject
 func (n *NotifyAssign) GetSubject() string {
-	return n.GetMap()[utils.KeyEmailSubject]
+	return n.GetMap()[constants.KeyEmailSubject]
 }
 
 // body in html
 func (n *NotifyAssign) GetHtml() string {
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 
 	if n.Project.Id < 0 {
 		// to escape doing the same request more than once

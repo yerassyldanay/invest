@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyAddComment struct {
@@ -30,7 +30,7 @@ func (n *NotifyAddComment) GetMap() map[string]string {
 
 // sender
 func (n *NotifyAddComment) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -52,12 +52,12 @@ func (n *NotifyAddComment) GetToList() []string {
 
 // get subject
 func (n *NotifyAddComment) GetSubject() string {
-	return n.GetMap()[utils.KeyEmailSubject]
+	return n.GetMap()[constants.KeyEmailSubject]
 }
 
 // body in html
 func (n *NotifyAddComment) GetHtml() string {
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 
 	if n.CommentedBy.Id < 1 {
 		// get user, who commented
@@ -76,9 +76,9 @@ func (n *NotifyAddComment) GetHtml() string {
 	}
 
 	// Comment from: %s. Comment itself: %s. Status: %s. The name of the project: %s
-	body = fmt.Sprintf(body, n.CommentedBy.Fio, n.CommentBody, utils.MapProjectStatusFirstStatusThenLang[n.Status]["kaz"], n.Project.Name,
-		n.CommentedBy.Fio, n.CommentBody, utils.MapProjectStatusFirstStatusThenLang[n.Status]["rus"], n.Project.Name,
-		n.CommentedBy.Fio, n.CommentBody, utils.MapProjectStatusFirstStatusThenLang[n.Status]["eng"], n.Project.Name)
+	body = fmt.Sprintf(body, n.CommentedBy.Fio, n.CommentBody, constants.MapProjectStatusFirstStatusThenLang[n.Status]["kaz"], n.Project.Name,
+		n.CommentedBy.Fio, n.CommentBody, constants.MapProjectStatusFirstStatusThenLang[n.Status]["rus"], n.Project.Name,
+		n.CommentedBy.Fio, n.CommentBody, constants.MapProjectStatusFirstStatusThenLang[n.Status]["eng"], n.Project.Name)
 
 	return body
 }

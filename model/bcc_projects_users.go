@@ -3,7 +3,7 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
 
 	"time"
 )
@@ -45,7 +45,7 @@ func (pu *ProjectsUsers) BeforeCreate(tx *gorm.DB) error {
 		return err
 	}
 
-	if user.Role.Name == utils.RoleInvestor {
+	if user.Role.Name == constants.RoleInvestor {
 		return errors.New("cannot assign investor to the project")
 	}
 

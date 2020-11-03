@@ -1,47 +1,49 @@
 package model
 
-import "invest/utils"
+import (
+	"invest/utils/constants"
+)
 
 func Prepare_project_statuses(status string) (statuses []string) {
 	switch status {
 	case "investor":
 		statuses = []string{
-			utils.ProjectStatusPendingInvestor,
-			utils.ProjectStatusReconsider,
+			constants.ProjectStatusPendingInvestor,
+			constants.ProjectStatusReconsider,
 		}
 	case "spk":
 		statuses = []string{
-			utils.ProjectStatusPendingManager,
-			utils.ProjectStatusPendingExpert,
-			utils.ProjectStatusPendingInvCommittee,
-			utils.ProjectStatusRegistrationOfLandPlot,
-			utils.ProjectStatusPendingBoard,
+			constants.ProjectStatusPendingManager,
+			constants.ProjectStatusPendingExpert,
+			constants.ProjectStatusPendingInvCommittee,
+			constants.ProjectStatusRegistrationOfLandPlot,
+			constants.ProjectStatusPendingBoard,
 		}
 	case "admin":
 		statuses = []string{
-			utils.ProjectStatusPendingAdmin,
+			constants.ProjectStatusPendingAdmin,
 		}
 	case "reject":
 		statuses = []string{
-			utils.ProjectStatusReject,
+			constants.ProjectStatusReject,
 		}
 	case "agreement":
 		statuses = []string{
-			utils.ProjectStatusAgreement,
+			constants.ProjectStatusAgreement,
 		}
 	default:
 		statuses = []string{
-			utils.ProjectStatusPendingInvestor,
-			utils.ProjectStatusPendingManager,
-			utils.ProjectStatusPendingAdmin,
-			utils.ProjectStatusPendingExpert,
-			utils.ProjectStatusPendingInvCommittee,
-			utils.ProjectStatusRegistrationOfLandPlot,
-			utils.ProjectStatusPendingBoard,
-			utils.ProjectStatusAgreement,
-			utils.ProjectStatusReject,
-			utils.ProjectStatusReconsider,
-			utils.ProjectStatusAccept,
+			constants.ProjectStatusPendingInvestor,
+			constants.ProjectStatusPendingManager,
+			constants.ProjectStatusPendingAdmin,
+			constants.ProjectStatusPendingExpert,
+			constants.ProjectStatusPendingInvCommittee,
+			constants.ProjectStatusRegistrationOfLandPlot,
+			constants.ProjectStatusPendingBoard,
+			constants.ProjectStatusAgreement,
+			constants.ProjectStatusReject,
+			constants.ProjectStatusReconsider,
+			constants.ProjectStatusAccept,
 		}
 	}
 

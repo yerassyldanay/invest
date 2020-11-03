@@ -1,8 +1,8 @@
 package model
 
 import (
-	"invest/utils"
-
+	"invest/utils/constants"
+	"invest/utils/helper"
 )
 
 var DefaultGantaParentsOfStep2 = []Ganta{
@@ -14,11 +14,11 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
-		Step:           2,
-		Status: 		utils.ProjectStatusPendingInvestor,
+		Step:   2,
+		Status: constants.ProjectStatusPendingInvestor,
 
-		Responsible:    utils.RoleInvestor,
-		IsDone: 		false, // always false
+		Responsible: constants.RoleInvestor,
+		IsDone:      false, // always false
 	},
 	{
 		IsAdditional:   false,
@@ -28,12 +28,12 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           2,
-		Status: 		utils.ProjectStatusPendingManager,
+		Step:   2,
+		Status: constants.ProjectStatusPendingManager,
 
-		Responsible:    utils.RoleManager,
-		IsDone: 		false, // always false
-		IsDocCheck: 	true,
+		Responsible: constants.RoleManager,
+		IsDone:      false, // always false
+		IsDocCheck:  true,
 	},
 	{
 		IsAdditional:   false,
@@ -43,11 +43,11 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           2,
-		Status: 		utils.ProjectStatusPendingAdmin,
+		Step:   2,
+		Status: constants.ProjectStatusPendingAdmin,
 
-		Responsible:    utils.RoleAdmin,
-		IsDone: 		false, // always false
+		Responsible: constants.RoleAdmin,
+		IsDone:      false, // always false
 	},
 	{
 		IsAdditional:   false,
@@ -57,10 +57,10 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           2,
-		Status: 		utils.ProjectStatusPendingExpert,
-		Responsible:    utils.RoleExpert,
-		IsDocCheck: 	true,
+		Step:        2,
+		Status:      constants.ProjectStatusPendingExpert,
+		Responsible: constants.RoleExpert,
+		IsDocCheck:  true,
 	},
 	{
 		IsAdditional:   false,
@@ -70,24 +70,24 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           2,
-		Status: 		utils.ProjectStatusPendingAdmin,
+		Step:   2,
+		Status: constants.ProjectStatusPendingAdmin,
 
-		Responsible:    utils.RoleAdmin,
-		IsDone: 		false, // always false
+		Responsible: constants.RoleAdmin,
+		IsDone:      false, // always false
 	},
 	{
 		IsAdditional:   false,
 		Kaz:            "ӘКК Кеңесінің жобаны қарастыруы",
 		Rus:            "На рассмотрение правления СПК",
 		Eng:            "Consideration of the project by the Board",
-		StartDate:      utils.GetCurrentTime(),
+		StartDate:      helper.GetCurrentTime(),
 		DurationInDays: 21,
 		GantaParentId:  0,
 
-		Step:           2,
-		Status: 		utils.ProjectStatusPendingManager,
-		Responsible:    utils.RoleManager,
+		Step:        2,
+		Status:      constants.ProjectStatusPendingManager,
+		Responsible: constants.RoleManager,
 
 		GantaChildren:  []Ganta{},
 	},
@@ -96,13 +96,13 @@ var DefaultGantaParentsOfStep2 = []Ganta{
 		Kaz:            "Келісімге отыру",
 		Rus:            "Заключение договора",
 		Eng:            "Conclusion of the agreement",
-		StartDate:      utils.GetCurrentTime(),
+		StartDate:      helper.GetCurrentTime(),
 		DurationInDays: 15,
 		GantaParentId:  0,
 
-		Step:           2,
-		Status: 		utils.ProjectStatusPendingManager,
-		Responsible:    utils.RoleManager,
+		Step:        2,
+		Status:      constants.ProjectStatusPendingManager,
+		Responsible: constants.RoleManager,
 
 		GantaChildren: []Ganta{
 			//{
@@ -139,12 +139,12 @@ var DefaultGantaFinalStep = Ganta{
 	Kaz:            "Жоба барлық кезеңдерден өтті",
 	Rus:            "Проект прошел все этапы",
 	Eng:            "The project has passed all stages",
-	StartDate:      utils.GetCurrentTime(),
+	StartDate:      helper.GetCurrentTime(),
 	DurationInDays: 0,
 
-	Step:           3,
-	Status: 		utils.ProjectStatusAgreement,
-	Responsible:    utils.RoleNobody,
+	Step:        3,
+	Status:      constants.ProjectStatusAgreement,
+	Responsible: constants.RoleNobody,
 
 	GantaChildren:  []Ganta{},
 	NotToShow: true,

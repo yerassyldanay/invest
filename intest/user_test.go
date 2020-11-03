@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
 	"strings"
 	"testing"
 )
@@ -13,7 +13,7 @@ var user = model.User{
 	Password:       "6z24HXMd7nLeZAE",
 	Fio:            "Тестовый Сотрудник СПК",
 	Role:           model.Role{
-		Name:            utils.RoleManager,
+		Name: constants.RoleManager,
 	},
 	Email:          model.Email{
 		Address: 		"yerassyl.danay.nu@gmail.com",

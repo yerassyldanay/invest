@@ -2,10 +2,11 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Ganta_check_permission_to_read_ganta(project_id uint64) (utils.Msg) {
+func (is *InvestService) Ganta_check_permission_to_read_ganta(project_id uint64) (message.Msg) {
 	/*
 		users:
 			* with administrate privileges
@@ -18,7 +19,7 @@ func (is *InvestService) Ganta_check_permission_to_read_ganta(project_id uint64)
 	}
 
 	switch {
-	case is.RoleName == utils.RoleAdmin:
+	case is.RoleName == constants.RoleAdmin:
 		// nothing to do - this is a user with admin privileges
 	case project.OnlyCheckInvestorByProjectAndInvestorId(model.GetDB()) == nil:
 		// nothing to do - this is an investor of the project

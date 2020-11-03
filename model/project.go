@@ -4,14 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
+	"invest/utils/message"
 
 	"strings"
 )
 
-func (p *Project) Create_project(trans *gorm.DB) (utils.Msg){
+func (p *Project) Create_project(trans *gorm.DB) (message.Msg){
 	if p.Lang == "" {
-		p.Lang = utils.DefaultContentLanguage
+		p.Lang = constants.DefaultContentLanguage
 	}
 
 	if err := p.Validate(); err != nil {
@@ -36,7 +38,7 @@ func (p *Project) Create_project(trans *gorm.DB) (utils.Msg){
 	}
 
 	p.OrganizationId = p.Organization.Id
-	p.Created = utils.GetCurrentTime()
+	p.Created = helper.GetCurrentTime()
 
 	var categors = p.Categors
 	p.Categors = []Categor{}
@@ -57,9 +59,9 @@ func (p *Project) Create_project(trans *gorm.DB) (utils.Msg){
 	return ReturnNoError()
 }
 
-func (p *Project) Update() (utils.Msg) {
+func (p *Project) Update() (message.Msg) {
 	if p.Lang == "" {
-		p.Lang = utils.DefaultContentLanguage
+		p.Lang = constants.DefaultContentLanguage
 	}
 
 	if p.Id == 0 {

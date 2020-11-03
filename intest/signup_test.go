@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
 	"testing"
 	"time"
 )
@@ -33,7 +33,7 @@ func TestSignUp(t *testing.T) {
 
 	is := service.InvestService{
 		BasicInfo: service.BasicInfo{
-			Lang: utils.DefaultContentLanguage,
+			Lang: constants.DefaultContentLanguage,
 		},
 	}
 

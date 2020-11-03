@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 func (pu *ProjectsUsers) Chech_whether_user_is_assigned_to_project(tx *gorm.DB) (error) {
@@ -53,7 +53,7 @@ func (pu *ProjectsUsers) OnlyCountByRoleAndProjectId(role string, tx *gorm.DB) (
 //
 func (pu *ProjectsUsers) OnlyAssignExpertsToProject(project_id uint64, tx *gorm.DB) (error) {
 	main_query := `insert into projects_users select ? as project_id, u.id as id from users u ` +
-		` join roles r on r.id = u.role_id where r.name = '` + utils.RoleExpert + `' ;`
+		` join roles r on r.id = u.role_id where r.name = '` + constants.RoleExpert + `' ;`
 	err := tx.Exec(main_query, project_id).Error
 
 	return err

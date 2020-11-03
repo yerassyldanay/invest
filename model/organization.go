@@ -5,7 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"io/ioutil"
 	"net/http"
@@ -19,7 +21,7 @@ import (
 */
 func (o *Organization) Make_request_to_get_organization() (*Organization, error) {
 	if o.Lang == "" {
-		o.Lang = utils.DefaultContentLanguage
+		o.Lang = constants.DefaultContentLanguage
 	}
 
 	var bin = o.Bin
@@ -59,7 +61,7 @@ func (o *Organization) Make_request_to_get_organization() (*Organization, error)
 	var name = temp["name"]
 	var fio = temp["fio"]
 
-	if utils.Is_any_of_these_nil(registerDate, katoAddress, name, fio) {
+	if message.Is_any_of_these_nil(registerDate, katoAddress, name, fio) {
 		return o, errors.New("there is a nil element inside the map. get info by bin")
 	}
 
@@ -82,9 +84,9 @@ func (o *Organization) Make_request_to_get_organization() (*Organization, error)
 	create a company
 		expects that all fields are filled
 */
-func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (utils.Msg) {
+func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (message.Msg) {
 	if o.Lang == "" {
-		o.Lang = utils.DefaultContentLanguage
+		o.Lang = constants.DefaultContentLanguage
 	}
 
 	var bin = o.Bin
@@ -94,7 +96,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (u
 		check whether such organization is already on db
 	 */
 	if err = o.OnlyGetByBinAndLang(tx); err == nil {
-		var resp = utils.NoErrorFineEverthingOk
+		var resp = errormsg.NoErrorFineEverthingOk
 		resp["info"] =  Struct_to_map(*o)
 		return ReturnNoErrorWithResponseMessage(resp)
 	} else if err != gorm.ErrRecordNotFound {
@@ -106,7 +108,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (u
 	*/
 	o, err = o.Make_request_to_get_organization()
 	if err != nil {
-		return utils.Msg{utils.ErrorExternalServiceErrorNoOrganizationInfo, http.StatusServiceUnavailable, "", err.Error(),}
+		return message.Msg{errormsg.ErrorExternalServiceErrorNoOrganizationInfo, http.StatusServiceUnavailable, "", err.Error(),}
 	}
 
 	/*
@@ -117,7 +119,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (u
 		return ReturnInternalDbError(err.Error())
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] =  Struct_to_map(*o)
 
 	return ReturnNoError()
@@ -126,7 +128,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (u
 /*
 	update company info by admin
 */
-func (o *Organization) Update_organization_info(tx *gorm.DB) (utils.Msg) {
+func (o *Organization) Update_organization_info(tx *gorm.DB) (message.Msg) {
 	if o.Lang == "" {
 		o.Lang = "kaz"
 	}

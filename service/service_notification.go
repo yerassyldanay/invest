@@ -2,10 +2,11 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Notification_get_by_project_id(project_id uint64) (utils.Msg) {
+func (is *InvestService) Notification_get_by_project_id(project_id uint64) (message.Msg) {
 	// get user email address
 	var user = model.User{Id: is.UserId}
 	if err := user.OnlyGetByIdPreloaded(model.GetDB()); err != nil {
@@ -28,7 +29,7 @@ func (is *InvestService) Notification_get_by_project_id(project_id uint64) (util
 		notificationsMap = append(notificationsMap, model.Struct_to_map(notification))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = notificationsMap
 
 	return model.ReturnNoErrorWithResponseMessage(resp)

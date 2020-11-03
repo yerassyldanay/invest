@@ -2,20 +2,21 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"time"
 )
 
 func (d *Document) Set_default_parameters(project_id uint64, step int, investorHasDays time.Duration) {
 	d.ProjectId = project_id
-	d.Modified = utils.GetCurrentTime()
+	d.Modified = helper.GetCurrentTime()
 
 	// either 1 or 2
 	d.Step = step
 }
 
 // create documents
-func (d *Document) Create_default_documents(project_id uint64, tx *gorm.DB) (utils.Msg) {
+func (d *Document) Create_default_documents(project_id uint64, tx *gorm.DB) (message.Msg) {
 	// an investor has 3 days to upload first list of documents
 	var firstDeadline = time.Duration(3)
 

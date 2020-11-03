@@ -2,11 +2,12 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"time"
 )
 
-func (is *InvestService) EmailConfirm(userEmail model.Email) (utils.Msg) {
+func (is *InvestService) EmailConfirm(userEmail model.Email) (message.Msg) {
 
 	// start transaction
 	var trans = model.GetDB().Begin()
@@ -24,7 +25,7 @@ func (is *InvestService) EmailConfirm(userEmail model.Email) (utils.Msg) {
 	// it might be that email in use
 	// or a code sent by a user is invalid
 	// or the deadline for an email is before the current date
-	if email.Verified || email.Deadline.Before(utils.GetCurrentTime()) ||email.SentCode != userEmail.SentCode {
+	if email.Verified || email.Deadline.Before(helper.GetCurrentTime()) ||email.SentCode != userEmail.SentCode {
 		return model.ReturnInvalidParameters("code is not valid or email is already in use")
 	}
 

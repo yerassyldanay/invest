@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyAddDoc struct {
@@ -28,7 +28,7 @@ func (n *NotifyAddDoc) GetMap() map[string]string {
 
 // sender
 func (n *NotifyAddDoc) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -49,7 +49,7 @@ func (n *NotifyAddDoc) GetToList() []string {
 
 // get subject
 func (n *NotifyAddDoc) GetSubject() string {
-	return MapNotifyAddDoc[utils.KeyEmailSubject]
+	return MapNotifyAddDoc[constants.KeyEmailSubject]
 }
 
 // body in html
@@ -61,12 +61,12 @@ func (n *NotifyAddDoc) GetHtml() string {
 	}
 
 	// prepare template
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 
 	// Document: %s. Responsible: %s. Added by: %s
-	resp := fmt.Sprintf(body, n.Name, utils.MapRole[n.Responsible]["kaz"], user.Fio,
-		n.Name, utils.MapRole[n.Responsible]["rus"], user.Fio,
-		n.Name, utils.MapRole[n.Responsible]["eng"], user.Fio,)
+	resp := fmt.Sprintf(body, n.Name, constants.MapRole[n.Responsible]["kaz"], user.Fio,
+		n.Name, constants.MapRole[n.Responsible]["rus"], user.Fio,
+		n.Name, constants.MapRole[n.Responsible]["eng"], user.Fio,)
 
 	return resp
 }

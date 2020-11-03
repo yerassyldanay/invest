@@ -2,7 +2,8 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/helper"
+	"invest/utils/message"
 
 	"time"
 )
@@ -107,14 +108,14 @@ func (p *Project) Create_ganta_parent_with_its_children(start_date time.Time, ga
 	provide:
 		project_id
  */
-func (p *Project) Create_ganta_table_for_this_project(trans *gorm.DB) (utils.Msg) {
+func (p *Project) Create_ganta_table_for_this_project(trans *gorm.DB) (message.Msg) {
 
 	_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(trans, "gantas")
 
 	/*
 		in case everything is ok, commit changes to db
 	 */
-	var start_date = utils.GetCurrentTruncatedDate()
+	var start_date = helper.GetCurrentTruncatedDate()
 	start_date, err := p.Create_ganta_parent_with_its_children(start_date, DefaultGantaParentsOfStep1, trans)
 	if err != nil {
 		return ReturnInternalDbError(err.Error())

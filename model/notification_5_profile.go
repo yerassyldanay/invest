@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyCreateProfile struct {
@@ -28,7 +28,7 @@ func (n *NotifyCreateProfile) GetMap() map[string]string {
 
 // sender
 func (n *NotifyCreateProfile) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -48,7 +48,7 @@ func (n *NotifyCreateProfile) GetToList() []string {
 
 // get subject
 func (n *NotifyCreateProfile) GetSubject() string {
-	return n.GetMap()[utils.KeyEmailSubject]
+	return n.GetMap()[constants.KeyEmailSubject]
 }
 
 // body in html
@@ -59,16 +59,16 @@ func (n *NotifyCreateProfile) GetHtml() string {
 		_ = n.User.OnlyGetByIdPreloaded(GetDB())
 	}
 
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 
 	// prepare email address & phone number with country code (+7 for KZ)
 	email := n.User.Email.Address
 	phoneNumber := n.User.Phone.Ccode + n.User.Phone.Number
 
 	// This email address ... Name: %s. Role: %s. Login: %s | %s. Password: %s
-	body = fmt.Sprintf(body, n.User.Fio, utils.MapRole[n.User.Role.Name]["kaz"], email, phoneNumber, n.RawPassword,
-		n.User.Fio, utils.MapRole[n.User.Role.Name]["rus"], email, phoneNumber, n.RawPassword,
-		n.User.Fio, utils.MapRole[n.User.Role.Name]["eng"], email, phoneNumber, n.RawPassword)
+	body = fmt.Sprintf(body, n.User.Fio, constants.MapRole[n.User.Role.Name]["kaz"], email, phoneNumber, n.RawPassword,
+		n.User.Fio, constants.MapRole[n.User.Role.Name]["rus"], email, phoneNumber, n.RawPassword,
+		n.User.Fio, constants.MapRole[n.User.Role.Name]["eng"], email, phoneNumber, n.RawPassword)
 
 	return body
 }

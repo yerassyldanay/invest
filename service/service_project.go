@@ -3,11 +3,13 @@ package service
 import (
 	"fmt"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Service_create_project(projectWithFinTable *model.ProjectWithFinanceTables) (utils.Msg){
-	defer func() utils.Msg {
+func (is *InvestService) Service_create_project(projectWithFinTable *model.ProjectWithFinanceTables) (message.Msg){
+	defer func() message.Msg {
 		if err := recover(); err != nil {
 			fmt.Println("CreateProject - could not send email: ", err)
 			return model.ReturnInternalDbError("the function createProject failed")
@@ -18,10 +20,10 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil {trans.Rollback()} }()
 
-	var msg = utils.Msg{}
+	var msg = message.Msg{}
 
 	// set fields
-	projectWithFinTable.Project.Status = utils.ProjectStatusPendingAdmin
+	projectWithFinTable.Project.Status = constants.ProjectStatusPendingAdmin
 	projectWithFinTable.Project.OfferedById = is.UserId
 	projectWithFinTable.Project.Lang = is.Lang
 
@@ -91,14 +93,13 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 	select {
 	case model.GetMailerQueue().NotificationChannel <- &nps:
 	default:
-		utils.OnlyPrintQueueIsFull("createProject")
 	}
 
 	return model.ReturnNoError()
 }
 
 // get all project info
-func (is *InvestService) Project_get_by_id(project_id uint64) (utils.Msg) {
+func (is *InvestService) Project_get_by_id(project_id uint64) (message.Msg) {
 
 	var projectWithFinTables = struct {
 		model.Project
@@ -132,7 +133,7 @@ func (is *InvestService) Project_get_by_id(project_id uint64) (utils.Msg) {
 	}
 
 	// convert to map
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = model.Struct_to_map(projectWithFinTables)
 
 	return model.ReturnNoErrorWithResponseMessage(resp)

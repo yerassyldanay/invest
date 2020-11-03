@@ -2,18 +2,19 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 )
 
 // check whether this user has privileges to get project data
-func (is *InvestService) Check_whether_this_user_can_get_access_to_project_info(project_id uint64)(utils.Msg) {
+func (is *InvestService) Check_whether_this_user_can_get_access_to_project_info(project_id uint64)(message.Msg) {
 	var err error
 	var user = model.User{Id: is.UserId}
 
 	switch {
-	case is.RoleName == utils.RoleAdmin:
+	case is.RoleName == constants.RoleAdmin:
 		return model.ReturnNoError()
-	case is.RoleName == utils.RoleInvestor:
+	case is.RoleName == constants.RoleInvestor:
 		err = user.DoesOwnThisProjectById(project_id, model.GetDB())
 	default:
 		err = user.IsAssignedToThisProjectById(project_id, model.GetDB())
@@ -31,7 +32,7 @@ func (is *InvestService) Check_whether_this_user_can_get_access_to_project_info(
 	for example:
 		* remove documents
  */
-func (is *InvestService) Check_whether_this_user_responsible_for_current_step(project_id uint64) (utils.Msg) {
+func (is *InvestService) Check_whether_this_user_responsible_for_current_step(project_id uint64) (message.Msg) {
 	var project = model.Project{Id: project_id}
 	err := project.GetAndUpdateStatusOfProject(model.GetDB())
 	if err != nil {
@@ -40,7 +41,7 @@ func (is *InvestService) Check_whether_this_user_responsible_for_current_step(pr
 
 	var responsible = project.CurrentStep.Responsible
 
-	if is.RoleName == utils.RoleAdmin {
+	if is.RoleName == constants.RoleAdmin {
 		// pass
 	} else if responsible != is.RoleName {
 		return model.ReturnMethodNotAllowed("responsible: " + responsible + " | your role: " + is.RoleName)
@@ -49,7 +50,7 @@ func (is *InvestService) Check_whether_this_user_responsible_for_current_step(pr
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Does_project_exist(project_id uint64) (utils.Msg) {
+func (is *InvestService) Does_project_exist(project_id uint64) (message.Msg) {
 	// check whether a project exists
 	var project = model.Project{Id: project_id}
 	err := project.OnlyGetById(model.GetDB())

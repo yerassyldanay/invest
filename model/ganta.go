@@ -2,11 +2,13 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"time"
 )
 
-func (g *Ganta) Add_new_step() (utils.Msg) {
+func (g *Ganta) Add_new_step() (message.Msg) {
 
 	/*
 		validate the ganta step
@@ -17,8 +19,8 @@ func (g *Ganta) Add_new_step() (utils.Msg) {
 
 	if g.Start != 0 {
 		g.StartDate = time.Unix(g.Start, 0)
-		if g.StartDate.Before(utils.GetCurrentTime()) {
-			g.StartDate = utils.GetCurrentTime()
+		if g.StartDate.Before(helper.GetCurrentTime()) {
+			g.StartDate = helper.GetCurrentTime()
 		}
 	}
 
@@ -27,14 +29,14 @@ func (g *Ganta) Add_new_step() (utils.Msg) {
 	 */
 	if g.StartDate.IsZero() {
 		g.GantaParentId = 0
-		g.StartDate = utils.GetCurrentTime()
+		g.StartDate = helper.GetCurrentTime()
 	}
 
 	if err := GetDB().Create(g).Error; err != nil {
 		return ReturnInternalDbError(err.Error())
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	//resp["info"] = Struct_to_map_with_escape(*g, []string{"project"})
 
 	return ReturnNoErrorWithResponseMessage(resp)
@@ -46,11 +48,11 @@ func (g *Ganta) Add_new_step() (utils.Msg) {
 	get ganta steps by:
 		* project_id
 */
-func (g *Ganta) Get_ganta_with_documents_by_project_id() (utils.Msg) {
+func (g *Ganta) Get_ganta_with_documents_by_project_id() (message.Msg) {
 	var gantas = []Ganta{}
 	if err := GetDB().Preload("Document").Find(&gantas, "project_id = ?", g.ProjectId).Error;
 		err != nil {
-		return utils.Msg{ utils.ErrorInternalDbError, 417, "", err.Error()}
+		return message.Msg{errormsg.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var gantasMap = []map[string]interface{}{}
@@ -58,18 +60,18 @@ func (g *Ganta) Get_ganta_with_documents_by_project_id() (utils.Msg) {
 		gantasMap = append(gantasMap, Struct_to_map(ganta))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = gantasMap
 
-	return utils.Msg{resp, 200, "", ""}
+	return message.Msg{resp, 200, "", ""}
 }
 
 /*
 	update ganta steps
  */
-func (g *Ganta) Update_ganta_step(fields... string) (utils.Msg) {
+func (g *Ganta) Update_ganta_step(fields... string) (message.Msg) {
 	if err := g.Validate(); err != nil {
-		return utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()}
+		return message.Msg{errormsg.ErrorInvalidParameters, 400, "", err.Error()}
 	}
 
 	err := GetDB().Table(g.TableName()).Select(fields).Where("id = ?", g.Id).Updates(map[string]interface{}{
@@ -81,7 +83,7 @@ func (g *Ganta) Update_ganta_step(fields... string) (utils.Msg) {
 	}).Error
 
 	if err != nil {
-		return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+		return message.Msg{errormsg.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	return ReturnNoError()
@@ -93,30 +95,30 @@ func (g *Ganta) Update_ganta_step(fields... string) (utils.Msg) {
 		* delete all child steps
 		* delete all documents
  */
-func (g *Ganta) Delete_ganta_step() (utils.Msg) {
+func (g *Ganta) Delete_ganta_step() (message.Msg) {
 	return ReturnNoError()
 }
 
 /*
 	get single ganta step
  */
-func (g *Ganta) Get_only_one_with_docs() (utils.Msg) {
+func (g *Ganta) Get_only_one_with_docs() (message.Msg) {
 	if err := GetDB().Preload("Document").First(g, "id = ?", g.Id).Error;
 		err != nil {
 			return ReturnInternalDbError(err.Error())
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(*g)
 
 	return ReturnNoError()
 }
 
-func (g *Ganta) Change_time() (utils.Msg) {
+func (g *Ganta) Change_time() (message.Msg) {
 
 	g.StartDate = time.Unix(g.Start, 0)
-	if g.StartDate.Before(utils.GetCurrentTime()) {
-		g.StartDate = utils.GetCurrentTime()
+	if g.StartDate.Before(helper.GetCurrentTime()) {
+		g.StartDate = helper.GetCurrentTime()
 	}
 
 	msg := g.Update_ganta_step("start_date", "duration_in_days")
@@ -133,11 +135,11 @@ func (g *Ganta) Add_ganta_step_to_the_top(tx *gorm.DB) (error) {
 		// create a new one
 		g = &Ganta{
 			IsAdditional:   true,
-			ProjectId:		project_id,
+			ProjectId:      project_id,
 			Kaz:            g.Kaz,
-			Rus: 			g.Rus,
-			Eng: 			g.Eng,
-			StartDate:      utils.GetCurrentTime(),
+			Rus:            g.Rus,
+			Eng:            g.Eng,
+			StartDate:      helper.GetCurrentTime(),
 			DurationInDays: g.DurationInDays,
 			Step:           g.Step,
 			Status:         g.Status,

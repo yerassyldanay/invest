@@ -1,4 +1,4 @@
-package utils
+package helper
 
 /*
 	this function has been created to check whether a slice contains an element

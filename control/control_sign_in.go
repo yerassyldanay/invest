@@ -3,7 +3,9 @@ package control
 import (
 	"encoding/json"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"net/http"
 )
@@ -20,22 +22,22 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Println("r.Body: ", r.Header, r.URL)
 	if err := json.NewDecoder(r.Body).Decode(&sis); err != nil {
-		utils.Respond(w, r,
-			utils.Msg{
-				Message: utils.ErrorInvalidParameters, Status:  400, Fname: fname + " 1", ErrMsg:  err.Error(),
+		message.Respond(w, r,
+			message.Msg{
+				Message: errormsg.ErrorInvalidParameters, Status:  400, Fname: fname + " 1", ErrMsg:  err.Error(),
 		})
 		return
 	}
 	defer r.Body.Close()
 
-	var msg utils.Msg
+	var msg message.Msg
 	msg = sis.Sign_in()
 	msg.Fname = fname + " 3"
 
 	/*
 		request header will carry auth token
 	*/
-	r.Header.Set(utils.HeaderAuthorization, sis.TokenCompound)
+	r.Header.Set(constants.HeaderAuthorization, sis.TokenCompound)
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

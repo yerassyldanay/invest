@@ -1,7 +1,7 @@
 package service
 
 import (
-	"invest/utils"
+	"invest/utils/errormsg"
 	"net/http"
 )
 
@@ -11,7 +11,7 @@ func (ds *DocStore) Download_and_store_file(r *http.Request) (map[string]interfa
 
 	_, err := ds.Parse_file(r)
 	if err != nil {
-		return utils.ErrorInternalServerError, err
+		return errormsg.ErrorInternalServerError, err
 	}
 
 	/*
@@ -19,7 +19,7 @@ func (ds *DocStore) Download_and_store_file(r *http.Request) (map[string]interfa
 			* "image/png" -> .png
 	 */
 	if err = ds.OnlyParseFormatOfTheFile(); err != nil {
-		return utils.ErrorInternalServerError, err
+		return errormsg.ErrorInternalServerError, err
 	}
 	//return utils.ErrorInternalServerError, errors.New("new one")
 
@@ -30,9 +30,9 @@ func (ds *DocStore) Download_and_store_file(r *http.Request) (map[string]interfa
 	err = ds.Store_document()
 
 	if err != nil {
-		return utils.ErrorInternalServerError, err
+		return errormsg.ErrorInternalServerError, err
 	}
 
-	return utils.NoErrorFineEverthingOk, nil
+	return errormsg.NoErrorFineEverthingOk, nil
 }
 

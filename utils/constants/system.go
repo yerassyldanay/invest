@@ -1,4 +1,4 @@
-package utils
+package constants
 
 var MapRole = map[string]map[string]string {
 	RoleAdmin: {
@@ -68,57 +68,57 @@ var MapProjectStatusFirstStatusThenLang = map[string]map[string]string{
 		"rus": "На рассмотрении менеджера",
 		"eng": "Review by a manager",
 	},
-	ProjectStatusPendingAdmin : {
+	ProjectStatusPendingAdmin: {
 		"kaz": "Админнің қарауында",
 		"rus": "На рассмотрении админа",
 		"eng": "Review by an admin",
 	},
-	ProjectStatusPendingExpert : {
+	ProjectStatusPendingExpert: {
 		"kaz": "Эксперттің қарауында",
 		"rus": "На рассмотрении эксперта",
 		"eng": "Review by an expert",
 	},
-	ProjectStatusPendingInvCommittee : {
+	ProjectStatusPendingInvCommittee: {
 		"kaz": "Инвест коммитеттің қарауында",
 		"rus": "На рассмотрении инвестиционного коммитета",
 		"eng": "Review by an Invest Committee",
 	},
-	ProjectStatusRegistrationOfLandPlot : {
+	ProjectStatusRegistrationOfLandPlot: {
 		"kaz": "Жер учаскесін тіркеу",
 		"rus": "На оформлении земельного участка",
 		"eng": "Registration of land plot",
 	},
-	ProjectStatusPendingBoard : {
+	ProjectStatusPendingBoard: {
 		"kaz": "ӘКК кеңесінің қарауында",
 		"rus": "На рассмотрении правления СПК",
 		"eng": "Review by the Board of SEC",
 	},
-	ProjectStatusAgreement : {
+	ProjectStatusAgreement: {
 		"kaz": "Жоба барлық кезеңдерден өтті",
 		"rus": "Проек прошел все этапы",
 		"eng": "The project has passed all stages",
 	},
-	ProjectStatusDelay : {
+	ProjectStatusDelay: {
 		"kaz": "Процесс кідірісте",
 		"rus": "Задержка",
 		"eng": "Delay",
 	},
-	ProjectStatusReject : {
+	ProjectStatusReject: {
 		"kaz": "Қабылданбады",
 		"rus": "Отклонен",
 		"eng": "Rejected",
 	},
-	ProjectStatusReconsider : {
+	ProjectStatusReconsider: {
 		"kaz": "Қайта қарау",
 		"rus": "На доработке",
 		"eng": "Reconsideration",
 	},
-	ProjectStatusAccept : {
+	ProjectStatusAccept: {
 		"kaz": "Қабылданды",
 		"rus": "Принято",
 		"eng": "Accepted",
 	},
-	ProjectStatusNewOne : {
+	ProjectStatusNewOne: {
 		"kaz": "Жаңа",
 		"rus": "Новый",
 		"eng": "New",

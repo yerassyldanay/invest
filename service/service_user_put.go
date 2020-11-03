@@ -5,10 +5,12 @@ import (
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/helper"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
+func (is *InvestService) Update_user_profile(user *model.User) (message.Msg) {
 	/*
 		get the user account, which is being modified
 	 */
@@ -72,7 +74,7 @@ func (is *InvestService) Update_user_profile(user *model.User) (utils.Msg) {
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Update_user_password(old_password, new_password string) (utils.Msg) {
+func (is *InvestService) Update_user_password(old_password, new_password string) (message.Msg) {
 	var user = model.User{Id: is.UserId}
 
 	// get user info
@@ -96,7 +98,7 @@ func (is *InvestService) Update_user_password(old_password, new_password string)
 	}
 
 	// convert to hash
-	hashed_password, err := utils.Convert_string_to_hash(new_password)
+	hashed_password, err := helper.Convert_string_to_hash(new_password)
 	if err != nil {
 		return model.ReuturnInternalServerError(err.Error())
 	}
@@ -122,7 +124,7 @@ func (is *InvestService) Update_user_password(old_password, new_password string)
 /*
 	POST
  */
-func (is *InvestService) Create_user_based_on_role(new_user *model.User) (utils.Msg) {
+func (is *InvestService) Create_user_based_on_role(new_user *model.User) (message.Msg) {
 
 	// validate
 	if err := new_user.ValidateSpkUser(); err != nil {
@@ -151,7 +153,7 @@ func (is *InvestService) Create_user_based_on_role(new_user *model.User) (utils.
 /*
 	GET
  */
-func (is *InvestService) Get_users_by_roles(roles []string) (utils.Msg) {
+func (is *InvestService) Get_users_by_roles(roles []string) (message.Msg) {
 	var user = model.User{}
 
 	// get users
@@ -172,7 +174,7 @@ func (is *InvestService) Get_users_by_roles(roles []string) (utils.Msg) {
 		usersMap = append(usersMap, model.Struct_to_map(users[i]))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = usersMap
 
 	return model.ReturnNoErrorWithResponseMessage(resp)

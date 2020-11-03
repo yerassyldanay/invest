@@ -3,7 +3,9 @@ package service
 import (
 	"github.com/jinzhu/gorm"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"time"
 )
 
@@ -15,7 +17,7 @@ import (
 		417 - db error
 		422 - could not sent message & not stored on db
 */
-func (is *InvestService) SignUp(c model.User) (utils.Msg) {
+func (is *InvestService) SignUp(c model.User) (message.Msg) {
 
 	// validate
 	if err := c.Validate(); err != nil {
@@ -48,13 +50,13 @@ func (is *InvestService) SignUp(c model.User) (utils.Msg) {
 	}
 
 	// convert password to hash
-	hashed, err := utils.Convert_string_to_hash(c.Password)
+	hashed, err := helper.Convert_string_to_hash(c.Password)
 	if err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	// get role id by name (of the role)
-	c.Role.Name = utils.RoleInvestor
+	c.Role.Name = constants.RoleInvestor
 	if err := c.Role.OnlyGetByName(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
@@ -69,11 +71,11 @@ func (is *InvestService) SignUp(c model.User) (utils.Msg) {
 	c.OrganizationId = c.Organization.Id
 
 	// these code and link will be sent to the user
-	scode := utils.Generate_Random_Number(utils.MaxNumberOfDigitsSentByEmail)
+	scode := helper.Generate_Random_Number(constants.MaxNumberOfDigitsSentByEmail)
 
 	// store the email, phone & get ids
 	c.Email.SentCode = scode
-	c.Email.Deadline = utils.GetCurrentTime().Add(time.Hour * 24)
+	c.Email.Deadline = helper.GetCurrentTime().Add(time.Hour * 24)
 
 	// create email
 	if err := c.Email.OnlyCreate(trans); err != nil {

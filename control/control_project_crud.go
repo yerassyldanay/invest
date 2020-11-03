@@ -5,7 +5,9 @@ import (
 	"errors"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"net/http"
 )
@@ -21,14 +23,14 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	is.OnlyParseRequest(r)
 
 	//
-	if is.RoleName != utils.RoleInvestor {
-		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, fname + " role", "role must be investor. role is " + is.RoleName})
+	if is.RoleName != constants.RoleInvestor {
+		message.Respond(w, r, message.Msg{errormsg.ErrorMethodNotAllowed, 405, fname + " role", "role must be investor. role is " + is.RoleName})
 		return
 	}
 
 	// decode request body
 	if err := json.NewDecoder(r.Body).Decode(&projectWithFinTable); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1", err.Error() })
+		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 1", err.Error() })
 		return
 	}
 	defer r.Body.Close()
@@ -41,7 +43,7 @@ var Create_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg.Fname = fname + " service"
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Update_project = func(w http.ResponseWriter, r *http.Request) {
@@ -49,8 +51,8 @@ var Update_project = func(w http.ResponseWriter, r *http.Request) {
 	var project = model.Project{}
 
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		utils.Respond(w, r, utils.Msg{
-			Message: utils.ErrorInvalidParameters,
+		message.Respond(w, r, message.Msg{
+			Message: errormsg.ErrorInvalidParameters,
 			Status:  400,
 			Fname:   fname + " 1",
 			ErrMsg:  err.Error(),
@@ -59,10 +61,10 @@ var Update_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	project.Lang = r.Header.Get(utils.HeaderContentLanguage)
+	project.Lang = r.Header.Get(constants.HeaderContentLanguage)
 
 	msg := project.Update()
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Get_project_by_project_id = func(w http.ResponseWriter, r *http.Request) {
@@ -81,11 +83,11 @@ var Get_project_by_project_id = func(w http.ResponseWriter, r *http.Request) {
 	/*
 		Permission
 	*/
-	roleName := service.Get_header_parameter(r, utils.KeyRoleName, "").(string)
-	if roleName == utils.RoleInvestor {
+	roleName := service.Get_header_parameter(r, constants.KeyRoleName, "").(string)
+	if roleName == constants.RoleInvestor {
 		project.OfferedById = is.UserId
 		err = project.OnlyCheckInvestorByProjectAndInvestorId(model.GetDB())
-	} else if roleName == utils.RoleAdmin || roleName == utils.RoleManager || roleName == utils.RoleExpert{
+	} else if roleName == constants.RoleAdmin || roleName == constants.RoleManager || roleName == constants.RoleExpert {
 		// green light is on for admins
 	} else {
 		err = errors.New("your role is " + roleName)
@@ -103,5 +105,5 @@ var Get_project_by_project_id = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.Project_get_by_id(project_id)
 	msg.SetFname(fname, "msg")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

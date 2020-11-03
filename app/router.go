@@ -5,7 +5,9 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -21,9 +23,9 @@ func Create_new_invest_router() (*mux.Router) {
 	var download = generalRouter.PathPrefix("/download").Subrouter()
 
 	download.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("id: ", utils.GetContext(r, utils.KeyId))
+		fmt.Println("id: ", helper.GetContext(r, constants.KeyId))
 		//fmt.Println("role: ", utils.GetContext(r, utils.KeyRole))
-		utils.Respond(w, r, utils.Msg{
+		message.Respond(w, r, message.Msg{
 			Message: 	map[string]interface{}{
 				"eng": 		"Welcome Home",
 				"rus":		"Welcome Home",
@@ -165,6 +167,12 @@ func Create_new_invest_router() (*mux.Router) {
 		Notifications
 	 */
 	v1.HandleFunc("/notifications", control.Notification_get).Methods("GET")
+
+	/*
+		SMTP
+	 */
+	v1.HandleFunc("/smtp", control.Smtp_create_update_put).Methods("POST", "PUT", "DELETE")
+	v1.HandleFunc("/smtp", control.Smtp_get).Methods("GET")
 
 	/*
 		Test API

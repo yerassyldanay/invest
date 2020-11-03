@@ -1,66 +1,67 @@
 package model
 
 import (
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"net/http"
 )
 
-func ReturnInternalDbError(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorInternalDbError, 417, "", errmsg}
+func ReturnInternalDbError(errmsg string) message.Msg {
+	return message.Msg{errormsg.ErrorInternalDbError, 417, "", errmsg}
 }
 
-func ReturnWrongPassword(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorWrongPassword, 417, "", errmsg}
+func ReturnWrongPassword(errmsg string) message.Msg {
+	return message.Msg{errormsg.ErrorWrongPassword, 417, "", errmsg}
 }
 
-func ReturnInvalidPassword(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorInvalidPassword, 417, "", errmsg}
+func ReturnInvalidPassword(errmsg string) message.Msg {
+	return message.Msg{errormsg.ErrorInvalidPassword, 417, "", errmsg}
 }
 
-func ReturnNoError() (utils.Msg) {
-	return utils.Msg{utils.NoErrorFineEverthingOk, 200, "", ""}
+func ReturnNoError() (message.Msg) {
+	return message.Msg{errormsg.NoErrorFineEverthingOk, 200, "", ""}
 }
 
-func ReturnSuccessfullyCreated() (utils.Msg) {
-	return utils.Msg{utils.NoErrorFineEverthingOk, 201, "", ""}
+func ReturnSuccessfullyCreated() (message.Msg) {
+	return message.Msg{errormsg.NoErrorFineEverthingOk, 201, "", ""}
 }
 
-func ReturnInvalidParameters(errmsg string) (utils.Msg) {
-	return utils.Msg{utils.ErrorInvalidParameters, 400, "", errmsg}
+func ReturnInvalidParameters(errmsg string) (message.Msg) {
+	return message.Msg{errormsg.ErrorInvalidParameters, 400, "", errmsg}
 }
 
-func ReturnEmailAlreadyInUse(errmsg string) (utils.Msg) {
-	return utils.Msg{utils.ErrorEmailIsAreadyInUse, 409, "", errmsg}
+func ReturnEmailAlreadyInUse(errmsg string) (message.Msg) {
+	return message.Msg{errormsg.ErrorEmailIsAreadyInUse, 409, "", errmsg}
 }
 
-func ReturnDuplicateKeyError(errmsg string) (utils.Msg) {
-	return utils.Msg{utils.ErrorDupicateKeyOnDb, 409, "", errmsg}
+func ReturnDuplicateKeyError(errmsg string) (message.Msg) {
+	return message.Msg{errormsg.ErrorDupicateKeyOnDb, 409, "", errmsg}
 }
 
-func ReturnNoErrorWithResponseMessage(resp map[string]interface{}) utils.Msg {
-	return utils.Msg{resp, 200, "", ""}
+func ReturnNoErrorWithResponseMessage(resp map[string]interface{}) message.Msg {
+	return message.Msg{resp, 200, "", ""}
 }
 
-func ReuturnInternalServerError(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorInternalServerError, 500, "", errmsg}
+func ReuturnInternalServerError(errmsg string) message.Msg {
+	return message.Msg{errormsg.ErrorInternalServerError, 500, "", errmsg}
 }
 
-func ReturnNotFoundError(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorNotFound, 400, "", errmsg}
+func ReturnNotFoundError(errmsg string) message.Msg {
+	return message.Msg{errormsg.ErrorNotFound, 400, "", errmsg}
 }
 
-func ReturnMethodNotAllowed(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorMethodNotAllowed, 405, "", errmsg}
+func ReturnMethodNotAllowed(errmsg string) message.Msg {
+	return message.Msg{errormsg.ErrorMethodNotAllowed, 405, "", errmsg}
 }
 
-func ReturnNoSuchUser(errmsg string) utils.Msg {
-	return utils.Msg{utils.ErrorNoSuchUser, 404, "", errmsg}
+func ReturnNoSuchUser(errmsg string) message.Msg {
+	return message.Msg{errormsg.ErrorNoSuchUser, 404, "", errmsg}
 }
 
-func ReturnCouldNotSendEmailError(errmsg string) (utils.Msg) {
-	return utils.Msg{utils.ErrorCouldNotSendEmail, 422, "", errmsg}
+func ReturnCouldNotSendEmailError(errmsg string) (message.Msg) {
+	return message.Msg{errormsg.ErrorCouldNotSendEmail, 422, "", errmsg}
 }
 
-func ReturnFailedToCreateAnAccount(errmsg string) (utils.Msg) {
-	return utils.Msg{utils.ErrorFailedToCreateAnAccount, http.StatusExpectationFailed, "", errmsg}
+func ReturnFailedToCreateAnAccount(errmsg string) (message.Msg) {
+	return message.Msg{errormsg.ErrorFailedToCreateAnAccount, http.StatusExpectationFailed, "", errmsg}
 }

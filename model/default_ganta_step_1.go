@@ -1,7 +1,7 @@
 package model
 
 import (
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 /*
@@ -16,11 +16,11 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 3,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingInvestor,
+		Step:   1,
+		Status: constants.ProjectStatusPendingInvestor,
 
-		Responsible:    utils.RoleInvestor,
-		IsDone: 		false, // always false
+		Responsible: constants.RoleInvestor,
+		IsDone:      false, // always false
 	},
 	{
 		IsAdditional:   false,
@@ -30,11 +30,11 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingAdmin,
+		Step:   1,
+		Status: constants.ProjectStatusPendingAdmin,
 
-		Responsible:    utils.RoleAdmin,
-		IsDone: 		false, // always false
+		Responsible: constants.RoleAdmin,
+		IsDone:      false, // always false
 	},
 	{
 		IsAdditional:   false,
@@ -44,12 +44,12 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingManager,
+		Step:   1,
+		Status: constants.ProjectStatusPendingManager,
 
-		Responsible:    utils.RoleManager,
-		IsDone: 		false, // always false
-		IsDocCheck: 	true,
+		Responsible: constants.RoleManager,
+		IsDone:      false, // always false
+		IsDocCheck:  true,
 	},
 	{
 		IsAdditional:   false,
@@ -59,11 +59,11 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingAdmin,
+		Step:   1,
+		Status: constants.ProjectStatusPendingAdmin,
 
-		Responsible:    utils.RoleAdmin,
-		IsDone: 		false, // always false
+		Responsible: constants.RoleAdmin,
+		IsDone:      false, // always false
 	},
 	{
 		IsAdditional:   false,
@@ -73,10 +73,10 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingExpert,
-		Responsible:    utils.RoleExpert,
-		IsDocCheck: 	true,
+		Step:        1,
+		Status:      constants.ProjectStatusPendingExpert,
+		Responsible: constants.RoleExpert,
+		IsDocCheck:  true,
 	},
 	{
 		IsAdditional:   false,
@@ -86,11 +86,11 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 2,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingAdmin,
+		Step:   1,
+		Status: constants.ProjectStatusPendingAdmin,
 
-		Responsible:    utils.RoleAdmin,
-		IsDone: 		false, // always false
+		Responsible: constants.RoleAdmin,
+		IsDone:      false, // always false
 	},
 	{
 		IsAdditional:   false,
@@ -100,9 +100,9 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 6,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingInvCommittee,
-		Responsible:    utils.RoleManager,
+		Step:        1,
+		Status:      constants.ProjectStatusPendingInvCommittee,
+		Responsible: constants.RoleManager,
 	},
 	{
 		IsAdditional:   false,
@@ -112,8 +112,8 @@ var DefaultGantaParentsOfStep1 = []Ganta{
 		DurationInDays: 9 * 30,
 		GantaChildren:  []Ganta{},
 
-		Step:           1,
-		Status: 		utils.ProjectStatusPendingManager,
-		Responsible:    utils.RoleManager,
+		Step:        1,
+		Status:      constants.ProjectStatusPendingManager,
+		Responsible: constants.RoleManager,
 	},
 }

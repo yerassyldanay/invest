@@ -1,11 +1,14 @@
 package model
 
-import "invest/utils"
+import (
+	"invest/utils/errormsg"
+	"invest/utils/message"
+)
 
 /*
 	Restricted means that you will get steps based on project step (either 1 or 2)
  */
-func (g *Ganta) Get_parent_ganta_steps_by_project_id_and_step(project_step interface{}) (utils.Msg) {
+func (g *Ganta) Get_parent_ganta_steps_by_project_id_and_step(project_step interface{}) (message.Msg) {
 	gantas, err := g.OnlyGetParentsByProjectId(project_step, GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())
@@ -16,7 +19,7 @@ func (g *Ganta) Get_parent_ganta_steps_by_project_id_and_step(project_step inter
 		gantaMap = append(gantaMap, Struct_to_map(each))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = gantaMap
 
 	return ReturnNoErrorWithResponseMessage(resp)
@@ -25,7 +28,7 @@ func (g *Ganta) Get_parent_ganta_steps_by_project_id_and_step(project_step inter
 /*
 	get ganta sub-steps
  */
-func (g *Ganta) Get_child_ganta_steps_by_project_id_and_step(project_step int) (utils.Msg) {
+func (g *Ganta) Get_child_ganta_steps_by_project_id_and_step(project_step int) (message.Msg) {
 	err := g.OnlyGetChildrenByIdAndProjectIdStep(project_step, GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())
@@ -36,7 +39,7 @@ func (g *Ganta) Get_child_ganta_steps_by_project_id_and_step(project_step int) (
 		gantasMap = append(gantasMap, Struct_to_map(child))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = gantasMap
 
 	return ReturnNoErrorWithResponseMessage(resp)

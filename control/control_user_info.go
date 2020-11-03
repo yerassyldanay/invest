@@ -3,7 +3,9 @@ package control
 import (
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -14,14 +16,14 @@ var Get_full_user_info = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// admins only
-	roleName := service.Get_header_parameter(r, utils.KeyRoleName, "").(string)
-	if roleName != utils.RoleAdmin {
-		utils.Respond(w, r, utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "only admins can access. your role is: " + roleName})
+	roleName := service.Get_header_parameter(r, constants.KeyRoleName, "").(string)
+	if roleName != constants.RoleAdmin {
+		message.Respond(w, r, message.Msg{errormsg.ErrorMethodNotAllowed, 405, "", "only admins can access. your role is: " + roleName})
 		return
 	}
 
 	msg := user.Get_full_info_of_this_user("id")
 	msg.Fname = fname + " 1"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

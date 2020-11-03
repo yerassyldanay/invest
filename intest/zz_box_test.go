@@ -3,16 +3,16 @@ package intest
 import (
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
 	"testing"
 )
 
 var document = model.Document{
-	Eng:          "Тестовый документ",
-	Uri:          "",
-	Step:         0,
-	ProjectId:    0,
-	Responsible:  utils.RoleSpk,
+	Eng:         "Тестовый документ",
+	Uri:         "",
+	Step:        0,
+	ProjectId:   0,
+	Responsible: constants.RoleSpk,
 }
 
 func TestServiceGanttCreateBox(t *testing.T) {

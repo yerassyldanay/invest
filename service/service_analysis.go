@@ -2,7 +2,9 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -20,22 +22,22 @@ func OnlyCopySpecificMap(m map[string]int64) (map[string]int64) {
 }
 
 // analysis
-func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (utils.Msg) {
+func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (message.Msg) {
 	// convert timestamp to date
 	switch {
 	case analysis.Start < 1:
 		// then take for 5 years
-		analysis.StartDate = utils.GetCurrentTime().Add(time.Hour * 24 * (-365) * 5)
+		analysis.StartDate = helper.GetCurrentTime().Add(time.Hour * 24 * (-365) * 5)
 	default:
 		// convert it to
-		analysis.StartDate = utils.OnlyPrettifyTime(time.Unix(analysis.Start, 0))
+		analysis.StartDate = helper.OnlyPrettifyTime(time.Unix(analysis.Start, 0))
 	}
 
 	// convert end date
 	switch {
 	case analysis.End < 1:
 		// then set current time
-		analysis.EndDate = utils.GetCurrentTime()
+		analysis.EndDate = helper.GetCurrentTime()
 	default:
 		// convert
 		analysis.EndDate = time.Unix(analysis.End, 0)
@@ -85,11 +87,11 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (util
 	wg.Wait()
 
 	// return response
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	if analysis.WriteToFile {
 
 		// create file name + indicate file path
-		fileName := utils.Generate_Random_String(40)
+		fileName := helper.Generate_Random_String(40)
 		filePath, err := filepath.Abs("./documents/analysis/" + fileName + ".xlsx")
 		if err != nil {
 			return model.ReturnInternalDbError(err.Error())

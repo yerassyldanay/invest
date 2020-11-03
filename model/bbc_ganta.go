@@ -3,7 +3,7 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/helper"
 	"strconv"
 	"time"
 )
@@ -171,19 +171,19 @@ func (g *Ganta) OnlyChangeStatusById(tx *gorm.DB) (err error) {
 
 // 'is_done' field is set to true
 func (g *Ganta) OnlyChangeStatusToDoneAndUpdateDeadlineById(tx *gorm.DB) (err error) {
-	var days = int(utils.GetCurrentTruncatedDate().Sub(g.StartDate).Hours() / 24)
+	var days = int(helper.GetCurrentTruncatedDate().Sub(g.StartDate).Hours() / 24)
 
 	switch {
 	case days == 0:
 		days = 1
-		g.StartDate = utils.GetCurrentTruncatedDate().Add(time.Hour * (-24))
+		g.StartDate = helper.GetCurrentTruncatedDate().Add(time.Hour * (-24))
 	case days < 0:
 		days = 1
-		g.StartDate = utils.GetCurrentTruncatedDate().Add(time.Hour * time.Duration(days))
+		g.StartDate = helper.GetCurrentTruncatedDate().Add(time.Hour * time.Duration(days))
 	}
 
 	// deadline ends up where it is
-	g.Deadline = utils.GetCurrentTruncatedDate()
+	g.Deadline = helper.GetCurrentTruncatedDate()
 
 	err = tx.Model(&Ganta{Id: g.Id}).Updates(map[string]interface{}{
 		"is_done": true,

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/errormsg"
 	"time"
 )
 
@@ -105,7 +105,7 @@ func (e *Email) IsVerified() (map[string]interface{}, error) {
 		}
 	}
 
-	return utils.ErrorEmailIsNotVerified, err
+	return errormsg.ErrorEmailIsNotVerified, err
 }
 
 // get list of emails of users, who has connection to the project, by project id

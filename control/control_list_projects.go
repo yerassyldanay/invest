@@ -3,7 +3,8 @@ package control
 import (
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -24,7 +25,7 @@ var Get_own_projects = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.Get_own_projects(statuses, steps)
 	msg.Fname = fname + " own"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 /*
@@ -47,7 +48,7 @@ var Get_all_projects_by_user_and_status = func(w http.ResponseWriter, r *http.Re
 	msg := is.Get_projects_by_user_id_and_status(user_id, statuses, []int{1, 2})
 	msg.Fname = fname + " 1"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Get_all_projects_by_statuses = func(w http.ResponseWriter, r *http.Request) {
@@ -58,10 +59,10 @@ var Get_all_projects_by_statuses = func(w http.ResponseWriter, r *http.Request) 
 	is.OnlyParseRequest(r)
 
 	// security check
-	if is.RoleName != utils.RoleAdmin && is.RoleName != utils.RoleExpert && is.RoleName != utils.RoleManager {
+	if is.RoleName != constants.RoleAdmin && is.RoleName != constants.RoleExpert && is.RoleName != constants.RoleManager {
 		msg := model.ReturnMethodNotAllowed("only admin. your role is " + is.RoleName)
 		msg.Fname = fname + " role"
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -72,5 +73,5 @@ var Get_all_projects_by_statuses = func(w http.ResponseWriter, r *http.Request) 
 	msg := is.Get_all_projects_by_statuses(statuses, steps)
 	msg.Fname = fname + " get"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

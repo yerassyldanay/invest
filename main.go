@@ -7,7 +7,8 @@ import (
 	logr "github.com/sirupsen/logrus"
 	"invest/app"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/logist"
 
 	"net/http"
 	"os"
@@ -34,11 +35,11 @@ func main() {
 		migration
 	*/
 	if err := model.Migration(); err != nil {
-		utils.SysMessage{
+		logist.SysMessage{
 			FuncName: "MAIN",
 			Message:  "migration: " + err.Error(),
 			Ok:       false,
-			Lev:      utils.WarnLevel,
+			Lev:      constants.WarnLevel,
 		}.Log_system_message()
 	}
 
@@ -51,14 +52,14 @@ func main() {
 	/*
 		close the file at the end of the
 	*/
-	utils.InitiateLogFile()
-	defer utils.Get_file()
+	logist.InitiateLogFile()
+	defer logist.Get_file()
 
 	/*
 		this function stops the goroutines in the background
 	 */
 	defer func() {
-		utils.Get_file_rotator().Cancel <- true
+		logist.Get_file_rotator().Cancel <- true
 	}()
 
 	/*

@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyProjectCreation struct {
@@ -29,7 +29,7 @@ func (n *NotifyProjectCreation) GetMap() map[string]string {
 
 // sender
 func (n *NotifyProjectCreation) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -51,7 +51,7 @@ func (n *NotifyProjectCreation) GetToList() []string {
 
 // get subject
 func (n *NotifyProjectCreation) GetSubject() string {
-	return MapNotifyProjectCreation[utils.KeyEmailSubject]
+	return MapNotifyProjectCreation[constants.KeyEmailSubject]
 }
 
 // body in html
@@ -72,7 +72,7 @@ func (n *NotifyProjectCreation) GetHtml() string {
 
 	// prepare template
 	// A new project has been added. The name of the project: %s. The name of an initiator: %s
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 	body = fmt.Sprintf(body, n.Project.Name, user.Fio, n.Project.Name, user.Fio, n.Project.Name, user.Fio)
 
 	return body

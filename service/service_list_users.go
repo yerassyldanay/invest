@@ -2,10 +2,11 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Get_project_with_its_users(project_id uint64) (utils.Msg) {
+func (is *InvestService) Get_project_with_its_users(project_id uint64) (message.Msg) {
 	var err error
 	var project = model.Project{Id: project_id}
 
@@ -18,7 +19,7 @@ func (is *InvestService) Get_project_with_its_users(project_id uint64) (utils.Ms
 	} else {
 		// no err, which means the following:
 		// we have info on the project & categories as well as all assigned users
-		var resp = utils.NoErrorFineEverthingOk
+		var resp = errormsg.NoErrorFineEverthingOk
 
 		// get rid of password
 		for i, _ := range project.Users {

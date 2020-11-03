@@ -2,18 +2,19 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Check_is_it_admin() utils.Msg {
-	if is.RoleName != utils.RoleAdmin {
+func (is *InvestService) Check_is_it_admin() message.Msg {
+	if is.RoleName != constants.RoleAdmin {
 		return model.ReturnMethodNotAllowed("not admin. your role is " + is.RoleName)
 	}
 
-	return utils.Msg{}
+	return message.Msg{}
 }
 
-func (is *InvestService) Does_user_has_given_role(user_id uint64, roles []string) (utils.Msg) {
+func (is *InvestService) Does_user_has_given_role(user_id uint64, roles []string) (message.Msg) {
 	// check whether a user exists (preloaded means gets also role, email & phone)
 	var user = model.User{Id: user_id}
 	err := user.OnlyGetByIdPreloaded(model.GetDB())

@@ -2,10 +2,11 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 )
 
-func (is *InvestService) Check_whether_this_user_is_responsible_for_document(document_id uint64, project_id uint64) (utils.Msg) {
+func (is *InvestService) Check_whether_this_user_is_responsible_for_document(document_id uint64, project_id uint64) (message.Msg) {
 	var document = model.Document{Id: document_id, ProjectId: project_id}
 
 	// get this document
@@ -16,10 +17,10 @@ func (is *InvestService) Check_whether_this_user_is_responsible_for_document(doc
 
 	// convert role to spk
 	switch is.RoleName {
-	case utils.RoleManager:
-		is.RoleName = utils.RoleSpk
-	case utils.RoleExpert:
-		is.RoleName = utils.RoleSpk
+	case constants.RoleManager:
+		is.RoleName = constants.RoleSpk
+	case constants.RoleExpert:
+		is.RoleName = constants.RoleSpk
 	}
 
 	// check whether this user is responsible

@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type NotifyGantaDeadline struct {
@@ -24,7 +24,7 @@ func (n *NotifyGantaDeadline) GetMap() map[string]string {
 
 // sender
 func (n *NotifyGantaDeadline) GetFrom() (string) {
-	return utils.BaseEmailAddress
+	return constants.BaseEmailAddress
 }
 
 // get the list of users, who has connection to project
@@ -53,7 +53,7 @@ func (n *NotifyGantaDeadline) GetToList() []string {
 
 // get subject
 func (n *NotifyGantaDeadline) GetSubject() string {
-	return MapNotifyGantaDeadline[utils.KeyEmailSubject]
+	return MapNotifyGantaDeadline[constants.KeyEmailSubject]
 }
 
 // body in html
@@ -74,7 +74,7 @@ func (n *NotifyGantaDeadline) GetHtml() string {
 
 	// prepare template
 	// A new password: %s
-	body := n.GetMap()[utils.KeyEmailHtml]
+	body := n.GetMap()[constants.KeyEmailHtml]
 	body = fmt.Sprintf(body, n.Project.Name, n.Project.CurrentStep.Kaz, deadline,
 		n.Project.Name, n.Project.CurrentStep.Rus, deadline,
 		n.Project.Name, n.Project.CurrentStep.Eng, deadline)

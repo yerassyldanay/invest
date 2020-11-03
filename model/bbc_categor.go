@@ -5,7 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 )
 
 type Categor struct {
@@ -52,7 +53,7 @@ func (c *Categor) OnlyGetAll(tx *gorm.DB) ([]Categor, error) {
 /*
 	create a category
 */
-func(ca *Categor) Create_category() (utils.Msg) {
+func(ca *Categor) Create_category() (message.Msg) {
 	if err := GetDB().Create(ca).Error; err != nil {
 		return ReturnInternalDbError(err.Error())
 	}
@@ -63,7 +64,7 @@ func(ca *Categor) Create_category() (utils.Msg) {
 /*
 
  */
-func (ca *Categor) UpdateById() (utils.Msg) {
+func (ca *Categor) UpdateById() (message.Msg) {
 	if err := GetDB().Model(Categor{Id: ca.Id}).Updates(map[string]interface{}{
 		"kaz": ca.Kaz,
 		"rus": ca.Rus,
@@ -78,7 +79,7 @@ func (ca *Categor) UpdateById() (utils.Msg) {
 /*
 	delete category + delete from projects
 */
-func (ca *Categor) Delete_category_from_tabe_and_projects() (utils.Msg) {
+func (ca *Categor) Delete_category_from_tabe_and_projects() (message.Msg) {
 
 	if err := GetDB().Delete(ca, "id = ?", ca.Id).Error;
 		err != nil {
@@ -91,7 +92,7 @@ func (ca *Categor) Delete_category_from_tabe_and_projects() (utils.Msg) {
 /*
 	get all categories
 */
-func (ca *Categor) Get_all_categors(offset string) (utils.Msg) {
+func (ca *Categor) Get_all_categors(offset string) (message.Msg) {
 	var cas = []Categor{}
 	if err := GetDB().Table(ca.TableName()).Offset(offset).Limit(GetLimit).Find(&cas).Error; err != nil {
 		return ReturnInternalDbError(err.Error())
@@ -102,7 +103,7 @@ func (ca *Categor) Get_all_categors(offset string) (utils.Msg) {
 		carr = append(carr, Struct_to_map(each))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = carr
 
 	return ReturnNoError()

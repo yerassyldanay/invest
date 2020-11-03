@@ -2,12 +2,13 @@ package auth
 
 import (
 	"golang.org/x/text/language"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 
 	"net/http"
 )
 
-func Parse_prefered_language_of_user(w http.ResponseWriter, r *http.Request) (utils.Msg) {
+func Parse_prefered_language_of_user(w http.ResponseWriter, r *http.Request) (message.Msg) {
 	var supported = []language.Tag{
 		language.Kazakh,
 		language.Russian,
@@ -16,14 +17,14 @@ func Parse_prefered_language_of_user(w http.ResponseWriter, r *http.Request) (ut
 		language.BritishEnglish,
 	}
 
-	lang, err := r.Cookie(utils.CookieLanguageKeyWord)
+	lang, err := r.Cookie(constants.CookieLanguageKeyWord)
 	if err != nil {
 		lang = &http.Cookie{}
 	}
 
-	accept := r.Header.Get(utils.HeaderContentLanguage)
+	accept := r.Header.Get(constants.HeaderContentLanguage)
 	if accept == "" {
-		r.Header.Get(utils.HeaderAcceptLanguage)
+		r.Header.Get(constants.HeaderAcceptLanguage)
 	}
 
 	tag, _ := language.MatchStrings(language.NewMatcher(supported), lang.String(), accept)
@@ -31,15 +32,15 @@ func Parse_prefered_language_of_user(w http.ResponseWriter, r *http.Request) (ut
 	var user_language string
 	switch tag {
 	case language.Kazakh:
-		user_language = utils.ContentLanguageKk
+		user_language = constants.ContentLanguageKk
 	case language.English:
-		user_language = utils.ContentLanguageEn
+		user_language = constants.ContentLanguageEn
 	default:
-		user_language = utils.ContentLanguageRu
+		user_language = constants.ContentLanguageRu
 	}
 
-	r.Header.Set(utils.HeaderContentLanguage, user_language)
-	r.Header.Set(utils.HeaderAcceptLanguage, user_language)
+	r.Header.Set(constants.HeaderContentLanguage, user_language)
+	r.Header.Set(constants.HeaderAcceptLanguage, user_language)
 
-	return utils.Msg{}
+	return message.Msg{}
 }

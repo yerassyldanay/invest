@@ -3,11 +3,13 @@ package service
 import (
 	"github.com/jinzhu/gorm"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"time"
 )
 
-func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (utils.Msg) {
+func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (message.Msg) {
 
 	// get email
 	var email = model.Email{Address: fp.EmailAddress}
@@ -21,14 +23,14 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (u
 	}
 
 	// create a hash that will be sent to email address
-	var hashCodeToSend = utils.Generate_Random_Number(4)
+	var hashCodeToSend = helper.Generate_Random_Number(4)
 
 	// check whether once message was sent
 	err := fp.OnlyGet(model.GetDB())
 
 	// set hash
 	fp.Code = hashCodeToSend
-	fp.Deadline = utils.GetCurrentTime().Add(time.Hour * 24)
+	fp.Deadline = helper.GetCurrentTime().Add(time.Hour * 24)
 
 	switch {
 	case err == gorm.ErrRecordNotFound:
@@ -62,7 +64,7 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (u
 	default:
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	//resp["info"] = model.Struct_to_map(fp)
 
 	return model.ReturnNoErrorWithResponseMessage(resp)
@@ -70,7 +72,7 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (u
 
 // change the actual password
 // hash & password
-func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword) (utils.Msg) {
+func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword) (message.Msg) {
 
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil {trans.Rollback()} }()
@@ -92,7 +94,7 @@ func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword)
 	}
 
 	// convert password to hash
-	hashedPassword, err := utils.Convert_string_to_hash(fp.NewPassword)
+	hashedPassword, err := helper.Convert_string_to_hash(fp.NewPassword)
 	if err != nil {
 		return model.ReturnInternalDbError("hash" + err.Error())
 	}

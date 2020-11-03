@@ -3,7 +3,7 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/errormsg"
 	"regexp"
 )
 
@@ -86,7 +86,7 @@ func (p *Phone) IsVerified() (map[string]interface{}, error) {
 		}
 	}
 
-	return utils.ErrorPhoneNumberIsNotVerified, err
+	return errormsg.ErrorPhoneNumberIsNotVerified, err
 }
 
 // errors

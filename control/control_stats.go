@@ -3,14 +3,15 @@ package control
 import (
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"net/http"
 	"strings"
 )
 
 var Get_projects_based_on_user_or_status = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Stats_on_projects_based_on_user_or_status"
-	var msg utils.Msg
+	var msg message.Msg
 
 	var pus = model.ProjectUserStat{
 		UserId: service.Get_query_parameter_uint64(r, "user_id", 0),
@@ -24,10 +25,10 @@ var Get_projects_based_on_user_or_status = func(w http.ResponseWriter, r *http.R
 	} else if pus.Status != "" {
 		msg = pus.Get_projects_by_status(offset)
 	} else {
-		msg = utils.Msg{utils.ErrorMethodNotAllowed, 405, "", "method is not allowed. status & user_id are not provided"}
+		msg = message.Msg{errormsg.ErrorMethodNotAllowed, 405, "", "method is not allowed. status & user_id are not provided"}
 	}
 
 	msg.Fname = fname + " 1"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

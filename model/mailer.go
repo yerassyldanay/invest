@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gopkg.in/gomail.v2"
-	"invest/utils"
+	"invest/utils/helper"
 	"sync"
 )
 
@@ -86,9 +86,9 @@ func MessageOnlyPrepareMail(message InterMessage) (*gomail.Message, error) {
 
 // send message
 func MessageOnlySend(dialer InterDialer, message *gomail.Message) error {
-	startTime := utils.GetCurrentTime()
+	startTime := helper.GetCurrentTime()
 	err := dialer.DialAndSend(message)
-	fmt.Println("Dial & Send Message Took: ", utils.GetCurrentTime().Sub(startTime).Seconds(), " s")
+	fmt.Println("Dial & Send Message Took: ", helper.GetCurrentTime().Sub(startTime).Seconds(), " s")
 	return err
 }
 
@@ -97,6 +97,13 @@ func MessageDialAndSend(message *gomail.Message) error {
 	// get smtp credential from db
 	var smtpServer = SmtpServer{}
 	if err := smtpServer.OnlyGetOne(GetDB()); err != nil {
+		return err
+	}
+
+	// change last_used time
+	// this helps to send messages from different smtp servers
+	smtpServer.LastUsed = helper.GetCurrentTime()
+	if err := smtpServer.OnlySaveById(GetDB()); err != nil {
 		return err
 	}
 
@@ -115,11 +122,11 @@ func MessageDialAndSend(message *gomail.Message) error {
 func MessageStoreNotificationOnDb(n InterMessage) error {
 	// create notification
 	notification := Notification{
-		FromAddress: 	n.GetFrom(),
-		ProjectId:   	n.GetProjectId(),
-		Html:        	n.GetHtml(),
-		Plain:       	n.GetPlainText(),
-		Created:     	utils.GetCurrentTime(),
+		FromAddress: n.GetFrom(),
+		ProjectId:   n.GetProjectId(),
+		Html:        n.GetHtml(),
+		Plain:       n.GetPlainText(),
+		Created:     helper.GetCurrentTime(),
 	}
 
 	// store notification body on db

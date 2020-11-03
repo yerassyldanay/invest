@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -21,7 +22,7 @@ var User_email_confirm = func(w http.ResponseWriter, r *http.Request) {
 	// request body
 	var email = model.Email{}
 	if err := json.NewDecoder(r.Body).Decode(&email); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
 		return
 	}
 
@@ -31,6 +32,6 @@ var User_email_confirm = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.EmailConfirm(email)
 	msg.SetFname(fname, "c")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 

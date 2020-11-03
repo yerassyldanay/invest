@@ -64,3 +64,5 @@ time="2020-10-30T20:22:04+06:00" level=info msg=fn_rotate_log_files message="fin
 time="2020-10-30T20:22:04+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
 time="2020-10-30T20:22:48+06:00" level=info msg=main port=7000
 time="2020-10-30T20:41:09+06:00" level=info msg=main port=7000
+time="2020-10-30T20:51:27+06:00" level=info msg=main port=7000
+time="2020-10-30T20:51:48+06:00" level=info msg="Sign_up up" error= host="[::1]:45154" path=/v1/signup status=200

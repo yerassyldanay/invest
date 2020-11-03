@@ -3,14 +3,15 @@ package service
 import (
 	"fmt"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"os"
 	"path/filepath"
 	"strconv"
 )
 
 // get documents by project id
-func (is *InvestService) Document_get_by_project_id(project_id uint64, stepsRaw []string) (utils.Msg) {
+func (is *InvestService) Document_get_by_project_id(project_id uint64, stepsRaw []string) (message.Msg) {
 	var document = model.Document{}
 
 	// get documents
@@ -41,14 +42,14 @@ func (is *InvestService) Document_get_by_project_id(project_id uint64, stepsRaw 
 		documentsMap = append(documentsMap, model.Struct_to_map(document))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = documentsMap
 
 	return model.ReturnNoErrorWithResponseMessage(resp)
 }
 
 // remove a file from storage & empty uri
-func (is *InvestService) Document_remove_document_from_project(document_id uint64) (utils.Msg) {
+func (is *InvestService) Document_remove_document_from_project(document_id uint64) (message.Msg) {
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil {
 		trans.Rollback()

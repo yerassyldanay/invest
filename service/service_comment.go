@@ -2,11 +2,11 @@ package service
 
 import (
 	"invest/model"
-	"invest/utils"
+	"invest/utils/message"
 )
 
 // comment on project with document statuses
-func (is *InvestService) Comment_on_project_documents(spkComment model.SpkComment) (utils.Msg) {
+func (is *InvestService) Comment_on_project_documents(spkComment model.SpkComment) (message.Msg) {
 	var trans = model.GetDB().Begin()
 	defer func() { if trans != nil { trans.Rollback() } }()
 
@@ -60,7 +60,7 @@ func (is *InvestService) Comment_on_project_documents(spkComment model.SpkCommen
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Get_comments_of_project(project_id uint64) (utils.Msg) {
+func (is *InvestService) Get_comments_of_project(project_id uint64) (message.Msg) {
 	var comment = model.Comment{
 		ProjectId: project_id,
 	}

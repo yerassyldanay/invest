@@ -3,17 +3,19 @@ package service
 import (
 	"github.com/jinzhu/gorm"
 	"invest/model"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"sync"
 )
 
-func (is *InvestService) Get_own_projects(statuses []string, steps []int) (utils.Msg) {
+func (is *InvestService) Get_own_projects(statuses []string, steps []int) (message.Msg) {
 	var err error
 	var project = model.Project{}
 	var projects []model.Project
 
 	switch {
-	case is.RoleName == utils.RoleInvestor:
+	case is.RoleName == constants.RoleInvestor:
 		projects, err = project.OnlyGetProjectsOfInvestor(is.UserId, statuses, steps, is.Offset, model.GetDB())
 	default:
 		projects, err = project.OnlyGetProjectsOfSpkUsers(is.UserId, statuses, steps, is.Offset, model.GetDB())
@@ -45,13 +47,13 @@ func (is *InvestService) Get_own_projects(statuses []string, steps []int) (utils
 		projectsMap = append(projectsMap, model.Struct_to_map(project))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = projectsMap
 
 	return model.ReturnNoErrorWithResponseMessage(resp)
 }
 
-func (is *InvestService) Get_projects_by_user_id_and_status(user_id uint64, statuses []string, steps []int) (utils.Msg) {
+func (is *InvestService) Get_projects_by_user_id_and_status(user_id uint64, statuses []string, steps []int) (message.Msg) {
 	var user = model.User{Id: user_id}
 	if err := user.OnlyGetByIdPreloaded(model.GetDB()); err != nil {
 		return model.ReturnInternalDbError(err.Error())
@@ -65,7 +67,7 @@ func (is *InvestService) Get_projects_by_user_id_and_status(user_id uint64, stat
 	return is.Get_own_projects(statuses, steps)
 }
 
-func (is *InvestService) Get_all_projects_by_statuses(statuses []string, steps []int) (utils.Msg) {
+func (is *InvestService) Get_all_projects_by_statuses(statuses []string, steps []int) (message.Msg) {
 	var project = model.Project{}
 
 	// get projects
@@ -90,7 +92,7 @@ func (is *InvestService) Get_all_projects_by_statuses(statuses []string, steps [
 	}
 
 	// convert
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = projectsMap
 
 	return model.ReturnNoErrorWithResponseMessage(resp)

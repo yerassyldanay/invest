@@ -2,7 +2,9 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"net/http"
 	"sync"
 )
@@ -10,7 +12,7 @@ import (
 /*
 	get the full user info
 */
-func (c *User) Get_full_info_of_this_user(by string) (utils.Msg) {
+func (c *User) Get_full_info_of_this_user(by string) (message.Msg) {
 	var err error
 	switch by {
 	case "username":
@@ -29,7 +31,7 @@ func (c *User) Get_full_info_of_this_user(by string) (utils.Msg) {
 	}
 
 	if err == gorm.ErrRecordNotFound {
-		return utils.Msg{utils.ErrorNoSuchUser, 404, "", err.Error()}
+		return message.Msg{errormsg.ErrorNoSuchUser, 404, "", err.Error()}
 	}
 
 	var wg = sync.WaitGroup{}
@@ -72,12 +74,12 @@ func (c *User) Get_full_info_of_this_user(by string) (utils.Msg) {
 	var password = c.Password
 	c.Password = ""
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(*c)
 
 	c.Password = password
 
-	return utils.Msg{
+	return message.Msg{
 		resp, http.StatusOK, "", "",
 	}
 }
@@ -85,8 +87,8 @@ func (c *User) Get_full_info_of_this_user(by string) (utils.Msg) {
 /*
 	Get Admins
  */
-func (c *User) Get_admins() (utils.Msg) {
-	users, err := c.OnlyGetPreloadedUsersByRole(utils.RoleAdmin, GetDB())
+func (c *User) Get_admins() (message.Msg) {
+	users, err := c.OnlyGetPreloadedUsersByRole(constants.RoleAdmin, GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())
 	}
@@ -96,7 +98,7 @@ func (c *User) Get_admins() (utils.Msg) {
 		usersMap = append(usersMap, Struct_to_map(user))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = usersMap
 
 	return ReturnNoErrorWithResponseMessage(resp)

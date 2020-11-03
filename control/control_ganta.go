@@ -3,7 +3,8 @@ package control
 import (
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -25,7 +26,7 @@ var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *htt
 	msg.Fname = fname + " is"
 
 	if msg.ErrMsg != "" {
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -34,7 +35,7 @@ var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *htt
 	err := project.GetAndUpdateStatusOfProject(model.GetDB())
 
 	if err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInternalDbError, 417, fname + " db", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorInternalDbError, 417, fname + " db", err.Error()})
 		return
 	}
 
@@ -49,7 +50,7 @@ var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *htt
 	}
 
 	msg.Fname = fname + " ganta"
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 /*

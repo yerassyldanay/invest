@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -25,7 +26,7 @@ var Document_get = func(w http.ResponseWriter, r *http.Request) {
 
 	if msg.IsThereAnError() {
 		// kick out as a user has nothing to do with the project
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -33,7 +34,7 @@ var Document_get = func(w http.ResponseWriter, r *http.Request) {
 	msg = is.Document_get_by_project_id(project_id, steps)
 	msg.Fname = fname + " 2"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Request) {
@@ -53,11 +54,11 @@ var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Re
 	// security check
 	msg := is.Check_whether_this_user_can_get_access_to_project_info(document.ProjectId)
 	if msg.IsThereAnError() {
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
-	if is.RoleName != utils.RoleExpert && is.RoleName != utils.RoleManager && is.RoleName != utils.RoleAdmin {
+	if is.RoleName != constants.RoleExpert && is.RoleName != constants.RoleManager && is.RoleName != constants.RoleAdmin {
 		OnlyReturnMethodNotAllowed(w, r, "only spk is allowed. your role: " + is.RoleName, fname, "role")
 		return
 	}
@@ -65,7 +66,7 @@ var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Re
 	msg = is.Add_box_to_upload_document(document)
 	msg.SetFname(fname, " add_box")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 //var Document_get_statuses = func(w http.ResponseWriter, r *http.Request) {

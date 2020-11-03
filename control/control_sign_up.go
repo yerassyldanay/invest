@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/message"
 	"net/http"
 )
 
@@ -35,5 +35,5 @@ var Sign_up = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.SignUp(user)
 	msg.SetFname(fname, "up")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }

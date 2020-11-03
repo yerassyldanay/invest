@@ -3,8 +3,9 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"invest/utils"
-
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 )
 
 /*
@@ -13,7 +14,7 @@ import (
 func (u *User) Get_all_projects(offset string) (map[string]interface{}, error) {
 	rows, err := GetDB().Table(Project{}.TableName()).Offset(offset).Limit(GetLimit).Rows()
 	if err != nil {
-		return utils.ErrorInternalDbError, err
+		return errormsg.ErrorInternalDbError, err
 	}
 	defer rows.Close()
 
@@ -47,7 +48,7 @@ func (u *User) Get_all_projects(offset string) (map[string]interface{}, error) {
 		projects.Info = append(projects.Info, tproject)
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(projects)
 
 	return resp, nil
@@ -56,7 +57,7 @@ func (u *User) Get_all_projects(offset string) (map[string]interface{}, error) {
 /*
 	get only own projects
 */
-func (u *User) Get_own_projects_spk(offset string) (utils.Msg) {
+func (u *User) Get_own_projects_spk(offset string) (message.Msg) {
 	var result = []map[string]interface{}{}
 	var projects = []Project{}
 
@@ -97,7 +98,7 @@ func (u *User) Get_own_projects_spk(offset string) (utils.Msg) {
 		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = result
 
 	return ReturnNoError()
@@ -106,7 +107,7 @@ func (u *User) Get_own_projects_spk(offset string) (utils.Msg) {
 /*
 	get only own projects
 */
-func (u *User) Get_own_projects_spk_(offset string) (utils.Msg) {
+func (u *User) Get_own_projects_spk_(offset string) (message.Msg) {
 	var result = []map[string]interface{}{}
 	var projects = []Project{}
 
@@ -147,7 +148,7 @@ func (u *User) Get_own_projects_spk_(offset string) (utils.Msg) {
 		result = append(result, Struct_to_map_with_escape(project, []string{"documents"}))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = result
 
 	return ReturnNoError()
@@ -156,12 +157,12 @@ func (u *User) Get_own_projects_spk_(offset string) (utils.Msg) {
 /*
 	preload & get all projects
  */
-func (p *Project) Get_all_after_preload(offset string) (utils.Msg) {
+func (p *Project) Get_all_after_preload(offset string) (message.Msg) {
 	var projects = []Project{}
 	if err := GetDB().Preload("Organization").Preload("Categors").
-		Offset(offset).Limit(utils.GetLimitProjects).Find(&projects).Error;
+		Offset(offset).Limit(constants.GetLimitProjects).Find(&projects).Error;
 		err != nil {
-			return utils.Msg{utils.ErrorInternalDbError, 417, "", err.Error()}
+			return message.Msg{errormsg.ErrorInternalDbError, 417, "", err.Error()}
 	}
 
 	var rprojects = []map[string]interface{}{}
@@ -171,8 +172,8 @@ func (p *Project) Get_all_after_preload(offset string) (utils.Msg) {
 		rprojects = append(rprojects, Struct_to_map(project))
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = rprojects
 
-	return utils.Msg{resp, 200, "", ""}
+	return message.Msg{resp, 200, "", ""}
 }

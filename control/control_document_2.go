@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/helper"
+	"invest/utils/message"
 	"os"
 	"path/filepath"
 
@@ -29,7 +32,7 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 	// parse form-data
 	// creating a buffer of size 10 * 2^20 ~= 50 megabyte
 	if err := r.ParseMultipartForm(50 << 20); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " 1.0", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 1.0", err.Error()})
 		return
 	}
 
@@ -41,18 +44,18 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
 	if msg.IsThereAnError() {
 		msg.SetFname(fname, "access project")
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
-	if is.RoleName == utils.RoleAdmin {
+	if is.RoleName == constants.RoleAdmin {
 		// gently pass this part
 	} else {
 		// security #2 - is this user allowed to upload a document - each document has a responsible role
 		msg = is.Check_whether_this_user_is_responsible_for_document(document_id, project_id)
 		if msg.IsThereAnError() {
 			msg.SetFname(fname, "access doc")
-			utils.Respond(w, r, msg)
+			message.Respond(w, r, msg)
 			return
 		}
 	}
@@ -67,7 +70,7 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 	var ds = service.DocStore{}
 	_, err := ds.Download_and_store_file(r)
 	if err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " doc", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " doc", err.Error()})
 		return
 	}
 
@@ -77,7 +80,7 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 	// set document uri
 	path := ds.Directory + ds.Filename + ds.Format
 	document.Uri = path
-	document.Modified = utils.GetCurrentTime()
+	document.Modified = helper.GetCurrentTime()
 
 	// store on db
 	msg = is.Upload_documents_to_project(&document)
@@ -90,7 +93,7 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 // remove document & delete a file
@@ -117,14 +120,14 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
 	if msg.IsThereAnError() {
 		msg.SetFname(fname, "project")
-		utils.Respond(w ,r, msg)
+		message.Respond(w ,r, msg)
 		return
 	}
 
 	msg = is.Check_whether_this_user_responsible_for_current_step(project_id)
 	if msg.IsThereAnError() {
 		msg.SetFname(fname, "step")
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -132,6 +135,6 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 	msg = is.Document_remove_document_from_project(document_id)
 	msg.SetFname(fname, "remove")
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 

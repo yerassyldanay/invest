@@ -3,7 +3,8 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/helper"
 	"time"
 )
 
@@ -50,14 +51,14 @@ func (c *Comment) Validate() error {
 	}
 
 	switch c.Status {
-	case utils.ProjectStatusReconsider:
-	case utils.ProjectStatusAccept:
-	case utils.ProjectStatusReject:
+	case constants.ProjectStatusReconsider:
+	case constants.ProjectStatusAccept:
+	case constants.ProjectStatusReject:
 	default:
 		return errorInvalidStatus
 	}
 
-	c.Created = utils.GetCurrentTime()
+	c.Created = helper.GetCurrentTime()
 
 	return nil
 }
@@ -80,8 +81,8 @@ func (sc *SpkComment) OnlyUpdateDocumentStatusesByIdAndProjectId(project_id uint
 	for _, document := range documents {
 		err = tx.Model(&Document{}).Where("id = ? and project_id = ?", document.Id, project_id).
 			Updates(map[string]interface{}{
-				"status": document.Status,
-				"modified": utils.GetCurrentTime(),
+				"status":   document.Status,
+				"modified": helper.GetCurrentTime(),
 		}).Error
 		if err != nil {
 			return err
@@ -96,9 +97,9 @@ func (sc *SpkComment) OnlyValidateStatusesOfDocuments() (err error) {
 	for _, document := range sc.Documents {
 		// validate status
 		switch {
-		case document.Status == utils.ProjectStatusAccept:
-		case document.Status == utils.ProjectStatusReconsider:
-		case document.Status == utils.ProjectStatusReject:
+		case document.Status == constants.ProjectStatusAccept:
+		case document.Status == constants.ProjectStatusReconsider:
+		case document.Status == constants.ProjectStatusReject:
 		default:
 			return errors.New("invalid document status. status: " + document.Status)
 		}

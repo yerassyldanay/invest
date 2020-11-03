@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 )
 
 /*
@@ -205,7 +207,7 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 	err = ganta.OnlyGetCurrentStepByProjectId(tx)
 
 	switch {
-	case err == nil && utils.ProjectStatusReject == p.Status:
+	case err == nil && constants.ProjectStatusReject == p.Status:
 		p.Step = ganta.Step
 		p.CurrentStep = ganta
 	case err == nil:
@@ -216,7 +218,7 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 		p.Status = ganta.Status
 	case err == gorm.ErrRecordNotFound:
 		p.Step = 3
-		p.Status = utils.ProjectStatusAgreement
+		p.Status = constants.ProjectStatusAgreement
 		p.CurrentStep = DefaultGantaFinalStep
 	default:
 		return err
@@ -226,7 +228,7 @@ func (p *Project) GetAndUpdateStatusOfProject(tx *gorm.DB) (err error) {
 	return err
 }
 
-func (p *Project) Get_project_with_current_status() (utils.Msg) {
+func (p *Project) Get_project_with_current_status() (message.Msg) {
 	// update & set status
 	// set the current ganta step
 	err := p.GetAndUpdateStatusOfProject(GetDB())
@@ -242,7 +244,7 @@ func (p *Project) Get_project_with_current_status() (utils.Msg) {
 		return ReturnInternalDbError(err.Error())
 	}
 
-	var resp = utils.NoErrorFineEverthingOk
+	var resp = errormsg.NoErrorFineEverthingOk
 	resp["info"] = Struct_to_map(*p)
 
 	return ReturnNoErrorWithResponseMessage(resp)

@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
 )
 
 type Finance struct {
@@ -53,11 +53,11 @@ func (Finance) TableName() string {
 	update seq id before update & create operations
 */
 func (fi *Finance) BeforeUpdate(tx *gorm.DB) error {
-	return Update_sequence_id_thus_avoid_duplicate_primary_key_error(tx, utils.GormSeqIdFinance)
+	return Update_sequence_id_thus_avoid_duplicate_primary_key_error(tx, constants.GormSeqIdFinance)
 }
 
 func(fi *Finance) BeforeCreate(tx *gorm.DB) error {
-	return Update_sequence_id_thus_avoid_duplicate_primary_key_error(tx, utils.GormSeqIdFinance)
+	return Update_sequence_id_thus_avoid_duplicate_primary_key_error(tx, constants.GormSeqIdFinance)
 }
 
 /*

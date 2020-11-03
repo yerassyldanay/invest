@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils"
+	"invest/utils/constants"
 
 	"time"
 )
@@ -73,7 +73,7 @@ var errorDefaultUsersAreBeingUpdated = errors.New("cannot update basic user info
 	cannot delete default users
  */
 func (c *User) BeforeDelete(tx *gorm.DB) error {
-	if c.Id <= utils.ConstantDefaultNumberOfUsers {
+	if c.Id <= constants.ConstantDefaultNumberOfUsers {
 		return errorDefultUsersAreBeingAltered
 	}
 
@@ -234,7 +234,7 @@ func (c *User) OnlyGetInvestorByProjectId(project_id uint64, tx *gorm.DB) (error
 func (c *User) GetAllUsersAndAdminsByProjectId(project_id uint64, tx *gorm.DB) ([]User, error) {
 	// get all admins
 	var admins = []User{}
-	if admins, err := c.OnlyGetPreloadedUsersByRole(utils.RoleAdmin, tx); err != nil && err != gorm.ErrRecordNotFound {
+	if admins, err := c.OnlyGetPreloadedUsersByRole(constants.RoleAdmin, tx); err != nil && err != gorm.ErrRecordNotFound {
 		return admins, err
 	}
 

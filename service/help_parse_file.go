@@ -1,7 +1,7 @@
 package service
 
 import (
-	"invest/utils"
+	"invest/utils/helper"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -29,7 +29,7 @@ func (ds *DocStore) Parse_file(r *http.Request) (*multipart.FileHeader, error) {
 	defer file.Close()
 
 	// generate a name for the file
-	var file_name = utils.Generate_Random_String(50)
+	var file_name = helper.Generate_Random_String(50)
 
 	// converting file into bytes
 	fileInBytes, err := ioutil.ReadAll(file)

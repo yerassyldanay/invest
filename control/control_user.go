@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"invest/model"
 	"invest/service"
-	"invest/utils"
+	"invest/utils/constants"
+	"invest/utils/errormsg"
+	"invest/utils/message"
 
 	"net/http"
 )
@@ -19,21 +21,21 @@ var Users_get_by_role = func(w http.ResponseWriter, r *http.Request) {
 
 	// only admins can get users by role
 	if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
-		utils.Respond(w, r, msg);
+		message.Respond(w, r, msg);
 		return
 	}
 
 	// if nothing is provided then all manager & expert will be given
 	var roles = r.URL.Query()["role"]
 	if len(roles) < 1 {
-		roles = []string{utils.RoleManager, utils.RoleExpert}
+		roles = []string{constants.RoleManager, constants.RoleExpert}
 	}
 
 	// logic
 	msg := is.Get_users_by_roles(roles)
 	msg.Fname = fname + " get"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Create_user = func(w http.ResponseWriter, r *http.Request) {
@@ -46,14 +48,14 @@ var Create_user = func(w http.ResponseWriter, r *http.Request) {
 
 	// decode user info
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " json", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " json", err.Error()})
 		return
 	}
 	defer r.Body.Close()
 
 	// check
 	if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -64,7 +66,7 @@ var Create_user = func(w http.ResponseWriter, r *http.Request) {
 	}
 	msg.Fname = fname + " 1"
 
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http.Request) {
@@ -72,7 +74,7 @@ var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http
 	var user = model.User{}
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, fname + " json", err.Error()})
+		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " json", err.Error()})
 		return
 	}
 	defer r.Body.Close()
@@ -82,12 +84,12 @@ var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http
 	is.OnlyParseRequest(r)
 
 	// check & logic
-	var msg utils.Msg
+	var msg message.Msg
 	switch whose {
 	case "other":
 		// pass
 		if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
-			utils.Respond(w, r, msg); return
+			message.Respond(w, r, msg); return
 		}
 		msg = is.Update_user_profile(&user)
 	case "own":
@@ -98,7 +100,7 @@ var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http
 	}
 
 	msg.SetFname(fname, " update")
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Update_own_profile = func(w http.ResponseWriter, r *http.Request) {
@@ -120,13 +122,13 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 		OldPassword				string			`json:"old_password"`
 	}{}
 
-	var msg utils.Msg
+	var msg message.Msg
 
 	// get request body
 	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
 		msg = model.ReturnInvalidParameters(err.Error())
 		msg.Fname = fname + " json"
-		utils.Respond(w, r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 	defer r.Body.Close()
@@ -140,10 +142,10 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 	case whose == "own":
 		// if this is own then is.UserId will be used
 		msg = is.Update_user_password(requestBody.OldPassword, requestBody.Password)
-	case whose == "other" && is.RoleName == utils.RoleAdmin:
+	case whose == "other" && is.RoleName == constants.RoleAdmin:
 
 		// security check
-		if is.RoleName != utils.RoleAdmin {
+		if is.RoleName != constants.RoleAdmin {
 			OnlyReturnMethodNotAllowed(w, r, "only admin can access, your role " + is.RoleName, fname, "sec")
 			return
 		}
@@ -159,7 +161,7 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 	}
 
 	msg.Fname = fname + " update"
-	utils.Respond(w, r, msg)
+	message.Respond(w, r, msg)
 }
 
 var Update_own_password = func(w http.ResponseWriter, r *http.Request) {
