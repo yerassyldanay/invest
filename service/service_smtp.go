@@ -17,13 +17,23 @@ func (is *InvestService) SmtpCreate(smtp *model.SmtpServer) (message.Msg) {
 	tx := model.GetDB().Begin()
 	defer func() { if tx != nil { tx.Rollback() } }()
 
+	// unpredictable gorm
+	headers := smtp.Headers
+	smtp.Headers = []model.SmtpHeaders{}
+
 	// create smtp
 	if err := smtp.OnlyCreate(tx); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	// create headers
+	smtp.Headers = headers
 	if err := smtp.OnlySetHeaders(tx); err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// update time
+	if err := smtp.OnlyUpdateLastTimeUsed(tx); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
@@ -37,6 +47,11 @@ func (is *InvestService) SmtpCreate(smtp *model.SmtpServer) (message.Msg) {
 
 // update
 func (is *InvestService) SmtpUpdate(smtp *model.SmtpServer) (message.Msg) {
+
+	// check id
+	if smtp.Id <= 0 {
+		return model.ReturnInvalidParameters("id is invalid")
+	}
 
 	// validate
 	if err := smtp.Validate(); err != nil {
@@ -58,7 +73,13 @@ func (is *InvestService) SmtpUpdate(smtp *model.SmtpServer) (message.Msg) {
 	}
 
 	// update values of smtp server
+	smtp.Headers = []model.SmtpHeaders{}
 	if err := smtp.OnlySaveById(tx); err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// update time
+	if err := smtp.OnlyUpdateLastTimeUsed(tx); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 

@@ -17,9 +17,13 @@ func Is_it_free_from_sql_injection(str string) bool {
 func OnlyCheckSqlInjection(str string) (error) {
 	for _, ch := range str {
 		switch {
+		case ch == 32:
+			// space is ok
 		case ch == 45:
 			// pass
 			// this is -
+		case ch >= 48 && ch <= 57:
+			// numbers are ok
 		case ch >= 65 && ch <= 90:
 			// A-Z
 		case ch >= 97 && ch <= 122:

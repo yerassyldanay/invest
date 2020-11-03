@@ -6,10 +6,8 @@ import (
 )
 
 type NotifyAddDoc struct {
-	Name				string					`json:"name"`
-	Responsible			string					`json:"responsible"`
+	Document			Document					`json:"document"`
 	UserId				uint64					`json:"user_id"`
-	ProjectId			uint64					`json:"project_id"`
 }
 
 var MapNotifyAddDoc = map[string]string{
@@ -34,7 +32,7 @@ func (n *NotifyAddDoc) GetFrom() (string) {
 // get the list of users, who has connection to project
 func (n *NotifyAddDoc) GetToList() []string {
 	var email = Email{}
-	emails, err := email.OnlyGetEmailsHasConnectionToProject(n.ProjectId, GetDB())
+	emails, err := email.OnlyGetEmailsHasConnectionToProject(n.Document.ProjectId, GetDB())
 	if err != nil {
 		return []string{}
 	}
@@ -64,9 +62,9 @@ func (n *NotifyAddDoc) GetHtml() string {
 	body := n.GetMap()[constants.KeyEmailHtml]
 
 	// Document: %s. Responsible: %s. Added by: %s
-	resp := fmt.Sprintf(body, n.Name, constants.MapRole[n.Responsible]["kaz"], user.Fio,
-		n.Name, constants.MapRole[n.Responsible]["rus"], user.Fio,
-		n.Name, constants.MapRole[n.Responsible]["eng"], user.Fio,)
+	resp := fmt.Sprintf(body, n.Document.Kaz, constants.MapRole[n.Document.Responsible]["kaz"], user.Fio,
+		n.Document.Rus, constants.MapRole[n.Document.Responsible]["rus"], user.Fio,
+		n.Document.Eng, constants.MapRole[n.Document.Responsible]["eng"], user.Fio)
 
 	return resp
 }
@@ -76,5 +74,5 @@ func (n *NotifyAddDoc) GetPlainText() string {
 }
 
 func (n *NotifyAddDoc) GetProjectId() uint64 {
-	return n.ProjectId
+	return n.Document.ProjectId
 }

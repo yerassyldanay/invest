@@ -73,7 +73,7 @@ var ErrorInternalIssueOrInvalidPassword = map[string]interface{}{
 }
 
 var ErrorWrongPassword = map[string]interface{}{
-	"eng": "a password is wrong",
+	"eng": "password is wrong",
 	"rus": "неверный пароль",
 	"kaz": "құпия сөз дұрыс емес",
 }

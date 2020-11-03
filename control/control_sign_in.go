@@ -2,6 +2,7 @@ package control
 
 import (
 	"encoding/json"
+	"fmt"
 	"invest/model"
 	"invest/utils/constants"
 	"invest/utils/errormsg"
@@ -38,6 +39,6 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 		request header will carry auth token
 	*/
 	r.Header.Set(constants.HeaderAuthorization, sis.TokenCompound)
-
+	fmt.Println(sis.TokenCompound)
 	message.Respond(w, r, msg)
 }

@@ -124,12 +124,18 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (me
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	if document.Responsible == constants.RoleInvestor {
+		// send project to reconsideration
+		msg := is.Ganta_change_the_status_of_project(document.ProjectId, constants.ProjectStatusReconsider)
+		if msg.IsThereAnError() {
+			return msg
+		}
+	}
+
 	// send notification
 	na := model.NotifyAddDoc{
-		Name:        document.Kaz,
-		Responsible: document.Responsible,
-		UserId:      is.UserId,
-		ProjectId:   document.ProjectId,
+		Document:       document,
+		UserId:      	is.UserId,
 	}
 
 	// handles everything

@@ -16,6 +16,7 @@ var Smtp_create_update_put = func(w http.ResponseWriter, r *http.Request) {
 	// parse values
 	if err := json.NewDecoder(r.Body).Decode(&smtp); err != nil {
 		OnlyReturnInvalidParametersError(w, r, err.Error(), fname, "json")
+		return
 	}
 
 	// headers
@@ -23,7 +24,7 @@ var Smtp_create_update_put = func(w http.ResponseWriter, r *http.Request) {
 	is.OnlyParseRequest(r)
 
 	// security check
-	if is.RoleName != constants.RoleInvestor {
+	if is.RoleName != constants.RoleAdmin {
 		OnlyReturnMethodNotAllowed(w, r, "only admins can access this", fname, "2")
 		return
 	}

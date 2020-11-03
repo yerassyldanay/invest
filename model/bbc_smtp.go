@@ -24,7 +24,7 @@ type SmtpServer struct {
 type SmtpHeaders struct {
 	Id							uint64					`json:"id" gorm:"primaryKey"`
 	SmtpServerId				uint64					`json:"smtp_server_id"`
-	Key							string					`json:"header"`
+	Key							string					`json:"key"`
 	Value						string					`json:"value"`
 }
 
