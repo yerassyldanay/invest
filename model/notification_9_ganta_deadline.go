@@ -11,10 +11,10 @@ type NotifyGantaDeadline struct {
 }
 
 var MapNotifyGantaDeadline = map[string]string{
-	"subject": "Ақырғы мерзім келіп қалды. Крайний срок для гантт стадии. Deadline is coming.",
-	"html": "Өтініш, гантт кестесіне өзгерістер енгізіңіз! Жоба атуы: %s. Саты атауы: %s. Ақтық мерзім: %s\n\n\n" +
-		"Пожалуйста, внесите изменения в таблице гантт. Название проекта: %s. Название стадии: %s. Крайний срок: %s\n\n\n " +
-		"Please, enter some changes. The name of the project: %s. The name of the stage: %s. Deadline: %s\n\n\n",
+	"subject": "Ақырғы мерзім келіп қалды. Крайний срок для гантт стадии. Running out of time.",
+	"html": "'%s' атаулы жоба кезеңінің аяқталуына аз уақыт қалды. Өтініш, кезеңді %s дейін аяқтаңыз \n\n\n" +
+		"Осталось мало времени до завершения стадии. Пожалуйста, завершите стадию по проекту '%s' до %s \n\n\n " +
+		"The stage is running out of time until it must be complete. Please, complete the stage of the project called '%s' until %s\n\n\n",
 }
 
 // get map
@@ -36,19 +36,32 @@ func (n *NotifyGantaDeadline) GetToList() []string {
 		}
 	}
 
-	var user = User{}
-	users, err := user.OnlyGetSpkUsersByProjectIdAndRoleName(n.ProjectId, n.Project.CurrentStep.Responsible, GetDB())
+	var emails []Email
+	var email = Email{}
+	var err error
+
+	switch {
+	case n.Project.CurrentStep.Responsible == constants.RoleInvestor:
+		err = email.OnlyGetEmailOfInvestorByProjectId(n.Project.Id, GetDB())
+		emails = append(emails, email)
+	case n.Project.CurrentStep.Responsible == constants.RoleManager:
+		emails, err = email.OnlyGetEmailOfManagerByProjectId(n.Project.Id, GetDB())
+	case n.Project.CurrentStep.Responsible == constants.RoleExpert:
+		emails, err = email.OnlyGetAllEmailsByRole(constants.RoleExpert, GetDB())
+	default:
+		emails, err = email.OnlyGetAllEmailsByRole(constants.RoleAdmin, GetDB())
+	}
+
 	if err != nil {
 		return []string{}
 	}
 
-	var emails = []string{}
-	for i, _ := range users {
-		_ = users[i].OnlyGetByIdPreloaded(GetDB())
-		emails = append(emails, users[i].Email.Address)
+	emailAddresses := []string{}
+	for _, email := range emails {
+		emailAddresses = append(emailAddresses, email.Address)
 	}
 
-	return emails
+	return emailAddresses
 }
 
 // get subject
@@ -73,11 +86,11 @@ func (n *NotifyGantaDeadline) GetHtml() string {
 	deadline := n.Project.CurrentStep.Deadline.Format("2006-01-02")
 
 	// prepare template
-	// A new password: %s
+	// You are kindly asked to make changes to the project '%s' until %s. Please, refer to the Gantt table
 	body := n.GetMap()[constants.KeyEmailHtml]
-	body = fmt.Sprintf(body, n.Project.Name, n.Project.CurrentStep.Kaz, deadline,
-		n.Project.Name, n.Project.CurrentStep.Rus, deadline,
-		n.Project.Name, n.Project.CurrentStep.Eng, deadline)
+	body = fmt.Sprintf(body, n.Project.Name, deadline,
+		n.Project.Name, deadline,
+		n.Project.Name, deadline)
 
 	return body
 }

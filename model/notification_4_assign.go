@@ -14,9 +14,9 @@ type NotifyAssign struct {
 
 var MapNotifyAssign = map[string]string{
 	"subject": "Сіз жобаға қосылдыңыз. Вас добавили в проект. You have been added to the project",
-	"html": "Жоба тақырыбы: %s. Жоба сипаттамасы: %s. Ұйым атауы: %s. \n\n\n" +
-		"Название проекта: %s. Описание проекта: %s. Название организации: %s. \n\n\n" +
-		"The project: %s. The description: %s. The name of the organization: %s\n",
+	"html": "Менеджер '%s' аталатын жобаға қосылды. Жоба сипаттамасы: %s \n\n\n" +
+		"Менеджер был назначен на проект '%s'. Описание проекта: %s \n\n\n" +
+		"A manager has been assigned to the project '%s'. The description of the project: %s \n",
 }
 
 // get map
@@ -31,15 +31,26 @@ func (n *NotifyAssign) GetFrom() (string) {
 
 // get the list of users, who has connection to project
 func (n *NotifyAssign) GetToList() []string {
-	if n.User.Email.Id < 1 {
-		// one request is enough
-		n.User.Id = n.UserId
-		if err := n.User.OnlyGetByIdPreloaded(GetDB()); err != nil {
+	if n.Project.Id <= 0 {
+		if err := n.Project.OnlyGetById(GetDB()); err != nil {
 			return []string{}
 		}
 	}
 
-	return []string{n.User.Email.Address}
+	// get emails of those, who has connection to the project
+	email := Email{}
+	emails, err := email.OnlyGetEmailsHasConnectionToProject(n.Project.Id, GetDB())
+	if err != nil {
+		return []string{}
+	}
+
+	// get only email addresses
+	emailAddresses := []string{}
+	for _, email := range emails {
+		emailAddresses = append(emailAddresses, email.Address)
+	}
+
+	return emailAddresses
 }
 
 // get subject
@@ -59,10 +70,11 @@ func (n *NotifyAssign) GetHtml() string {
 		}
 	}
 
-	// The project: %s. The description: %s. The name of the organization: %s
-	resp := fmt.Sprintf(body, n.Project.Name, n.Project.Description, n.Project.Organization.Name,
-		n.Project.Name, n.Project.Description, n.Project.Organization.Name,
-		n.Project.Name, n.Project.Description, n.Project.Organization.Name)
+	// A manager has been assigned to the project '%s'. The description of the project: %s
+	resp := fmt.Sprintf(body,
+		n.Project.Name, n.Project.Description,
+		n.Project.Name, n.Project.Description,
+		n.Project.Name, n.Project.Description)
 
 	return resp
 }

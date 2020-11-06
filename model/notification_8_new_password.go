@@ -13,7 +13,9 @@ type NotifyNewPassword struct {
 
 var MapNotifyNewPassword = map[string]string{
 	"subject": "Жаңа құпия сөз. Новый пароль. A new password.",
-	"html": "Жаңа құпия сөз: %s\n\n\n Новый пароль: %s\n\n\n A new password: %s\n\n\n",
+	"html": "Жаңа құпия сөз: %s\n\n\n " +
+		"Новый пароль: %s\n\n\n " +
+		"A new password: %s\n\n\n",
 }
 
 // get map

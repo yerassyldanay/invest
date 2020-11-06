@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"invest/utils/constants"
 	"invest/utils/errormsg"
 	"time"
 )
@@ -110,44 +111,80 @@ func (e *Email) IsVerified() (map[string]interface{}, error) {
 
 // get list of emails of users, who has connection to the project, by project id
 func (e *Email) OnlyGetEmailsHasConnectionToProject(project_id uint64, tx *gorm.DB) ([]Email, error) {
-	// get emails of admins & investors
-	var emails = []Email{}
-	err := tx.Raw(`select distinct e.address from users u join emails e on e.id = u.email_id
-		join roles r on r.id = u.role_id left join projects p on u.id = p.offered_by_id 
-		where r.name = 'admin' or p.id = ?; `, project_id).Scan(&emails).Error
-
+	// get emails of managers and experts
+	emailsSpk, err := e.OnlyGetEmailsOfSpkUsersExceptAdmins(project_id, tx)
 	if err != nil {
-		return emails, err
+		return emailsSpk, err
 	}
 
-	// get emails of assigned users
-	var spkEmails = []Email{}
-	err = tx.Raw(`select distinct e.address from users u join emails e on e.id = u.email_id 
-		join projects_users pu on u.id = pu.user_id where project_id = ?; `, project_id).Scan(&spkEmails).Error
-
-	for _, email := range spkEmails {
-		emails = append(emails, email)
+	// get emails of admins
+	emailsAdmins, err := e.OnlyGetAllEmailsByRole(constants.RoleAdmin, tx)
+	if err != nil {
+		return emailsAdmins, err
 	}
 
+	// get email of an investor
+	if err := e.OnlyGetEmailOfInvestorByProjectId(project_id, tx); err != nil {
+		return []Email{}, err
+	}
+
+	// gather in one place
+	emailsSpk = append(emailsSpk, emailsAdmins...)
+	emailsSpk = append(emailsSpk, *e)
+
+	return emailsSpk, nil
+}
+
+// get managers & all experts
+func (e *Email) OnlyGetEmailsOfSpkUsersExceptAdmins(project_id uint64, tx *gorm.DB) ([]Email, error) {
+	emails := []Email{}
+	main_query := `select distinct e.address from projects_users pu
+		join users u on pu.user_id = u.id
+		join emails e on u.email_id = e.id where project_id = ?;`
+
+	err := tx.Raw(main_query, project_id).Scan(&emails).Error
 	return emails, err
 }
 
+// get email(s) of manager(s)
+func (e *Email) OnlyGetEmailOfManagerByProjectId(project_id uint64, tx *gorm.DB) ([]Email, error) {
+	emails := []Email{}
+	main_query := `select distinct e.address from projects_users pu
+		join users u on pu.user_id = u.id join roles r on u.role_id = r.id
+		join emails e on u.email_id = e.id where pu.project_id = ? and r.name = ?;`
+
+	err := tx.Raw(main_query, project_id, constants.RoleManager).Scan(&emails).Error
+	return emails, err
+}
+
+// get email of investor
+func (e *Email) OnlyGetEmailOfInvestorByProjectId(project_id uint64, tx *gorm.DB) (error) {
+	main_query := `select e.* from projects p ` +
+		` join users u on p.offered_by_id = u.id` +
+		` join emails e on u.email_id = e.id where p.id = ? limit 1; `
+	err := tx.Raw(main_query, project_id).Scan(e).Error
+
+	return err
+}
+
+// get spk users (manager & all experts) and all admins
 func (e *Email) OnlyGetEmailsOfSpkUsersAndAdmins(project_id uint64, tx *gorm.DB) ([]Email, error) {
-	// get emails of assigned users
-	var spkEmails = []Email{}
-	err := tx.Raw(`select distinct e.address from users u join emails e on e.id = u.email_id 
-		join projects_users pu on u.id = pu.user_id where project_id = ?; `, project_id).Scan(&spkEmails).Error
 
-	// get emails of admins & investors
+	// get emails of all admins
+	emailsOfAdmins, _ := e.OnlyGetAllEmailsByRole(constants.RoleAdmin, GetDB())
+
+	// get emails of all experts
+	emailsOfSpkUsers, _ := e.OnlyGetEmailsOfSpkUsersExceptAdmins(project_id, GetDB())
+	emailsOfAdmins = append(emailsOfAdmins, emailsOfSpkUsers...)
+
+	return emailsOfAdmins, nil
+}
+
+// get all admins
+func (e *Email) OnlyGetAllEmailsByRole(role string, tx *gorm.DB) ([]Email, error) {
 	var emails = []Email{}
-	err = tx.Raw(`select e.* from users u join roles r on r.id = u.role_id ` +
-		` join emails e on u.email_id = e.id where r.name = 'admin'; `).Scan(&emails).Error
-
-	for _, email := range spkEmails {
-		emails = append(emails, email)
-	}
+	err := tx.Raw(`select e.* from users u join roles r on r.id = u.role_id ` +
+		` join emails e on u.email_id = e.id where r.name = ?; `, role).Scan(&emails).Error
 
 	return emails, err
 }
-
-

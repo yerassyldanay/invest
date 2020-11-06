@@ -59,6 +59,13 @@ func (pu *ProjectsUsers) OnlyAssignExpertsToProject(project_id uint64, tx *gorm.
 	return err
 }
 
+// assign expert to all projects
+func (pu *ProjectsUsers) OnlyAssignExpertToAllProjects(tx *gorm.DB) (error) {
+	main_query := `insert into projects_users (project_id, user_id) select id, ? from projects;`
+	err := tx.Raw(main_query, pu.UserId).Error
+	return err
+}
+
 func (pu *ProjectsUsers) OnlyDeleteByProjectId(project_id uint64, tx *gorm.DB) error {
 	fmt.Println(project_id)
 	err := tx.Delete(pu, "project_id = ?", project_id).Error

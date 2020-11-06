@@ -17,9 +17,11 @@ type NotifyCode struct {
 
 var MapNotifyCode = map[string]string{
 	"subject": "Операцияны растауға арналған құпия сөз." +
-		"  Код для валидации." +
+		" Код для валидации." +
 		" Confirmation code.",
-	"html": "Сіздің растауға арналған құпия сөзіңіз: %s. \n\n\n Ваш код для валидации: %s. \n\n\n Confirmation code: %s. \n\n\n",
+	"html": "Сіздің ӘКК құрамына кіруге арналған кодыңыз: %s. \n\n\n " +
+		"Ваш код для входа в систему СПК: %s. \n\n\n " +
+		"Your code to enter SEC platform: %s. \n\n\n",
 }
 
 // get map

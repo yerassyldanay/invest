@@ -95,6 +95,19 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 	default:
 	}
 
+	// notify an investor
+	nipc := model.NotifyOnlyInvestorProjectCreation{
+		ProjectId: projectWithFinTable.Project.Id,
+		Project:   projectWithFinTable.Project,
+		UserId:    is.UserId,
+	}
+
+	// send notification
+	select {
+	case model.GetMailerQueue().NotificationChannel <- &nipc:
+	default:
+	}
+
 	return model.ReturnNoError()
 }
 

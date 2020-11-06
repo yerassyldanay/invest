@@ -6,17 +6,19 @@ import (
 )
 
 type NotifyAddDoc struct {
-	Document			Document					`json:"document"`
 	UserId				uint64					`json:"user_id"`
+	User				User
+
+	Document			Document				`json:"document"`
 }
 
 var MapNotifyAddDoc = map[string]string{
 	"subject": "Құжат қосылды." +
 		"  Документ добавлен." +
 		" A document has been added",
-	"html": "Құжат: %s. Жауапты: %s. Құжатты қосқан тұлға: %s.\n\n\n" +
-		"Документ: %s. Ответственный за документ: %s. Кто добавил: %s\n\n\n" +
-		"Document: %s. Responsible: %s. Added by: %s",
+	"html": "'%s' келесі '%s' құжатты жүктеуді сұрастырады. '%s' атаулы құжатты жүктеуі қажет \n\n\n" +
+		"'%s' запросил документ '%s'. '%s' должен загрузите документ '%s' \n\n\n" +
+		"'%s' has requested the document called '%s'. '%s' should upload the document",
 }
 
 // get map
@@ -31,40 +33,40 @@ func (n *NotifyAddDoc) GetFrom() (string) {
 
 // get the list of users, who has connection to project
 func (n *NotifyAddDoc) GetToList() []string {
-	var email = Email{}
+	email := Email{}
 	emails, err := email.OnlyGetEmailsHasConnectionToProject(n.Document.ProjectId, GetDB())
 	if err != nil {
 		return []string{}
 	}
 
-	var emailList = []string{}
+	emailsString := []string{}
 	for _, email := range emails {
-		emailList = append(emailList, email.Address)
+		emailsString = append(emailsString, email.Address)
 	}
 
-	return emailList
+	return emailsString
 }
 
 // get subject
 func (n *NotifyAddDoc) GetSubject() string {
-	return MapNotifyAddDoc[constants.KeyEmailSubject]
+	return n.GetMap()[constants.KeyEmailSubject]
 }
 
 // body in html
 func (n *NotifyAddDoc) GetHtml() string {
-	// get user, who added
-	var user = User{Id: n.UserId}
-	if err := user.OnlyGetByIdPreloaded(GetDB()); err != nil {
-		return ""
-	}
 
 	// prepare template
 	body := n.GetMap()[constants.KeyEmailHtml]
 
-	// Document: %s. Responsible: %s. Added by: %s
-	resp := fmt.Sprintf(body, n.Document.Kaz, constants.MapRole[n.Document.Responsible]["kaz"], user.Fio,
-		n.Document.Rus, constants.MapRole[n.Document.Responsible]["rus"], user.Fio,
-		n.Document.Eng, constants.MapRole[n.Document.Responsible]["eng"], user.Fio)
+	// '%s' has requested the document called '%s'. '%s' should upload the document
+	requestedBy := n.User.Role.Name
+	responsible := n.Document.Responsible
+
+	resp := fmt.Sprintf(body,
+		constants.MapRole[requestedBy]["kaz"], n.Document.Kaz, constants.MapRole[responsible]["kaz"],
+		constants.MapRole[requestedBy]["rus"], n.Document.Kaz, constants.MapRole[responsible]["rus"],
+		constants.MapRole[requestedBy]["eng"], n.Document.Kaz, constants.MapRole[responsible]["eng"],
+	)
 
 	return resp
 }

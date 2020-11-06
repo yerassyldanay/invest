@@ -6,13 +6,13 @@ import (
 )
 
 type NotifyProjectStatus struct {
-	UserId					uint64
-	ChangedByFio			string
-	StatusBefore			string
-	StatusAfter				string
-	ProjectId				uint64
-	Step					int
-	Lang					string
+	UserId						uint64
+	ChangedBy					User
+
+	ProjectId					uint64
+	Project						Project
+
+	LastGantaStep				Ganta
 }
 
 /*
@@ -32,9 +32,9 @@ var MapNotifyProjectStatus = map[string]string{
 	"subject": "Жобаға өзгерістер енгізілді." +
 		" Внесены изменения в проект. " +
 		" Changes has been made to the project",
-	"html": "Жоба '%s' мәртебесінен '%s' мәртебесіне өзгертілді. Өзгерткен %s \n\n\n " +
-		"Статус проекта изменен с '%s' на '%s'. Внес изменения: %s \n\n\n " +
-		"The project status has been changed from '%s' to '%s'. Changes were made by %s",
+	"html": "%s (%s) жобаны '%s' кезеңінен '%s' кезеңіне өзгертті \n\n\n " +
+		"%s (%s) изменил стадию проекта с '%s' на '%s' \n\n\n " +
+		"%s (%s) has changed the stage from '%s' to '%s'",
 }
 
 // get map
@@ -67,17 +67,32 @@ func (n *NotifyProjectStatus) GetSubject() string {
 
 // body in html
 func (n *NotifyProjectStatus) GetHtml() string {
-	var user = User{Id: n.UserId}
-	if err := user.OnlyGetUserById(GetDB()); err != nil {
-		return ""
+	// get the presone, who changed the stage
+	if n.ChangedBy.Id <= 0 {
+		n.ChangedBy.Id = n.UserId
+		if err := n.ChangedBy.OnlyGetByIdPreloaded(GetDB()); err != nil {
+			fmt.Println("notification 1: ", err)
+			return ""
+		}
 	}
 
+	// get current gantt step
+	if n.Project.CurrentStep.Id <= 0 {
+		if err := n.Project.GetAndUpdateStatusOfProject(GetDB()); err != nil {
+			fmt.Println("notification 1: ", err)
+			return ""
+		}
+	}
+
+	// get the body of html
 	body := n.GetMap()[constants.KeyEmailHtml]
 
-	// The project status has been changed from '%s' to '%s'. Changes were made by %s
-	resp := fmt.Sprintf(body, constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["kaz"], constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["kaz"], user.Fio,
-		constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["rus"], constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["rus"], user.Fio,
-		constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["eng"], constants.MapProjectStatusFirstStatusThenLang[n.StatusBefore]["eng"], user.Fio)
+	// %s (%s) has changed the stage from '%s' to '%s'
+	role := n.ChangedBy.Role.Name
+	resp := fmt.Sprintf(body,
+		n.ChangedBy.Fio, constants.MapRole[role]["kaz"], n.LastGantaStep.Kaz, n.Project.CurrentStep.Kaz,
+		n.ChangedBy.Fio, constants.MapRole[role]["rus"], n.LastGantaStep.Rus, n.Project.CurrentStep.Rus,
+		n.ChangedBy.Fio, constants.MapRole[role]["eng"], n.LastGantaStep.Eng, n.Project.CurrentStep.Eng)
 
 	return resp
 }

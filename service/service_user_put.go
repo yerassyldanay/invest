@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 	"invest/model"
+	"invest/utils/constants"
 	"invest/utils/errormsg"
 	"invest/utils/helper"
 	"invest/utils/message"
@@ -126,6 +127,12 @@ func (is *InvestService) Update_user_password(old_password, new_password string)
  */
 func (is *InvestService) Create_user_based_on_role(new_user *model.User) (message.Msg) {
 
+	// role must be (spk)
+	ok := helper.Does_a_slice_contain_element([]string{constants.RoleExpert, constants.RoleAdmin, constants.RoleManager}, new_user.Role.Name)
+	if !ok {
+		return model.ReturnMethodNotAllowed("role is invalid")
+	}
+
 	// validate
 	if err := new_user.ValidateSpkUser(); err != nil {
 		return model.ReturnInvalidParameters(err.Error())
@@ -133,6 +140,16 @@ func (is *InvestService) Create_user_based_on_role(new_user *model.User) (messag
 
 	// create
 	msg := new_user.Create_user_without_check()
+
+	// assign user to all projects if role is expert
+	if new_user.Role.Name == constants.RoleExpert {
+		pu := model.ProjectsUsers{
+			UserId: new_user.Id,
+		}
+		if err := pu.OnlyAssignExpertToAllProjects(model.GetDB()); err != nil {
+			return model.ReturnInternalDbError(err.Error())
+		}
+	}
 
 	// send notification
 	np := model.NotifyCreateProfile{

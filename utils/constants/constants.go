@@ -77,7 +77,7 @@ const (
 )
 
 const (
-	BaseEmailAddress = "yerassyl.danay@nu.edu.kz"
+	BaseEmailAddress = "no-reply@spk.kz"
 	BaseEmailName = "SPK"
 )
 

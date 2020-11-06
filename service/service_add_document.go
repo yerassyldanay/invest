@@ -124,6 +124,8 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (me
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	// if an investor is responsible for this document
+	// wait until an investor uploads documents
 	if document.Responsible == constants.RoleInvestor {
 		// send project to reconsideration
 		msg := is.Ganta_change_the_status_of_project(document.ProjectId, constants.ProjectStatusReconsider)

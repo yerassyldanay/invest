@@ -17,9 +17,9 @@ var MapNotifyProjectCreation = map[string]string{
 	"subject": "Жоба қосылды." +
 		"  Проект добавлен." +
 		" A project has been added",
-	"html": "Жаңа жоба қосылды. Жоба атауы: %s. Жоба ұсынушы: %s. \n\n\n" +
-		"Проект был добавлен. Название проекта: %s. ФИО инициатора проекта: %s. \n\n\n" +
-		"A new project has been added. The name of the project: %s. The name of an initiator: %s\n",
+	"html": "%s платформада '%s' атаулы жоба ұсынып отыр \n\n\n" +
+		"%s подал(-а) заявку на рассмотрение проекта '%s' \n\n\n" +
+		"%s has submitted the project called '%s' \n",
 }
 
 // get map
@@ -71,9 +71,11 @@ func (n *NotifyProjectCreation) GetHtml() string {
 	}
 
 	// prepare template
-	// A new project has been added. The name of the project: %s. The name of an initiator: %s
+	// %s has submitted the project called '%s'
 	body := n.GetMap()[constants.KeyEmailHtml]
-	body = fmt.Sprintf(body, n.Project.Name, user.Fio, n.Project.Name, user.Fio, n.Project.Name, user.Fio)
+	body = fmt.Sprintf(body, user.Fio, n.Project.Name,
+		user.Fio, n.Project.Name,
+		user.Fio, n.Project.Name)
 
 	return body
 }

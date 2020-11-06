@@ -124,3 +124,29 @@ var MapProjectStatusFirstStatusThenLang = map[string]map[string]string{
 		"eng": "New",
 	},
 }
+
+var MapConvertStatusToHumanReadableWordStatusThenLang = map[string]map[string]string{
+	// жоба
+	// проект был
+	// project was ~
+	ProjectStatusReconsider: {
+		"kaz": "қайта қаралымға жіберілді",
+		"rus": "отправлен(-о/-а/-ы) на доработку",
+		"eng": "sent to reconsideration",
+	},
+	ProjectStatusAccept: {
+		"kaz": "келесі кезеңге жіберілді",
+		"rus": "допушен(-о/-а/-ы) на следующий этап",
+		"eng": "sent to next step",
+	},
+	ProjectStatusReject: {
+		"kaz": "кері қайтарылды",
+		"rus": "не допушен(-о/-а/-ы) на следующие этапы",
+		"eng": "rejected",
+	},
+	"": {
+		"kaz": "(бегісіз жағдайда)",
+		"rus": "(статус неизвестен)",
+		"eng": "(unknown status)",
+	},
+}
