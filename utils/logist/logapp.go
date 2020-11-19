@@ -96,10 +96,10 @@ func (fr *FileRotator) Set_log_file() {
 	/*
 		this is to handle the mistake arising when running this function from different paths
 			main.go - /invest
-			intest - /invest/intest
+			tests - /invest/tests
 	 */
 	current_path, _ := os.Getwd()
-	if strings.Contains(current_path, "/invest/intest") {
+	if strings.Contains(current_path, "/invest/tests") {
 		file_path, err = filepath.Abs("../" + constants.FolderLogFiles + "/")
 		if err != nil {
 			log.Println(err)

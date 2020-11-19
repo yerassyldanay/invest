@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 	"invest/model"
 	"invest/utils/constants"
@@ -17,8 +19,21 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 		return model.ReturnNoError()
 	}()
 
-	var trans = model.GetDB().Begin()
-	defer func() { if trans != nil {trans.Rollback()} }()
+	/*
+		LevelDefault IsolationLevel = iota
+		LevelReadUncommitted
+		LevelReadCommitted
+		LevelWriteCommitted
+		LevelRepeatableRead
+		LevelSnapshot
+		LevelSerializable
+		LevelLinearizable
+	 */
+	var trans = model.GetDB().BeginTx(context.Background(), &sql.TxOptions{
+		Isolation: sql.LevelDefault,
+		ReadOnly:  false,
+	})
+	defer func() { if trans != nil { trans.Rollback() } }()
 
 	var msg = message.Msg{}
 

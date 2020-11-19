@@ -17,8 +17,8 @@ import (
 type Organization struct {
 	Id					uint64				`json:"id" gorm:"primary key"`
 
-	Lang				string				`json:"lang" gorm:"unique_index:make_org_unique"`
-	Bin					string				`json:"bin" gorm:"unique_index:make_org_unique" validate:"regexp=[0-9]+"`
+	Lang				string				`json:"lang"`
+	Bin					string				`json:"bin" validate:"regexp=[0-9]+"`
 
 	Name				string				`json:"name" gorm:"not null" validate:"required"`
 	Fio					string				`json:"fio"`

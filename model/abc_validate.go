@@ -13,7 +13,7 @@ import (
 		* a-z
 		* 0-9
 */
-var errorPasswordInvalidLength = errors.New("invalid length: must be 8-20 characters")
+var errorPasswordInvalidLength = errors.New("invalid length: must be 8-50 characters")
 var errorPasswordNoUpperLetter = errors.New("no upper letter characters")
 var errorPasswordNoLowerLetter = errors.New("no lower letter characters")
 var errorPasswordNoDigits = errors.New("no digits")
@@ -36,7 +36,7 @@ func OnlyValidatePassword(val string) error {
 		return errorPasswordNoLowerLetter
 	case containDigit.FindString(val) == "":
 		return errorPasswordNoDigits
-	case len(val) > 20:
+	case len(val) > 50:
 		return errorPasswordInvalidLength
 	case len(val) < 8:
 		return errorPasswordInvalidLength

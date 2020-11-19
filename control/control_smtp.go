@@ -18,6 +18,7 @@ var Smtp_create_update_put = func(w http.ResponseWriter, r *http.Request) {
 		OnlyReturnInvalidParametersError(w, r, err.Error(), fname, "json")
 		return
 	}
+	defer r.Body.Close()
 
 	// headers
 	is := service.InvestService{}

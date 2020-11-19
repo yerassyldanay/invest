@@ -65,7 +65,7 @@ func (n *NotifyCreateProfile) GetHtml() string {
 	email := n.User.Email.Address
 	phoneNumber := n.User.Phone.Ccode + n.User.Phone.Number
 
-	// This email address ... Name: %s. Role: %s. Login: %s | %s. Password: %s
+	// You have ... Name: %s. Role: %s. Login: %s | %s. Password: %s
 	body = fmt.Sprintf(body, n.User.Fio, constants.MapRole[n.User.Role.Name]["kaz"], email, phoneNumber, n.RawPassword,
 		n.User.Fio, constants.MapRole[n.User.Role.Name]["rus"], email, phoneNumber, n.RawPassword,
 		n.User.Fio, constants.MapRole[n.User.Role.Name]["eng"], email, phoneNumber, n.RawPassword)

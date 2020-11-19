@@ -26,14 +26,12 @@ func (sis *SignIn) Sign_in() (message.Msg) {
 	var user = User{}
 	regexpOnlyLetters, err := regexp.Compile("[a-z]+")
 	if err != nil {
-		return message.Msg{
-			Message: errormsg.ErrorInternalServerError, Status:  http.StatusInternalServerError, ErrMsg:  err.Error(),
-		}
+		return ReturnInternalServerError(err.Error())
 	}
 
 	//fmt.Println(strings.ToLower(sis.KeyUsername))
 	if ok := regexpOnlyLetters.Match([]byte(strings.ToLower(sis.KeyUsername))); !ok {
-			return message.Msg{errormsg.ErrorInvalidParameters, http.StatusBadRequest, "", "regexp does not match with key"}
+			return ReturnInvalidParameters("regexp does not match with key")
 	}
 
 	switch sis.KeyUsername {
@@ -44,12 +42,21 @@ func (sis *SignIn) Sign_in() (message.Msg) {
 		user.Phone.Number = sis.Value
 	case "username":
 		user.Username = sis.Value
+	default:
+		return ReturnInvalidParameters(sis.KeyUsername + " is not supported")
 	}
 
+	// get user
 	msg := user.Get_full_info_of_this_user(sis.KeyUsername)
-	//fmt.Printf("\nuser %#v \n", user)
+	//fmt.Printf("\n user %#v \n", user)
 	if msg.ErrMsg != "" {
 		return msg
+	}
+
+	// check whether email address is confirmed
+	// confirmation check
+	if ok := user.Email.Verified; !ok {
+		return ReturnEmailIsNotVerified("email address has not been verified yet")
 	}
 
 	/*
@@ -87,9 +94,7 @@ func (sis *SignIn) Sign_in() (message.Msg) {
 	resp["token"] = token_string
 	resp["role"] = user.Role.Name
 
-	return message.Msg{
-		resp, http.StatusOK,"", "",
-	}
+	return ReturnNoError()
 }
 
 

@@ -19,7 +19,7 @@ const (
 )
 
 var NoNeedToAuth = []string {
-	"/v1/intest",
+	"/v1/tests",
 	"/v1/signup",
 	"/v1/signin",
 	"/v1/confirmation/email",
@@ -54,8 +54,8 @@ const (
 	AttemptToConnectToDb = 3
 	TimeSecToSleepBetweenDbConn = 5
 
-	MaxNumberOpenConnToDb = 5
-	MaxNumberOfDigitsSentByEmail = 4
+	MaxNumberOpenConnToDb = 1
+	MaxNumberOfDigitsSentByEmail = 6
 	MaxNumberOfCharactersSentByEmail = 30
 )
 

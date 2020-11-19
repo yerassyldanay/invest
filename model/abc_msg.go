@@ -10,6 +10,12 @@ func ReturnInternalDbError(errmsg string) message.Msg {
 	return message.Msg{errormsg.ErrorInternalDbError, 417, "", errmsg}
 }
 
+func ReturnInternalServerError(errmsg string) message.Msg {
+	return message.Msg {
+		Message: errormsg.ErrorInternalServerError, Status:  http.StatusInternalServerError, ErrMsg:  errmsg,
+	}
+}
+
 func ReturnWrongPassword(errmsg string) message.Msg {
 	return message.Msg{errormsg.ErrorWrongPassword, 417, "", errmsg}
 }
@@ -32,6 +38,14 @@ func ReturnInvalidParameters(errmsg string) (message.Msg) {
 
 func ReturnEmailAlreadyInUse(errmsg string) (message.Msg) {
 	return message.Msg{errormsg.ErrorEmailIsAreadyInUse, 409, "", errmsg}
+}
+
+func ReturnEmailAlreadyInUseOrCodeExpired(errmsg string) (message.Msg) {
+	return message.Msg{errormsg.ErrorEmailIsAreadyInUseOrCodeExpired, 409, "", errmsg}
+}
+
+func ReturnEmailIsNotVerified(errmsg string) (message.Msg) {
+	return message.Msg{errormsg.ErrorEmailIsNotVerified, 406, "", errmsg}
 }
 
 func ReturnDuplicateKeyError(errmsg string) (message.Msg) {

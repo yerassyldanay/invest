@@ -2,7 +2,6 @@ package model
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils/constants"
 	"invest/utils/helper"
@@ -31,17 +30,18 @@ func (p *Project) Create_project(trans *gorm.DB) (message.Msg){
 	/*
 		get org. id by bin or create one
 	*/
-	p.Organization.Lang = p.Lang
-	msg := p.Organization.Create_or_get_organization_from_db_by_bin(trans)
-	if msg.IsThereAnError() {
-		fmt.Println(msg)
-	}
+	//p.Organization.Lang = p.Lang
+	//msg := p.Organization.Create_or_get_organization_from_db_by_bin(trans)
+	//if msg.IsThereAnError() {
+	//	fmt.Println(msg)
+	//}
 
 	p.OrganizationId = p.Organization.Id
 	p.Created = helper.GetCurrentTime()
 
 	var categors = p.Categors
 	p.Categors = []Categor{}
+	p.Organization = Organization{}
 
 	if err := p.OnlyCreate(trans); err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {

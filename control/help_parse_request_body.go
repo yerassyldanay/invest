@@ -12,6 +12,7 @@ func OnlyParseRequestBody(r *http.Request, to interface{}) (interface{}, message
 	if err := json.NewDecoder(r.Body).Decode(&to); err != nil {
 		return to, model.ReturnInvalidParameters(err.Error())
 	}
+	defer r.Body.Close()
 
 	return to, model.ReturnNoError()
 }

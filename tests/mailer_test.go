@@ -1,4 +1,4 @@
-package intest
+package tests
 
 import (
 	"context"

@@ -50,6 +50,7 @@ var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Re
 		OnlyReturnInvalidParametersError(w, r, err.Error(), fname, " decode")
 		return
 	}
+	defer r.Body.Close()
 
 	// security check
 	msg := is.Check_whether_this_user_can_get_access_to_project_info(document.ProjectId)

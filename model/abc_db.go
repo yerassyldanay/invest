@@ -179,7 +179,7 @@ func Set_up_db() {
 	/*
 		parameters of db
 	 */
-	db.DB().SetMaxOpenConns(constants.MaxNumberOpenConnToDb)
+	db.DB().SetMaxOpenConns( constants.MaxNumberOpenConnToDb )
 
 	err = PrepareSequenceId()
 	if err != nil {

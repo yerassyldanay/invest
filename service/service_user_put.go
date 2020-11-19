@@ -127,6 +127,8 @@ func (is *InvestService) Update_user_password(old_password, new_password string)
  */
 func (is *InvestService) Create_user_based_on_role(new_user *model.User) (message.Msg) {
 
+	rawPassword := new_user.Password
+
 	// role must be (spk)
 	ok := helper.Does_a_slice_contain_element([]string{constants.RoleExpert, constants.RoleAdmin, constants.RoleManager}, new_user.Role.Name)
 	if !ok {
@@ -137,6 +139,9 @@ func (is *InvestService) Create_user_based_on_role(new_user *model.User) (messag
 	if err := new_user.ValidateSpkUser(); err != nil {
 		return model.ReturnInvalidParameters(err.Error())
 	}
+
+	// check email
+
 
 	// create
 	msg := new_user.Create_user_without_check()
@@ -156,6 +161,7 @@ func (is *InvestService) Create_user_based_on_role(new_user *model.User) (messag
 		UserId:      new_user.Id,
 		User:        *new_user,
 		CreatedById: 	is.UserId,
+		RawPassword: rawPassword,
 	}
 
 	// handles everything

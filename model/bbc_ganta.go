@@ -22,7 +22,7 @@ import (
 		of the project
  */
 type Ganta struct {
-	Id								uint64					`json:"id" gorm:"primary key"`
+	Id								uint64					`json:"id" gorm:"primary key;AUTO_INCREMENT"`
 
 	IsAdditional					bool					`json:"is_additional" gorm:"default:false"`
 	ProjectId						uint64					`json:"project_id" gorm:"foreignkey:projects.id"`

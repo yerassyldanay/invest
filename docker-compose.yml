@@ -4,6 +4,8 @@ services:
   iguard_global:
     build: .
     command: ./main
+    volumes:
+      - "/docker_volumes/invest/backend/documents/:/documents/"
     environment:
       - "TZ=Asia/Almaty"
     ports:

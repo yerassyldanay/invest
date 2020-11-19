@@ -27,9 +27,9 @@ func main() {
 		setup mailer queue, which receives & handles notifications in one place
 	 */
 	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 	mq := model.InitiateNewMailerQueue()
 	go mq.Handle(ctx)
+	defer cancel()
 
 	/*
 		migration
@@ -73,6 +73,13 @@ func main() {
 	cnx, cancelNotifier := context.WithCancel(context.Background())
 	go model.OnlyNotifyAboutGantaDeadline(cnx)
 	defer cancelNotifier()
+
+	/*
+		remove files at the background
+	 */
+	ctxRemoveAnalysisFiles, cancelRemoveAnalysisFilesCtx := context.WithCancel(context.Background())
+	go model.Remove_files_left_after_analysis_periodically(ctxRemoveAnalysisFiles)
+	defer cancelRemoveAnalysisFilesCtx()
 
 	/*
 		creating a router instance

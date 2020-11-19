@@ -117,6 +117,7 @@ func (p *Project) OnlyCheckUserByProjectAndUserId(project_id uint64, user_id uin
 
 // create only
 func (p *Project) OnlyCreate(tx *gorm.DB) error {
+
 	return tx.Create(p).Error
 }
 

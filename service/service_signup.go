@@ -30,7 +30,7 @@ func (is *InvestService) SignUp(c model.User) (message.Msg) {
 
 	// there are four cases
 	var email = model.Email{Address: c.Email.Address}
-	err := email.OnlyGetByAddress(model.GetDB())
+	err := email.OnlyGetByAddress(trans)
 
 	switch {
 	case err == gorm.ErrRecordNotFound:
@@ -39,9 +39,9 @@ func (is *InvestService) SignUp(c model.User) (message.Msg) {
 	case err != nil:
 		// unexpected error
 		return model.ReturnInternalDbError("err: " + err.Error())
-	case email.Verified: // err != nil
+	case email.Verified == true: // err != nil
 		// already in use
-		return model.ReturnInvalidParameters("this email is already in use")
+		return model.ReturnEmailAlreadyInUse("this email is already in use")
 	default: // found & not verified
 		// delete email address
 		if err := c.DeleteUserByEmail(email, trans); err != nil {
@@ -67,7 +67,7 @@ func (is *InvestService) SignUp(c model.User) (message.Msg) {
 
 	// create organization or get old one
 	c.Organization.Lang = c.Lang
-	c.Organization.Create_or_get_organization_from_db_by_bin(model.GetDB())
+	c.Organization.Create_or_get_organization_from_db_by_bin(trans)
 	c.OrganizationId = c.Organization.Id
 
 	// these code and link will be sent to the user

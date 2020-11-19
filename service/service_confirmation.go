@@ -25,8 +25,10 @@ func (is *InvestService) EmailConfirm(userEmail model.Email) (message.Msg) {
 	// it might be that email in use
 	// or a code sent by a user is invalid
 	// or the deadline for an email is before the current date
-	if email.Verified || email.Deadline.Before(helper.GetCurrentTime()) ||email.SentCode != userEmail.SentCode {
-		return model.ReturnInvalidParameters("code is not valid or email is already in use")
+	if email.Verified || email.Deadline.Before(helper.GetCurrentTime()) {
+		return model.ReturnEmailAlreadyInUse("email is already in use or code is expired")
+	} else if email.SentCode != userEmail.SentCode {
+		return model.ReturnInvalidParameters("code is not valid")
 	}
 
 	// get rid of extra values

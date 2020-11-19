@@ -43,7 +43,6 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 			message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 2", err.Error()})
 			return
 		}
-
 		defer r.Body.Close()
 
 		msg = is.Password_reset_change_password(fp)

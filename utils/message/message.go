@@ -75,7 +75,7 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 
 	//fmt.Println("w.WriteHeader: ", w.Header(), msg.Status)
 
-	msg.Message["error"] = msg.ErrMsg
+	//msg.Message["error"] = msg.ErrMsg
 
 	if err := json.NewEncoder(w).Encode(msg.Message); err != nil {
 		logist.SysMessage{

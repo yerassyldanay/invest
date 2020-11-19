@@ -22,7 +22,7 @@ func Create_new_invest_router() (*mux.Router) {
 	var docRouter = generalRouter.PathPrefix("/documents").Subrouter()
 	var download = generalRouter.PathPrefix("/download").Subrouter()
 
-	download.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
+	v1.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("id: ", helper.GetContext(r, constants.KeyId))
 		//fmt.Println("role: ", utils.GetContext(r, utils.KeyRole))
 		message.Respond(w, r, message.Msg{
@@ -177,7 +177,7 @@ func Create_new_invest_router() (*mux.Router) {
 	/*
 		Test API
 	 */
-	v1.HandleFunc("/intest", func(w http.ResponseWriter, r *http.Request) {
+	v1.HandleFunc("/tests", func(w http.ResponseWriter, r *http.Request) {
 
 	})
 

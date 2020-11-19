@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils/constants"
 )
@@ -67,7 +66,7 @@ func (pu *ProjectsUsers) OnlyAssignExpertToAllProjects(tx *gorm.DB) (error) {
 }
 
 func (pu *ProjectsUsers) OnlyDeleteByProjectId(project_id uint64, tx *gorm.DB) error {
-	fmt.Println(project_id)
+	//fmt.Println(project_id)
 	err := tx.Delete(pu, "project_id = ?", project_id).Error
 	return err
 }

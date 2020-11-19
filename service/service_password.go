@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/jinzhu/gorm"
 	"invest/model"
-	"invest/utils/errormsg"
 	"invest/utils/helper"
 	"invest/utils/message"
 	"time"
@@ -23,7 +22,7 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (m
 	}
 
 	// create a hash that will be sent to email address
-	var hashCodeToSend = helper.Generate_Random_Number(4)
+	var hashCodeToSend = helper.Generate_Random_Number(6)
 
 	// check whether once message was sent
 	err := fp.OnlyGet(model.GetDB())
@@ -63,11 +62,9 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (m
 	case model.GetMailerQueue().NotificationChannel <- &nc:
 	default:
 	}
-
-	var resp = errormsg.NoErrorFineEverthingOk
 	//resp["info"] = model.Struct_to_map(fp)
 
-	return model.ReturnNoErrorWithResponseMessage(resp)
+	return model.ReturnNoError()
 }
 
 // change the actual password
@@ -100,7 +97,7 @@ func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword)
 	}
 
 	// update password
-	if err := user.OnlyUpdatePasswordById(hashedPassword, model.GetDB()); err != nil {
+	if err := user.OnlyUpdatePasswordById(hashedPassword, trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 

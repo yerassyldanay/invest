@@ -49,13 +49,21 @@ func (c *User) DeleteUserByEmail(email Email, tx *gorm.DB) error {
 		return errors.New("this email address has been verified. cannot delete it")
 	}
 
+	// check
+	if c.Id == 0 {
+		if err := c.OnlyGetByEmailAddress(tx); err != nil {
+			return err
+		}
+	}
+
 	// get user preloaded
-	var user = User{}
+	var user = User{Id: c.Id}
 	if err := user.OnlyGetByIdPreloaded(tx); err != nil {
 		return err
 	}
 
 	// delete email
+	email.Id = c.EmailId
 	if err := email.OnlyDeleteById(tx); err != nil {
 		return err
 	}

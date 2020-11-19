@@ -30,7 +30,14 @@ func (Email) TableName() string {
 
  */
 func (e *Email) OnlyDeleteById(trans *gorm.DB) error {
-	return trans.Delete(Email{}, "id = ?", e.Id).Error
+	err := trans.Delete(&Email{}, "id = ?", e.Id).Error
+	return err
+}
+
+// delete by address
+func (e *Email) OnlyDeleteByAddress(trans *gorm.DB) error {
+	err := trans.Delete(&Email{}, "address = ?", e.Address).Error
+	return err
 }
 
 /*

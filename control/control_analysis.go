@@ -17,6 +17,7 @@ var Analysis_get_help = func(which string, w http.ResponseWriter, r *http.Reques
 		OnlyReturnInvalidParametersError(w, r, err.Error(), fname, "json")
 		return
 	}
+	defer r.Body.Close()
 
 	// headers
 	is := service.InvestService{}

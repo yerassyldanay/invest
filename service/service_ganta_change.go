@@ -70,7 +70,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	var statusBefore = currentGanta.Status
+	var lastGantaStep = currentGanta
 
 	// there two cases when nobody is responsible
 	if currentGanta.Responsible == constants.RoleNobody {
@@ -208,13 +208,10 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 
 	// send notification
 	notifyStatusChangeMessage := &model.NotifyProjectStatus{
-		UserId:			is.UserId,
-		ChangedByFio: 	is.RoleName,
-		StatusBefore: 	statusBefore,
-		StatusAfter:  	project.CurrentStep.Status,
-		ProjectId:    	project_id,
-		Step:         	project.Step,
-		Lang:         	is.Lang,
+		UserId:        is.UserId,
+		ProjectId:     project_id,
+		Project:       project,
+		LastGantaStep: lastGantaStep,
 	}
 
 	// send message (handles everything: stores on db, prepares smtp message,

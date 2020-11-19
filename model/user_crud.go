@@ -5,6 +5,7 @@ import (
 	"invest/utils/constants"
 	"invest/utils/helper"
 	"invest/utils/message"
+	"strings"
 	"time"
 
 	//"gorm.io/gorm/clause"
@@ -32,15 +33,29 @@ func (c *User) Create_user_without_check() (message.Msg) {
 	//_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(GetDB(), "phones")
 	//_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(GetDB(), "emails")
 
+	// if email address is not confirmed, then delete user
+	email := c.Email
+	if err := email.OnlyGetByAddress(GetDB()); err == nil && !email.Verified {
+		user := User{
+			Email: c.Email,
+		}
+		// get user preloaded
+		if err := user.OnlyGetByEmailAddress(GetDB()); err != nil {
+			return ReturnInternalDbError(err.Error())
+		}
+
+		// delete all user info by email address
+		if err := user.DeleteUserByEmail(c.Email, GetDB()); err != nil {
+			return ReturnInternalDbError(err.Error())
+		}
+	}
+
 	trans := GetDB().Begin()
 	defer func(){
 		if trans != nil {
 			trans.Rollback()
 		}
 	}()
-
-	// remove if the user account is not confirmed
-	_, _ = c.Remove_all_users_with_not_confirmed_email()
 
 	// validate password
 	if err := OnlyValidatePassword(c.Password); err != nil {
@@ -64,7 +79,9 @@ func (c *User) Create_user_without_check() (message.Msg) {
 	c.Email.Deadline = time.Time{}
 
 	// store email
-	if err := c.Email.OnlyCreate(trans); err != nil {
+	if err := c.Email.OnlyCreate(trans); err != nil && strings.Contains(err.Error(), "duplicate key") {
+		return ReturnEmailAlreadyInUse(err.Error())
+	} else if err != nil {
 		return ReturnInternalDbError(err.Error())
 	}
 	c.EmailId = c.Email.Id

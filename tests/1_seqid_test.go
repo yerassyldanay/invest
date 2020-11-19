@@ -1,4 +1,4 @@
-package intest
+package tests
 
 import (
 	"invest/model"
@@ -11,3 +11,4 @@ func TestSequenceId(t *testing.T) {
 		t.Error("expected no err, but got ", err)
 	}
 }
+
