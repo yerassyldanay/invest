@@ -45,16 +45,6 @@ func OnlyValidatePassword(val string) error {
 	return nil
 }
 
-// validate username
-func OnlyValidateUsername(username string) error {
-	switch {
-	case containNonWordCharacter.FindString(username) != "":
-
-	}
-
-	return nil
-}
-
 // validate org bin
 func OnlyValidateBin(bin string) error {
 	switch {

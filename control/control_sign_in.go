@@ -11,8 +11,7 @@ import (
 )
 
 /*
-	key - how the username is called
-	username
+	key:
 	password
 	role
 */

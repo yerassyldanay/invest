@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"invest/utils/constants"
 
@@ -15,7 +14,6 @@ import (
 type User struct {
 	Id				uint64				`json:"id" gorm:"AUTO_INCREMENT;primary key"`
 
-	Username		string				`json:"username" gorm:"unique" validate:"required"`
 	Password		string				`json:"password"`
 
 	Fio				string				`json:"fio" gorm:"unique" validate:"required"`
@@ -92,7 +90,6 @@ func (c *User) BeforeDelete(tx *gorm.DB) error {
 //}
 
 // errors
-var errorSignUpInvalidUsername = errors.New("invalid username: must contain at least 8 and at most 255 characters")
 var errorSignUpInvalidPassword = errors.New("invalid password: must contain at least 8 and at most 50 characters (digits & letters)")
 var errorSignUpInvalidFio = errors.New("invalid fio: must contain at least 5 characters")
 
@@ -105,11 +102,6 @@ func (c *User) ValidateSignUpUser() (error) {
 }
 
 func (c *User) ValidateSpkUser() (error) {
-	// username
-	if len(c.Username) < 8 || len(c.Username) > 255 {
-		fmt.Println("this is fail", c.Username)
-		return errorSignUpInvalidUsername
-	}
 
 	// password
 	if len(c.Password) < 8 || len(c.Password) > 50 {

@@ -16,7 +16,6 @@ import (
  */
 func TestSignUp(t *testing.T) {
 	var user = model.User{
-		Username:       "yerassyl_danay",
 		Password:       "YerassylDanay1234",
 		Fio:            "Yerassyl Danay",
 		Email:          model.Email{

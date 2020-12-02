@@ -5,8 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"invest/auth"
 	"invest/control"
-	"invest/utils/constants"
-	"invest/utils/helper"
+	"invest/model"
 	"invest/utils/message"
 	"net/http"
 )
@@ -23,17 +22,8 @@ func Create_new_invest_router() (*mux.Router) {
 	var download = generalRouter.PathPrefix("/download").Subrouter()
 
 	v1.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("id: ", helper.GetContext(r, constants.KeyId))
-		//fmt.Println("role: ", utils.GetContext(r, utils.KeyRole))
-		message.Respond(w, r, message.Msg{
-			Message: 	map[string]interface{}{
-				"eng": 		"Welcome Home",
-				"rus":		"Welcome Home",
-				"kaz":		"Welcome Home",
-			},
-			Status:  	http.StatusBadRequest,
-			Fname:   	"MAIN",
-		})
+		msg := model.ReturnNoError()
+		message.Respond(w, r, msg)
 	}).Methods("GET", "POST")
 
 	var STATIC_DIR = "/documents/docs"

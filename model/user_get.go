@@ -15,8 +15,6 @@ import (
 func (c *User) Get_full_info_of_this_user(by string) (message.Msg) {
 	var err error
 	switch by {
-	case "username":
-		err = GetDB().First(c, "username=?", c.Username).Error
 	case "email":
 		err = GetDB().
 			Raw("select u.* from users u join emails e on u.email_id = e.id where e.address = ?;", c.Email.Address).

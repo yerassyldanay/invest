@@ -3,14 +3,14 @@
 -- SQL in section 'Up' is executed when this migration is applied
 
 -- email & phone
-create unique index if not exists make_email_address_unique on invest.public.emails (address);
-create unique index if not exists make_phone_number_unique on invest.public.phones (ccode, number);
-create index if not exists phone_better_login on phones ((invest.public.phones.ccode || invest.public.phones.number));
+create unique index if not exists make_email_address_unique on spkdb.public.emails (address);
+create unique index if not exists make_phone_number_unique on spkdb.public.phones (ccode, number);
+create index if not exists phone_better_login on phones ((spkdb.public.phones.ccode || spkdb.public.phones.number));
 
 -- documents
-create index doc_uri on invest.public.documents (uri);
-create index doc_status on invest.public.documents (status);
-create index doc_project on invest.public.documents (step, project_id);
+create index doc_uri on spkdb.public.documents (uri);
+create index doc_status on spkdb.public.documents (status);
+create index doc_project on spkdb.public.documents (step, project_id);
 
 -- gantt table
 create index gantt_project_id on gantas (project_id);

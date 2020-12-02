@@ -90,12 +90,6 @@ var ErrorEmailIsAreadyInUseOrCodeExpired = map[string]interface{}{
 	"kaz": "электрондық почта қолданыста немесе құпия сандар ескірген. Платформаға қайта тіркелуіңізді, өтінеміз",
 }
 
-var ErrorUsernameOrFioIsAreadyInUse = map[string]interface{}{
-	"eng": "username or fio is already in use",
-	"rus": "логин или фио уже используется",
-	"kaz": "логин немесе адам есімі қолданыста",
-}
-
 var ErrorFailedToUpdateSomeValues = map[string]interface{}{
 	"eng": "failed to update some values",
 	"rus": "не удалось обновить некоторые значения",

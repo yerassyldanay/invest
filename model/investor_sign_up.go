@@ -5,21 +5,13 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// errors
-var errorInvalidUsername = errors.New("username is too long")
-
 /*
 	Validate:
-		* validate username
 		* validate password
 		* validate bin
 		* validate email address
  */
 func (c *User) Validate() error {
-	// username
-	if len(c.Username) < 8 && len(c.Username) > 30 {
-		return errorInvalidUsername
-	}
 
 	// password
 	if err := OnlyValidatePassword(c.Password); err != nil {

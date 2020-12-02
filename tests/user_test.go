@@ -5,7 +5,6 @@ import (
 	"invest/model"
 	"invest/service"
 	"invest/utils/constants"
-	"strings"
 	"testing"
 )
 
@@ -41,13 +40,10 @@ func TestUpdateUserProfile(t *testing.T) {
 		},
 	}
 
-	user.Username = strings.ToLower(user.Fio)
-
 	msg := is.Create_user_based_on_role(&user)
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}
-
 
 }
 
@@ -173,3 +169,4 @@ func TestServiceUpdatePassword(t *testing.T) {
 		t.Error(msg.ErrMsg)
 	}
 }
+

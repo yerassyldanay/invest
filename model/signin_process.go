@@ -40,8 +40,6 @@ func (sis *SignIn) Sign_in() (message.Msg) {
 	case "phone":
 		user.Phone.Ccode = ""
 		user.Phone.Number = sis.Value
-	case "username":
-		user.Username = sis.Value
 	default:
 		return ReturnInvalidParameters(sis.KeyUsername + " is not supported")
 	}
