@@ -1,11 +1,50 @@
 #### Invest project
 
+##### Needed
+```text
+* docker (used 18.09.7)
+* docker-compose (used 1.8.0)
+* **optional** goose (to run migrations)
+```
+
+##### To run
+**Note:** before running backend refer to ./env/.env file & make sure all variables are correct 
+```text
+To run PostgreSQL:
+* env HOST=0.0.0.0 docker-compose -f docker-services.yml up --bu -d
+To run backend:
+* docker-compose up --bu -d
+```
+
+##### Makefile
+Inside the 'Makefile', you can find short-cut commands.  
+**Note:** 0.0.0.0 makes your database open for outside
+
+```makefile
+run_services:
+	env HOST=0.0.0.0 docker-compose -f docker-services.yml up --bu -d
+
+run_backend:
+	docker-compose up --bu -d
+
+test_database_run:
+	docker pull postgres:11-alpine && docker run --name database_test -p 0.0.0.0:7010:5432 -e POSTGRES_USER=spkuser -e POSTGRES_PASSWORD=spkpassword -e POSTGRES_DB=spkdb -d postgres:11-alpine
+
+test_database_container_remove:
+	docker rm database_test
+
+test_database_remove:
+	docker kill database_test && docker rm database_test
+
+.PHONY: run_services run_backend test_database_run test_database_remove
+```
+
 ##### About the roles 
 
 Roles are hard-coded within the project.
 
 ```text
->> Roles: <<
+>> roles <<
 admin
 investor
 manager
@@ -52,5 +91,4 @@ is confir03med
 424 - has not such a permission 
 500 - other internal error or path is not correct
 ```
-
 
