@@ -26,7 +26,7 @@ func TestCheckSQLInjection(t *testing.T) {
 	for _, testCase := range testCases {
 		err := helper.OnlyCheckSqlInjection(testCase.Str)
 		if (err != nil) != testCase.IsErr {
-			t.Error("REGEXP: sql injection | expected something else not ", err)
+			t.Error("REGEXP: sql injection | expected something else not ", )
 		}
 	}
 }

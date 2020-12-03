@@ -1,56 +1,31 @@
 #### Invest project
 
 ##### About the roles 
-Within the scope of the project, every role is considered as a user
+
+Roles are hard-coded within the project.
 
 ```text
->> Roles (users): <<
+>> Roles: <<
 admin
 investor
 manager
-lawyer
-financier
+expert
 ```
 
-##### Database
+##### Packages
+* **/app** - API path & mapping to functions  
+* **/auth** - all pre-checks & pre-operations before letting the user to access resources (e.g. authorization token is handled in this package)  
+* **/control** - accept request, parse request data, security check (e.g. has user a right to access this?) & call service function  
+* **/db** - .sql files, which are needed to run migration  
+* **/documents** - store documents (all uploaded files) & files left after analysis  
+* **/env** - Dockerfile for PostgreSQL & environmental variables  
+* **/logdir** - all log files (by date)  
+* **/model** - all structs (for database scheme) & data access objects  
+* **/service** - logic is here (e.g. running several data access objects)  
+* **/test** - you can find all test within this package  
+* **/utils** - helper functions (e.g. generate random string), constants (e.g. roles) & error messages  
 
-A meaning of some column names
-
-```json
-{
-  "fname": "first name",
-  "sname": "second name",
-  "mname": "middle name - in our case, it is father's name of a person",
-
-  "country_code": "+7",
-  "phone": "xxxyyyaabb"
-}
-```
-
-#####Warning
-
-The warning levels inside the code (It is created because of incomtability with the 'logrus' package)
-
-```go
-package nameit
-
-const (
-	PanicLevel int = iota
-	FatalLevel
-	ErrorLevel
-	WarnLevel
-	InfoLevel
-	DebugLevel
-	TraceLevel
-)
-```
-
-##### Permissions
-```go
-
-```
-
-#### Statuses & their meaning
+##### Statuses & their meaning
 ```text
 200 - ok. everything is fine & as expected
 201 - ok. created
@@ -66,7 +41,7 @@ const (
 503 - service is unavailable (e.g. autocomplete for bin)
 ```
 
-#### Wrapper Statuses
+##### Wrapper Statuses
 ```text
 This is a list of statuses that might be returned to any request that go though
 wrapper that check session token, language & permission and whether email address 
@@ -78,17 +53,4 @@ is confir03med
 500 - other internal error or path is not correct
 ```
 
-###### Supported Languages
-```text
-kk;q=*.*
-en;
-en-*
-```
 
-/etc/letsencrypt/live/tsrk.xyz/fullchain.pem
-/etc/letsencrypt/live/tsrk.xyz/privkey.pem
-
-#####to_do
-```text
-make phone number unique
-```

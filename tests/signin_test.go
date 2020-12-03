@@ -50,42 +50,6 @@ func TestSignInData(t *testing.T) {
 	}
 }
 
-func TestSignIn(t *testing.T) {
-	var siCases = []signInDataStruct{
-		{
-			Sis:               model.SignIn{
-				KeyUsername:   "username",
-				Value:         "investor",
-				Password:      "KeRXaTaq5Ce8ULO",
-			},
-			ResultErrorString: "",
-		},
-		{
-			Sis:               model.SignIn{
-				KeyUsername:   "username",
-				Value:         "investor",
-				Password:      "KeRXaTaq5Ce8ULO",
-			},
-			ResultErrorString: "",
-		},
-		{
-			Sis: 	model.SignIn{
-				KeyUsername:   "username",
-				Value:         "investor",
-				Password:      "invalidpassword",
-			},
-			ResultErrorString: "password either does not match or invalid",
-		},
-	}
-
-	for _, si := range siCases {
-		msg := si.Sis.Sign_in()
-		if msg.ErrMsg != si.ResultErrorString {
-			t.Error("expected nil, but got error: ", msg.ErrMsg)
-		}
-	}
-}
-
 func TestSignInByPhone(t *testing.T) {
 	sis := model.SignIn{
 		KeyUsername:   "email",

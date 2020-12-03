@@ -52,7 +52,7 @@ func (fp *ForgetPassword) OnlyDelete(tx *gorm.DB) (err error) {
 	return err
 }
 
-func (fp *ForgetPassword) OnlyGet(tx *gorm.DB) (err error) {
+func (fp *ForgetPassword) OnlyGetByAddress(tx *gorm.DB) (err error) {
 	err = tx.First(fp, "email_address = ?", fp.EmailAddress).Error
 	return err
 }

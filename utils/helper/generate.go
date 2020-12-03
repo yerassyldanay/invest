@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"io"
+	mrand "math/rand"
 )
 
 const gen_letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -60,4 +61,13 @@ func Generate_Random_String(n int) string {
 
 func Generate_Random_Number(n int) string {
 	return generate_random_string_or_number(n, gen_numbers)
+}
+
+// generate an integer between two values
+func OnlyGenerateNumberBetweenTwoNumbers(start, end int) int {
+	return mrand.Intn((end - start) + start)
+}
+
+func OnlyGenerateNumberForFinanceTable() int {
+	return OnlyGenerateNumberBetweenTwoNumbers(1000, 90000)
 }

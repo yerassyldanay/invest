@@ -4,23 +4,23 @@ import (
 	"bytes"
 	"fmt"
 	"invest/app"
+	"invest/utils/helper"
 	"net/http"
 	"net/http/httptest"
-	"strconv"
 	"sync"
 	"testing"
 )
 
 func TestLoadTestOnServiceCreateProject(t *testing.T) {
 
-	NumberOfTimeToTest := 1
+	NumberOfTimeToTest := 2
 	NumberOfConcurrentRequest := 5
 
 	sessionTokenForAdmin := "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlX2lkIjowLCJyb2xlX25hbWUiOiJpbnZlc3RvciIsImV4cCI6IjIwMjAtMTEtMDhUMTc6MTg6MzQuNTQzMTcxOTE1KzA2OjAwIn0.UxG-6Rww3-en2ou-gNSGrcPZbwhQza_rfi3zCvfg8hM"
 
 	requestBody := `{
 		"project": {
-			"name": "Тестовый проект - спк - %s",
+			"name": "Тестовый проект - %s",
 			"description": "Описание проекта пишете сюда",
 			"info_sent": {
 				"add-info": "доп инфо"
@@ -77,7 +77,7 @@ func TestLoadTestOnServiceCreateProject(t *testing.T) {
 			go func(j int, gRequestBody string, gwg *sync.WaitGroup) {
 				defer wg.Done()
 
-				gRequestBody = fmt.Sprintf(gRequestBody, strconv.Itoa(j))
+				gRequestBody = fmt.Sprintf(gRequestBody, helper.Generate_Random_String(20))
 
 				inBytes := []byte(gRequestBody)
 
@@ -92,7 +92,7 @@ func TestLoadTestOnServiceCreateProject(t *testing.T) {
 				router.ServeHTTP(response, request)
 
 				if response == nil {
-					fmt.Println(i, " failed")
+					//fmt.Println(i, " failed")
 					return
 				}
 

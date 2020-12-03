@@ -25,7 +25,7 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (m
 	var hashCodeToSend = helper.Generate_Random_Number(6)
 
 	// check whether once message was sent
-	err := fp.OnlyGet(model.GetDB())
+	err := fp.OnlyGetByAddress(model.GetDB())
 
 	// set hash
 	fp.Code = hashCodeToSend

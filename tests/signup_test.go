@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/require"
 	"invest/model"
 	"invest/service"
 	"invest/utils/constants"
@@ -9,84 +9,76 @@ import (
 	"time"
 )
 
+// generate a new user
+
 /*
 	TestSignUp:
-		* create user
-		* send message to an email address
+		* generate user
+		* create user on database
+		* check data
+		* email not verified
+		* verification of email address
+		* check - sign in
  */
 func TestSignUp(t *testing.T) {
-	var user = model.User{
-		Password:       "YerassylDanay1234",
-		Fio:            "Yerassyl Danay",
-		Email:          model.Email{
-			Address:  "yerassyl.danay@mail.ru",
-		},
-		Phone:          model.Phone{
-			Ccode:    "+7",
-			Number:   "7058686509",
-		},
-		Organization:   model.Organization{
-			Bin: "190940011748",
-		},
-	}
+	// generate
+	user := HelperGenerateNewUser()
+	password := user.Password
+	newUser := user
 
-	is := service.InvestService{
-		BasicInfo: service.BasicInfo{
-			Lang: constants.DefaultContentLanguage,
-		},
-	}
-
-	//// create or use a mailer queue
-	//mq := model.GetMailerQueue()
-	//
-	//// handle messages (a handler with context)
-	//ctx, cancel := context.WithCancel(context.Background())
-	//defer cancel()
-	//go mq.Handle(ctx)
-
-	msg := is.SignUp(user)
-
-	if msg.IsThereAnError() {
-		t.Error(msg, msg.ErrMsg)
-	}
-}
-
-func TestEmailVerification(t *testing.T) {
-	// get the one, which not confirmed
-	var email = model.Email{}
-	err := email.OnlyGetNotConfirmedOne(model.GetDB())
-	if err != nil {
-		t.Error("expected nil, but got ", err)
-		return
-	}
-
-	fmt.Println("not confirmed email", email)
-
-	// confirm the email
-	email.Id = 0
-	email.Deadline = time.Time{}
-	email.Verified = false
-
-	// logic
+	// sign up
 	is := service.InvestService{}
+	msg := is.SignUp(newUser)
 
-	msg := is.EmailConfirm(email)
-	if msg.IsThereAnError() {
-		t.Error("expected not err, but got ", msg.ErrMsg)
-		return
-	}
-}
+	// check
+	require.Zero(t, msg.ErrMsg)
 
-func TestEmailUpdate(t *testing.T) {
-	var email = model.Email{
-		Id:       7,
-		Address:  "yerassyl.danay@mail.ru",
-		Verified: false,
-		SentCode: "7223",
-	}
+	// verify
+	newUser = model.User{Email: model.Email{
+		Address: user.Email.Address,
+	}}
+	err := newUser.OnlyGetByEmailAddress(model.GetDB())
+	// check
+	require.NoError(t, err)
 
-	if ok := email.OnlyUpdateAfterConfirmation(model.GetDB()); !ok {
-		t.Error("expected to update, but could not")
-		return
+	// preload all information
+	err = newUser.OnlyGetByIdPreloaded(model.GetDB())
+
+	// check
+	require.NoError(t, err)
+	require.NotZero(t, newUser.Fio, newUser.Password, newUser.Email.Address, newUser.Phone.Number)
+	require.Equal(t, constants.RoleInvestor, newUser.Role.Name)
+
+	// check - email
+	require.NotZero(t, newUser.Email.SentCode)
+	require.False(t, newUser.Email.Verified)
+	require.Condition(t, func() (bool) { return newUser.Email.Deadline.After(time.Now()) })
+
+	// check verification
+	up := model.UserPermission{
+		UserId:     newUser.Id,
 	}
+	msg = up.Check_db_whether_this_user_account_is_confirmed()
+
+	// check - must be not zero
+	require.NotZero(t, msg.ErrMsg)
+
+	// confirm email address
+	is = service.InvestService{}
+	email := newUser.Email
+	msg = is.EmailConfirm(email)
+
+	// check
+	require.Zero(t, msg.ErrMsg)
+
+	// sign in
+	sis := model.SignIn{
+		KeyUsername:   "email",
+		Value:         newUser.Email.Address,
+		Password:      password,
+	}
+	msg = sis.Sign_in()
+
+	// check
+	require.Zero(t, msg.ErrMsg)
 }

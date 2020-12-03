@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/require"
 	"invest/model"
 	"invest/service"
 	"invest/utils/helper"
@@ -9,45 +9,28 @@ import (
 )
 
 func TestServiceSmtpCreate(t *testing.T) {
-	smtp := model.SmtpServer{
-		Host:     "service.test.com",
-		Port:     876,
-		Username: "test.user",
-		Password: "YA6654qwd",
-		LastUsed: helper.GetCurrentTime(),
-		Headers:  []model.SmtpHeaders{
-			{
-				Key:          "X-First-Header",
-				Value:        "First-Header-Value",
-			},
-			{
-				Key:          "X-Second-Header",
-				Value:        "Second-Header-Value",
-			},
-		},
-	}
+	// generate one
+	smtp := HelperGenerateSMTP()
 
 	// headers
 	is := service.InvestService{}
 	msg := is.SmtpCreate(&smtp)
 
 	// check
-	if msg.IsThereAnError() {
-		t.Error(msg.ErrMsg)
-	}
+	require.Zero(t, msg.ErrMsg)
 }
 
 func TestServiceSmtpUpdate(t *testing.T) {
 	// we need id to update
 	smtp := model.SmtpServer{}
 
-	// get test
-	err := model.GetDB().First(&smtp, "host like '%.test.%'").Error
-	if err != nil {
-		t.Error(err)
-	}
+	// get any smtp
+	err := model.GetDB().First(&smtp).Error
 
-	smtp.Headers = []model.SmtpHeaders{
+	// check
+	require.NoError(t, err)
+
+	newHeaders := []model.SmtpHeaders{
 		{
 			Key:          "X-First-Header",
 			Value:        "First-Header-Value-Updated",
@@ -58,97 +41,111 @@ func TestServiceSmtpUpdate(t *testing.T) {
 		},
 	}
 
-	smtp.Host = "service.test.com.updated"
-	smtp.Username = "test.user.updated"
+	newHost := helper.Generate_Random_String(20) + ".updated.host"
+	newUsername := helper.Generate_Random_String(20) + ".updated.username"
 
 	// headers
+	newSmtp := model.SmtpServer{
+		Id:       smtp.Id,
+		Host:     newHost,
+		Port:     smtp.Port,
+		Username: newUsername,
+		Password: smtp.Password,
+		Headers:  newHeaders,
+	}
 	is := service.InvestService{}
-	msg := is.SmtpUpdate(&smtp)
+	msg := is.SmtpUpdate(&newSmtp)
 
 	// check
-	if msg.IsThereAnError() {
-		t.Error(msg.ErrMsg)
-	}
+	require.Zero(t, msg.ErrMsg)
+
+	// check that updated
+	newSmtp.Id = smtp.Id
+	err = newSmtp.OnlyGetById(model.GetDB())
+
+	// check
+	//fmt.Println(newSmtp)
+	require.NoError(t, err)
+	require.Equal(t, newSmtp.Id, smtp.Id)
+	require.Equal(t, newSmtp.Password, smtp.Password)
+	require.Equal(t, newSmtp.Username, newUsername)
+	require.Equal(t, newSmtp.Host, newHost)
 }
 
-func TestServiceSmtpGet(t *testing.T) {
+func TestModelSmtpGet(t *testing.T) {
 
 	is := service.InvestService{}
 	msg := is.SmtpGet()
 
-	if msg.IsThereAnError() {
-		t.Error(msg.ErrMsg)
-	}
+	// check
+	require.Zero(t, msg.ErrMsg)
 
-	smtps, ok := msg.Message["info"]
-	if !ok {
-		t.Error("could not find info inside the map")
-	}
-
-	if smtps == nil {
-		t.Error("there is no any smtp credential")
-	}
-}
-
-func TestModelSmtpGet(t *testing.T) {
+	// create one & get list of smtp servers
+	TestServiceSmtpCreate(t)
 	smtp := model.SmtpServer{}
-
 	smtps, err := smtp.OnlyGetAll(model.GetDB())
-	if err != nil {
-		t.Error(err)
-	}
 
-	if len(smtps) <= 0 {
-		t.Error("could not find any smtp credential")
-	} else {
-		fmt.Println("smtps found: ", len(smtps))
-		for _, smtp := range smtps {
-			fmt.Println(smtp)
-		}
+	// check
+	require.NoError(t, err)
+	require.Condition(t, func() (bool) { return len(smtps) > 0 })
+
+	for _, smtp := range smtps {
+		HelperValidateSmtpCredentials(smtp, t)
 	}
 }
 
 func TestServiceSmtpDelete(t *testing.T) {
-	smtp := model.SmtpServer{}
+
+	// create one initially
+	TestServiceSmtpCreate(t)
 
 	// get test
-	err := model.GetDB().First(&smtp, "host like '%.test.%'").Error
-	if err != nil {
-		t.Error(err)
-	}
+	smtp := model.SmtpServer{}
+	err := model.GetDB().First(&smtp).Error
+
+	// check
+	require.NoError(t, err)
+	HelperValidateSmtpCredentials(smtp, t)
 
 	// delete
+	saveSmtp := model.SmtpServer{Id: smtp.Id}
 	is := service.InvestService{}
 	msg := is.SmtpDelete(&smtp)
 
 	// check
-	if msg.IsThereAnError() {
-		t.Error(msg.ErrMsg)
-	}
+	require.Zero(t, msg.ErrMsg)
+
+	// make sure
+	err = saveSmtp.OnlyGetById(model.GetDB())
+
+	// check
+	require.Error(t, err)
 }
 
 func TestLogicSmtpRotate(t *testing.T) {
 	// get smtp server
 	firstSmtp := model.SmtpServer{}
-	if err := firstSmtp.OnlyGetOne(model.GetDB()); err != nil {
-		t.Error(err)
-	}
+	err := firstSmtp.OnlyGetOne(model.GetDB())
+
+	// check
+	require.NoError(t, err)
 
 	// change time
 	firstSmtp.LastUsed = helper.GetCurrentTime()
-	if err := firstSmtp.OnlySaveById(model.GetDB()); err != nil {
-		t.Error(err)
-	}
+	err = firstSmtp.OnlySaveById(model.GetDB())
+
+	// check
+	require.NoError(t, err)
+
+	// -- second --
 
 	// check is it rotated
 	secondSmtp := model.SmtpServer{}
-	if err := secondSmtp.OnlyGetOne(model.GetDB()); err != nil {
-		t.Error(err)
-	}
+	err = secondSmtp.OnlyGetOne(model.GetDB())
 
-	if firstSmtp.Host == secondSmtp.Host && firstSmtp.Username == secondSmtp.Username {
-		t.Error("smtp credentials have not been rotated")
-	}
+	// check
+	require.NoError(t, err)
+	require.NotEqual(t, firstSmtp.Id, secondSmtp.Id)
 }
 
 
