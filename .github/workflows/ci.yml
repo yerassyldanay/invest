@@ -1,0 +1,47 @@
+name: ci-test
+
+on:
+  push:
+    branches:
+      - master
+      - development
+  pull_request:
+    branches:
+      - master
+      - development
+
+jobs:
+
+  run-test:
+    name: runing-all-test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:11-alpine
+        env:
+          POSTGRES_USER: spkuser
+          POSTGRES_PASSWORD: spkpassword
+          POSTGRES_DB: spkdb
+        ports:
+          - 7001:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.13
+        id: go-test-set-up
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Run all test inside the package ./tests/*
+        run: make test
+

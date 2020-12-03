@@ -13,4 +13,7 @@ test_database_container_remove:
 test_database_remove:
 	docker kill database_test && docker rm database_test
 
-.PHONY: run_services run_backend test_database_run test_database_remove
+test:
+	go test ./tests/*.go -v
+
+.PHONY: run_services run_backend test_database_run test_database_remove test

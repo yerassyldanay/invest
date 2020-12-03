@@ -8,6 +8,7 @@ import (
 	mrand "math/rand"
 )
 
+const gen_only_letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 const gen_letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 const gen_numbers = "0123456789"
 
@@ -55,6 +56,10 @@ func generate_random_string_or_number(n int, letters string) string {
 	return string(bytes)
 }
 
+func Generate_Random_String_No_Digits(n int) string {
+	return generate_random_string_or_number(n, gen_only_letters)
+}
+
 func Generate_Random_String(n int) string {
 	return generate_random_string_or_number(n, gen_letters)
 }
@@ -66,8 +71,4 @@ func Generate_Random_Number(n int) string {
 // generate an integer between two values
 func OnlyGenerateNumberBetweenTwoNumbers(start, end int) int {
 	return mrand.Intn((end - start) + start)
-}
-
-func OnlyGenerateNumberForFinanceTable() int {
-	return OnlyGenerateNumberBetweenTwoNumbers(1000, 90000)
 }

@@ -28,10 +28,10 @@ func HelperGetAnyProject(t *testing.T) model.Project {
 
 func HelperGenerateNewUser() model.User {
 	return model.User{
-		Password:       helper.Generate_Random_String(15),
-		Fio:            helper.Generate_Random_String(10) + " " + helper.Generate_Random_String(10),
+		Password:       "P" + helper.Generate_Random_String(15),
+		Fio:            helper.Generate_Random_String_No_Digits(10) + " " + helper.Generate_Random_String(10),
 		Email:          model.Email{
-			Address:  helper.Generate_Random_String(15) + "_test@mail.ru",
+			Address:  	helper.Generate_Random_String_No_Digits(15) + "_test@mail.ru",
 		},
 		Phone:          model.Phone{
 			Ccode:    "+7",
