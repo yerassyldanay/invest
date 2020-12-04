@@ -17,10 +17,17 @@ test:
 	go test ./tests/*.go -v
 
 migrate_up:
-	migrate -path ./db/postgre/migrate -database postgres://spkuser:spkpassword@192.168.0.10:7010/spkdb?sslmode=disable -verbose up
+	migrate -path ./db/postgre/migrate -database postgres://spkuser:spkpassword@localhost:7010/spkdb?sslmode=disable -verbose up
 
 migrate_down:
+	migrate -path ./db/postgre/migrate -database postgres://spkuser:spkpassword@localhost:7010/spkdb?sslmode=disable -verbose down
+
+migrate_up_docker:
+	migrate -path ./db/postgre/migrate -database postgres://spkuser:spkpassword@192.168.0.10:7010/spkdb?sslmode=disable -verbose up
+
+migrate_down_docker:
 	migrate -path ./db/postgre/migrate -database postgres://spkuser:spkpassword@192.168.0.10:7010/spkdb?sslmode=disable -verbose down
+
 
 .PHONY: run_services run_backend test_database_run test_database_remove test migrate_up migrate_down
 

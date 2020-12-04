@@ -34,7 +34,7 @@ COPY . /go/src/
 #RUN source env/.env
 COPY migrate /usr/bin
 
-RUN make migrate_up
+RUN make migrate_up_docker
 
 RUN go build -o main
 #CMD tail -f /dev/null
