@@ -67,9 +67,9 @@ func (is *InvestService) Document_remove_document_from_project(document_id uint6
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	// get an absolute path & delete a file from storage
+	// get an absolute pather & delete a file from storage
 	path, _ = filepath.Abs("./" + path)
-	fmt.Println("remove file path: " + path)
+	fmt.Println("remove file pather: " + path)
 	if err := os.Remove(path); err != nil {
 		fmt.Println(err.Error())
 	}

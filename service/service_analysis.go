@@ -90,7 +90,7 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (mess
 	var resp = errormsg.NoErrorFineEverthingOk
 	if analysis.WriteToFile {
 
-		// create file name + indicate file path
+		// create file name + indicate file pather
 		fileName := helper.Generate_Random_String(40)
 		filePath, err := filepath.Abs("./documents/analysis/" + fileName + ".xlsx")
 		if err != nil {

@@ -16,4 +16,10 @@ test_database_remove:
 test:
 	go test ./tests/*.go -v
 
+migrate_up:
+	migrate -path ./db/postgre/migrations -database postgres://spkuser:spkpassword@localhost:7010/spkdb?sslmode=disable -verbose up
+
+migrate_down:
+	migrate -path ./db/postgre/migrations -database postgres://spkuser:spkpassword@localhost:7010/spkdb?sslmode=disable -verbose down
+
 .PHONY: run_services run_backend test_database_run test_database_remove test

@@ -30,7 +30,7 @@ func Message(fname string, status_to_send int, message_to_send map[string]interf
 
 func (msg *Msg) Log(r *http.Request) {
 	logr.WithFields(map[string]interface{}{
-		"path":				r.URL.Path,
+		"pather":				r.URL.Path,
 		"host":				r.RemoteAddr,
 		"error":			msg.ErrMsg,
 		"status":			msg.Status,

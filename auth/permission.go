@@ -13,8 +13,8 @@ import (
 
 /*
 	This wrapper will check whether a request valid or invalid
-	The path is composed of several parts:
-		/v1/permission_type/other/path/part
+	The pather is composed of several parts:
+		/v1/permission_type/other/pather/part
 	This handler will:
 		1. parse id of the user
 		2. get permission_type
@@ -37,7 +37,7 @@ var HasPermissionWrapper = func(w http.ResponseWriter, r *http.Request)  (messag
 				Message: errormsg.ErrorInternalServerError,
 				Status:  http.StatusMisdirectedRequest,
 				Fname:   fname + " 1",
-				ErrMsg:  "the path is invalid",
+				ErrMsg:  "the pather is invalid",
 			}
 		}
 

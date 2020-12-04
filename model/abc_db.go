@@ -4,8 +4,6 @@ import (
 	"bitbucket.org/liamstask/goose/lib/goose"
 	"invest/utils/constants"
 	"invest/utils/logist"
-
-	//"github.com/pressly/goose"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
@@ -82,8 +80,7 @@ func Migration() error {
 		Driver:        		chooseDbDriver("postgres", dbUri),
 	}
 
-	abs, _ := filepath.Abs(migrateConf.MigrationsDir)
-	//fmt.Println(abs)
+	abs, _ := filepath.Abs("./invest/db/postgre/migrations")
 
 	latest, err := goose.GetMostRecentDBVersion(abs)
 	if err != nil {

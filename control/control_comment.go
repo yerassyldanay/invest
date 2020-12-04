@@ -40,7 +40,7 @@ import (
 //		}
 //	}
 //
-//	path := ds.Directory + ds.Filename + ds.Format
+//	pather := ds.Directory + ds.Filename + ds.Format
 //
 //	id := Get_header_parameter(r, utils.KeyId, uint64(0)).(uint64)
 //	project_id, err := strconv.ParseInt(r.FormValue("project_id"), 10, 64)
@@ -57,8 +57,8 @@ import (
 //	var docsStr = r.FormValue("documents")
 //
 //	if err := json.Unmarshal([]byte(docsStr), &documents); err != nil {
-//		if path != "" {
-//			fmt.Println(os.Remove("." + path))
+//		if pather != "" {
+//			fmt.Println(os.Remove("." + pather))
 //		}
 //		utils.Respond(w, r, utils.Msg{utils.ErrorInvalidParameters, 400, "", err.Error()})
 //		return
@@ -69,7 +69,7 @@ import (
 //		Body:       	r.FormValue("body"),
 //		UserId:     	uint64(id),
 //		ProjectId:  	uint64(project_id),
-//		DocumentUrl: 	path,
+//		DocumentUrl: 	pather,
 //		DocStatuses: 	documents,
 //	}
 //
@@ -81,8 +81,8 @@ import (
 //	msg := is.Comment_on_project_documents(comment)
 //
 //	if msg.ErrMsg != "" {
-//		if path != "" {
-//			fmt.Println(os.Remove("." + path))
+//		if pather != "" {
+//			fmt.Println(os.Remove("." + pather))
 //		}
 //	}
 //
