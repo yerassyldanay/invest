@@ -22,6 +22,7 @@ WORKDIR /go
 
 RUN apt-get update -y
 RUN apt-get install git -y
+RUN apt-get update -y
 
 # to solve the following problem:
 # exec: "gcc": executable file not found in %PATH%
@@ -30,6 +31,11 @@ RUN apt-get install build-essential -y
 WORKDIR /go/src
 COPY . /go/src/
 
-RUN go build main.go
+#RUN source env/.env
+COPY migrate /usr/bin
+
+RUN make migrate_up
+
+RUN go build -o main
 #CMD tail -f /dev/null
 

@@ -31,7 +31,7 @@ func main() {
 	defer cancel()
 
 	/*
-		this will be run at the end of all
+		this will be main at the end of all
 			allows to gracefully shut down
 	 */
 	defer time.Sleep(time.Millisecond * 10)

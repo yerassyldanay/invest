@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  iguard_global:
+  invest:
     build: .
     command: ./main
     volumes:

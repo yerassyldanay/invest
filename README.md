@@ -8,7 +8,8 @@
 ```
 
 ##### To run
-**Note:** before running backend refer to ./env/.env file & make sure all variables are correct 
+**Note:** before running backend refer to ./env/.env file & make sure all variables are correct  
+**Note #2:** refer to Dockerfile to see how it runs the migration
 ```text
 To run PostgreSQL:
 * env HOST=0.0.0.0 docker-compose -f docker-services.yml up --bu -d
