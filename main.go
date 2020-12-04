@@ -7,7 +7,6 @@ import (
 	logr "github.com/sirupsen/logrus"
 	"invest/app"
 	"invest/model"
-	"invest/utils/constants"
 	"invest/utils/logist"
 
 	"net/http"
@@ -30,18 +29,6 @@ func main() {
 	mq := model.InitiateNewMailerQueue()
 	go mq.Handle(ctx)
 	defer cancel()
-
-	/*
-		migration
-	*/
-	if err := model.Migration(); err != nil {
-		logist.SysMessage{
-			FuncName: "MAIN",
-			Message:  "migration: " + err.Error(),
-			Ok:       false,
-			Lev:      constants.WarnLevel,
-		}.Log_system_message()
-	}
 
 	/*
 		this will be run at the end of all

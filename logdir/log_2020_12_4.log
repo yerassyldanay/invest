@@ -29,3 +29,10 @@ time="2020-12-04T00:45:04+06:00" level=info msg=main port=7000
 time="2020-12-04T00:51:35+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
 time="2020-12-04T00:51:35+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
 time="2020-12-04T07:23:44+06:00" level=info msg=main port=7000
+time="2020-12-04T08:27:07+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-12-04T08:27:07+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2020-12-04T08:27:10+06:00" level=info msg=main port=7000
+time="2020-12-04T08:27:36+06:00" level=info msg="Sign_in 3" error="username is not supported" host="[::1]:57118" pather=/v1/signin status=400
+time="2020-12-04T08:28:00+06:00" level=info msg="Sign_in 3" error= host="[::1]:57118" pather=/v1/signin status=200
+time="2020-12-04T08:34:07+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2020-12-04T08:34:07+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true

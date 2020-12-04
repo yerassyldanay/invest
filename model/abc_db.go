@@ -1,16 +1,13 @@
 package model
 
 import (
-	"bitbucket.org/liamstask/goose/lib/goose"
-	"invest/utils/constants"
-	"invest/utils/logist"
-	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"invest/utils/constants"
+	"invest/utils/logist"
 	//_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/lib/pq"
 	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -21,30 +18,10 @@ import (
 var db *gorm.DB
 
 /*
-	this allows to choose the database and set parameters
- */
-func chooseDbDriver(dbtype, dbpath string) goose.DBDriver {
-	drive := goose.DBDriver{
-		Name:    		dbtype,
-		OpenStr: 		dbpath,
-		Import:  		"",
-		Dialect: 		nil,
-	}
-
-	switch dbtype {
-	default:
-		drive.Import = "github.com/lib/pq"
-		drive.Dialect = &goose.PostgresDialect{}
-	}
-
-	return drive
-}
-
-/*
 	E.g.
 		postgresql://other@localhost/otherdb?connect_timeout=10&application_name=myapp
  */
-func Get_db_uri() (string, error) {
+func GetDbUri() (string, error) {
 
 	if err := Load_env_values(); err != nil {
 		return "", err
@@ -66,48 +43,13 @@ func Get_db_uri() (string, error) {
 	return dbUri, nil
 }
 
-func Migration() error {
-	//var dbName = os.Getenv("POSTGRES_DB")
-	var dbUri, err = Get_db_uri()
-
-	if err != nil {
-		return err
-	}
-
-	migrateConf := &goose.DBConf {
-		MigrationsDir: 		os.Getenv("MIGRATION_PATH"),
-		Env:           		os.Getenv("ENV"),
-		Driver:        		chooseDbDriver("postgres", dbUri),
-	}
-
-	abs, _ := filepath.Abs("./invest/db/postgre/migrations")
-
-	latest, err := goose.GetMostRecentDBVersion(abs)
-	if err != nil {
-		return err
-	}
-
-	//fmt.Println(latest)
-	var tdb = GetDB().DB()
-	if tdb == nil {
-		return errors.New("*DB is nil")
-	}
-
-	err = goose.RunMigrationsOnDb(migrateConf, migrateConf.MigrationsDir, latest, tdb)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 /*
 	init it
  */
 func Set_up_db() {
 
 	var fname = "INIT_DB"
-	var dbUri, err = Get_db_uri()
+	var dbUri, err = GetDbUri()
 
 	//fmt.Println(dbUri + "...")
 
