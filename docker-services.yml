@@ -8,12 +8,11 @@ services:
       - "env/.env"
     environment:
       - "TZ=Asia/Almaty"
-      - "POSTGRES_DB=invest"
     volumes:
       - "/docker_volumes/invest/postgre:/var/lib/postgresql/data"
     ports:
       - "$HOST:7001:5432"
-    hostname: "invest_postgre"
+    hostname: "postgres_invest"
 
   redis_invest:
     restart: always
@@ -23,5 +22,5 @@ services:
       - "/docker_volumes/invest/data"
     ports:
       - "$HOST:7002:6379"
-    hostname: "invest_redis"
+    hostname: "redis_invest"
 

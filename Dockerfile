@@ -34,7 +34,7 @@ COPY . /go/src/
 #RUN source env/.env
 COPY migrate /usr/bin
 
-RUN make migrate_up_docker
+RUN migrate -path ./db/postgre/migrate -database postgres://spkuser:c8acb720063d4eb75b56drg@178.170.221.116:7001/invest?sslmode=disable -verbose up
 
 RUN go build -o main
 #CMD tail -f /dev/null

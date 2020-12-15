@@ -4,9 +4,11 @@ services:
   invest:
     build: .
     command: ./main
-    volumes:
-      - "/docker_volumes/invest/backend/documents/:/documents/"
     environment:
       - "TZ=Asia/Almaty"
+    env_file:
+      - "env/.env"
+    volumes:
+      - "/docker_volumes/invest/backend/documents/:/documents/"
     ports:
       - "7000:7000"

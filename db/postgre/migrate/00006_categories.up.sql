@@ -1,4 +1,4 @@
-insert into spkdb.public.categors (kaz, rus, eng) values
+insert into invest.public.categors (kaz, rus, eng) values
     ('құрылыс', 'строительство', 'construction'),
     ('құрылыс ЖТҮ', 'строительство МЖК', 'YRH'),
     ('өндіріс', 'производство', 'production'),
