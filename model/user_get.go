@@ -6,7 +6,6 @@ import (
 	"invest/utils/errormsg"
 	"invest/utils/message"
 	"net/http"
-	"sync"
 )
 
 /*
@@ -32,42 +31,45 @@ func (c *User) Get_full_info_of_this_user(by string) (message.Msg) {
 		return message.Msg{errormsg.ErrorNoSuchUser, 404, "", err.Error()}
 	}
 
-	var wg = sync.WaitGroup{}
-	wg.Add(3)
-
-	/*
-		Phone
-	 */
-	go func(wgi *sync.WaitGroup) {
-		defer wg.Done()
-		_ = GetDB().First(&c.Phone, "id = ?", c.PhoneId)
-	}(&wg)
+	//var wg = sync.WaitGroup{}
+	//wg.Add(3)
+	//
+	///*
+	//	Phone
+	// */
+	//go func(wgi *sync.WaitGroup) {
+	//	defer wg.Done()
+	//
+	//}(&wg)
+	_ = GetDB().First(&c.Phone, "id = ?", c.PhoneId)
 
 	/*
 		Email
 	 */
-	go func(wgi *sync.WaitGroup) {
-		defer wg.Done()
-		_ = GetDB().First(&c.Email, "id = ?", c.EmailId)
-	}(&wg)
+	//go func(wgi *sync.WaitGroup) {
+	//	defer wg.Done()
+	//	_ = GetDB().First(&c.Email, "id = ?", c.EmailId)
+	//}(&wg)
+	_ = GetDB().First(&c.Email, "id = ?", c.EmailId)
 
 	/*
 		Role
 	 */
-	go func(wgi *sync.WaitGroup) {
-		defer wg.Done()
-		_ = GetDB().First(&c.Role, "id = ?", c.RoleId)
-	}(&wg)
+	//go func(wgi *sync.WaitGroup) {
+	//	defer wg.Done()
+	//	_ = GetDB().First(&c.Role, "id = ?", c.RoleId)
+	//}(&wg)
+	_ = GetDB().First(&c.Role, "id = ?", c.RoleId)
 
-	if c.OrganizationId > 0 {
-		wg.Add(1)
-		go func(wgi *sync.WaitGroup) {
-			defer wg.Done()
-			_ = GetDB().First(&c.Organization, "id = ?", c.OrganizationId)
-		}(&wg)
-	}
-
-	wg.Wait()
+	//if c.OrganizationId > 0 {
+	//	wg.Add(1)
+	//	go func(wgi *sync.WaitGroup) {
+	//		defer wg.Done()
+	//		_ = GetDB().First(&c.Organization, "id = ?", c.OrganizationId)
+	//	}(&wg)
+	//}
+	//wg.Wait()
+	_ = GetDB().First(&c.Organization, "id = ?", c.OrganizationId)
 
 	var password = c.Password
 	c.Password = ""

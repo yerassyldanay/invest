@@ -1,45 +1,25 @@
 create table categors
 (
-    id  bigserial not null
-        constraint categors_pkey
-            primary key,
-    kaz text      not null
-        constraint categors_kaz_key
-            unique,
-    rus text      not null
-        constraint categors_rus_key
-            unique,
-    eng text      not null
-        constraint categors_eng_key
-            unique
+    id  bigserial primary key,
+    kaz text not null unique,
+    rus text not null unique,
+    eng text not null unique
 );
-
-alter table categors
-    owner to spkuser;
 
 create table comments
 (
-    id         bigserial not null
-        constraint comments_pkey
-            primary key,
-    body       text                     default ''::text,
+    id bigserial primary key,
+    body text default ''::text,
     user_id    bigint,
     project_id bigint,
     status     text      not null,
     created    timestamp with time zone default now()
 );
 
-alter table comments
-    owner to spkuser;
-
 create table costs
 (
-    id                            bigserial not null
-        constraint costs_pkey
-            primary key,
-    project_id                    bigint
-        constraint costs_project_id_key
-            unique,
+    id  bigserial not null primary key,
+    project_id  bigint unique,
     building_repair_investor      integer,
     building_repair_involved      integer,
     technology_equipment_investor integer,
@@ -49,9 +29,6 @@ create table costs
     other_cost_investor           integer,
     other_cost_involved           integer
 );
-
-alter table costs
-    owner to spkuser;
 
 create table documents
 (
@@ -71,33 +48,25 @@ create table documents
     responsible   text
 );
 
-alter table documents
-    owner to spkuser;
+-- alter table documents
+--     owner to spkuser;
 
 create table emails
 (
-    id        bigserial not null
-        constraint emails_pkey
-            primary key,
-    address   text
-        constraint emails_address_key
-            unique,
+    id        bigserial   primary key,
+    address   text unique,
     verified  boolean default false,
     sent_code text,
     deadline  timestamp with time zone
 );
 
-alter table emails
-    owner to spkuser;
+-- alter table emails
+--     owner to spkuser;
 
 create table finances
 (
-    id                     bigserial not null
-        constraint finances_pkey
-            primary key,
-    project_id             bigint
-        constraint finances_project_id_key
-            unique,
+    id                     bigserial   primary key,
+    project_id             bigint unique,
     total_income           integer,
     total_production       integer,
     production_cost        integer,
@@ -108,9 +77,6 @@ create table finances
     taxes                  integer
 );
 
-alter table finances
-    owner to spkuser;
-
 create table forget_passwords
 (
     email_address text,
@@ -118,14 +84,9 @@ create table forget_passwords
     deadline      timestamp with time zone
 );
 
-alter table forget_passwords
-    owner to spkuser;
-
 create table gantas
 (
-    id               bigserial not null
-        constraint gantas_pkey
-            primary key,
+    id               bigserial   primary key,
     is_additional    boolean                  default false,
     project_id       bigint,
     kaz              text                     default ''::text,
@@ -143,14 +104,9 @@ create table gantas
     not_to_show      boolean                  default false
 );
 
-alter table gantas
-    owner to spkuser;
-
 create table organizations
 (
-    id      bigserial not null
-        constraint organizations_pkey
-            primary key,
+    id      bigserial primary key,
     lang    text,
     bin     text,
     name    text      not null,
@@ -159,34 +115,21 @@ create table organizations
     address text      not null
 );
 
-alter table organizations
-    owner to spkuser;
-
 create table permissions
 (
-    id          bigserial not null
-        constraint permissions_pkey
-            primary key,
+    id          bigserial  primary key,
     name        text,
     description text
 );
 
-alter table permissions
-    owner to spkuser;
-
 create table phones
 (
-    id        bigserial not null
-        constraint phones_pkey
-            primary key,
+    id        bigserial   primary key,
     ccode     text,
     number    text,
     sent_code text,
     verified  boolean
 );
-
-alter table phones
-    owner to spkuser;
 
 create table projects_users
 (
@@ -197,9 +140,6 @@ create table projects_users
         primary key (project_id, user_id)
 );
 
-alter table projects_users
-    owner to spkuser;
-
 create table projects_categors
 (
     project_id bigint not null,
@@ -208,14 +148,9 @@ create table projects_categors
         primary key (project_id, categor_id)
 );
 
-alter table projects_categors
-    owner to spkuser;
-
 create table projects
 (
-    id                  bigserial not null
-        constraint projects_pkey
-            primary key,
+    id                  bigserial  primary key,
     name                text,
     description         text                     default ''::text,
     info                text,
@@ -235,9 +170,6 @@ create table projects
     deleted             timestamp with time zone
 );
 
-alter table projects
-    owner to spkuser;
-
 create table roles_permissions
 (
     role_id       bigint not null,
@@ -246,26 +178,16 @@ create table roles_permissions
         primary key (role_id, permission_id)
 );
 
-alter table roles_permissions
-    owner to spkuser;
-
 create table roles
 (
-    id          bigserial not null
-        constraint roles_pkey
-            primary key,
+    id          bigserial  primary key,
     name        text,
     description text
 );
 
-alter table roles
-    owner to spkuser;
-
 create table smtp_servers
 (
-    id        bigserial not null
-        constraint smtp_servers_pkey
-            primary key,
+    id        bigserial  primary key,
     host      text,
     port      integer,
     username  text,
@@ -273,31 +195,20 @@ create table smtp_servers
     last_used timestamp with time zone
 );
 
-alter table smtp_servers
-    owner to spkuser;
 
 create table smtp_headers
 (
-    id             bigserial not null
-        constraint smtp_headers_pkey
-            primary key,
+    id             bigserial  primary key,
     smtp_server_id bigint,
     key            text,
     value          text
 );
 
-alter table smtp_headers
-    owner to spkuser;
-
 create table users
 (
-    id              bigserial not null
-        constraint users_pkey
-            primary key,
+    id              bigserial  primary key,
     password        text,
-    fio             text
-        constraint users_fio_key
-            unique,
+    fio             text,
     role_id         bigint,
     email_id        bigint,
     phone_id        bigint,
@@ -307,14 +218,9 @@ create table users
     created         timestamp with time zone default now()
 );
 
-alter table users
-    owner to spkuser;
-
 create table notifications
 (
-    id           bigserial not null
-        constraint notifications_pkey
-            primary key,
+    id           bigserial  primary key,
     from_address text,
     project_id   bigint                   default 0,
     html         text,
@@ -322,14 +228,9 @@ create table notifications
     created      timestamp with time zone default now()
 );
 
-alter table notifications
-    owner to spkuser;
-
 create table notification_instances
 (
     to_address      text,
     notification_id bigint
 );
 
-alter table notification_instances
-    owner to spkuser;

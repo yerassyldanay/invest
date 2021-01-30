@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"gopkg.in/gomail.v2"
 	"invest/utils/helper"
-	"sync"
 )
 
 // all notifications messages must have following methods,
@@ -137,7 +136,7 @@ func MessageStoreNotificationOnDb(n InterMessage) error {
 	// get a list of receivers
 	emails := n.GetToList()
 
-	var wg = sync.WaitGroup{}
+	//var wg = sync.WaitGroup{}
 
 	for _, email := range emails {
 		// not for fun
@@ -148,20 +147,20 @@ func MessageStoreNotificationOnDb(n InterMessage) error {
 			NotificationId: notification.Id,
 		}
 
-		wg.Add(1)
-		go func(email string, ni *NotificationInstance, gwg *sync.WaitGroup) {
-			defer wg.Done()
+		//wg.Add(1)
+		func(email string, ni *NotificationInstance) {
+			//defer wg.Done()
 
 			// get notification instance
 			if err := ni.OnlyCreate(GetDB()); err != nil {
 				fmt.Println("could not store notification on db. err: ", err)
 			}
 
-		}(email, notInstance, &wg)
+		}(email, notInstance)
 	}
 
 	// wait for goroutines
-	wg.Wait()
+	//wg.Wait()
 
 	return nil
 }

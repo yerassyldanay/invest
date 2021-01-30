@@ -1,13 +1,13 @@
 
 -- email & phone
-create unique index if not exists make_email_address_unique on invest.public.emails (address);
-create unique index if not exists make_phone_number_unique on invest.public.phones (ccode, number);
-create index if not exists phone_better_login on phones ((invest.public.phones.ccode || invest.public.phones.number));
+create unique index if not exists make_email_address_unique on emails (address);
+create unique index if not exists make_phone_number_unique on phones (ccode, number);
+create index if not exists phone_better_login on phones ((phones.ccode || phones.number));
 
 -- documents
-create index doc_uri on invest.public.documents (uri);
-create index doc_status on invest.public.documents (status);
-create index doc_project on invest.public.documents (step, project_id);
+create index doc_uri on documents (uri);
+create index doc_status on documents (status);
+create index doc_project on documents (step, project_id);
 
 -- gantt table
 create index gantt_project_id on gantas (project_id);

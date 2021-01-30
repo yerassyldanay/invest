@@ -7,7 +7,6 @@ import (
 	"invest/utils/message"
 	"path/filepath"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -64,14 +63,14 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (mess
 		analysis.ProjectExtendedList = append(analysis.ProjectExtendedList, projExtended)
 	}
 
-	var wg = sync.WaitGroup{}
+	//var wg = sync.WaitGroup{}
 
 	// load cost & finance tables
 	for i, _ := range analysis.ProjectExtendedList {
 		i := i
-		wg.Add(1)
-		go func(proj *model.ProjectExtended, gwg *sync.WaitGroup) {
-			defer gwg.Done()
+		//wg.Add(1)
+		func(proj *model.ProjectExtended) {
+			//defer gwg.Done()
 			_ = proj.Cost.OnlyGetByProjectId(model.GetDB())
 			_ = proj.Finance.OnlyGetByProjectId(model.GetDB())
 			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
@@ -82,9 +81,9 @@ func (is *InvestService) Analysis_get_on_projects(analysis model.Analysis) (mess
 				proj.Categors = []model.Categor{}
 			}
 
-		}(&analysis.ProjectExtendedList[i], &wg)
+		}(&analysis.ProjectExtendedList[i])
 	}
-	wg.Wait()
+	//wg.Wait()
 
 	// return response
 	var resp = errormsg.NoErrorFineEverthingOk

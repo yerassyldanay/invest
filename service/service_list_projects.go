@@ -6,7 +6,6 @@ import (
 	"invest/utils/constants"
 	"invest/utils/errormsg"
 	"invest/utils/message"
-	"sync"
 )
 
 func (is *InvestService) Get_own_projects(statuses []string, steps []int) (message.Msg) {
@@ -27,17 +26,17 @@ func (is *InvestService) Get_own_projects(statuses []string, steps []int) (messa
 	}
 
 	// preload categories
-	var wg = sync.WaitGroup{}
+	//var wg = sync.WaitGroup{}
 	for i, _ := range projects {
 		i := i
-		wg.Add(1)
-		go func(proj *model.Project, wg *sync.WaitGroup) {
-			defer wg.Done()
+		//wg.Add(1)
+		func(proj *model.Project) {
+			//defer wg.Done()
 			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
 			_ = proj.GetAndUpdateStatusOfProject(model.GetDB())
-		}(&projects[i], &wg)
+		}(&projects[i])
 	}
-	wg.Wait()
+	//wg.Wait()
 
 	// convert them to map
 	var projectsMap = []map[string]interface{}{}
@@ -74,17 +73,17 @@ func (is *InvestService) Get_all_projects_by_statuses(statuses []string, steps [
 	projects, _ := project.OnlyGetProjectsByStatusesAndSteps(is.Offset, statuses, steps, model.GetDB())
 
 	// get categories
-	var wg = sync.WaitGroup{}
+	//var wg = sync.WaitGroup{}
 	var projectsMap = []map[string]interface{}{}
 	for i, _ := range projects {
-		wg.Add(1)
-		go func(proj *model.Project, gwg *sync.WaitGroup) {
-			defer gwg.Done()
+		//wg.Add(1)
+		func(proj *model.Project) {
+			//defer gwg.Done()
 			_ = proj.OnlyGetCategorsByProjectId(model.GetDB())
 			_ = proj.GetAndUpdateStatusOfProject(model.GetDB())
-		}(&projects[i], &wg)
+		}(&projects[i])
 	}
-	wg.Wait()
+	//wg.Wait()
 
 	// convert to map
 	for _, project := range projects {

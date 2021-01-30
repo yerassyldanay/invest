@@ -70,7 +70,7 @@ func (sis *SignIn) Sign_in() (message.Msg) {
 	/*
 		Provide a role of a client
 	*/
-	var token = &Token{
+	var token = &Token {
 		UserId:         user.Id,
 		RoleName:		user.Role.Name,
 		Exp:            time.Now().Add(time.Hour * 24),

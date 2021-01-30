@@ -44,7 +44,7 @@ func (mqi *MailerQueue) Handle(ctx context.Context) {
 			return
 		case notifyMessage := <- mqi.NotificationChannel:
 
-			//continue
+			continue
 
 			//fmt.Println("Sending one more message: ", notifyMessage.GetSubject())
 

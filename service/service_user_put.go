@@ -141,8 +141,6 @@ func (is *InvestService) Create_user_based_on_role(new_user *model.User) (messag
 	}
 
 	// check email
-
-
 	// create
 	msg := new_user.Create_user_without_check()
 
