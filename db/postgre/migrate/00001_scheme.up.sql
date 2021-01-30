@@ -32,9 +32,7 @@ create table costs
 
 create table documents
 (
-    id            bigserial not null
-        constraint documents_pkey
-            primary key,
+    id            bigserial primary key,
     kaz           text      not null,
     rus           text      not null,
     eng           text      not null,
@@ -48,9 +46,6 @@ create table documents
     responsible   text
 );
 
--- alter table documents
---     owner to spkuser;
-
 create table emails
 (
     id        bigserial   primary key,
@@ -59,9 +54,6 @@ create table emails
     sent_code text,
     deadline  timestamp with time zone
 );
-
--- alter table emails
---     owner to spkuser;
 
 create table finances
 (
