@@ -67,7 +67,7 @@ func Respond(w http.ResponseWriter, r *http.Request, msg Msg) {
 	w.Header().Set(constants.HeaderCustomStatus, strconv.Itoa(msg.Status))
 
 	/*HEAD
-		this header will bear a auth token
+		this header will bear a middleware token
 	 */
 	w.Header().Add(constants.HeaderAuthorization, r.Header.Get(constants.HeaderAuthorization))
 

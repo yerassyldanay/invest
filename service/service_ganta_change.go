@@ -214,7 +214,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 		LastGantaStep: lastGantaStep,
 	}
 
-	// send message (handles everything: stores on db, prepares smtp message,
+	// send message (handles everything: stores on database, prepares smtp message,
 	// gets smtp server credentials, dials to smtp server & sends message )
 	select {
 	case model.GetMailerQueue().NotificationChannel <- notifyStatusChangeMessage:

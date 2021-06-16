@@ -1,14 +1,20 @@
-version: "2"
+version: "3.5"
 
 services:
-  invest:
+  spk:
     build: .
     command: ./main
+    volumes:
+      - "/docker_volumes/spk/backend/documents/:/docs/"
+    env_file:
+      - "environment/middleware.environment"
+    networks:
+      - spk_network
     environment:
       - "TZ=Asia/Almaty"
-    env_file:
-      - "env/.env"
-    volumes:
-      - "/docker_volumes/invest/backend/documents/:/documents/"
     ports:
-      - "7000:7000"
+      - "$HOST:7000:7000"
+
+networks:
+  spk_network:
+    external: true

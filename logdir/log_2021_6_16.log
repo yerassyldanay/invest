@@ -1,0 +1,56 @@
+time="2021-06-16T18:05:38+06:00" level=info msg=main port=7000
+time="2021-06-16T18:22:36+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:22:36+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:22:41+06:00" level=info msg=main port=7000
+time="2021-06-16T18:35:53+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:35:53+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:35:55+06:00" level=info msg=main port=7000
+time="2021-06-16T18:45:21+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:45:21+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:45:24+06:00" level=info msg=main port=7000
+time="2021-06-16T18:46:01+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:46:01+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:46:04+06:00" level=info msg=main port=7000
+time="2021-06-16T18:46:28+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:46:28+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:46:31+06:00" level=info msg=main port=7000
+time="2021-06-16T18:47:01+06:00" level=info msg="JWT_TOKEN 1" error="could not be split correctly | len: 1 | token: " host="[::1]:51648" pather=/v1/test status=421
+time="2021-06-16T18:48:27+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:48:27+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:48:29+06:00" level=info msg=main port=7000
+time="2021-06-16T18:49:53+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:49:53+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:49:56+06:00" level=info msg=main port=7000
+time="2021-06-16T18:50:24+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:50:24+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:50:26+06:00" level=info msg=main port=7000
+time="2021-06-16T18:59:12+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:59:12+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:59:15+06:00" level=info msg=main port=7000
+time="2021-06-16T18:59:50+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:59:50+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:59:54+06:00" level=info msg=main port=7000
+time="2021-06-16T18:59:55+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T18:59:55+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T18:59:58+06:00" level=info msg=main port=7000
+time="2021-06-16T19:01:18+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T19:01:18+06:00" level=info msg=fn_rotate_log_files message="finishing the rotate fr goroutine" ok=true
+time="2021-06-16T19:07:12+06:00" level=info msg=main port=7000
+time="2021-06-16T19:16:16+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T19:16:19+06:00" level=info msg=main port=7000
+time="2021-06-16T19:16:40+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T19:16:43+06:00" level=info msg=main port=7000
+time="2021-06-16T20:12:52+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T20:12:55+06:00" level=info msg=main port=7000
+time="2021-06-16T20:14:58+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T20:15:01+06:00" level=info msg=main port=7000
+time="2021-06-16T20:15:12+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T20:15:15+06:00" level=info msg=main port=7000
+time="2021-06-16T20:15:48+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T20:15:53+06:00" level=info msg=main port=7000
+time="2021-06-16T20:16:55+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T20:16:58+06:00" level=info msg=main port=7000
+time="2021-06-16T20:17:35+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T20:17:38+06:00" level=info msg=main port=7000
+time="2021-06-16T20:17:42+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T20:19:00+06:00" level=info msg=main port=7000

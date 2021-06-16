@@ -49,7 +49,7 @@ var ErrorInternalServerError = map[string]interface{} {
 }
 
 var ErrorInternalDbError = map[string]interface{} {
-	"eng": "failed create / update / remove / get a row from db",
+	"eng": "failed create / update / remove / get a row from database",
 	"rus": "не удалось создать / обновить / удалить / получить строку в бд",
 	"kaz": "мәліметті құру / жаңарту / жою / алу сәтсіз аяқталды",
 }

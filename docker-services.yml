@@ -1,26 +1,42 @@
-version: '2'
+version: '3.5'
 
 services:
-  postgres_invest:
+  postgres_spk:
     restart: always
-    build: ./env/postgre/
     env_file:
-      - "env/.env"
+      - environment/postgre/
+    image: postgres:11
+    volumes:
+      - "/docker_volumes/spk/postgre:/var/lib/postgresql/data"
+    networks:
+      - network
     environment:
       - "TZ=Asia/Almaty"
-    volumes:
-      - "/docker_volumes/invest/postgre:/var/lib/postgresql/data"
+    #    container_name: "postgres_spk"
     ports:
       - "$HOST:7001:5432"
-    hostname: "postgres_invest"
+    hostname: "spk_postgres"
 
-  redis_invest:
+  redis_spk:
     restart: always
     image: redis:5.0
-    command: redis-server --requirepass f5db003759b2456f8acb
+    #    command: redis-server --requirepass f5db003759b2456f8acb
     volumes:
-      - "/docker_volumes/invest/data"
+      - "/docker_volumes/spk/data"
+    environment:
+      - "TZ=Asia/Almaty"
+    env_file:
+      - environment/postgre/
+    #    container_name: "postgres_spk"
+    networks:
+      - network
     ports:
       - "$HOST:7002:6379"
-    hostname: "redis_invest"
+    hostname: "spk_redis"
+
+networks:
+  network:
+    driver: bridge
+
+
 

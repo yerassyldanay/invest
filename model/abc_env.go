@@ -12,13 +12,13 @@ func Load_env_values() error {
 
 	var env1_general string
 	if ok, err := regexp.Match("[a-zA-Z0-9]*/invest/+", []byte(current_path)); ok && err == nil {
-		env1_general = "../env/.env"
+		env1_general = "../environment/.environment"
 	} else {
-		env1_general = "./env/.env"
+		env1_general = "./environment/.environment"
 	}
 
 	/*
-		the following call loads all env variables in the .env file
+		the following call loads all environment variables in the .environment file
 	*/
 	path_env, err := filepath.Abs(env1_general)
 

@@ -28,7 +28,7 @@ func GetDbUri() (string, error) {
 	}
 
 	/*
-		the env variables are loaded above
+		the environment variables are loaded above
 	*/
 	var dbUsername = os.Getenv("POSTGRES_USER")
 	var dbPassword = os.Getenv("POSTGRES_PASSWORD")
@@ -91,7 +91,7 @@ func Set_up_db() {
 		if i == constants.AttemptToConnectToDb {
 			logist.SysMessage{
 				FuncName: fname,
-				Message:  "could not connect to db...",
+				Message:  "could not connect to database...",
 				Ok:       false,
 				Lev:      constants.WarnLevel,
 			}.Log_system_message()
@@ -104,42 +104,21 @@ func Set_up_db() {
 	/*
 		the following call makes changes to the database based on the changes in provided struct-s
 	 */
-	//db.Debug().AutoMigrate(&Admin{}, &Category{}, &Company{}, &CivilServant{}, &Email{},
+	//database.Debug().AutoMigrate(&Admin{}, &Category{}, &Company{}, &CivilServant{}, &Email{},
 	//&Investor{}, InvestorAndCompany{}, &Phone{}, &Position{}, &Project{}, &ProjectDoc{},
 	//&ProjectCivilConnection{}, &SendgridMessage{})
 
-	db.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{},
-		&Email{}, &Finance{}, &ForgetPassword{}, &Ganta{}, &Organization{},
-		&Permission{}, &Phone{}, &Project{}, &Role{}, &SmtpServer{}, &SmtpHeaders{},
-		&User{})
-
-	db.Debug().AutoMigrate(&Notification{}, &NotificationInstance{}, &ProjectsUsers{})
+	//database.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{},
+	//	&Email{}, &Finance{}, &ForgetPassword{}, &Ganta{}, &Organization{},
+	//	&Permission{}, &Phone{}, &Project{}, &Role{}, &SmtpServer{}, &SmtpHeaders{},
+	//	&User{})
+	//
+	//database.Debug().AutoMigrate(&Notification{}, &NotificationInstance{}, &ProjectsUsers{})
 
 	/*
-		parameters of db
+		parameters of database
 	 */
 	db.DB().SetMaxOpenConns( constants.MaxNumberOpenConnToDb )
-
-	err = PrepareSequenceId()
-	if err != nil {
-		fmt.Printf("could not prepare sequence id. err: ", err)
-	}
-}
-
-func PrepareSequenceId() error {
-	main_query := `
-		select setval('costs_id_seq', (select max(id) from costs) + 1);
-		select setval('finances_id_seq', (select max(id) from finances) + 1);
-		select setval('gantas_id_seq', (select coalesce(max(id), 0) as id from gantas) + 1);
-		select setval('emails_id_seq', (select max(id) from emails) + 1);
-		select setval('phones_id_seq', (select max(id) from phones) + 1);
-		select setval('users_id_seq', (select max(id) from users) + 1);
-		select setval('roles_id_seq', (select max(id) from roles) + 1);
-		select setval('projects_id_seq', (select max(id) from projects) + 1);
-		select setval('organizations_id_seq', (select max(id) from organizations) + 1);
-	`
-	err := GetDB().Exec(main_query).Error
-	return err
 }
 
 /*
@@ -147,7 +126,7 @@ func PrepareSequenceId() error {
  */
 func GetDB () *gorm.DB {
 	if db == nil {
-		fmt.Printf("[CONN] Establishing a new db connection...")
+		fmt.Printf("[CONN] Establishing a new database connection...")
 		Set_up_db()
 	}
 	return db

@@ -53,8 +53,8 @@ func (mqi *MailerQueue) Handle(ctx context.Context) {
 			}
 
 			// prepare notification message
-			// store notification body on db
-			// store notification instances on db
+			// store notification body on database
+			// store notification instances on database
 			err := MessageStoreNotificationOnDb(notifyMessage)
 			if err != nil {
 				mqi.printCouldNotSendNotification(err)
@@ -68,7 +68,7 @@ func (mqi *MailerQueue) Handle(ctx context.Context) {
 				return
 			}
 
-			// this function gets smtp server credentials from db
+			// this function gets smtp server credentials from database
 			// sets connection & sends message
 			if err = MessageDialAndSend(message); err != nil {
 				mqi.printCouldNotSendNotification(err)

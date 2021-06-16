@@ -1,41 +1,95 @@
-BINARY=rubi
-
-POSTGRES_HOST=0.0.0.0
-POSTGRES_PORT=7001
+BINARY=spk
+DB_HOST=0.0.0.0
+DB_PORT=7001
 POSTGRES_PASSWORD=simple
 POSTGRES_USER=simple
 POSTGRES_DB_NAME=simple
 POSTGRES_CONTAINER_NAME=invest_postgres
-POSTGRES_VERSION=11-alpine
+POSTGRES_VERSION=12-alpine
 
 REDIS_HOST=0.0.0.0
 REDIS_PORT=7002
 
-services_run:
-	env HOST=0.0.0.0 docker-compose -f docker-services.yml up --bu -d
+lint-prepare:
+	@echo "Installing golangci-lint"
+	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s latest
 
-services_down:
-	env HOST=0.0.0.0 docker-compose -f docker-services.yml down
+lint:
+	./bin/golangci-lint run ./...
 
-backend_run:
-	docker-compose up --bu -d
+compile:
+	go build -o ${BINARY} main.go
+
+clean:
+	if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 
 postgres:
-	docker pull postgres:${POSTGRES_VERSION} && docker run --name ${POSTGRES_CONTAINER_NAME} -p ${POSTGRES_HOST}:${POSTGRES_PORT}:5432 -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_USER=${POSTGRES_USER} -e POSTGRES_DB=${POSTGRES_DB_NAME} -d postgres:${POSTGRES_VERSION}
+	docker pull postgres:${POSTGRES_VERSION} && docker run --name ${POSTGRES_CONTAINER_NAME} -p ${DB_HOST}:${DB_PORT}:5432 -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_USER=${POSTGRES_USER} -e POSTGRES_USER=${POSTGRES_USER} -d postgres:${POSTGRES_VERSION}
 
-postgres_remove:
-	docker kill ${POSTGRES_CONTAINER_NAME} && docker rm ${POSTGRES_CONTAINER_NAME}
+postgres_delete:
+	docker stop ${POSTGRES_CONTAINER_NAME} && docker rm ${POSTGRES_CONTAINER_NAME}
 
-test:
-	go test ./tests/*.go -v
+postgres_logs:
+	docker logs ${POSTGRES_CONTAINER_NAME} -f --tail=30
+
+redis:
+	docker pull redis && docker run --name spk_redis -p ${REDIS_HOST}:${REDIS_PORT}:6379 -d redis
+
+redis_delete:
+	docker kill spk_redis && docker rm spk_redis
+
+redis_logs:
+	docker logs spk_redis -f --tail=30
 
 migrate_up:
-	migrate -path ./db/postgre/migrate -database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}?sslmode=disable -verbose up
+	migrate -path ./db/postgre/migrate -database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB_NAME}?sslmode=disable -verbose up
 
 migrate_down:
-	migrate -path ./db/postgre/migrate -database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}?sslmode=disable -verbose down
+	migrate -path ./db/postgre/migrate -database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB_NAME}?sslmode=disable -verbose down
 
-env:
-	echo $(POSTGRES_USER)
+generate:
+	sqlc generate
 
-.PHONY: services_run services_down backend_run postgres postgres_remove test migrate_up migrate_down env
+test:
+	go test -v ./...
+
+server:
+	go run main.go
+
+sql_next_migrate:
+	migrate create -ext sql -dir ./database/postgres/ -seq -digits 5 nameit
+
+
+services_:
+	env HOST=0.0.0.0 docker-compose -f docker-services.yml up --remove-orphans --bu -d
+
+services_log:
+	env HOST=0.0.0.0 docker-compose -f docker-services.yml logs -f --tail=30
+
+services_stop:
+	env HOST=0.0.0.0 docker-compose -f docker-services.yml stop
+
+services_rm:
+	env HOST=0.0.0.0 docker-compose -f docker-services.yml rm
+
+images_all_rm:
+	docker rmi $(docker images -aq)
+
+images_postgres_rm:
+	docker rmi postgres:11
+
+backend:
+	env HOST=0.0.0.0 docker-compose up --bu -d
+
+backend_log:
+	env HOST=0.0.0.0 docker-compose logs -f --tail=30
+
+backend_stop:
+	env HOST=0.0.0.0 docker-compose stop
+
+backend_rm:
+	env HOST=0.0.0.0 docker-compose rm
+
+.PHONY: postgres postgres_delete postgres_logs postgres_up postgres_down generate test compile clean lint-prepare lint server sql_next_migrate
+.PHONY: services_ services_stop services_rm backend backend_stop backend_rm services_log
+.PHONY: images_all_rm images_postgres_rm

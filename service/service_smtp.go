@@ -62,7 +62,7 @@ func (is *InvestService) SmtpUpdate(smtp *model.SmtpServer) (message.Msg) {
 	tx := model.GetDB().Begin()
 	defer func() { if tx != nil { tx.Rollback() } }()
 
-	// delete all headers from db
+	// delete all headers from database
 	if err := smtp.OnlyDeleteAllHeadersBySmtpId(tx); err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}

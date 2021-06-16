@@ -93,7 +93,7 @@ func MessageOnlySend(dialer InterDialer, message *gomail.Message) error {
 
 // get connection & send message
 func MessageDialAndSend(message *gomail.Message) error {
-	// get smtp credential from db
+	// get smtp credential from database
 	var smtpServer = SmtpServer{}
 	if err := smtpServer.OnlyGetOne(GetDB()); err != nil {
 		return err
@@ -128,7 +128,7 @@ func MessageStoreNotificationOnDb(n InterMessage) error {
 		Created:     helper.GetCurrentTime(),
 	}
 
-	// store notification body on db
+	// store notification body on database
 	if err := notification.OnlyCreate(GetDB()); err != nil {
 		return err
 	}
@@ -153,7 +153,7 @@ func MessageStoreNotificationOnDb(n InterMessage) error {
 
 			// get notification instance
 			if err := ni.OnlyCreate(GetDB()); err != nil {
-				fmt.Println("could not store notification on db. err: ", err)
+				fmt.Println("could not store notification on database. err: ", err)
 			}
 
 		}(email, notInstance)

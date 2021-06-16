@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	this is the struct of notifications message which will be stored on db
+	this is the struct of notifications message which will be stored on database
 
 	NotificationInstance will carry:
 		* receiver address

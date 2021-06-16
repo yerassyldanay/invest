@@ -31,9 +31,10 @@ RUN apt-get install build-essential -y
 WORKDIR /go/src
 COPY . /go/src/
 
-#RUN source env/.env
+#RUN source environment/.environment
 COPY migrate /usr/bin
 
+RUN source ./en
 RUN migrate -path ./db/postgre/migrate -database postgres://spkuser:c8acb720063d4eb75b56drg@178.170.221.116:7001/invest?sslmode=disable -verbose up
 
 RUN go build -o main

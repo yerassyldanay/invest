@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	create & store a comment on db
+	create & store a comment on database
 */
 func (c *Comment) Create_comment_after_saving_its_document() (message.Msg) {
 	if err := c.Validate(); err != nil {

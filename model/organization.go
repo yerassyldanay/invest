@@ -94,7 +94,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (m
 	var err error
 
 	/*
-		check whether such organization is already on db
+		check whether such organization is already on database
 	 */
 	if err = o.OnlyGetByBinAndLang(tx); err == nil {
 		var resp = errormsg.NoErrorFineEverthingOk
@@ -113,7 +113,7 @@ func (o *Organization) Create_or_get_organization_from_db_by_bin(tx *gorm.DB) (m
 	}
 
 	/*
-		store data on db
+		store data on database
 	*/
 	o.Bin = bin
 	if err := o.OnlyCreate(tx); err != nil {

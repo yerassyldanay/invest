@@ -65,7 +65,7 @@ func TestLoadTestOnServiceCreateProject(t *testing.T) {
 		}
 	}`
 
-	router := app.Create_new_invest_router()
+	router := app.NewRouter()
 	ts := httptest.NewServer(router)
 
 	for i := 0; i < NumberOfTimeToTest; i++ {

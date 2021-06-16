@@ -2,8 +2,8 @@ version: "1"
 packages:
   - name: "database"
     path: "./model/documentation"
-    queries: "./db/postgre/migrate"
-    schema: "./db/postgre/migrate"
+    queries: "./database/postgre/migrate"
+    schema: "./database/postgre/migrate"
     engine: "postgresql"
     emit_json_tags: true
     emit_prepared_queries: false

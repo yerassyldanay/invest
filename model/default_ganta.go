@@ -113,7 +113,7 @@ func (p *Project) Create_ganta_table_for_this_project(trans *gorm.DB) (message.M
 	_ = Update_sequence_id_thus_avoid_duplicate_primary_key_error(trans, "gantas")
 
 	/*
-		in case everything is ok, commit changes to db
+		in case everything is ok, commit changes to database
 	 */
 	var start_date = helper.GetCurrentTruncatedDate()
 	start_date, err := p.Create_ganta_parent_with_its_children(start_date, DefaultGantaParentsOfStep1, trans)

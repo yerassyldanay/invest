@@ -38,7 +38,7 @@ func (is *InvestService) EmailConfirm(userEmail model.Email) (message.Msg) {
 
 	// update values
 	if ok := email.OnlyUpdateAfterConfirmation(trans); !ok {
-		return model.ReturnInternalDbError("could not update / confirm email on the level of db")
+		return model.ReturnInternalDbError("could not update / confirm email on the level of database")
 	}
 
 	// commit changes

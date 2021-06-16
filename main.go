@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gorilla/handlers"
 	logr "github.com/sirupsen/logrus"
 	"invest/app"
 	"invest/model"
+	"invest/utils/helper"
 	"invest/utils/logist"
 
 	"net/http"
@@ -16,15 +16,19 @@ import (
 )
 
 func main() {
+	var err error
 
-	/*
-		Set up a connection with db
-	 */
+	// Set up a connection with database
 	model.Set_up_db()
 
-	/*
-		setup mailer queue, which receives & handles notifications in one place
-	 */
+	// close the connection with database at the end
+	defer func() {
+		fmt.Println("[DATABASE] closing connection...")
+		err = model.GetDB().Close()
+		helper.IfErrorPanic(err)
+	}()
+
+	// setup mailer queue, which receives & handles notifications in one place
 	ctx, cancel := context.WithCancel(context.Background())
 	mq := model.InitiateNewMailerQueue()
 	go mq.Handle(ctx)
@@ -36,46 +40,36 @@ func main() {
 	 */
 	defer time.Sleep(time.Millisecond * 10)
 
-	/*
-		close the file at the end of the
-	*/
+	// close the file at the end of the
 	logist.InitiateLogFile()
-	defer logist.Get_file()
-
-	/*
-		this function stops the goroutines in the background
-	 */
 	defer func() {
+		fmt.Println("[FILE] closing connection...")
+		err = logist.Get_file().Close()
+		helper.IfErrorPanic(err)
+	}()
+
+	// this function stops a file rotator goroutine in the background
+	defer func() {
+		fmt.Println("[FILE-ROTATOR] closing connection...")
 		logist.Get_file_rotator().Cancel <- true
 	}()
 
-	/*
-		close the connection with database at the end
-	 */
-	defer model.GetDB().Close()
-
-	/*
-		Run notification sender at background
-	 */
+	// run notification sender at background
 	cnx, cancelNotifier := context.WithCancel(context.Background())
 	go model.OnlyNotifyAboutGantaDeadline(cnx)
 	defer cancelNotifier()
 
-	/*
-		remove files at the background
-	 */
+	// remove files at the background
 	ctxRemoveAnalysisFiles, cancelRemoveAnalysisFilesCtx := context.WithCancel(context.Background())
 	go model.Remove_files_left_after_analysis_periodically(ctxRemoveAnalysisFiles)
 	defer cancelRemoveAnalysisFilesCtx()
 
-	/*
-		creating a router instance
-	 */
-	var router = app.Create_new_invest_router()
+	// creating a router instance
+	var router = app.NewRouter()
 
-	handlerOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
-	originOk := handlers.AllowedOrigins([]string{"*"})
-	methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"})
+	//handlerOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	//originOk := handlers.AllowedOrigins([]string{"*"})
+	//methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"})
 
 	/*
 		port
@@ -87,7 +81,7 @@ func main() {
 		"port": port,
 	}).Info(fname)
 
-	go http.ListenAndServe(":" + port, handlers.CORS(handlerOk, originOk, methodsOk)(router))
+	go http.ListenAndServe(":" + port, router)
 
 	/*
 		ctrl + c -> shut down

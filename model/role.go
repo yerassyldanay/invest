@@ -20,7 +20,7 @@ func(r *Role) Validate() bool {
 /*
 	200 - ok
 	400 - invalid parameters
-	417 - internal db error
+	417 - internal database error
  */
 func(r *Role) Create_a_role_with_permissions() (message.Msg) {
 	if ok := r.Validate(); !ok {

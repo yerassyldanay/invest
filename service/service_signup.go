@@ -14,8 +14,8 @@ import (
 		201 - created
 		400 - bad request
 		409 - already in use
-		417 - db error
-		422 - could not sent message & not stored on db
+		417 - database error
+		422 - could not sent message & not stored on database
 */
 func (is *InvestService) SignUp(c model.User) (message.Msg) {
 
