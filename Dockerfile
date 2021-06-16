@@ -34,9 +34,8 @@ COPY . /go/src/
 #RUN source environment/.environment
 COPY migrate /usr/bin
 
-RUN source ./en
-RUN migrate -path ./db/postgre/migrate -database postgres://spkuser:c8acb720063d4eb75b56drg@178.170.221.116:7001/invest?sslmode=disable -verbose up
+#RUN apt-get install tree
 
-RUN go build -o main
+RUN go build -mod vendor -o main
 #CMD tail -f /dev/null
 

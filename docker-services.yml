@@ -4,7 +4,7 @@ services:
   postgres_spk:
     restart: always
     env_file:
-      - environment/postgre/
+      - environment/local.env
     image: postgres:11
     volumes:
       - "/docker_volumes/spk/postgre:/var/lib/postgresql/data"
@@ -26,8 +26,7 @@ services:
     environment:
       - "TZ=Asia/Almaty"
     env_file:
-      - environment/postgre/
-    #    container_name: "postgres_spk"
+      - environment/local.env
     networks:
       - network
     ports:

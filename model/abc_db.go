@@ -3,138 +3,45 @@ package model
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils/constants"
-	"invest/utils/logist"
-	//_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/lib/pq"
-	"os"
-	"time"
+	"invest/utils/config"
+	"invest/utils/constants"
 )
-
-//type DbConfigurations struct {
-//
-//}
 
 var db *gorm.DB
 
-/*
-	E.g.
-		postgresql://other@localhost/otherdb?connect_timeout=10&application_name=myapp
- */
-func GetDbUri() (string, error) {
-
-	if err := Load_env_values(); err != nil {
-		return "", err
-	}
-
-	/*
-		the environment variables are loaded above
-	*/
-	var dbUsername = os.Getenv("POSTGRES_USER")
-	var dbPassword = os.Getenv("POSTGRES_PASSWORD")
-	var dbName = os.Getenv("POSTGRES_DB")
-	var dbHost = os.Getenv("POSTGRES_HOST")
-	var dbPort = os.Getenv("POSTGRES_PORT")
-
-	var dbUri = fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", dbHost, dbPort, dbUsername, dbName, dbPassword)
-
-	//fmt.Println("dbUri: ", dbUri)
-
-	return dbUri, nil
-}
-
-/*
-	init it
- */
-func Set_up_db() {
-
-	var fname = "INIT_DB"
-	var dbUri, err = GetDbUri()
-
-	//fmt.Println(dbUri + "...")
-
+// EstablishDatabaseConnection establishes connection with database
+func EstablishDatabaseConnection(opts config.Config) (*gorm.DB, error) {
+	// connect
+	tempDb, err := gorm.Open("postgres", opts.GetDatabaseSource())
 	if err != nil {
-		logist.SysMessage{
-			FuncName: fname,
-			Message:  err.Error(),
-			Ok:       false,
-			Lev:      constants.WarnLevel,
-		}.Log_system_message()
-		return
+		return tempDb, fmt.Errorf("failed to establish connection with database. err: %v", err)
 	}
+	db = tempDb
 
-	/*
-		actual connection to the database
-	 */
-	var i = 0
-
-	for {
-		db, err = gorm.Open("postgres", dbUri)
-		if err == nil {
-			logist.SysMessage{
-				FuncName: fname,
-				Message:  "connected to Postgres...",
-				Ok:       true,
-				Lev:      constants.InfoLevel,
-			}.Log_system_message()
-			break
-		}
-
-		logist.SysMessage{
-			FuncName: fname,
-			Message:  err.Error() + " sleeping for a while...",
-			Ok:       false,
-			Lev:      constants.WarnLevel,
-		}.Log_system_message()
-		time.Sleep(time.Second * constants.TimeSecToSleepBetweenDbConn)
-
-		if i == constants.AttemptToConnectToDb {
-			logist.SysMessage{
-				FuncName: fname,
-				Message:  "could not connect to database...",
-				Ok:       false,
-				Lev:      constants.WarnLevel,
-			}.Log_system_message()
-			return
-		}
-
-		i++
-	}
-
-	/*
-		the following call makes changes to the database based on the changes in provided struct-s
-	 */
-	//database.Debug().AutoMigrate(&Admin{}, &Category{}, &Company{}, &CivilServant{}, &Email{},
-	//&Investor{}, InvestorAndCompany{}, &Phone{}, &Position{}, &Project{}, &ProjectDoc{},
-	//&ProjectCivilConnection{}, &SendgridMessage{})
-
-	//database.Debug().AutoMigrate(&Categor{}, &Comment{}, &Cost{}, &Document{},
-	//	&Email{}, &Finance{}, &ForgetPassword{}, &Ganta{}, &Organization{},
-	//	&Permission{}, &Phone{}, &Project{}, &Role{}, &SmtpServer{}, &SmtpHeaders{},
-	//	&User{})
-	//
-	//database.Debug().AutoMigrate(&Notification{}, &NotificationInstance{}, &ProjectsUsers{})
-
-	/*
-		parameters of database
-	 */
+	// 		parameters of database
 	db.DB().SetMaxOpenConns( constants.MaxNumberOpenConnToDb )
+
+	return tempDb, err
 }
 
-/*
-	getter for gorm.DB object
- */
+// GetDB getter for gorm.DB object
 func GetDB () *gorm.DB {
 	if db == nil {
 		fmt.Printf("[CONN] Establishing a new database connection...")
-		Set_up_db()
+		opts, err := config.LoadConfig("../environment/.local.env")
+		if err != nil {
+			fmt.Printf("failed to get database connection. err: %v\n", err)
+		}
+		db, err = EstablishDatabaseConnection(opts)
+		if err != nil {
+			fmt.Printf("failed to get database connection. err: %v\n", err)
+		}
 	}
 	return db
 }
 
-/*
-	rollback at the end if something happens
- */
+// Rollback rollback at the end if something happens
 func Rollback(trans *gorm.DB) {
 	if trans != nil {
 		trans.Rollback()

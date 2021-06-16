@@ -7,7 +7,7 @@ services:
     volumes:
       - "/docker_volumes/spk/backend/documents/:/docs/"
     env_file:
-      - "environment/middleware.environment"
+      - environment/local.env
     networks:
       - spk_network
     environment:

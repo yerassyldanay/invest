@@ -6,6 +6,7 @@ import (
 	logr "github.com/sirupsen/logrus"
 	"invest/app"
 	"invest/model"
+	config "invest/utils/config"
 	"invest/utils/helper"
 	"invest/utils/logist"
 
@@ -18,8 +19,14 @@ import (
 func main() {
 	var err error
 
+	// environmental variables
+	opts, err := config.LoadConfig("./environment/")
+	helper.IfErrorPanic(err)
+	_ = opts
+
 	// Set up a connection with database
-	model.Set_up_db()
+	_, err = model.EstablishDatabaseConnection(opts)
+	helper.IfErrorPanic(err)
 
 	// close the connection with database at the end
 	defer func() {

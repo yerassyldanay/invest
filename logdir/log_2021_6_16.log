@@ -54,3 +54,8 @@ time="2021-06-16T20:17:35+06:00" level=info msg=GET_FILE message="closing the fi
 time="2021-06-16T20:17:38+06:00" level=info msg=main port=7000
 time="2021-06-16T20:17:42+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
 time="2021-06-16T20:19:00+06:00" level=info msg=main port=7000
+time="2021-06-16T21:28:44+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T21:53:50+06:00" level=info msg=main port=7000
+time="2021-06-16T21:54:29+06:00" level=info msg=GET_FILE message="closing the file..." ok=true
+time="2021-06-16T21:54:32+06:00" level=info msg=main port=7000
+time="2021-06-16T21:54:41+06:00" level=info msg=GET_FILE message="closing the file..." ok=true

@@ -1,4 +1,4 @@
--include ./environment/.env
+-include ./environment/local.env
 
 lint-prepare:
 	@echo "Installing golangci-lint"
