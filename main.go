@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	logr "github.com/sirupsen/logrus"
-	"invest/app"
-	"invest/model"
-	config "invest/utils/config"
-	"invest/utils/helper"
-	"invest/utils/logist"
+	"github.com/yerassyldanay/invest/app"
+	"github.com/yerassyldanay/invest/model"
+	config "github.com/yerassyldanay/invest/utils/config"
+	"github.com/yerassyldanay/invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/logist"
 
 	"net/http"
 	"os"
@@ -24,8 +24,12 @@ func main() {
 	helper.IfErrorPanic(err)
 	_ = opts
 
-	// Set up a connection with database
+	// POSTGRES - set up a connection with database
 	_, err = model.EstablishDatabaseConnection(opts)
+	helper.IfErrorPanic(err)
+
+	// REDIS - establish connection with redis
+	_, err = model.EstablishConnectionWithRedis(opts)
 	helper.IfErrorPanic(err)
 
 	// close the connection with database at the end

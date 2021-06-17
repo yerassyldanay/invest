@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"invest/model"
+	"github.com/yerassyldanay/invest/model"
 	"reflect"
 	"testing"
 )

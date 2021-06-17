@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/constants"
 )
 
 type NotifyGantaDeadline struct {

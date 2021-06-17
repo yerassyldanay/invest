@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils/constants"
-	"invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/errormsg"
 	"time"
 )
 

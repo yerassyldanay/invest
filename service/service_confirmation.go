@@ -1,13 +1,27 @@
 package service
 
 import (
-	"invest/model"
-	"invest/utils/helper"
-	"invest/utils/message"
+	"encoding/json"
+	"fmt"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/message"
 	"time"
 )
 
 func (is *InvestService) EmailConfirm(userEmail model.Email) (message.Msg) {
+
+	// get profile by code
+	code, err := model.GetRedis().Get(userEmail.SentCode).Result()
+	if err != nil {
+		return model.ReturnFailedToCreateAnAccount(fmt.Sprintf("faield to retrieve user profile data from redis. err: %s", err))
+	}
+
+	// unmarshal back
+	var newUser = model.User{}
+	if err := json.Unmarshal([]byte(code), &newUser); err != nil {
+		return model.ReturnFailedToCreateAnAccount(fmt.Sprintf("faield to unmarshal profile data. err: %s", err.Error()))
+	}
 
 	// start transaction
 	var trans = model.GetDB().Begin()
@@ -15,30 +29,48 @@ func (is *InvestService) EmailConfirm(userEmail model.Email) (message.Msg) {
 		if trans != nil {trans.Rollback()}
 	}()
 
-	// get email with the same code or hash
-	var email = model.Email{Address: userEmail.Address}
-	if err := email.OnlyGetByAddress(trans); err != nil {
-		return model.ReturnInternalDbError(err.Error())
+	// get investor role
+	var role = model.Role{}
+	if err := trans.First(&role, "name = ?", constants.RoleInvestor).Error; err != nil {
+		_ = trans.Rollback()
+		return model.ReturnFailedToCreateAnAccount(fmt.Sprintf("faield to get investor role. err: %s", err.Error()))
 	}
 
-	// check for validity
-	// it might be that email in use
-	// or a code sent by a user is invalid
-	// or the deadline for an email is before the current date
-	if email.Verified || email.Deadline.Before(helper.GetCurrentTime()) {
-		return model.ReturnEmailAlreadyInUse("email is already in use or code is expired")
-	} else if email.SentCode != userEmail.SentCode {
-		return model.ReturnInvalidParameters("code is not valid")
+	// create email
+	if err := trans.Create(&newUser.Email).Error; err != nil {
+		_ = trans.Rollback()
+		return model.ReturnFailedToCreateAnAccount(fmt.Sprintf("faield to create email. err: %s", err.Error()))
 	}
 
-	// get rid of extra values
-	email.SentCode = ""
-	email.Deadline = time.Time{}
-	email.Verified = true
+	// create phone
+	if err := trans.Create(&newUser.Phone).Error; err != nil {
+		_ = trans.Rollback()
+		return model.ReturnFailedToCreateAnAccount(fmt.Sprintf("faield to create phone. err: %s", err.Error()))
+	}
 
-	// update values
-	if ok := email.OnlyUpdateAfterConfirmation(trans); !ok {
-		return model.ReturnInternalDbError("could not update / confirm email on the level of database")
+	// create organization
+	if msg := newUser.Organization.Create_or_get_organization_from_db_by_bin(trans); msg.ErrMsg != "" {
+		_ = trans.Rollback()
+		return model.ReturnFailedToCreateAnAccount(fmt.Sprintf("faield to set organization. err: %s", msg.ErrMsg))
+	}
+
+	// create user
+	newUser = model.User{
+		Id:             0,
+		Password:       newUser.Password,
+		Fio:            newUser.Fio,
+		RoleId:         role.Id,
+		EmailId:        newUser.EmailId,
+		PhoneId:        newUser.PhoneId,
+		Verified:       true,
+		Lang:           newUser.Lang,
+		OrganizationId: newUser.Organization.Id,
+		Blocked:        false,
+		Created:        time.Now(),
+	}
+	if err := trans.Create(&newUser).Error; err != nil {
+		_ = trans.Rollback()
+		return model.ReturnFailedToCreateAnAccount(fmt.Sprintf("faield to commit changes to database. err: %s", err.Error()))
 	}
 
 	// commit changes

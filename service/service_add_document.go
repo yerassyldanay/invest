@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
-	"invest/model"
-	"invest/utils/constants"
-	"invest/utils/helper"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 /*

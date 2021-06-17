@@ -3,8 +3,8 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils/constants"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"time"
 )
 

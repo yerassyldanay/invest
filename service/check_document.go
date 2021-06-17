@@ -1,9 +1,9 @@
 package service
 
 import (
-	"invest/model"
-	"invest/utils/constants"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 func (is *InvestService) Check_whether_this_user_is_responsible_for_document(document_id uint64, project_id uint64) (message.Msg) {

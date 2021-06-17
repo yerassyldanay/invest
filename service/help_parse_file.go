@@ -1,7 +1,7 @@
 package service
 
 import (
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"

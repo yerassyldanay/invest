@@ -2,8 +2,8 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils/errormsg"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/message"
 	"net/http"
 )
 

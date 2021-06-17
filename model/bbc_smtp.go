@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"time"
 )
 

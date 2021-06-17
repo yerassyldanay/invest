@@ -2,7 +2,7 @@ package logist
 
 import (
 	logr "github.com/sirupsen/logrus"
-	"invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/constants"
 )
 
 /*

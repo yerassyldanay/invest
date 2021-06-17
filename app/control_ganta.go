@@ -1,10 +1,10 @@
 package app
 
 import (
-	"invest/model"
-	"invest/service"
-	"invest/utils/errormsg"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/service"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/message"
 	"net/http"
 )
 

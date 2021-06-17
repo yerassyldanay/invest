@@ -1,7 +1,7 @@
 package model
 
 import (
-	"invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/constants"
 )
 
 /*

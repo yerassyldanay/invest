@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
-	"invest/utils/config"
-	"invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/config"
+	"github.com/yerassyldanay/invest/utils/constants"
 )
 
 var db *gorm.DB

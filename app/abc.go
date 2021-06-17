@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gorilla/mux"
-	"invest/middleware"
+	"github.com/yerassyldanay/invest/middleware"
 	"net/http"
 )
 
@@ -47,7 +47,7 @@ func NewRouter() (*mux.Router) {
 	/*
 		Confirm
 	 */
-	v1Free.HandleFunc("/confirmation/email", User_email_confirm).Methods("POST")
+	v1Free.HandleFunc("/confirmation/email", UserProfileConfirmEmail).Methods("POST")
 	//v1.HandleFunc("/confirmation/phone", app.User_phone_confirm).Methods("GET")
 
 	/*

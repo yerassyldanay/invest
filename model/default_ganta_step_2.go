@@ -1,8 +1,8 @@
 package model
 
 import (
-	"invest/utils/constants"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/helper"
 )
 
 var DefaultGantaParentsOfStep2 = []Ganta{

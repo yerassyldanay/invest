@@ -2,18 +2,18 @@ package app
 
 import (
 	"encoding/json"
-	"invest/model"
-	"invest/service"
-	"invest/utils/errormsg"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/service"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/message"
 	"net/http"
 )
 
 /*
 	this is to confirm that a user owns this email
  */
-var User_email_confirm = func(w http.ResponseWriter, r *http.Request) {
-	var fname = "User_email_confirm"
+func UserProfileConfirmEmail(w http.ResponseWriter, r *http.Request) {
+	var fname = "UserProfileConfirmEmail"
 
 	// headersOnlyGetByAddress
 	is := service.InvestService{}

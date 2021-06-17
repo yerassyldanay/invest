@@ -9,6 +9,10 @@ const (
 )
 
 const (
+	RedisKeyStoreNewProfile = "redis_key_new_profile"
+)
+
+const (
 	PanicLevel int = iota
 	FatalLevel
 	ErrorLevel

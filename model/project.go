@@ -3,9 +3,9 @@ package model
 import (
 	"encoding/json"
 	"github.com/jinzhu/gorm"
-	"invest/utils/constants"
-	"invest/utils/helper"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/message"
 
 	"strings"
 )

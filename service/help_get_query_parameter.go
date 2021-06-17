@@ -1,7 +1,7 @@
 package service
 
 import (
-	"invest/model"
+	"github.com/yerassyldanay/invest/model"
 	"net/http"
 	"strconv"
 )

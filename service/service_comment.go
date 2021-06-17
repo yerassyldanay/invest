@@ -1,8 +1,8 @@
 package service
 
 import (
-	"invest/model"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 // comment on project with document statuses

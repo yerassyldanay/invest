@@ -2,9 +2,9 @@ package service
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/model"
-	"invest/utils/helper"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/message"
 	"time"
 )
 

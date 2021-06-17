@@ -1,7 +1,7 @@
 package service
 
 import (
-	"invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/errormsg"
 	"net/http"
 )
 

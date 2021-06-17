@@ -2,9 +2,9 @@ package app
 
 import (
 	"encoding/json"
-	"invest/model"
-	"invest/service"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/service"
+	"github.com/yerassyldanay/invest/utils/message"
 	"net/http"
 )
 
@@ -16,7 +16,7 @@ import (
 	422 - could not sent message & not stored on database
 	500 - internal server error
  */
-var Sign_up = func(w http.ResponseWriter, r *http.Request) {
+func Sign_up(w http.ResponseWriter, r *http.Request) {
 	var fname = "Sign_up"
 	var user = model.User{}
 

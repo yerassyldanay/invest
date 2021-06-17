@@ -1,9 +1,9 @@
 package service
 
 import (
-	"invest/model"
-	"invest/utils/constants"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 func (is *InvestService) Ganta_check_permission_to_read_ganta(project_id uint64) (message.Msg) {

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 /*

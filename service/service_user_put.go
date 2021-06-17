@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
-	"invest/model"
-	"invest/utils/constants"
-	"invest/utils/errormsg"
-	"invest/utils/helper"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 func (is *InvestService) Update_user_profile(user *model.User) (message.Msg) {

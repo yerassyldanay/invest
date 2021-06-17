@@ -2,9 +2,9 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils/constants"
-	"invest/utils/errormsg"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/message"
 	"net/http"
 )
 

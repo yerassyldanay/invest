@@ -1,9 +1,9 @@
 package service
 
 import (
-	"invest/model"
-	"invest/utils/constants"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 func (is *InvestService) Assign_user_to_project(pu model.ProjectsUsers) (message.Msg) {

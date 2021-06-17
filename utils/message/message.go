@@ -3,8 +3,8 @@ package message
 import (
 	"encoding/json"
 	logr "github.com/sirupsen/logrus"
-	"invest/utils/constants"
-	"invest/utils/logist"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/logist"
 
 	"net/http"
 	"strconv"

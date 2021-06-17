@@ -1,8 +1,8 @@
 package app
 
 import (
-	"invest/service"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/service"
+	"github.com/yerassyldanay/invest/utils/message"
 	"net/http"
 )
 

@@ -1,10 +1,10 @@
 package service
 
 import (
-	"invest/model"
-	"invest/utils/errormsg"
-	"invest/utils/helper"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/message"
 	"path/filepath"
 	"strings"
 	"time"

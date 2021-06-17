@@ -3,8 +3,8 @@ package tests
 import (
 	"fmt"
 	"github.com/stretchr/testify/require"
-	"invest/model"
-	"invest/service"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/service"
 	"testing"
 )
 

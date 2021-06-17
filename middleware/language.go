@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"golang.org/x/text/language"
-	"invest/utils/constants"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/message"
 
 	"net/http"
 )

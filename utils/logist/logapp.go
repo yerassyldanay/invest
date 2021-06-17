@@ -3,7 +3,7 @@ package logist
 import (
 	"fmt"
 	logr "github.com/sirupsen/logrus"
-	"invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/constants"
 
 	"io"
 	"log"

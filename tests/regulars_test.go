@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"testing"
 )
 

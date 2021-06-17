@@ -3,8 +3,8 @@ package tests
 import (
 	"bytes"
 	"fmt"
-	"invest/app"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/app"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"net/http"
 	"net/http/httptest"
 	"sync"

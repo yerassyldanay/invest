@@ -2,9 +2,9 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/utils/errormsg"
-	"invest/utils/helper"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/message"
 	"time"
 )
 

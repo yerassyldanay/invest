@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gopkg.in/gomail.v2"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/helper"
 )
 
 // all notifications messages must have following methods,

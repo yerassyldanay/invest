@@ -3,7 +3,7 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"strconv"
 	"time"
 )

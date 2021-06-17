@@ -3,8 +3,8 @@ package model
 import (
 	"context"
 	"fmt"
-	"invest/utils/constants"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"time"
 )
 

@@ -2,9 +2,9 @@ package tests
 
 import (
 	"github.com/stretchr/testify/require"
-	"invest/model"
-	"invest/service"
-	"invest/utils/helper"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/service"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"testing"
 )
 

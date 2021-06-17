@@ -1,7 +1,7 @@
 package service
 
 import (
-	"invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/constants"
 	"net/http"
 	"time"
 )

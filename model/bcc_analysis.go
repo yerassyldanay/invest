@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/jinzhu/gorm"
 	"github.com/tealeg/xlsx"
-	"invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/constants"
 	"os"
 	"strconv"
 	"time"

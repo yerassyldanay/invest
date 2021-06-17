@@ -2,10 +2,10 @@ package service
 
 import (
 	"github.com/jinzhu/gorm"
-	"invest/model"
-	"invest/utils/constants"
-	"invest/utils/errormsg"
-	"invest/utils/message"
+	"github.com/yerassyldanay/invest/model"
+	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/errormsg"
+	"github.com/yerassyldanay/invest/utils/message"
 )
 
 func (is *InvestService) Get_own_projects(statuses []string, steps []int) (message.Msg) {
