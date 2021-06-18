@@ -24,7 +24,7 @@ func (is *InvestService) SignUp(c model.User) (message.Msg) {
 	//	return model.ReturnInvalidParameters(err.Error())
 	//}
 
-	// convert password to hash
+	//convert password to hash
 	//hashed, err := helper.Convert_string_to_hash(c.Password)
 	//if err != nil {
 	//	return model.ReturnInternalDbError(err.Error())
@@ -32,7 +32,7 @@ func (is *InvestService) SignUp(c model.User) (message.Msg) {
 	//c.Password = hashed
 
 	// these code and link will be sent to the user
-	random_code := helper.Generate_Random_Number(constants.MaxNumberOfDigitsSentByEmail)
+	randomCode := helper.Generate_Random_Number(constants.MaxNumberOfDigitsSentByEmail)
 
 	// marshal to store data
 	userInBytes, err := json.Marshal(c)
@@ -41,14 +41,14 @@ func (is *InvestService) SignUp(c model.User) (message.Msg) {
 	}
 
 	// store it in redis
-	cmd := model.GetRedis().Set(random_code, string(userInBytes), time.Second * 120)
+	cmd := model.GetRedis().Set(randomCode, string(userInBytes), time.Second * 120)
 	if cmd.Err() != nil {
 		return model.ReturnFailedToCreateAnAccount(cmd.Err().Error())
 	}
 
 	// send notification
 	nc := model.NotifyCode{
-		Code:    random_code,
+		Code:    randomCode,
 		Address: c.Email.Address,
 	}
 
@@ -57,5 +57,7 @@ func (is *InvestService) SignUp(c model.User) (message.Msg) {
 	default:
 	}
 
-	return model.ReturnNoError()
+	return model.ReturnNoErrorWithResponseMessage(map[string]interface{}{
+		"code": randomCode,
+	})
 }

@@ -1,28 +1,37 @@
 package model
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/yerassyldanay/invest/utils/constants"
 	"github.com/yerassyldanay/invest/utils/errormsg"
 	"github.com/yerassyldanay/invest/utils/message"
-	"net/http"
 )
 
-/*
-	get the full user info
-*/
-func (c *User) Get_full_info_of_this_user(by string) (message.Msg) {
+type ElementGetFullInfoOfThisUser struct {
+	Key string
+	Value string
+}
+
+func (c *User) GetFullInfoOfThisUser(e ElementGetFullInfoOfThisUser) (message.Msg) {
+	//HelperPrint(e)
+
 	var err error
-	switch by {
+	switch e.Key {
 	case "email":
-		err = GetDB().
-			Raw("select u.* from users u join emails e on u.email_id = e.id where e.address = ?;", c.Email.Address).
-				Scan(c).Error
+		var email = Email{}
+		err = GetDB().First(&email, "address = ?", e.Value).Error
+		if err != nil {
+			fmt.Println(fmt.Errorf("[ERROR] failed to fetch email. err: %v", err))
+		}
+		err = GetDB().First(c, "email_id = ?", email.Id).Error
 	case "phone":
-		phoneNumber := c.Phone.Ccode + c.Phone.Number
-		err = GetDB().
-			Raw("select u.* from users u join phones p on p.id = u.phone_id where p.ccode || p.number = ? ;", phoneNumber).
-				Scan(c).Error
+		var phone = Phone{}
+		err = GetDB().First(&phone, "ccode || number = ?", e.Value).Error
+		if err != nil {
+			fmt.Println(fmt.Errorf("[ERROR] failed to fetch phone. err: %v", err))
+		}
+		err = GetDB().First(c, "phone_id = ?", phone.Id).Error
 	default:
 		err = GetDB().First(c, "id = ?", c.Id).Error
 	}
@@ -31,57 +40,14 @@ func (c *User) Get_full_info_of_this_user(by string) (message.Msg) {
 		return message.Msg{errormsg.ErrorNoSuchUser, 404, "", err.Error()}
 	}
 
-	//var wg = sync.WaitGroup{}
-	//wg.Add(3)
-	//
-	///*
-	//	Phone
-	// */
-	//go func(wgi *sync.WaitGroup) {
-	//	defer wg.Done()
-	//
-	//}(&wg)
 	_ = GetDB().First(&c.Phone, "id = ?", c.PhoneId)
-
-	/*
-		Email
-	 */
-	//go func(wgi *sync.WaitGroup) {
-	//	defer wg.Done()
-	//	_ = GetDB().First(&c.Email, "id = ?", c.EmailId)
-	//}(&wg)
 	_ = GetDB().First(&c.Email, "id = ?", c.EmailId)
-
-	/*
-		Role
-	 */
-	//go func(wgi *sync.WaitGroup) {
-	//	defer wg.Done()
-	//	_ = GetDB().First(&c.Role, "id = ?", c.RoleId)
-	//}(&wg)
 	_ = GetDB().First(&c.Role, "id = ?", c.RoleId)
-
-	//if c.OrganizationId > 0 {
-	//	wg.Add(1)
-	//	go func(wgi *sync.WaitGroup) {
-	//		defer wg.Done()
-	//		_ = GetDB().First(&c.Organization, "id = ?", c.OrganizationId)
-	//	}(&wg)
-	//}
-	//wg.Wait()
 	_ = GetDB().First(&c.Organization, "id = ?", c.OrganizationId)
 
-	var password = c.Password
-	c.Password = ""
-
-	var resp = errormsg.NoErrorFineEverthingOk
-	resp["info"] = Struct_to_map(*c)
-
-	c.Password = password
-
-	return message.Msg{
-		resp, http.StatusOK, "", "",
-	}
+	return ReturnNoErrorWithResponseMessage(map[string]interface{}{
+		"user": *c,
+	})
 }
 
 /*

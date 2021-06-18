@@ -16,7 +16,7 @@ import (
 	422 - could not sent message & not stored on database
 	500 - internal server error
  */
-func Sign_up(w http.ResponseWriter, r *http.Request) {
+func SignUp(w http.ResponseWriter, r *http.Request) {
 	var fname = "Sign_up"
 	var user = model.User{}
 

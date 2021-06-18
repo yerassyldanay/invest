@@ -57,7 +57,7 @@ func TestSignInByPhone(t *testing.T) {
 		Password:      "KeRXaTaq5Ce8ULO",
 	}
 
-	msg := sis.Sign_in()
+	msg := sis.SignIn()
 	if msg.IsThereAnError() {
 		t.Error(msg.ErrMsg)
 	}
@@ -68,7 +68,7 @@ func TestSignInByPhone(t *testing.T) {
 		Password:      "invalidpassword",
 	}
 
-	msg = sis.Sign_in()
+	msg = sis.SignIn()
 	if !msg.IsThereAnError() {
 		t.Error("expected an error, but got nil")
 	}

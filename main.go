@@ -8,8 +8,6 @@ import (
 	"github.com/yerassyldanay/invest/model"
 	config "github.com/yerassyldanay/invest/utils/config"
 	"github.com/yerassyldanay/invest/utils/helper"
-	"github.com/yerassyldanay/invest/utils/logist"
-
 	"net/http"
 	"os"
 	"os/signal"
@@ -28,14 +26,21 @@ func main() {
 	_, err = model.EstablishDatabaseConnection(opts)
 	helper.IfErrorPanic(err)
 
+	// close the connection with database at the end
+	defer func() {
+		fmt.Println("[DATABASE] closing connection...")
+		err = model.GetDB().Close()
+		helper.IfErrorPanic(err)
+	}()
+
 	// REDIS - establish connection with redis
 	_, err = model.EstablishConnectionWithRedis(opts)
 	helper.IfErrorPanic(err)
 
 	// close the connection with database at the end
 	defer func() {
-		fmt.Println("[DATABASE] closing connection...")
-		err = model.GetDB().Close()
+		fmt.Println("[REDIS] closing connection...")
+		err = model.GetRedis().Close()
 		helper.IfErrorPanic(err)
 	}()
 
@@ -50,20 +55,6 @@ func main() {
 			allows to gracefully shut down
 	 */
 	defer time.Sleep(time.Millisecond * 10)
-
-	// close the file at the end of the
-	logist.InitiateLogFile()
-	defer func() {
-		fmt.Println("[FILE] closing connection...")
-		err = logist.Get_file().Close()
-		helper.IfErrorPanic(err)
-	}()
-
-	// this function stops a file rotator goroutine in the background
-	defer func() {
-		fmt.Println("[FILE-ROTATOR] closing connection...")
-		logist.Get_file_rotator().Cancel <- true
-	}()
 
 	// run notification sender at background
 	cnx, cancelNotifier := context.WithCancel(context.Background())

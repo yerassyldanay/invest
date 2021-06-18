@@ -15,7 +15,7 @@ import (
 	password
 	role
 */
-var Sign_in = func(w http.ResponseWriter, r *http.Request) {
+var SignIn = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Sign_in"
 	var sis = model.SignIn{}
 
@@ -32,7 +32,7 @@ var Sign_in = func(w http.ResponseWriter, r *http.Request) {
 	// check email address
 
 	var msg message.Msg
-	msg = sis.Sign_in()
+	msg = sis.SignIn()
 	msg.Fname = fname + " 3"
 
 	/*

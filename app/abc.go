@@ -13,6 +13,7 @@ func NewRouter() (*mux.Router) {
 	// prefixes
 	var v1 = generalRouter.PathPrefix("/v1").Subrouter()
 	var v1Free = generalRouter.PathPrefix("/v1").Subrouter()
+
 	var docRouter = generalRouter.PathPrefix("/documents").Subrouter()
 	var download = generalRouter.PathPrefix("/download").Subrouter()
 
@@ -41,14 +42,13 @@ func NewRouter() (*mux.Router) {
 	/*
 		Registration
 	 */
-	v1Free.HandleFunc("/signup", Sign_up).Methods("POST")
-	v1Free.HandleFunc("/signin", Sign_in).Methods("POST")
+	v1Free.HandleFunc("/signup", SignUp).Methods("POST")
+	v1Free.HandleFunc("/signin", SignIn).Methods("POST")
 
 	/*
 		Confirm
 	 */
 	v1Free.HandleFunc("/confirmation/email", UserProfileConfirmEmail).Methods("POST")
-	//v1.HandleFunc("/confirmation/phone", app.User_phone_confirm).Methods("GET")
 
 	/*
 		Profile

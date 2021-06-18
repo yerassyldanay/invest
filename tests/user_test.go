@@ -135,7 +135,7 @@ func TestServiceUpdateUserPassword(t *testing.T) {
 		Value:         user.Email.Address,
 		Password:      newPassword,
 	}
-	msg = sis.Sign_in()
+	msg = sis.SignIn()
 
 	// check
 	require.Zero(t, msg.ErrMsg)

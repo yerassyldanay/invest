@@ -77,7 +77,7 @@ func TestSignUp(t *testing.T) {
 		Value:         newUser.Email.Address,
 		Password:      password,
 	}
-	msg = sis.Sign_in()
+	msg = sis.SignIn()
 
 	// check
 	require.Zero(t, msg.ErrMsg)

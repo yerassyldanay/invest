@@ -99,7 +99,7 @@ func TestResetPassword(t *testing.T) {
 		Value:         email.Address,
 		Password:      newPassword,
 	}
-	msg = sis.Sign_in()
+	msg = sis.SignIn()
 
 	// check
 	require.Zero(t, msg.ErrMsg)

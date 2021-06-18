@@ -32,6 +32,7 @@ func UserProfileConfirmEmail(w http.ResponseWriter, r *http.Request) {
 	msg := is.EmailConfirm(email)
 	msg.SetFname(fname, "c")
 
+	// ok
 	message.Respond(w, r, msg)
 }
 

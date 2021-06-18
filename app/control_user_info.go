@@ -22,7 +22,7 @@ var Get_full_user_info = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	msg := user.Get_full_info_of_this_user("id")
+	msg := user.GetFullInfoOfThisUser(model.ElementGetFullInfoOfThisUser{})
 	msg.Fname = fname + " 1"
 
 	message.Respond(w, r, msg)

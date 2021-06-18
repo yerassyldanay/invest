@@ -15,7 +15,7 @@ func (is *InvestService) SmtpCreate(smtp *model.SmtpServer) (message.Msg) {
 
 	// create transaction
 	tx := model.GetDB().Begin()
-	defer func() { if tx != nil { tx.Rollback() } }()
+	//defer func() { if tx != nil { tx.Rollback() } }()
 
 	// unpredictable gorm
 	headers := smtp.Headers
@@ -23,17 +23,20 @@ func (is *InvestService) SmtpCreate(smtp *model.SmtpServer) (message.Msg) {
 
 	// create smtp
 	if err := smtp.OnlyCreate(tx); err != nil {
+		_ = tx.Rollback()
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	// create headers
 	smtp.Headers = headers
 	if err := smtp.OnlySetHeaders(tx); err != nil {
+		_ = tx.Rollback()
 		return model.ReturnInternalDbError(err.Error())
 	}
 
 	// update time
 	if err := smtp.OnlyUpdateLastTimeUsed(tx); err != nil {
+		_ = tx.Rollback()
 		return model.ReturnInternalDbError(err.Error())
 	}
 
