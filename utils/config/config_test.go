@@ -1,8 +1,8 @@
 package config
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/require"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"testing"
 )
 
@@ -24,5 +24,5 @@ func TestLoadConfig(t *testing.T) {
 	require.NotZero(t, configuration.BackendHost)
 	require.NotZero(t, configuration.BackendPort)
 
-	fmt.Printf("%#v \n", configuration)
+	helper.HelperPrint(configuration)
 }
