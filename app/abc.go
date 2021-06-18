@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func NewRouter() (*mux.Router) {
+func NewRouter() *mux.Router {
 	// new router
 	var generalRouter = mux.NewRouter().StrictSlash(true)
 
@@ -23,36 +23,36 @@ func NewRouter() (*mux.Router) {
 	*/
 	v1.Use(middleware.JwtAuthentication)
 
-	v1.Use(middleware.CORSMethodMiddleware)
-	v1Free.Use(middleware.CORSMethodMiddleware)
+	//v1.Use(middleware.CORSMethodMiddleware)
+	//v1Free.Use(middleware.CORSMethodMiddleware)
 
 	// log every request
 	v1.Use(middleware.LoggerMiddleware)
 	v1Free.Use(middleware.LoggerMiddleware)
 
 	var STATIC_DIR = "/documents/docs"
-	docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("." + STATIC_DIR))))
+	docRouter.Handle("/docs/{file}", http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("."+STATIC_DIR))))
 
 	var STATIC_DIR_ANALYSIS = "/documents/analysis"
-	docRouter.Handle("/analysis/{file}", http.StripPrefix(STATIC_DIR_ANALYSIS, http.FileServer(http.Dir("." + STATIC_DIR_ANALYSIS))))
+	docRouter.Handle("/analysis/{file}", http.StripPrefix(STATIC_DIR_ANALYSIS, http.FileServer(http.Dir("."+STATIC_DIR_ANALYSIS))))
 
 	// download a binary file
 	download.HandleFunc("/documents/docs/{file}", Document_download).Methods("GET")
 
 	/*
 		Registration
-	 */
+	*/
 	v1Free.HandleFunc("/signup", SignUp).Methods("POST")
 	v1Free.HandleFunc("/signin", SignIn).Methods("POST")
 
 	/*
 		Confirm
-	 */
+	*/
 	v1Free.HandleFunc("/confirmation/email", UserProfileConfirmEmail).Methods("POST")
 
 	/*
 		Profile
-	 */
+	*/
 	v1.HandleFunc("/profile", Get_full_user_info).Methods("GET")
 	v1.HandleFunc("/profile/own", User_get_own_info).Methods("GET")
 	v1.HandleFunc("/profile/other", Get_full_user_info).Methods("GET")
@@ -78,7 +78,7 @@ func NewRouter() (*mux.Router) {
 
 	/*
 		Gantt
-	 */
+	*/
 	v1.HandleFunc("/ganta/restricted/parents", Ganta_restricted_get_parent_ganta_steps).Methods("GET")
 	v1.HandleFunc("/ganta/restricted/children", Ganta_restricted_get_child_ganta_steps).Methods("GET")
 
@@ -88,7 +88,7 @@ func NewRouter() (*mux.Router) {
 
 	/*
 		Documents
-	 */
+	*/
 	v1.HandleFunc("/project/docs/box", Document_add_box_to_upload_document).Methods("POST")
 	v1.HandleFunc("/project/docs/file", Document_upload_document).Methods("POST")
 	v1.HandleFunc("/project/docs/file/delete", Document_remove_file).Methods("GET")
@@ -102,25 +102,25 @@ func NewRouter() (*mux.Router) {
 
 	/*
 		Status
-	 */
+	*/
 	v1.HandleFunc("/project/status", Project_get_status_of_project).Methods("GET")
 
 	/*
 		Analysis
-	 */
+	*/
 	v1.HandleFunc("/analysis", Analysis_get).Methods("POST")
 	v1.HandleFunc("/analysis/file", Analysis_get_file).Methods("POST")
 
 	/*
 		Role & Permissions
-	 */
+	*/
 	v1.HandleFunc("/role", Role_create_update_add_and_remove_permissions).Methods("GET")
 	//v1.HandleFunc("/role/{role_id}", app.Role_delete_or_get_with_role_id).Methods("GET", "DELETE")
 	//v1.HandleFunc("/permissions", app.Role_add_and_remove_permissions).Methods( "POST", "DELETE")
 
 	/*
 		Categories
-	 */
+	*/
 	v1.HandleFunc("/categor", Categors_create_read_update_delete).Methods("GET", "POST", "DELETE")
 
 	/*
@@ -141,35 +141,35 @@ func NewRouter() (*mux.Router) {
 
 	/*
 		Leave a COMMENT on the project
-	 */
+	*/
 	v1.HandleFunc("/spk_comment", Project_get_comments).Methods("GET")
 	v1.HandleFunc("/spk_comment", Project_comment_on_documents).Methods("POST")
 
 	/*
 		Organization
-	 */
+	*/
 	v1.HandleFunc("/organization", Get_organization_info_by_bin).Methods("GET")
 	v1.HandleFunc("/organization", Update_organization_data).Methods("PUT")
 
 	/*
 		Reset password
-	 */
+	*/
 	v1.HandleFunc("/reset_password", Forget_password_send_message).Methods("GET", "POST")
 
 	/*
 		Notifications
-	 */
+	*/
 	v1.HandleFunc("/notifications", Notification_get).Methods("GET")
 
 	/*
 		SMTP
-	 */
+	*/
 	v1.HandleFunc("/smtp", Smtp_create_update_put).Methods("POST", "PUT", "DELETE")
 	v1.HandleFunc("/smtp", Smtp_get).Methods("GET")
 
 	/*
 		Test API
-	 */
+	*/
 	v1Free.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Tested!!!"))
@@ -180,4 +180,3 @@ func NewRouter() (*mux.Router) {
 
 // Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlX2lkIjozLCJleHAiOiIyMDIwLTA4LTA4VDIzOjE5OjIwLjI1ODQ2NTQyMSswNjowMCJ9.Ffqpg5W0VK-1sxGZdXsX6tEzSgN4Jv19WFGmdGBBeUs
 //
-

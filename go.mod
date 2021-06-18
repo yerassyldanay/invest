@@ -6,6 +6,7 @@ require (
 	github.com/brianvoe/gofakeit v3.18.0+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/h2non/filetype v1.1.1
 	github.com/jinzhu/gorm v1.9.16

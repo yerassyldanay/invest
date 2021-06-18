@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/gorilla/handlers"
 	logr "github.com/sirupsen/logrus"
 	"github.com/yerassyldanay/invest/app"
 	"github.com/yerassyldanay/invest/model"
@@ -53,7 +54,7 @@ func main() {
 	/*
 		this will be main at the end of all
 			allows to gracefully shut down
-	 */
+	*/
 	defer time.Sleep(time.Millisecond * 10)
 
 	// run notification sender at background
@@ -69,13 +70,13 @@ func main() {
 	// creating a router instance
 	var router = app.NewRouter()
 
-	//handlerOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
-	//originOk := handlers.AllowedOrigins([]string{"*"})
-	//methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"})
+	handlerOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	originOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"})
 
 	/*
 		port
-	 */
+	*/
 	var port = "7000"
 	var fname = "main"
 
@@ -83,11 +84,11 @@ func main() {
 		"port": port,
 	}).Info(fname)
 
-	go http.ListenAndServe(":" + port, router)
+	go http.ListenAndServe(":"+port, handlers.CORS(handlerOk, originOk, methodsOk)(router))
 
 	/*
 		ctrl + c -> shut down
-	 */
+	*/
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	<-c
