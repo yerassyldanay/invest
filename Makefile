@@ -67,6 +67,9 @@ images_all_rm:
 images_postgres_rm:
 	docker rmi postgres:11
 
+#back:
+#	env HOST=0.0.0.0 docker-compose up --bu
+
 backend:
 	env HOST=0.0.0.0 docker-compose up --bu -d
 
@@ -79,6 +82,9 @@ backend_stop:
 backend_rm:
 	env HOST=0.0.0.0 docker-compose rm
 
+volume:
+	docker volume prune
+
 .PHONY: postgres postgres_delete postgres_logs postgres_up postgres_down generate test compile clean lint-prepare lint server sql_next_migrate
 .PHONY: services_ services_stop services_rm backend backend_stop backend_rm services_log
-.PHONY: images_all_rm images_postgres_rm
+.PHONY: images_all_rm images_postgres_rm volume

@@ -4,17 +4,17 @@ services:
   spk:
     build: .
     command: ./main
-    volumes:
-      - "/docker_volumes/spk/backend/documents/:/docs/"
+#    volumes:
+#      - "/docker_volumes/spk/backend/documents/:/docs/"
     env_file:
       - environment/local.env
     networks:
-      - spk_network
+      - invest_network
     environment:
       - "TZ=Asia/Almaty"
     ports:
       - "$HOST:7000:7000"
 
 networks:
-  spk_network:
+  invest_network:
     external: true

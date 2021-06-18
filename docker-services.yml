@@ -6,8 +6,8 @@ services:
     env_file:
       - environment/local.env
     image: postgres:11
-    volumes:
-      - "/docker_volumes/spk/postgre:/var/lib/postgresql/data"
+#    volumes:
+#      - "/docker_volumes/spk/postgre:/var/lib/postgresql/data"
     networks:
       - network
     environment:
@@ -15,14 +15,14 @@ services:
     #    container_name: "postgres_spk"
     ports:
       - "$HOST:7001:5432"
-#    hostname: "spk_postgres"
+    hostname: "invest_postgres"
 
   redis:
     restart: always
     image: redis:5.0
     #    command: redis-server --requirepass f5db003759b2456f8acb
-    volumes:
-      - "/docker_volumes/spk/data"
+#    volumes:
+#      - "/docker_volumes/spk/data"
     environment:
       - "TZ=Asia/Almaty"
     env_file:
@@ -31,7 +31,7 @@ services:
       - network
     ports:
       - "$HOST:7002:6379"
-#    hostname: "spk_redis"
+    hostname: "invest_redis"
 
 networks:
   network:
