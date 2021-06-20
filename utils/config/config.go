@@ -49,7 +49,7 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.SetConfigType("env")
 	viper.SetConfigName("local")
 
-	viper.SetDefault("LOAD_ENV_FILE", false)
+	viper.SetDefault("LOAD_ENV_FILE", true)
 
 	viper.SetDefault("BACKEND_HOST", "0.0.0.0")
 	viper.SetDefault("BACKEND_PORT", "7000")

@@ -1,9 +1,7 @@
 package service
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/yerassyldanay/invest/model"
 	"github.com/yerassyldanay/invest/utils/constants"
 	"github.com/yerassyldanay/invest/utils/errormsg"
@@ -11,55 +9,43 @@ import (
 	"github.com/yerassyldanay/invest/utils/message"
 )
 
-func (is *InvestService) Update_user_profile(user *model.User) (message.Msg) {
-	/*
-		get the user account, which is being modified
-	 */
+func (is *InvestService) UpdateUserProfile(user *model.User) message.Msg {
+	// get the user account, which is being modified
 	var trans = model.GetDB().Begin()
-	defer func() { if trans != nil {trans.Rollback()} }()
 
-	var tempuser = model.User{
-		Id: user.Id,
-	}
-
-	// get user info
-	if err := tempuser.OnlyGetByIdPreloaded(trans); err != nil {
+	// get user
+	var oldUserProfile = model.User{}
+	if err := trans.First(&oldUserProfile, "id = ?", user.Id).Error; err != nil {
+		_ = trans.Rollback()
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	// if this is a new phone number
-	fmt.Println(tempuser.Phone.Ccode + tempuser.Phone.Number, user.Phone.Ccode + user.Phone.Number)
-	if tempuser.Phone.Ccode + tempuser.Phone.Number != user.Phone.Ccode + user.Phone.Number &&
-		user.Phone.Number != "" {
-		// validate
-		if err := user.Phone.Validate(); err != nil {
+	if (user.Phone.Ccode != oldUserProfile.Phone.Ccode ||
+		user.Phone.Number != oldUserProfile.Phone.Number) && (len(user.Phone.Number)*len(user.Phone.Ccode) != 0) {
+		// delete old phone
+		if err := trans.Delete(&model.Phone{}, "id = ?", oldUserProfile.Phone.Id).Error; err != nil {
+			_ = trans.Rollback()
 			return model.ReturnInternalDbError(err.Error())
 		}
 
-		// delete phone number
-		if err := tempuser.Phone.OnlyDeleteById(trans); err != nil {
+		// create new one
+		if err := trans.Create(&user.Phone).Error; err != nil {
+			_ = trans.Rollback()
 			return model.ReturnInternalDbError(err.Error())
 		}
 
-		tempuser.Phone.Ccode = user.Phone.Ccode
-		tempuser.Phone.Number = user.Phone.Number
-
-		// create a new phone number
-		if err := tempuser.Phone.OnlyCreate(trans); err != nil {
-			return model.ReturnInternalDbError(err.Error())
-		}
-
-		tempuser.PhoneId = tempuser.Phone.Id
+		oldUserProfile.PhoneId = user.Phone.Id
 	}
 
-	a := len(user.Fio)
-	_ = a
-	if len(user.Fio) >= 8 && len(user.Fio) <= 255 {
-		tempuser.Fio = user.Fio
+	// update fio
+	if len(user.Fio) > 0 {
+		oldUserProfile.Fio = user.Fio
 	}
 
-	// save changes
-	if err := tempuser.OnlySave(trans); err != nil {
+	// save data
+	oldUserProfile.Phone = user.Phone
+	if err := trans.Save(&oldUserProfile).Error; err != nil {
+		_ = trans.Rollback()
 		return model.ReturnInternalDbError(err.Error())
 	}
 
@@ -68,45 +54,47 @@ func (is *InvestService) Update_user_profile(user *model.User) (message.Msg) {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	// update key
-	_ = model.Update_sequence_id_thus_avoid_duplicate_primary_key_error(model.GetDB(), "phones")
-
-	trans = nil
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Update_user_password(old_password, new_password string) (message.Msg) {
+func (is *InvestService) UpdateUserPassword(old_password, new_password string) message.Msg {
 	var user = model.User{Id: is.UserId}
 
 	// get user info
-	if err := user.OnlyGetUserById(model.GetDB()); err != nil {
+	if err := model.GetDB().First(&user, "id = ?", is.UserId).Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	// here we check whether two passwords
-	// (a provided password and password on db_create_fake_data) MATCH
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(old_password));
-	if err == bcrypt.ErrMismatchedHashAndPassword {
-		return model.ReturnWrongPassword("password is wrong")
-	} else if err != nil {
-		return model.ReturnInvalidPassword("password either does not match or invalid")
+	if old_password != user.Password {
+		return model.ReturnInvalidPassword("old password is not correct")
 	}
 
-	// check validity of the password
-	// for more info refer to the description of the function below
-	if err := model.OnlyValidatePassword(new_password); err != nil {
-		return model.ReturnInvalidParameters(err.Error())
-	}
+	//// here we check whether two passwords
+	//// (a provided password and password on db_create_fake_data) MATCH
+	//err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(old_password));
+	//if err == bcrypt.ErrMismatchedHashAndPassword {
+	//	return model.ReturnWrongPassword("password is wrong")
+	//} else if err != nil {
+	//	return model.ReturnInvalidPassword("password either does not match or invalid")
+	//}
 
-	// convert to hash
-	hashed_password, err := helper.Convert_string_to_hash(new_password)
-	if err != nil {
-		return model.ReuturnInternalServerError(err.Error())
-	}
+	//// check validity of the password
+	//// for more info refer to the description of the function below
+	//if err := model.OnlyValidatePassword(new_password); err != nil {
+	//	return model.ReturnInvalidParameters(err.Error())
+	//}
+
+	//// convert to hash
+	//hashed_password, err := helper.Convert_string_to_hash(new_password)
+	//if err != nil {
+	//	return model.ReuturnInternalServerError(err.Error())
+	//}
 
 	// only update password
-	err = user.OnlyUpdatePasswordById(hashed_password, model.GetDB())
-	if err != nil {
+	if err := model.GetDB().Model(&model.User{}).Where("id = ?", user.Id).
+		Updates(map[string]interface{}{
+			"password": new_password,
+		}).Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
@@ -122,43 +110,86 @@ func (is *InvestService) Update_user_password(old_password, new_password string)
 	return model.ReturnNoError()
 }
 
-/*
-	POST
- */
-func (is *InvestService) Create_user_based_on_role(new_user *model.User) (message.Msg) {
+// CreateUserBasedOnRole POST
+func (is *InvestService) CreateUserBasedOnRole(newUser *model.User) message.Msg {
 
-	rawPassword := new_user.Password
+	rawPassword := newUser.Password
 
 	// role must be (spk)
-	ok := helper.Does_a_slice_contain_element([]string{constants.RoleExpert, constants.RoleAdmin, constants.RoleManager}, new_user.Role.Name)
+	ok := helper.DoesASliceContainElement([]string{constants.RoleExpert, constants.RoleAdmin, constants.RoleManager}, newUser.Role.Name)
 	if !ok {
 		return model.ReturnMethodNotAllowed("role is invalid")
 	}
 
-	// validate
-	if err := new_user.ValidateSpkUser(); err != nil {
+	// validate password
+	if len(newUser.Password) < 8 || len(newUser.Password) > 50 {
+		return model.ReturnInvalidPassword("too long password is provided")
+	}
+
+	// create user
+	if err := newUser.ValidateFioPhoneEmail(); err != nil {
 		return model.ReturnInvalidParameters(err.Error())
 	}
 
-	// check email
-	// create
-	msg := new_user.Create_user_without_check()
+	// tx
+	tx := model.GetDB().Begin()
+
+	// create phone
+	var newPhone = newUser.Phone
+	if err := tx.Create(&newPhone).Error; err != nil {
+		_ = tx.Rollback()
+		return model.ReturnInternalDbError(err.Error())
+	}
+	newUser.PhoneId = newPhone.Id
+
+	// create email
+	var newEmail = newUser.Email
+	if err := tx.Create(&newEmail).Error; err != nil {
+		_ = tx.Rollback()
+		return model.ReturnInternalDbError(err.Error())
+	}
+	newUser.EmailId = newEmail.Id
+
+	// get role
+	var role = model.Role{}
+	if err := tx.First(&role, "name = ?", newUser.Role.Name).Error; err != nil {
+		_ = tx.Rollback()
+		return model.ReturnInternalDbError(err.Error())
+	}
+	newUser.RoleId = role.Id
 
 	// assign user to all projects if role is expert
-	if new_user.Role.Name == constants.RoleExpert {
+	if newUser.Role.Name == constants.RoleExpert {
 		pu := model.ProjectsUsers{
-			UserId: new_user.Id,
+			UserId: newUser.Id,
 		}
-		if err := pu.OnlyAssignExpertToAllProjects(model.GetDB()); err != nil {
+		if err := pu.OnlyAssignExpertToAllProjects(tx); err != nil {
+			_ = tx.Rollback()
 			return model.ReturnInternalDbError(err.Error())
 		}
 	}
 
+	// create user
+	if err := tx.Create(&newUser).Error; err != nil {
+		_ = tx.Rollback()
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// commit changes
+	if err := tx.Commit().Error; err != nil {
+		return model.ReturnInternalDbError(err.Error())
+	}
+
+	// get user info
+	newUser.Role = role
+	newUser.Email = newEmail
+	newUser.Phone = newPhone
+
 	// send notification
 	np := model.NotifyCreateProfile{
-		UserId:      new_user.Id,
-		User:        *new_user,
-		CreatedById: 	is.UserId,
+		UserId:      newUser.Id,
+		User:        *newUser,
+		CreatedById: is.UserId,
 		RawPassword: rawPassword,
 	}
 
@@ -168,13 +199,11 @@ func (is *InvestService) Create_user_based_on_role(new_user *model.User) (messag
 	default:
 	}
 
-	return msg
+	return model.ReturnSuccessfullyCreated()
 }
 
-/*
-	GET
- */
-func (is *InvestService) Get_users_by_roles(roles []string) (message.Msg) {
+//
+func (is *InvestService) GetUsersByRoles(roles []string) message.Msg {
 	var user = model.User{}
 
 	// get users

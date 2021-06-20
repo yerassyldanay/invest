@@ -11,11 +11,11 @@ import (
 	"net/http"
 )
 
-var Assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
+var AssignUserToProject = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Admin_assign_user_to_project"
 	var pu = model.ProjectsUsers{}
 
-	if err := json.NewDecoder(r.Body).Decode(&pu); err  != nil {
+	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
 		message.Respond(w, r, message.Msg{errormsg.ErrorInvalidParameters, 400, fname + " 1", err.Error()})
 		return
 	}
@@ -38,13 +38,13 @@ var Assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check user
-	if msg := is.Does_user_has_given_role(pu.UserId, []string{constants.RoleExpert, constants.RoleManager}); msg.IsThereAnError() {
+	if msg := is.DoesUserHasGivenRole(pu.UserId, []string{constants.RoleExpert, constants.RoleManager}); msg.IsThereAnError() {
 		message.Respond(w, r, msg)
 		return
 	}
 
 	// logic
-	msg := is.Assign_user_to_project(pu)
+	msg := is.AssignUserToProject(pu)
 	msg.Fname = fname + " asg"
 
 	message.Respond(w, r, msg)
@@ -52,8 +52,8 @@ var Assign_user_to_project = func(w http.ResponseWriter, r *http.Request) {
 
 /*
 	remove user & project relation
- */
-var Remove_user_from_project = func(w http.ResponseWriter, r *http.Request) {
+*/
+var RemoveUserFromProject = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Remove_user_from_project"
 	var pu = model.ProjectsUsers{}
 
@@ -73,7 +73,6 @@ var Remove_user_from_project = func(w http.ResponseWriter, r *http.Request) {
 	is.OnlyParseRequest(r)
 
 	// logic
-	msg := is.Assign_remove_relation(pu)
+	msg := is.AssignRemoveRelation(pu)
 	message.Respond(w, r, msg)
 }
-

@@ -6,9 +6,13 @@ import (
 )
 
 // comment on project with document statuses
-func (is *InvestService) Comment_on_project_documents(spkComment model.SpkComment) (message.Msg) {
+func (is *InvestService) Comment_on_project_documents(spkComment model.SpkComment) message.Msg {
 	var trans = model.GetDB().Begin()
-	defer func() { if trans != nil { trans.Rollback() } }()
+	defer func() {
+		if trans != nil {
+			trans.Rollback()
+		}
+	}()
 
 	// validate statuses of documents
 	if err := spkComment.OnlyValidateStatusesOfDocuments(); err != nil {
@@ -31,25 +35,25 @@ func (is *InvestService) Comment_on_project_documents(spkComment model.SpkCommen
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	// change the status of project & gantt step
-	msg := is.Ganta_change_the_status_of_project(spkComment.Comment.ProjectId, spkComment.Comment.Status)
-	if msg.IsThereAnError() {
-		return msg
-	}
-
 	// commit
 	if err := trans.Commit().Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
+	// change the status of project & gantt step
+	msg := is.GantaChangeTheStatusOfProject(spkComment.Comment.ProjectId, spkComment.Comment.Status)
+	if msg.IsThereAnError() {
+		return msg
+	}
+
 	trans = nil
 
 	// send notification
-	nc := model.NotifyAddComment {
-		CommentedById: 	is.UserId,
-		ProjectId:     	spkComment.Comment.ProjectId,
-		CommentBody:   	spkComment.Comment.Body,
-		Status:        	spkComment.Comment.Status,
+	nc := model.NotifyAddComment{
+		CommentedById: is.UserId,
+		ProjectId:     spkComment.Comment.ProjectId,
+		CommentBody:   spkComment.Comment.Body,
+		Status:        spkComment.Comment.Status,
 	}
 
 	select {
@@ -60,10 +64,9 @@ func (is *InvestService) Comment_on_project_documents(spkComment model.SpkCommen
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Get_comments_of_project(project_id uint64) (message.Msg) {
+func (is *InvestService) Get_comments_of_project(project_id uint64) message.Msg {
 	var comment = model.Comment{
 		ProjectId: project_id,
 	}
 	return comment.Get_all_comments_of_the_project_by_project_id(is.Offset)
 }
-

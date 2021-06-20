@@ -1,54 +1,31 @@
 package service
 
 import (
-	"github.com/jinzhu/gorm"
+	"fmt"
 	"github.com/yerassyldanay/invest/model"
 	"github.com/yerassyldanay/invest/utils/helper"
 	"github.com/yerassyldanay/invest/utils/message"
-	"time"
 )
 
-func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (message.Msg) {
-
+func (is *InvestService) PasswordResetSendMessage(fp model.ForgetPassword) message.Msg {
 	// get email
-	var email = model.Email{Address: fp.EmailAddress}
-	if err := email.OnlyGetByAddress(model.GetDB()); err != nil {
-		return model.ReturnInvalidParameters(err.Error())
+	var email = model.Email{}
+	if err := model.GetDB().First(&email, "address = ?", fp.EmailAddress).Error; err != nil {
+		return model.ReturnInvalidParameters(fmt.Sprintf("failed to get email. err: %v", err))
 	}
 
 	// validate email
 	if err := fp.Validate(); err != nil {
-		return model.ReturnInvalidParameters(err.Error())
+		return model.ReturnInvalidParameters(fmt.Sprintf("failed to validate. err: %v", err))
 	}
 
 	// create a hash that will be sent to email address
-	var hashCodeToSend = helper.Generate_Random_Number(6)
+	var codeToSend = helper.Generate_Random_Number(6)
 
-	// check whether once message was sent
-	err := fp.OnlyGetByAddress(model.GetDB())
-
-	// set hash
-	fp.Code = hashCodeToSend
-	fp.Deadline = helper.GetCurrentTime().Add(time.Hour * 24)
-
-	switch {
-	case err == gorm.ErrRecordNotFound:
-		// it is possible that an email has been sent to this email address
-		// this indicates it is not
-		// create
-		if err = fp.OnlyCreate(model.GetDB()); err != nil {
-			return model.ReturnInternalDbError(err.Error())
-		}
-
-	case err != nil:
-		// an unknown / unexpected error has occurred
-		return model.ReturnInternalDbError(err.Error())
-
-	default:
-		// there is one
-		if err = fp.OnlyUpdateByEmailAddress(model.GetDB(), "code", "deadline"); err != nil {
-			return model.ReturnInternalDbError(err.Error())
-		}
+	// store on redis
+	cmdStatus := model.GetRedis().Set("password_reset"+codeToSend, fp.EmailAddress, 0)
+	if cmdStatus.Err() != nil {
+		return model.ReturnInternalDbError(fmt.Sprintf("failed to fetch data from redis. err: %v", cmdStatus.Err()))
 	}
 
 	// send notification
@@ -62,54 +39,36 @@ func (is *InvestService) Password_reset_send_message(fp model.ForgetPassword) (m
 	case model.GetMailerQueue().NotificationChannel <- &nc:
 	default:
 	}
-	//resp["info"] = model.Struct_to_map(fp)
 
-	return model.ReturnNoError()
+	return model.ReturnNoErrorWithResponseMessage(map[string]interface{}{
+		"code":    codeToSend,
+		"address": fp.EmailAddress,
+	})
 }
 
-// change the actual password
-// hash & password
-func (is *InvestService) Password_reset_change_password(fp model.ForgetPassword) (message.Msg) {
-
-	var trans = model.GetDB().Begin()
-	defer func() { if trans != nil {trans.Rollback()} }()
-
-	// get email from forget password
-	if err := fp.OnlyGetByAddressAndCode(trans); err != nil {
-		return model.ReturnInternalDbError("code " + err.Error())
-	}
-
-	// get user by email
-	var user = model.User{Email: model.Email{Address: fp.EmailAddress}}
-	if err := user.OnlyGetByEmailAddress(trans); err != nil {
-		return model.ReturnInternalDbError("get" + err.Error())
-	}
-
-	// validate password
-	if err := model.OnlyValidatePassword(fp.NewPassword); err != nil {
-		return model.ReturnInternalDbError("val" + err.Error())
-	}
-
-	// convert password to hash
-	hashedPassword, err := helper.Convert_string_to_hash(fp.NewPassword)
+// PasswordResetChangePassword
+func (is *InvestService) PasswordResetChangePassword(fp model.ForgetPassword) message.Msg {
+	// get from redis
+	emailAddress, err := model.GetRedis().Get("password_reset" + fp.Code).Result()
 	if err != nil {
-		return model.ReturnInternalDbError("hash" + err.Error())
+		return model.ReturnInvalidParameters(err.Error())
+	}
+
+	// get user by email address
+	var email = model.Email{}
+	if err := model.GetDB().First(&email, "address = ?", emailAddress).Error; err != nil {
+		return model.ReturnInvalidParameters(err.Error())
 	}
 
 	// update password
-	if err := user.OnlyUpdatePasswordById(hashedPassword, trans); err != nil {
+	if err := model.GetDB().Model(&model.User{}).
+		Where("email_id = ?", email.Id).
+		Updates(map[string]interface{}{
+			"password": fp.NewPassword,
+		}).Error; err != nil {
 		return model.ReturnInternalDbError(err.Error())
 	}
 
-	// delete - otherwise it can be used to reset password
-	if err = fp.OnlyDelete(trans); err != nil {
-		return model.ReturnInternalDbError("delete " + err.Error())
-	}
-
-	// commit changes
-	if err := trans.Commit().Error; err != nil {
-		return model.ReturnInternalDbError(err.Error())
-	}
-
+	// ok
 	return model.ReturnNoError()
 }

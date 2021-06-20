@@ -19,7 +19,7 @@ import (
 	body - the comment itself
 
 	id - from session token
- */
+*/
 //var Add_comment_to_project = func(w http.ResponseWriter, r *http.Request) {
 //	var fname = "Add_comment_to_project"
 //
@@ -107,7 +107,7 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 	/*
 		Security:
 			* only users, who are assigned to the project, can comment
-	 */
+	*/
 	var project = model.Project{
 		Id: spkComment.Comment.ProjectId,
 	}
@@ -122,7 +122,7 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 	/*
 		Security:
 			* is this user responsible?
-	 */
+	*/
 	err := project.GetAndUpdateStatusOfProject(model.GetDB())
 	if err != nil {
 		fmt.Println(err)
@@ -143,7 +143,7 @@ var Project_comment_on_documents = func(w http.ResponseWriter, r *http.Request) 
 /*
 	provide
 		* project_id
- */
+*/
 var Project_get_comments = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_comments_of_the_project"
 
@@ -155,7 +155,7 @@ var Project_get_comments = func(w http.ResponseWriter, r *http.Request) {
 	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 
 	// security
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(project_id)
 	if msg.ErrMsg != "" {
 		msg.SetFname(fname, "acc")
 		message.Respond(w, r, msg)

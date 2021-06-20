@@ -41,7 +41,7 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 	document_id := service.OnlyConvertString(r.FormValue("document_id"), uint64(0)).(uint64)
 
 	// security - user must have an access to the project
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(project_id)
 	if msg.IsThereAnError() {
 		msg.SetFname(fname, "access project")
 		message.Respond(w, r, msg)
@@ -97,14 +97,14 @@ var Document_upload_document = func(w http.ResponseWriter, r *http.Request) {
 }
 
 // remove document & delete a file
-var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
+var DocumentRemoveFile = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Project_remove_document"
-	
+
 	/*
 		parse request body:
 			* document_id
 			* project_id
-	 */
+	*/
 	var document_id = service.OnlyGetQueryParameter(r, "document_id", uint64(0)).(uint64)
 	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 
@@ -116,11 +116,11 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 		Security:
 			* check that exactly this user can access project
 			* is this user responsible for current step
-	 */
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
+	*/
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(project_id)
 	if msg.IsThereAnError() {
 		msg.SetFname(fname, "project")
-		message.Respond(w ,r, msg)
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -132,9 +132,8 @@ var Document_remove_file = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// delete a document by doc & project id
-	msg = is.Document_remove_document_from_project(document_id)
+	msg = is.DocumentRemoveDocumentFromProject(document_id)
 	msg.SetFname(fname, "remove")
 
 	message.Respond(w, r, msg)
 }
-

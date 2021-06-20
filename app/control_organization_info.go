@@ -34,7 +34,7 @@ var Update_organization_data = func(w http.ResponseWriter, r *http.Request) {
 
 var Get_organization_info_by_bin = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_organization_info_by_bin"
-	var bin = service.Get_query_parameter_str(r, "bin", "")
+	var bin = service.GetQueryParameterStr(r, "bin", "")
 	var msg = message.Msg{
 		errormsg.ErrorInvalidParameters, http.StatusBadRequest, fname + " 1", "invalid parameters. invalid bin number",
 	}
@@ -43,7 +43,7 @@ var Get_organization_info_by_bin = func(w http.ResponseWriter, r *http.Request) 
 		Lang: r.Header.Get(constants.HeaderContentLanguage),
 		Bin:  bin,
 	}
-	
+
 	if bin != "" {
 		msg = org.Create_or_get_organization_from_db_by_bin(model.GetDB())
 	}

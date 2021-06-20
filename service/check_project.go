@@ -7,7 +7,7 @@ import (
 )
 
 // check whether this user has privileges to get project data
-func (is *InvestService) Check_whether_this_user_can_get_access_to_project_info(project_id uint64)(message.Msg) {
+func (is *InvestService) CheckWhetherThisUserCanGetAccessToProjectInfo(project_id uint64) message.Msg {
 	var err error
 	var user = model.User{Id: is.UserId}
 
@@ -31,8 +31,8 @@ func (is *InvestService) Check_whether_this_user_can_get_access_to_project_info(
 	Is the user is not responsible for current step, he/she is not allowed to make changes
 	for example:
 		* remove documents
- */
-func (is *InvestService) Check_whether_this_user_responsible_for_current_step(project_id uint64) (message.Msg) {
+*/
+func (is *InvestService) Check_whether_this_user_responsible_for_current_step(project_id uint64) message.Msg {
 	var project = model.Project{Id: project_id}
 	err := project.GetAndUpdateStatusOfProject(model.GetDB())
 	if err != nil {
@@ -50,7 +50,7 @@ func (is *InvestService) Check_whether_this_user_responsible_for_current_step(pr
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Does_project_exist(project_id uint64) (message.Msg) {
+func (is *InvestService) Does_project_exist(project_id uint64) message.Msg {
 	// check whether a project exists
 	var project = model.Project{Id: project_id}
 	err := project.OnlyGetById(model.GetDB())

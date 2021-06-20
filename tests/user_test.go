@@ -18,7 +18,7 @@ import (
 		own
 		by admin
 	* get users by role
- */
+*/
 func createUserProfile(user model.User, t *testing.T) {
 
 	is := service.InvestService{
@@ -31,7 +31,7 @@ func createUserProfile(user model.User, t *testing.T) {
 	savedUser := user
 
 	// create a new user by admin
-	msg := is.Create_user_based_on_role(&user)
+	msg := is.CreateUserBasedOnRole(&user)
 
 	// check
 	require.Zero(t, msg.ErrMsg)
@@ -80,14 +80,14 @@ func TestServiceUpdateUserInfo(t *testing.T) {
 	user.Fio = helper.Generate_Random_String(30)
 	user.Phone.Number = helper.Generate_Random_Number(10)
 
-	is := service.InvestService {
-		BasicInfo: service.BasicInfo {
-			UserId: 1,
+	is := service.InvestService{
+		BasicInfo: service.BasicInfo{
+			UserId:   1,
 			RoleName: constants.RoleInvestor,
 		},
 	}
 	tempUser := user
-	msg := is.Update_user_profile(&tempUser)
+	msg := is.UpdateUserProfile(&tempUser)
 
 	// check
 	require.Zero(t, msg.ErrMsg)
@@ -124,16 +124,16 @@ func TestServiceUpdateUserPassword(t *testing.T) {
 			RoleName: user.Role.Name,
 		},
 	}
-	msg := is.Update_user_password(oldPassword, newPassword)
+	msg := is.UpdateUserPassword(oldPassword, newPassword)
 
 	// check
 	require.Zero(t, msg.ErrMsg)
 
 	// sign in - check
 	sis := model.SignIn{
-		KeyUsername:   "email",
-		Value:         user.Email.Address,
-		Password:      newPassword,
+		KeyUsername: "email",
+		Value:       user.Email.Address,
+		Password:    newPassword,
 	}
 	msg = sis.SignIn()
 
@@ -152,7 +152,7 @@ func TestModelGetUsersByRole(t *testing.T) {
 
 	// check
 	require.NoError(t, err)
-	require.Condition(t, func() (bool) { return len(users) >= 1 })
+	require.Condition(t, func() bool { return len(users) >= 1 })
 }
 
 func TestServiceGetUsersByRole(t *testing.T) {
@@ -164,13 +164,13 @@ func TestServiceGetUsersByRole(t *testing.T) {
 	// admin
 	is := service.InvestService{
 		BasicInfo: service.BasicInfo{
-			UserId: 1,
+			UserId:   1,
 			RoleName: constants.RoleInvestor,
 		},
 	}
 
 	// get managers
-	msg := is.Get_users_by_roles([]string{constants.RoleManager})
+	msg := is.GetUsersByRoles([]string{constants.RoleManager})
 
 	// check
 	require.Zero(t, msg.ErrMsg)

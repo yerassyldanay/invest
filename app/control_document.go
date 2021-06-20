@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-var Document_get = func(w http.ResponseWriter, r *http.Request) {
+var DocumentGet = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Document_get"
 
 	// headers
@@ -21,7 +21,7 @@ var Document_get = func(w http.ResponseWriter, r *http.Request) {
 	project_id := service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 
 	// security
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(project_id)
 	msg.Fname = fname + " 1"
 
 	if msg.IsThereAnError() {
@@ -31,13 +31,13 @@ var Document_get = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// logic
-	msg = is.Document_get_by_project_id(project_id, steps)
+	msg = is.DocumentGetByProjectId(project_id, steps)
 	msg.Fname = fname + " 2"
 
 	message.Respond(w, r, msg)
 }
 
-var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Request) {
+var DocumentAddBoxToUploadDocument = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Document_add_box"
 
 	// headers
@@ -53,18 +53,18 @@ var Document_add_box_to_upload_document = func(w http.ResponseWriter, r *http.Re
 	defer r.Body.Close()
 
 	// security check
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(document.ProjectId)
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(document.ProjectId)
 	if msg.IsThereAnError() {
 		message.Respond(w, r, msg)
 		return
 	}
 
 	if is.RoleName != constants.RoleExpert && is.RoleName != constants.RoleManager && is.RoleName != constants.RoleAdmin {
-		OnlyReturnMethodNotAllowed(w, r, "only spk is allowed. your role: " + is.RoleName, fname, "role")
+		OnlyReturnMethodNotAllowed(w, r, "only spk is allowed. your role: "+is.RoleName, fname, "role")
 		return
 	}
 
-	msg = is.Add_box_to_upload_document(document)
+	msg = is.AddBoxToUploadDocument(document)
 	msg.SetFname(fname, " add_box")
 
 	message.Respond(w, r, msg)

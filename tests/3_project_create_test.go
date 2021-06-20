@@ -1,4 +1,3 @@
-
 package tests
 
 import (
@@ -15,19 +14,20 @@ import (
 
  */
 const bin = "190940011748"
+
 func HelperGetNewProject() model.ProjectWithFinanceTables {
-	project := model.ProjectWithFinanceTables {
+	project := model.ProjectWithFinanceTables{
 		Project: model.Project{
-			Name:              "Тестовый проект - " + helper.Generate_Random_String(20),
-			Description:       helper.Generate_Random_String(30),
-			InfoSent:          map[string]interface{}{
+			Name:        "Тестовый проект - " + helper.Generate_Random_String(20),
+			Description: helper.Generate_Random_String(30),
+			InfoSent: map[string]interface{}{
 				"add-info": helper.Generate_Random_String(20),
 			},
-			EmployeeCount:     100,
-			Email:             "any@gmail.com",
-			PhoneNumber:       "+77781254856",
-			Organization:      model.Organization{
-				Bin:    bin,
+			EmployeeCount: 100,
+			Email:         "any@gmail.com",
+			PhoneNumber:   "+77781254856",
+			Organization: model.Organization{
+				Bin: bin,
 			},
 			Categors: []model.Categor{
 				{
@@ -39,7 +39,7 @@ func HelperGetNewProject() model.ProjectWithFinanceTables {
 			LandArea:          10000,
 			LandAddress:       "город, название улицы, дом",
 		},
-		Cost:    model.Cost{
+		Cost: model.Cost{
 			BuildingRepairInvestor:      2000,
 			BuildingRepairInvolved:      3000,
 			TechnologyEquipmentInvestor: 5000,
@@ -81,9 +81,9 @@ func TestProjectCreate(t *testing.T) {
 
 	// headers
 	is := service.InvestService{
-		TimeUTC:   time.Now().UTC(),
-		Time:      time.Now(),
-		Offset:    "0",
+		TimeUTC: time.Now().UTC(),
+		Time:    time.Now(),
+		Offset:  "0",
 		BasicInfo: service.BasicInfo{
 			UserId:   3,
 			RoleName: constants.RoleInvestor,
@@ -92,7 +92,7 @@ func TestProjectCreate(t *testing.T) {
 	}
 
 	// logic
-	msg = is.Service_create_project(&project)
+	msg = is.ServiceCreateProject(&project)
 	if msg.IsThereAnError() {
 		t.Error("expected no error, but got " + msg.ErrMsg)
 	}
@@ -148,12 +148,9 @@ func TestProjectGanta(t *testing.T) {
 
 	// check
 	require.NoError(t, err)
-	require.True(t, len(gantas) == len(model.DefaultGantaParentsOfStep2) - 1)
+	require.True(t, len(gantas) == len(model.DefaultGantaParentsOfStep2)-1)
 	require.True(t, len(gantas) > 0)
 
 	length := len(model.DefaultGantaParentsOfStep2)
-	require.Equal(t, gantas[len(gantas) - 1].Rus, model.DefaultGantaParentsOfStep2[length - 2].Rus)
+	require.Equal(t, gantas[len(gantas)-1].Rus, model.DefaultGantaParentsOfStep2[length-2].Rus)
 }
-
-
-

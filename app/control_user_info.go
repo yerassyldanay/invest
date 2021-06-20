@@ -9,10 +9,10 @@ import (
 	"net/http"
 )
 
-var Get_full_user_info = func(w http.ResponseWriter, r *http.Request) {
+func GetFullUserInfo(w http.ResponseWriter, r *http.Request) {
 	var fname = "Get_full_user_info"
 	var user = model.User{
-		Id: service.Get_query_parameter_uint64(r, "user_id", 0),
+		Id: service.GetQueryParameterUint64(r, "user_id", 0),
 	}
 
 	// admins only
@@ -22,7 +22,7 @@ var Get_full_user_info = func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	msg := user.GetFullInfoOfThisUser(model.ElementGetFullInfoOfThisUser{})
+	msg := user.GetFullInfoOfThisUserWithoutPasswordById()
 	msg.Fname = fname + " 1"
 
 	message.Respond(w, r, msg)

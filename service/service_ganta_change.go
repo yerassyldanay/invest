@@ -53,8 +53,8 @@ func (is *InvestService) Ganta_can_user_change_current_status(project_id uint64)
 
 /*
 	there are several cases that might happen after any of the users changes the status of the project
- */
-func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, status string) (message.Msg) {
+*/
+func (is *InvestService) GantaChangeTheStatusOfProject(project_id uint64, status string) message.Msg {
 	// validate status
 	switch {
 	case status == constants.ProjectStatusAccept:
@@ -79,7 +79,11 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 
 	// create transaction
 	var trans = model.GetDB().Begin()
-	defer func() { if trans != nil {trans.Rollback()} }()
+	defer func() {
+		if trans != nil {
+			trans.Rollback()
+		}
+	}()
 
 	var err error
 	status = strings.ToLower(status)
@@ -97,7 +101,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 				* reconsider: a new gantt step will be created (status: pending_investor),
 						the current gantt step will be put after this step
 				* accept: move to the next step
-		 */
+		*/
 		switch {
 		case status == constants.ProjectStatusReject:
 			// create a new gantt step, which indicates that the project has been rejected
@@ -140,11 +144,11 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			/*
 				if the current step is done, we need to shift all gantt steps to left
 					this is what we are doing here
-			 */
+			*/
 
 			// now the current step is
 			// at the end this step will the default final step
-			err = currentGanta.OnlyGetCurrentStepByProjectId(trans);
+			err = currentGanta.OnlyGetCurrentStepByProjectId(trans)
 			if err != nil {
 				return model.ReturnInternalDbError(err.Error())
 			}
@@ -181,7 +185,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 			// shift all gantt steps to right
 			// calculate shift hour
 			hoursToShift := int(helper.GetCurrentTruncatedDate().Sub(currentGanta.StartDate).Hours())
-			hoursToShift = hoursToShift + int(daysGivenToInvestor * 24)
+			hoursToShift = hoursToShift + int(daysGivenToInvestor*24)
 
 			// shift all gantt steps
 			if err = currentGanta.OnlyUpdateStartDatesOfAllUndoneGantaStepsByProjectId(hoursToShift, trans); err != nil {
@@ -224,7 +228,7 @@ func (is *InvestService) Ganta_change_the_status_of_project(project_id uint64, s
 	return model.ReturnNoError()
 }
 
-func (is *InvestService) Ganta_change_time(ganta model.Ganta) (message.Msg) {
+func (is *InvestService) Ganta_change_time(ganta model.Ganta) message.Msg {
 
 	// validate
 	if ganta.Start < 1 {
@@ -241,4 +245,3 @@ func (is *InvestService) Ganta_change_time(ganta model.Ganta) (message.Msg) {
 
 	return model.ReturnNoError()
 }
-

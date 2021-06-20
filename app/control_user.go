@@ -12,7 +12,7 @@ import (
 )
 
 /* */
-var Users_get_by_role = func(w http.ResponseWriter, r *http.Request) {
+var UsersGetByRole = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "User_get_by_role"
 
 	// headers
@@ -20,8 +20,8 @@ var Users_get_by_role = func(w http.ResponseWriter, r *http.Request) {
 	is.OnlyParseRequest(r)
 
 	// only admins can get users by role
-	if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
-		message.Respond(w, r, msg);
+	if msg := is.CheckIsItAdmin(); msg.IsThereAnError() {
+		message.Respond(w, r, msg)
 		return
 	}
 
@@ -32,13 +32,13 @@ var Users_get_by_role = func(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// logic
-	msg := is.Get_users_by_roles(roles)
+	msg := is.GetUsersByRoles(roles)
 	msg.Fname = fname + " get"
 
 	message.Respond(w, r, msg)
 }
 
-var Create_user = func(w http.ResponseWriter, r *http.Request) {
+var CreateUser = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Create_user_based_on_role"
 	var user = model.User{}
 
@@ -54,13 +54,13 @@ var Create_user = func(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	// check
-	if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
+	if msg := is.CheckIsItAdmin(); msg.IsThereAnError() {
 		message.Respond(w, r, msg)
 		return
 	}
 
 	// create
-	msg := is.Create_user_based_on_role(&user)
+	msg := is.CreateUserBasedOnRole(&user)
 	if msg.IsThereAnError() != true {
 		msg = model.ReturnNoError()
 	}
@@ -69,7 +69,7 @@ var Create_user = func(w http.ResponseWriter, r *http.Request) {
 	message.Respond(w, r, msg)
 }
 
-var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http.Request) {
+var UpdateUserProfileHelp = func(whose string, w http.ResponseWriter, r *http.Request) {
 	var fname = "Update_user_profile"
 	var user = model.User{}
 
@@ -88,13 +88,14 @@ var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http
 	switch whose {
 	case "other":
 		// pass
-		if msg := is.Check_is_it_admin(); msg.IsThereAnError() {
-			message.Respond(w, r, msg); return
+		if msg := is.CheckIsItAdmin(); msg.IsThereAnError() {
+			message.Respond(w, r, msg)
+			return
 		}
-		msg = is.Update_user_profile(&user)
+		msg = is.UpdateUserProfile(&user)
 	case "own":
 		user.Id = is.UserId
-		msg = is.Update_user_profile(&user)
+		msg = is.UpdateUserProfile(&user)
 	default:
 		msg = model.ReturnMethodNotAllowed("this is not supported | which profile are updating")
 	}
@@ -103,23 +104,21 @@ var Update_user_profile_help = func(whose string, w http.ResponseWriter, r *http
 	message.Respond(w, r, msg)
 }
 
-var Update_own_profile = func(w http.ResponseWriter, r *http.Request) {
-	Update_user_profile_help("own", w, r)
+var UpdateOwnProfile = func(w http.ResponseWriter, r *http.Request) {
+	UpdateUserProfileHelp("own", w, r)
 }
 
-var Update_other_profile = func(w http.ResponseWriter, r *http.Request) {
-	Update_user_profile_help("other", w, r)
+var UpdateOtherProfile = func(w http.ResponseWriter, r *http.Request) {
+	UpdateUserProfileHelp("other", w, r)
 }
 
-/*
-	Password
- */
-var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Request) {
+// UpdatePasswordHelp Password
+var UpdatePasswordHelp = func(whose string, w http.ResponseWriter, r *http.Request) {
 	var fname = "Update_password_help"
 	var requestBody = struct {
-		Id						uint64			`json:"id"`
-		Password				string			`json:"password"`
-		OldPassword				string			`json:"old_password"`
+		Id          uint64 `json:"id"`
+		Password    string `json:"password"`
+		OldPassword string `json:"old_password"`
 	}{}
 
 	var msg message.Msg
@@ -141,19 +140,19 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 	switch {
 	case whose == "own":
 		// if this is own then is.UserId will be used
-		msg = is.Update_user_password(requestBody.OldPassword, requestBody.Password)
+		msg = is.UpdateUserPassword(requestBody.OldPassword, requestBody.Password)
 	case whose == "other" && is.RoleName == constants.RoleAdmin:
 
 		// security check
 		if is.RoleName != constants.RoleAdmin {
-			OnlyReturnMethodNotAllowed(w, r, "only admin can access, your role " + is.RoleName, fname, "sec")
+			OnlyReturnMethodNotAllowed(w, r, "only admin can access, your role "+is.RoleName, fname, "sec")
 			return
 		}
 
 		// if this is a profile of another user
 		// then set is.UserId to the id of that user
 		is.UserId = requestBody.Id
-		msg = is.Update_user_password(requestBody.OldPassword, requestBody.Password)
+		msg = is.UpdateUserPassword(requestBody.OldPassword, requestBody.Password)
 
 	default:
 		// this is not allowed
@@ -164,12 +163,10 @@ var Update_password_help = func(whose string, w http.ResponseWriter, r *http.Req
 	message.Respond(w, r, msg)
 }
 
-var Update_own_password = func(w http.ResponseWriter, r *http.Request) {
-	Update_password_help("own", w, r)
+var UpdateOwnPassword = func(w http.ResponseWriter, r *http.Request) {
+	UpdatePasswordHelp("own", w, r)
 }
 
-var Update_other_password = func(w http.ResponseWriter, r *http.Request) {
-	Update_password_help("other", w, r)
+var UpdateOtherPassword = func(w http.ResponseWriter, r *http.Request) {
+	UpdatePasswordHelp("other", w, r)
 }
-
-

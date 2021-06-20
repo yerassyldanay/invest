@@ -5,6 +5,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/yerassyldanay/invest/model"
 	"github.com/yerassyldanay/invest/utils/constants"
+	"github.com/yerassyldanay/invest/utils/helper"
 	"github.com/yerassyldanay/invest/utils/randomer"
 	"testing"
 	"time"
@@ -22,17 +23,17 @@ func HelperTestGenerateUserWithoutAnyInfoStored(t *testing.T) model.User {
 	require.NoError(t, TestGorm.Create(&organization).Error)
 
 	return model.User{
-		Password:       randomer.RandomString(20),
-		Fio:            randomer.RandomString(30),
-		Role:           model.Role{
-			Name:            constants.RoleInvestor,
+		Password: randomer.RandomString(20),
+		Fio:      randomer.RandomString(30),
+		Role: model.Role{
+			Name: constants.RoleInvestor,
 		},
-		Email:          model.Email{
-			Address: 	randomer.RandomEmail(),
+		Email: model.Email{
+			Address: randomer.RandomEmail(),
 		},
-		Phone:          model.Phone{
-			Ccode:    "+7",
-			Number:   randomer.RandomDigit(10),
+		Phone: model.Phone{
+			Ccode:  "+7",
+			Number: randomer.RandomDigit(10),
 		},
 		Verified:       true,
 		Lang:           constants.ContentLanguageRu,
@@ -43,19 +44,30 @@ func HelperTestGenerateUserWithoutAnyInfoStored(t *testing.T) model.User {
 	}
 }
 
+func helperGenerateOrganization() model.Organization {
+	return model.Organization{
+		Lang:    constants.ContentLanguageRu,
+		Bin:     randomer.RandomDigit(10),
+		Name:    gofakeit.Company(),
+		Fio:     gofakeit.Name(),
+		Regdate: time.Now(),
+		Address: gofakeit.Address().Address,
+	}
+}
+
 // helperTestCreateUser
 // password is not hashed
 func helperTestGenerateUser(roleArgs string, t *testing.T) model.User {
 	// create email address
 	var email = model.Email{
-		Address: 	randomer.RandomEmail(),
+		Address: randomer.RandomEmail(),
 	}
 	require.NoError(t, TestGorm.Create(&email).Error)
 
 	// create phone number
 	var phone = model.Phone{
-		Ccode:    "+7",
-		Number:   randomer.RandomDigit(10),
+		Ccode:  "+7",
+		Number: randomer.RandomDigit(10),
 	}
 	require.NoError(t, TestGorm.Create(&phone).Error)
 
@@ -64,14 +76,7 @@ func helperTestGenerateUser(roleArgs string, t *testing.T) model.User {
 	require.NoError(t, TestGorm.First(&role, "name = ?", roleArgs).Error)
 
 	// create organization
-	organization := model.Organization{
-		Lang:    constants.ContentLanguageRu,
-		Bin:     randomer.RandomDigit(10),
-		Name:    gofakeit.Company(),
-		Fio:     gofakeit.Name(),
-		Regdate: time.Now(),
-		Address: gofakeit.Address().Address,
-	}
+	organization := helperGenerateOrganization()
 	require.NoError(t, TestGorm.Create(&organization).Error)
 
 	// generate user
@@ -82,7 +87,7 @@ func helperTestGenerateUser(roleArgs string, t *testing.T) model.User {
 		Role:           role,
 		EmailId:        email.Id,
 		Email:          email,
-		PhoneId: 		phone.Id,
+		PhoneId:        phone.Id,
 		Phone:          phone,
 		Verified:       true,
 		Lang:           constants.ContentLanguageRu,
@@ -94,6 +99,60 @@ func helperTestGenerateUser(roleArgs string, t *testing.T) model.User {
 
 	// ok
 	return user
+}
+
+type ElementHelperCreateProject struct {
+	Project  model.Project
+	Investor model.User
+}
+
+func helperGenerateProject(t *testing.T) ElementHelperCreateProject {
+	// create investor
+	investor := helperTestCreateUser(constants.RoleInvestor, t)
+
+	// create org
+	var organization = helperGenerateOrganization()
+	require.NoError(t, TestGorm.Create(&organization).Error)
+
+	// generate project
+	var project = model.Project{
+		Name:              randomer.RandomString(20),
+		Description:       randomer.RandomString(40),
+		Info:              randomer.RandomString(20),
+		InfoSent:          nil,
+		EmployeeCount:     1000,
+		Email:             gofakeit.Email(),
+		PhoneNumber:       gofakeit.Phone(),
+		OrganizationId:    organization.Id,
+		Organization:      organization,
+		Users:             nil,
+		Categors:          nil,
+		OfferedById:       investor.Id,
+		OfferedByPosition: "manager",
+		Status:            "status",
+		Step:              1,
+		LandPlotFrom:      "form-land",
+		LandArea:          1000,
+		LandAddress:       gofakeit.Address().Address,
+		IsManagerAssigned: false,
+		CurrentStep:       model.Ganta{},
+		AddInfo:           model.AddInfo{},
+	}
+
+	return ElementHelperCreateProject{
+		Project:  project,
+		Investor: investor,
+	}
+}
+
+func helperCreateProject(t *testing.T) ElementHelperCreateProject {
+	// generate
+	projectElement := helperGenerateProject(t)
+
+	// create project
+	require.NoError(t, TestGorm.Create(&projectElement.Project).Error)
+
+	return projectElement
 }
 
 func helperTestCreateUser(roleArgs string, t *testing.T) model.User {
@@ -117,6 +176,70 @@ func helperRedisCheckExists(key string, t *testing.T) bool {
 	return n == 1
 }
 
+type ElementHelperCreateManagerWithProject struct {
+	Manager  model.User
+	Investor model.User
+	Project  model.Project
+}
+
+func helperCreateManagerWithProject(t *testing.T) ElementHelperCreateManagerWithProject {
+	manager := helperTestCreateUser(constants.RoleManager, t)
+
+	// create project
+	element := helperCreateProject(t)
+
+	// assign
+	var pu = model.ProjectsUsers{
+		ProjectId: element.Project.Id,
+		UserId:    manager.Id,
+		Created:   time.Now(),
+	}
+	helper.HelperPrint(pu)
+	require.NoError(t, TestGorm.Create(&pu).Error)
+
+	// ok
+	return ElementHelperCreateManagerWithProject{
+		Manager:  manager,
+		Investor: element.Investor,
+		Project:  element.Project,
+	}
+}
+
+func helperTestGenerateProjectWithTables(t *testing.T) model.ProjectWithFinanceTables {
+	projectElement := helperGenerateProject(t)
+
+	// create project parameters
+	var projectsWithTables = model.ProjectWithFinanceTables{
+		Project: projectElement.Project,
+		Cost: model.Cost{
+			Id:                          0,
+			ProjectId:                   0,
+			BuildingRepairInvestor:      gofakeit.Number(100, 100000),
+			BuildingRepairInvolved:      gofakeit.Number(100, 100000),
+			TechnologyEquipmentInvestor: gofakeit.Number(100, 100000),
+			TechnologyEquipmentInvolved: gofakeit.Number(100, 100000),
+			WorkingCapitalInvestor:      gofakeit.Number(100, 100000),
+			WorkingCapitalInvolved:      gofakeit.Number(100, 100000),
+			OtherCostInvestor:           gofakeit.Number(100, 100000),
+			OtherCostInvolved:           gofakeit.Number(100, 100000),
+		},
+		Finance: model.Finance{
+			Id:                    0,
+			ProjectId:             0,
+			TotalIncome:           gofakeit.Number(100, 100000),
+			TotalProduction:       gofakeit.Number(100, 100000),
+			ProductionCost:        gofakeit.Number(100, 100000),
+			OperationalProfit:     gofakeit.Number(100, 100000),
+			SettlementObligations: gofakeit.Number(100, 100000),
+			OtherCost:             gofakeit.Number(100, 100000),
+			PureProfit:            gofakeit.Number(100, 100000),
+			Taxes:                 gofakeit.Number(100, 100000),
+		},
+	}
+
+	return projectsWithTables
+}
+
 // helperDeeplyCompareUsers
 // check everything except for ids
 func helperDeeplyCompareUsers(expected, actual model.User, t *testing.T) {
@@ -126,4 +249,15 @@ func helperDeeplyCompareUsers(expected, actual model.User, t *testing.T) {
 	require.Equal(t, expected.Fio, actual.Fio)
 	require.Equal(t, expected.Organization.Name, actual.Organization.Name)
 	require.Equal(t, expected.Role.Name, actual.Role.Name)
+}
+
+func helperTestUserGetFullInfo(id uint64, t *testing.T) model.User {
+	var checkUser = model.User{}
+	require.NoError(t, TestGorm.First(&checkUser, "id = ?", id).Error)
+	require.NoError(t, TestGorm.First(&checkUser.Phone, "id = ?", checkUser.PhoneId).Error)
+	require.NoError(t, TestGorm.First(&checkUser.Email, "id = ?", checkUser.EmailId).Error)
+	require.NoError(t, TestGorm.First(&checkUser.Role, "id = ?", checkUser.RoleId).Error)
+	require.NoError(t, TestGorm.First(&checkUser.Organization, "id = ?", checkUser.OrganizationId).Error)
+
+	return checkUser
 }

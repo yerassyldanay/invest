@@ -1,54 +1,21 @@
 package model
 
 import (
-	"errors"
-	"github.com/jinzhu/gorm"
-	"github.com/yerassyldanay/invest/utils/constants"
-
 	"time"
 )
 
 type ProjectUserStat struct {
-	ProjectId				uint64				`json:"project_id;omitempty"`
-	UserId					uint64				`json:"user_id;omitempty"`
-	Status					string				`json:"status"`
+	ProjectId uint64 `json:"project_id;omitempty"`
+	UserId    uint64 `json:"user_id;omitempty"`
+	Status    string `json:"status"`
 }
 
 type ProjectsUsers struct {
-	ProjectId				uint64					`json:"project_id" gorm:"foreignkey:projects.id"`
-	UserId					uint64					`json:"user_id" gorm:"foreignkey:users.id"`
-	Created					time.Time				`json:"created" gorm:"default:now()"`
+	ProjectId uint64    `json:"project_id"`
+	UserId    uint64    `json:"user_id"`
+	Created   time.Time `json:"created"`
 }
 
-func (ProjectsUsers) TableName() string {
+func (p *ProjectsUsers) TableName() string {
 	return "projects_users"
 }
-
-/*
-	* do not allow to delete default users
-	* do not allow assign investor to the project
- */
-//func (pu *ProjectsUsers) BeforeDelete(tx *gorm.DB) error {
-//
-//	if pu.UserId <= utils.DefaultNotAllowedUserToDelete {
-//		return errorDafultUsersAreBeingAltered
-//	}
-//
-//	return nil
-//}
-
-func (pu *ProjectsUsers) BeforeCreate(tx *gorm.DB) error {
-
-	var user = User{}
-	err := GetDB().Preload("Role").First(&user, "id = ?", pu.UserId).Error
-	if err != nil {
-		return err
-	}
-
-	if user.Role.Name == constants.RoleInvestor {
-		return errors.New("cannot assign investor to the project")
-	}
-
-	return nil
-}
-

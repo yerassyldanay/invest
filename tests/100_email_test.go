@@ -32,7 +32,7 @@ func TestEmailConfirmation(t *testing.T) {
 
 	// get email
 	newEmail := model.Email{
-		Address: email.Address,
+		Address:  email.Address,
 		SentCode: code,
 	}
 
@@ -50,7 +50,7 @@ func TestEmailConfirmation(t *testing.T) {
 	* get user
 	* reset password
 	* sign in
- */
+*/
 func TestResetPassword(t *testing.T) {
 	// get email address
 	user := model.User{Id: 1}
@@ -64,7 +64,7 @@ func TestResetPassword(t *testing.T) {
 	fp := model.ForgetPassword{EmailAddress: user.Email.Address}
 
 	is := service.InvestService{}
-	msg := is.Password_reset_send_message(fp)
+	msg := is.PasswordResetSendMessage(fp)
 
 	// check
 	require.Zero(t, msg.ErrMsg)
@@ -81,23 +81,23 @@ func TestResetPassword(t *testing.T) {
 
 	//change password
 	newPassword := helper.Generate_Random_String(20)
-	newFp := model.ForgetPassword {
+	newFp := model.ForgetPassword{
 		NewPassword:  newPassword,
 		EmailAddress: fp.EmailAddress,
 		Code:         fp.Code,
 	}
 
 	// check
-	msg = is.Password_reset_change_password(newFp)
+	msg = is.PasswordResetChangePassword(newFp)
 
 	// check
 	require.Zero(t, msg.ErrMsg)
 
 	// sign in
 	sis := model.SignIn{
-		KeyUsername:   "email",
-		Value:         email.Address,
-		Password:      newPassword,
+		KeyUsername: "email",
+		Value:       email.Address,
+		Password:    newPassword,
 	}
 	msg = sis.SignIn()
 

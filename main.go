@@ -77,7 +77,7 @@ func main() {
 	/*
 		port
 	*/
-	var port = "7000"
+	var port = opts.BackendPort
 	var fname = "main"
 
 	logr.WithFields(logr.Fields{

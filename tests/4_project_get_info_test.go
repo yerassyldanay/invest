@@ -22,7 +22,7 @@ func TestProjectGetById(t *testing.T) {
 	require.NoError(t, err)
 	//require.NotZero(t, project.Organization.Id)
 	require.NotZero(t, project.CurrentStep.Id)
-	require.Condition(t, func() (bool) { return len(project.Users) > 0 })
+	require.Condition(t, func() bool { return len(project.Users) > 0 })
 
 	// go through users & check
 	for _, user := range project.Users {
@@ -34,11 +34,10 @@ func TestProjectGetById(t *testing.T) {
 
 	// service
 	is := service.InvestService{BasicInfo: service.BasicInfo{UserId: 1}}
-	msg := is.Project_get_by_id(project.Id)
+	msg := is.ProjectGetById(project.Id)
 
 	// check service
 	if msg.IsThereAnError() {
 		t.Error(HelperExpectedNoErrorButGot(err.Error()))
 	}
 }
-

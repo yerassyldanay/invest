@@ -4,8 +4,6 @@ services:
   spk:
     build: .
     command: ./main
-#    volumes:
-#      - "/docker_volumes/spk/backend/documents/:/docs/"
     env_file:
       - environment/local.env
     networks:

@@ -22,7 +22,7 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 		}
 		defer r.Body.Close()
 	} else {
-		var offset = service.Get_query_parameter_str(r, "offset", "0")
+		var offset = service.GetQueryParameterStr(r, "offset", "0")
 		msg = c.Get_all_categors(offset)
 
 		message.Respond(w, r, msg)
@@ -31,7 +31,7 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 
 	/*
 		only admins can get create & delete
-	 */
+	*/
 	roleName := service.Get_header_parameter(r, constants.KeyRoleName, "").(string)
 	if roleName != constants.RoleAdmin {
 		message.Respond(w, r, message.Msg{errormsg.ErrorMethodNotAllowed, 405, fname + " role", "role is " + roleName})
@@ -47,7 +47,7 @@ var Categors_create_read_update_delete = func(w http.ResponseWriter, r *http.Req
 		msg = c.Delete_category_from_tabe_and_projects()
 
 	default:
-		msg =  message.Msg{}
+		msg = message.Msg{}
 	}
 
 	msg.SetFname(fname, "r")

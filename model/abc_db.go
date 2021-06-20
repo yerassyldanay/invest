@@ -21,13 +21,15 @@ func EstablishDatabaseConnection(opts config.Config) (*gorm.DB, error) {
 	db = tempDb
 
 	// 		parameters of database
-	db.DB().SetMaxOpenConns( constants.MaxNumberOpenConnToDb )
+	db.DB().SetMaxOpenConns(constants.MaxNumberOpenConnToDb)
+
+	//db.LogMode(true)
 
 	return tempDb, err
 }
 
 // GetDB getter for gorm.DB object
-func GetDB () *gorm.DB {
+func GetDB() *gorm.DB {
 	if db == nil {
 		fmt.Printf("[CONN] Establishing a new database connection...")
 		opts, err := config.LoadConfig("../environment/.local.env")

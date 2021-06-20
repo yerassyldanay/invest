@@ -14,13 +14,13 @@ import (
 	each ganta step has its 'is_done' field, which is an indication of whether
 		this step is passed
 	this function helps users pass the step manually
- */
+*/
 var Ganta_confirm_the_ganta_step = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_shift_to_the_next_ganta_step"
 
 	var reqBody = struct {
-		ProjectId				uint64				`json:"project_id"`
-		Status					string				`json:"status"`
+		ProjectId uint64 `json:"project_id"`
+		Status    string `json:"status"`
 	}{}
 
 	//var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
@@ -36,7 +36,7 @@ var Ganta_confirm_the_ganta_step = func(w http.ResponseWriter, r *http.Request) 
 	is.OnlyParseRequest(r)
 
 	// security check - access to project
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(reqBody.ProjectId)
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(reqBody.ProjectId)
 	if msg.IsThereAnError() {
 		message.Respond(w, r, msg)
 		return
@@ -56,7 +56,7 @@ var Ganta_confirm_the_ganta_step = func(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	msg = is.Ganta_change_the_status_of_project(reqBody.ProjectId, reqBody.Status)
+	msg = is.GantaChangeTheStatusOfProject(reqBody.ProjectId, reqBody.Status)
 	msg.Fname = fname + " status"
 
 	message.Respond(w, r, msg)
@@ -92,7 +92,7 @@ var Ganta_change_ganta_time = func(w http.ResponseWriter, r *http.Request) {
 }
 
 // change time of gantt step
-var Ganta_can_user_change_current_status = func (w http.ResponseWriter, r *http.Request) {
+var Ganta_can_user_change_current_status = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_can_user_change_current_status"
 
 	// headers

@@ -7,8 +7,8 @@ import (
 
 /*
 	Restricted means that you will get steps based on project step (either 1 or 2)
- */
-func (g *Ganta) Get_parent_ganta_steps_by_project_id_and_step(project_step interface{}) (message.Msg) {
+*/
+func (g *Ganta) GetParentGantaStepsByProjectIdAndStep(project_step interface{}) message.Msg {
 	gantas, err := g.OnlyGetParentsByProjectId(project_step, GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())
@@ -25,10 +25,8 @@ func (g *Ganta) Get_parent_ganta_steps_by_project_id_and_step(project_step inter
 	return ReturnNoErrorWithResponseMessage(resp)
 }
 
-/*
-	get ganta sub-steps
- */
-func (g *Ganta) Get_child_ganta_steps_by_project_id_and_step(project_step int) (message.Msg) {
+// get ganta sub-steps
+func (g *Ganta) GetChildGantaStepsByProjectIdAndStep(project_step int) message.Msg {
 	err := g.OnlyGetChildrenByIdAndProjectIdStep(project_step, GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())

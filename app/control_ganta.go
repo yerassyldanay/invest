@@ -12,8 +12,8 @@ import (
 	which:
 		* parents - ganta steps, which are steps of a process
 		* children - ganta sub-steps, which are documents (related to one document)
- */
-var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *http.Request) {
+*/
+var GantaRestrictedGetHelp = func(which string, w http.ResponseWriter, r *http.Request) {
 	var fname = "Ganta_get_parent_ganta_steps"
 	var is = service.InvestService{}
 	is.OnlyParseRequest(r)
@@ -22,7 +22,7 @@ var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *htt
 	var project_id = service.OnlyGetQueryParameter(r, "project_id", uint64(0)).(uint64)
 
 	// security check
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(project_id)
 	msg.Fname = fname + " is"
 
 	if msg.ErrMsg != "" {
@@ -42,9 +42,9 @@ var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *htt
 	var ganta = model.Ganta{ProjectId: project_id}
 	switch which {
 	case "parents":
-		msg = ganta.Get_parent_ganta_steps_by_project_id_and_step(project.Step)
+		msg = ganta.GetParentGantaStepsByProjectIdAndStep(project.Step)
 	case "children":
-		msg = ganta.Get_child_ganta_steps_by_project_id_and_step(project.Step)
+		msg = ganta.GetChildGantaStepsByProjectIdAndStep(project.Step)
 	default:
 		msg = model.ReturnMethodNotAllowed("you are requesting " + which)
 	}
@@ -55,13 +55,11 @@ var Ganta_restricted_get_help = func(which string, w http.ResponseWriter, r *htt
 
 /*
 	restricted - because you will get ganta steps either for project step / stage 1 or 2
- */
-var Ganta_restricted_get_parent_ganta_steps = func(w http.ResponseWriter, r *http.Request) {
-	Ganta_restricted_get_help("parents", w, r)
+*/
+var GantaRestrictedGetParentGantaSteps = func(w http.ResponseWriter, r *http.Request) {
+	GantaRestrictedGetHelp("parents", w, r)
 }
 
-var Ganta_restricted_get_child_ganta_steps = func(w http.ResponseWriter, r *http.Request) {
-	Ganta_restricted_get_help("children", w, r)
+var GantaRestrictedGetChildGantaSteps = func(w http.ResponseWriter, r *http.Request) {
+	GantaRestrictedGetHelp("children", w, r)
 }
-
-

@@ -10,7 +10,7 @@ import (
 	"github.com/yerassyldanay/invest/utils/message"
 )
 
-func (is *InvestService) Service_create_project(projectWithFinTable *model.ProjectWithFinanceTables) (message.Msg){
+func (is *InvestService) ServiceCreateProject(projectWithFinTable *model.ProjectWithFinanceTables) message.Msg {
 	defer func() message.Msg {
 		if err := recover(); err != nil {
 			fmt.Println("CreateProject - could not send email: ", err)
@@ -28,12 +28,16 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 		LevelSnapshot
 		LevelSerializable
 		LevelLinearizable
-	 */
+	*/
 	var trans = model.GetDB().BeginTx(context.Background(), &sql.TxOptions{
 		Isolation: sql.LevelDefault,
 		ReadOnly:  false,
 	})
-	defer func() { if trans != nil { trans.Rollback() } }()
+	defer func() {
+		if trans != nil {
+			trans.Rollback()
+		}
+	}()
 
 	var msg = message.Msg{}
 
@@ -44,7 +48,7 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 
 	/*
 		create a project
-	 */
+	*/
 	msg = projectWithFinTable.Project.Create_project(trans)
 	if msg.ErrMsg != "" {
 		return msg
@@ -66,7 +70,7 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 		create:
 			* Ganta table (parent)
 			* Parent steps - will be shown for other
-	 */
+	*/
 	msg = projectWithFinTable.Project.Create_ganta_table_for_this_project(trans)
 	if msg.ErrMsg != "" {
 		return msg
@@ -127,7 +131,7 @@ func (is *InvestService) Service_create_project(projectWithFinTable *model.Proje
 }
 
 // get all project info
-func (is *InvestService) Project_get_by_id(project_id uint64) (message.Msg) {
+func (is *InvestService) ProjectGetById(project_id uint64) message.Msg {
 
 	var projectWithFinTables = struct {
 		model.Project

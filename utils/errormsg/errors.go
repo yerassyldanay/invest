@@ -15,7 +15,7 @@ var ErrorInvalidPassword = map[string]interface{}{
 var ErrorInvalidParameters = map[string]interface{}{
 	"eng": "invalid parameters have been passed",
 	"rus": "невалидные параметры переданы",
-	"kaz": "қате параметрлер берілген",
+	"kaz": "берілген параметрлер қате",
 }
 
 var ErrorNoSuchUser = map[string]interface{}{
@@ -24,7 +24,7 @@ var ErrorNoSuchUser = map[string]interface{}{
 	"kaz": "қолданушы тіркелмеген",
 }
 
-var ErrorNotFound = map[string]interface{} {
+var ErrorNotFound = map[string]interface{}{
 	"eng": "not found",
 	"rus": "не найден",
 	"kaz": "табылмады",
@@ -42,25 +42,25 @@ var ErrorMethodNotAllowed = map[string]interface{}{
 	"kaz": "сіз бұл функцияны қолдана алмайсыз",
 }
 
-var ErrorInternalServerError = map[string]interface{} {
+var ErrorInternalServerError = map[string]interface{}{
 	"eng": "an internal error has occurred",
 	"rus": "произошла внутренняя ошибка",
 	"kaz": "серверлік қате пайда болды",
 }
 
-var ErrorInternalDbError = map[string]interface{} {
+var ErrorInternalDbError = map[string]interface{}{
 	"eng": "failed create / update / remove / get a row from database",
 	"rus": "не удалось создать / обновить / удалить / получить строку в бд",
 	"kaz": "мәліметті құру / жаңарту / жою / алу сәтсіз аяқталды",
 }
 
-var ErrorEmailIsNotVerified = map[string]interface{} {
+var ErrorEmailIsNotVerified = map[string]interface{}{
 	"eng": "the account is not confirmed | please, confirm email address",
 	"rus": "аккаунт не подтвержден | пожалуйста, подтвердите адрес электронной почты",
 	"kaz": "аккаунт расталмаған | электрондық пошта мекенжайы арқылы растаңыз",
 }
 
-var ErrorPhoneNumberIsNotVerified = map[string]interface{} {
+var ErrorPhoneNumberIsNotVerified = map[string]interface{}{
 	"eng": "please, confirm the phone number",
 	"rus": "пожалуйста, подтвердите номер телефона",
 	"kaz": "телефон нөміріңізді растаңыз",
@@ -96,13 +96,13 @@ var ErrorFailedToUpdateSomeValues = map[string]interface{}{
 	"kaz": "кейбір мәндерді жаңарта алмады",
 }
 
-var ErrorExternalServiceErrorNoOrganizationInfo = map[string]interface{} {
+var ErrorExternalServiceErrorNoOrganizationInfo = map[string]interface{}{
 	"eng": "failed to obtain organization info",
 	"rus": "не удалось получить информацию об организации",
 	"kaz": "ұйым туралы ақпарат ала мүмкін болмады",
 }
 
-var ErrorCouldNotSendEmail = map[string]interface{} {
+var ErrorCouldNotSendEmail = map[string]interface{}{
 	"eng": "failed to send an email",
 	"rus": "не удалось отправить электронное письмо",
 	"kaz": "электрондық хат жіберілмеді",
@@ -120,7 +120,7 @@ var ErrorFailedToCreateAnAccount = map[string]interface{}{
 	"kaz": "аккаунт ашу мүмкін болмады",
 }
 
-var ErrorDupicateKeyOnDb = map[string]interface{} {
+var ErrorDupicateKeyOnDb = map[string]interface{}{
 	"eng": "failed to create, probably, because some fields are repeated",
 	"rus": "не удалось создать, возможно, потому что некоторые поля повторяются",
 	"kaz": "енгізілген кейбір ақпарат қайталанады",
@@ -137,4 +137,3 @@ var ErrorTokenInvalid = map[string]interface{}{
 	"rus": "невалидный токен",
 	"kaz": "қате токен",
 }
-

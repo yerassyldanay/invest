@@ -16,7 +16,7 @@ var Project_get_status_of_project = func(w http.ResponseWriter, r *http.Request)
 	is.OnlyParseRequest(r)
 
 	// check whether this user has permission
-	msg := is.Check_whether_this_user_can_get_access_to_project_info(project_id)
+	msg := is.CheckWhetherThisUserCanGetAccessToProjectInfo(project_id)
 	msg.Fname = fname + " check"
 
 	if msg.ErrMsg != "" {

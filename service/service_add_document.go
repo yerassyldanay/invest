@@ -13,11 +13,15 @@ import (
 		* investor - uploading documents based on the list
 		* investor - uploading documents rejected or reconsider
 		* spk - uploading documents through the process
- */
-func (is *InvestService) Upload_documents_to_project(document *model.Document) (message.Msg) {
+*/
+func (is *InvestService) Upload_documents_to_project(document *model.Document) message.Msg {
 
 	var trans = model.GetDB().Begin()
-	defer func() { if trans != nil { trans.Rollback() }} ()
+	defer func() {
+		if trans != nil {
+			trans.Rollback()
+		}
+	}()
 
 	// set new fields
 	document.Modified = helper.GetCurrentTruncatedDate()
@@ -37,7 +41,7 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 		here we need to shift the step at gantt table, in case:
 			* an investor has uploaded all documents
 			* an investor has reconsidered documents, which are sent back
-	 */
+	*/
 	var currentGanta = model.Ganta{ProjectId: document.ProjectId}
 	if err := currentGanta.OnlyGetCurrentStepByProjectId(trans); err != nil {
 		return model.ReturnInternalDbError(err.Error())
@@ -47,7 +51,7 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 		Automatically shifts to the next stage:
 			* when an investor uploaded all documents
 			* when an investor reconsidered (removed & uploaded) documents with an undesirable status
-	 */
+	*/
 	var countNumberOfEmptyDocuments int
 	if currentGanta.Responsible == is.RoleName && is.RoleName == constants.RoleInvestor {
 		// number of documents with empty uri
@@ -61,7 +65,7 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 		}
 
 		// count the number of documents, which are to be reconsidered or uploaded
-		if countNumberOfEmptyDocuments + countNumberOfDocumentsWithUndesirableStatus == 0 {
+		if countNumberOfEmptyDocuments+countNumberOfDocumentsWithUndesirableStatus == 0 {
 			if err = currentGanta.OnlyChangeStatusToDoneAndUpdateDeadlineById(trans); err != nil {
 				// if there is no document to change or upload -> shift gantt step
 				return model.ReturnInternalDbError(err.Error())
@@ -79,8 +83,8 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 			}
 		}
 
-	} else if helper.Does_a_slice_contain_element([]string{constants.RoleSpk, constants.RoleManager, constants.RoleExpert}, currentGanta.Responsible) &&
-		helper.Does_a_slice_contain_element([]string{constants.RoleSpk, constants.RoleManager, constants.RoleExpert}, is.RoleName) {
+	} else if helper.DoesASliceContainElement([]string{constants.RoleSpk, constants.RoleManager, constants.RoleExpert}, currentGanta.Responsible) &&
+		helper.DoesASliceContainElement([]string{constants.RoleSpk, constants.RoleManager, constants.RoleExpert}, is.RoleName) {
 		fmt.Println(is.RoleName + " | " + currentGanta.Responsible)
 	}
 
@@ -99,7 +103,7 @@ func (is *InvestService) Upload_documents_to_project(document *model.Document) (
 }
 
 // add box to upload a document
-func (is *InvestService) Add_box_to_upload_document(document model.Document) (message.Msg) {
+func (is *InvestService) AddBoxToUploadDocument(document model.Document) message.Msg {
 
 	document.IsAdditional = true
 	document.Uri = ""
@@ -128,7 +132,7 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (me
 	// wait until an investor uploads documents
 	if document.Responsible == constants.RoleInvestor {
 		// send project to reconsideration
-		msg := is.Ganta_change_the_status_of_project(document.ProjectId, constants.ProjectStatusReconsider)
+		msg := is.GantaChangeTheStatusOfProject(document.ProjectId, constants.ProjectStatusReconsider)
 		if msg.IsThereAnError() {
 			return msg
 		}
@@ -136,8 +140,8 @@ func (is *InvestService) Add_box_to_upload_document(document model.Document) (me
 
 	// send notification
 	na := model.NotifyAddDoc{
-		Document:       document,
-		UserId:      	is.UserId,
+		Document: document,
+		UserId:   is.UserId,
 	}
 
 	// handles everything

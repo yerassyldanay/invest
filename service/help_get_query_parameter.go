@@ -28,7 +28,7 @@ func OnlyPrepareStatusAndStep(r *http.Request) ([]string, []int) {
 	return statuses, steps
 }
 
-func Get_query_parameter_str(r *http.Request, key string, base string) (string) {
+func GetQueryParameterStr(r *http.Request, key string, base string) string {
 	t := r.URL.Query()[key]
 	if len(t) == 0 {
 		return base
@@ -37,7 +37,7 @@ func Get_query_parameter_str(r *http.Request, key string, base string) (string) 
 	return t[0]
 }
 
-func Get_query_parameter_uint64(r *http.Request, key string, default_value uint64) (uint64) {
+func GetQueryParameterUint64(r *http.Request, key string, default_value uint64) uint64 {
 	t := r.URL.Query()[key]
 	if len(t) != 0 {
 		i, err := strconv.ParseInt(t[0], 0, 16)
@@ -49,7 +49,7 @@ func Get_query_parameter_uint64(r *http.Request, key string, default_value uint6
 	return default_value
 }
 
-func OnlyGetQueryParameterAsList(r *http.Request, key string) ([]string) {
+func OnlyGetQueryParameterAsList(r *http.Request, key string) []string {
 	return r.URL.Query()[key]
 }
 
@@ -117,7 +117,7 @@ func OnlyGetQueryParameter(r *http.Request, key string, defval interface{}) inte
 	this function will get header value for you
 		the type of the value that will be returned depends on the type of a value provided
 			e.g. if defval is uint64 then uint64 value will be returned
- */
+*/
 func Get_header_parameter(r *http.Request, key string, defval interface{}) interface{} {
 	t := r.Header.Get(key)
 
@@ -127,7 +127,7 @@ func Get_header_parameter(r *http.Request, key string, defval interface{}) inter
 
 	/*
 		string & bool values are parsed here
-	 */
+	*/
 	switch defval.(type) {
 	case bool:
 		i, err := strconv.ParseBool(t)

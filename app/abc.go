@@ -53,52 +53,51 @@ func NewRouter() *mux.Router {
 	/*
 		Profile
 	*/
-	v1.HandleFunc("/profile", Get_full_user_info).Methods("GET")
-	v1.HandleFunc("/profile/own", User_get_own_info).Methods("GET")
-	v1.HandleFunc("/profile/other", Get_full_user_info).Methods("GET")
+	v1.HandleFunc("/profile", GetFullUserInfo).Methods("GET")
+	v1.HandleFunc("/profile/own", UserGetOwnInfo).Methods("GET")
+	v1.HandleFunc("/profile/other", GetFullUserInfo).Methods("GET")
 
-	v1.HandleFunc("/profile/own", Update_own_profile).Methods("PUT")
-	v1.HandleFunc("/profile/other", Update_other_profile).Methods("PUT")
+	v1.HandleFunc("/profile/own", UpdateOwnProfile).Methods("PUT")
+	v1.HandleFunc("/profile/other", UpdateOtherProfile).Methods("PUT")
 
 	// 6z24HXMd7nLeZAE
-	v1.HandleFunc("/profile/password/own", Update_own_password).Methods("PUT")
-	v1.HandleFunc("/profile/password/other", Update_other_password).Methods("PUT")
+	v1.HandleFunc("/profile/password/own", UpdateOwnPassword).Methods("PUT")
+	v1.HandleFunc("/profile/password/other", UpdateOtherPassword).Methods("PUT")
 
 	/*
 		CRUD user by admin
 	*/
-	v1.HandleFunc("/user", Users_get_by_role).Methods("GET")
-	v1.HandleFunc("/user", Create_user).Methods("POST")
+	v1.HandleFunc("/user", UsersGetByRole).Methods("GET")
+	v1.HandleFunc("/user", CreateUser).Methods("POST")
 
 	/*
 		Assign & remove user from project
 	*/
-	v1.HandleFunc("/assign", Remove_user_from_project).Methods("DELETE")
-	v1.HandleFunc("/assign", Assign_user_to_project).Methods("POST")
+	v1.HandleFunc("/assign", RemoveUserFromProject).Methods("DELETE")
+	v1.HandleFunc("/assign", AssignUserToProject).Methods("POST")
 
 	/*
 		Gantt
 	*/
-	v1.HandleFunc("/ganta/restricted/parents", Ganta_restricted_get_parent_ganta_steps).Methods("GET")
-	v1.HandleFunc("/ganta/restricted/children", Ganta_restricted_get_child_ganta_steps).Methods("GET")
+	v1.HandleFunc("/ganta/restricted/parents", GantaRestrictedGetParentGantaSteps).Methods("GET")
+	v1.HandleFunc("/ganta/restricted/children", GantaRestrictedGetChildGantaSteps).Methods("GET")
 
 	v1.HandleFunc("/ganta/change/check_permission", Ganta_can_user_change_current_status).Methods("GET")
 	v1.HandleFunc("/ganta/change/status", Ganta_confirm_the_ganta_step).Methods("POST")
-	//v1.HandleFunc("/ganta/change/time", app.Ganta_change_ganta_time).Methods("POST")
 
 	/*
 		Documents
 	*/
-	v1.HandleFunc("/project/docs/box", Document_add_box_to_upload_document).Methods("POST")
+	v1.HandleFunc("/project/docs/box", DocumentAddBoxToUploadDocument).Methods("POST")
 	v1.HandleFunc("/project/docs/file", Document_upload_document).Methods("POST")
-	v1.HandleFunc("/project/docs/file/delete", Document_remove_file).Methods("GET")
-	v1.HandleFunc("/project/docs", Document_get).Methods("GET")
+	v1.HandleFunc("/project/docs/file/delete", DocumentRemoveFile).Methods("GET")
+	v1.HandleFunc("/project/docs", DocumentGet).Methods("GET")
 
 	/*
 		Project
 	*/
-	v1.HandleFunc("/project", Get_project_by_project_id).Methods("GET")
-	v1.HandleFunc("/project", Create_project).Methods("POST")
+	v1.HandleFunc("/project", GetProjectByProjectId).Methods("GET")
+	v1.HandleFunc("/project", CreateProject).Methods("POST")
 
 	/*
 		Status
@@ -154,7 +153,7 @@ func NewRouter() *mux.Router {
 	/*
 		Reset password
 	*/
-	v1.HandleFunc("/reset_password", Forget_password_send_message).Methods("GET", "POST")
+	v1.HandleFunc("/reset_password", ForgetPasswordSendMessage).Methods("GET", "POST")
 
 	/*
 		Notifications

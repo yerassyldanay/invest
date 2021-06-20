@@ -9,11 +9,11 @@ import (
 )
 
 type ElementGetFullInfoOfThisUser struct {
-	Key string
+	Key   string
 	Value string
 }
 
-func (c *User) GetFullInfoOfThisUser(e ElementGetFullInfoOfThisUser) (message.Msg) {
+func (c *User) GetFullInfoOfThisUser(e ElementGetFullInfoOfThisUser) message.Msg {
 	//HelperPrint(e)
 
 	var err error
@@ -50,10 +50,23 @@ func (c *User) GetFullInfoOfThisUser(e ElementGetFullInfoOfThisUser) (message.Ms
 	})
 }
 
+func (c *User) GetFullInfoOfThisUserWithoutPasswordById() message.Msg {
+	_ = GetDB().First(c, "id = ?", c.Id).Error
+	_ = GetDB().First(&c.Phone, "id = ?", c.PhoneId)
+	_ = GetDB().First(&c.Email, "id = ?", c.EmailId)
+	_ = GetDB().First(&c.Role, "id = ?", c.RoleId)
+	_ = GetDB().First(&c.Organization, "id = ?", c.OrganizationId)
+
+	c.Password = ""
+	return ReturnNoErrorWithResponseMessage(map[string]interface{}{
+		"user": *c,
+	})
+}
+
 /*
 	Get Admins
- */
-func (c *User) Get_admins() (message.Msg) {
+*/
+func (c *User) Get_admins() message.Msg {
 	users, err := c.OnlyGetPreloadedUsersByRole(constants.RoleAdmin, GetDB())
 	if err != nil {
 		return ReturnInternalDbError(err.Error())
@@ -76,4 +89,3 @@ func (c *User) OnlyGetPreloadedUsersByRole(role string, tx *gorm.DB) (users []Us
 		Find(&users, "role_id = (select id from roles where name = ? limit 1)", role).Error
 	return users, err
 }
-

@@ -11,7 +11,7 @@ import (
 )
 
 // get documents by project id
-func (is *InvestService) Document_get_by_project_id(project_id uint64, stepsRaw []string) (message.Msg) {
+func (is *InvestService) DocumentGetByProjectId(project_id uint64, stepsRaw []string) message.Msg {
 	var document = model.Document{}
 
 	// get documents
@@ -49,11 +49,13 @@ func (is *InvestService) Document_get_by_project_id(project_id uint64, stepsRaw 
 }
 
 // remove a file from storage & empty uri
-func (is *InvestService) Document_remove_document_from_project(document_id uint64) (message.Msg) {
+func (is *InvestService) DocumentRemoveDocumentFromProject(document_id uint64) message.Msg {
 	var trans = model.GetDB().Begin()
-	defer func() { if trans != nil {
-		trans.Rollback()
-	} }()
+	defer func() {
+		if trans != nil {
+			trans.Rollback()
+		}
+	}()
 
 	// get document to delete file from storage
 	var document = model.Document{Id: document_id}
@@ -82,5 +84,3 @@ func (is *InvestService) Document_remove_document_from_project(document_id uint6
 	trans = nil
 	return model.ReturnNoError()
 }
-
-

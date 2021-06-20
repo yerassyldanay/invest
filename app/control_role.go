@@ -15,7 +15,7 @@ import (
 
 /*
 	delete - ../role/
- */
+*/
 var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_create_update_add_and_delete_permissions_remove"
 	var msg message.Msg
@@ -23,10 +23,10 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 
 	/*
 		get
-	 */
+	*/
 	switch r.Method {
 	case http.MethodGet:
-		offset := service.Get_query_parameter_str(r, constants.KeyOffset, "0")
+		offset := service.GetQueryParameterStr(r, constants.KeyOffset, "0")
 		msg = role.Get_roles(offset)
 	default:
 		if err := json.NewDecoder(r.Body).Decode(&role); err != nil {
@@ -42,7 +42,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 
 		/*
 			put and post
-		 */
+		*/
 		if r.Method == http.MethodPut {
 			msg = role.Update_role_name_description_and_permissions()
 		} else if r.Method == http.MethodPost {
@@ -50,7 +50,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 		} else {
 			/*
 				if none of these methods, then
-			 */
+			*/
 			msg = message.Msg{
 				Message: errormsg.ErrorMethodNotAllowed,
 				Status:  http.StatusMethodNotAllowed,
@@ -65,7 +65,7 @@ var Role_create_update_add_and_remove_permissions = func(w http.ResponseWriter, 
 
 /*
 	../role/{role_id}
- */
+*/
 var Role_delete_or_get_with_role_id = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Role_delete_or_get_with_role_id"
 	var msg message.Msg
@@ -107,19 +107,19 @@ var Role_add_and_remove_permissions = func(w http.ResponseWriter, r *http.Reques
 	case http.MethodDelete:
 		/*
 			remove permissions
-		 */
+		*/
 		msg = role.Remove_a_list_of_permissions()
 
 	case http.MethodPost:
 		/*
 			add permissions
-		 */
+		*/
 		msg = role.Add_a_list_of_permissions()
 
 	default:
 		/*
 			not supported
-		 */
+		*/
 		msg = message.Msg{errormsg.ErrorMethodNotAllowed, 405, "", "method is not allowed. role/permissions"}
 
 	}

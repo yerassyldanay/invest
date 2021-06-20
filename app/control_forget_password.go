@@ -21,8 +21,8 @@ import (
 			"new_password": "",
 			""
 		}
- */
-var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) {
+*/
+var ForgetPasswordSendMessage = func(w http.ResponseWriter, r *http.Request) {
 	var fname = "Forget_password_send_message"
 
 	// headers
@@ -36,7 +36,7 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 	switch r.Method {
 	case http.MethodGet:
 		fp.EmailAddress = service.OnlyGetQueryParameter(r, "email", "").(string)
-		msg = is.Password_reset_send_message(fp)
+		msg = is.PasswordResetSendMessage(fp)
 
 	case http.MethodPost:
 		if err := json.NewDecoder(r.Body).Decode(&fp); err != nil {
@@ -45,7 +45,7 @@ var Forget_password_send_message = func(w http.ResponseWriter, r *http.Request) 
 		}
 		defer r.Body.Close()
 
-		msg = is.Password_reset_change_password(fp)
+		msg = is.PasswordResetChangePassword(fp)
 
 	default:
 		msg = model.ReturnMethodNotAllowed("only post & get requests are supported")
